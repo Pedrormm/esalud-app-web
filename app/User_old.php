@@ -9,14 +9,14 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
-    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'lastname',  'contact', 'dni', 'birthdate', 'avatar', 'sex', 'blood', 'information', 'deleted', 'sip_name', 'sip_id', 'sip_pass', 'rol', 'rol_perms'
+        'name', 'email', 'password',
     ];
 
     /**
@@ -25,8 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 
-        // Campos ocultos, encriptados
+        'password', 'remember_token',
     ];
 
     /**
@@ -35,14 +34,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        //'email_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime',
     ];
-
-    public function patients() {
-        return $this->hasMany("App\Patient");
-    }
-
-    public function messages() {
-        return $this->hasMany("App\Message");
-    }
 }
