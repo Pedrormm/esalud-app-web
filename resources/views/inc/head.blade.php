@@ -24,14 +24,14 @@
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.carousel.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.theme.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.transitions.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap-theme.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('datepicker/datepicker.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/bootstrap/css/bootstrap.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/bootstrap/css/bootstrap-theme.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/datepicker/datepicker.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fontawesome/css/font-awesome.min.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('chat/chat.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('calendar/default.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('records/default.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('CLNDR/clndr.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat/chat.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/calendar/default.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/records/default.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/CLNDR/clndr.css') }}">
 
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.1.0.min.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.touchSwipe.min.js') }}"></script>
@@ -52,22 +52,22 @@
                 <script type="text/javascript" src="{{ asset('js/sip.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/user.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/summary/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('calendar/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('chat/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('chat/chat.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('room/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('room/default2.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('permissions/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('users/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('staff/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('patients/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('medicine/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('records/default.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('records/default2.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/calendar/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/chat/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/chat/chat.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/room/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/room/default2.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/permissions/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/users/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/staff/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/patients/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/medicine/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/records/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/records/default2.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/owl/owl.carousel.min.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('datepicker/bootstrap-datepicker.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('CLNDR/moment-2.5.1.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('CLNDR/underscore.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/datepicker/bootstrap-datepicker.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/CLNDR/moment-2.5.1.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/CLNDR/underscore.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/CLNDR/clndr.js') }}"></script>
 
                 <!-- _User.id     = 1;

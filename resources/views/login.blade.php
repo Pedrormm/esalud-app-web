@@ -26,14 +26,14 @@
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.carousel.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.theme.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.transitions.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap-theme.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('datepicker/datepicker.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/bootstrap/css/bootstrap.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/bootstrap/css/bootstrap-theme.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/datepicker/datepicker.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fontawesome/css/font-awesome.min.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('chat/chat.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('calendar/default.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('records/default.css') }}">
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('CLNDR/clndr.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat/chat.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/calendar/default.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/records/default.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/CLNDR/clndr.css') }}">
 
             <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.1.0.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/jquery/jquery.touchSwipe.min.js') }}"></script>
