@@ -16,12 +16,42 @@
 <!--        <link rel="apple-touch-startup-image" sizes="1496x2048" href="images/splash/splash-screen-ipad-landscape-retina.png"   media="(device-width: 768px)	and (orientation: landscape)	and (-webkit-device-pixel-ratio: 2)"/>-->
 
         <title>{{ env('APP_VIRTUAL') }}</title>
-                        <link href="{{ url('css/core.css') }}" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/core/css/main.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/core/css/structure.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/core/css/flip.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/views/css/chat.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/views/css/videoconference.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/owl/owl.carousel.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/owl/owl.theme.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/owl/owl.transitions.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/datepicker/datepicker.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/services/chat/chat.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/services/calendar/default.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/services/records/default.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/js/CLNDR/clndr.css" rel="stylesheet" type="text/css">                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery-2.1.0.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.touchSwipe.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.tmpl.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.json-2.4.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.event.move.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/SIPml-api.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/core.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/util.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/server.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/index.js"></script>
+            <!-- <link href="{{ url('css/core.css') }}" rel="stylesheet" type="text/css"> -->
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/core.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/main.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/structure.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/flip.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/videoconference.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.carousel.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.theme.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.transitions.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap-theme.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('datepicker/datepicker.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fontawesome/css/font-awesome.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('chat/chat.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('calendar/default.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('records/default.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('CLNDR/clndr.css') }}">
+
+            <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.1.0.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/jquery/jquery.touchSwipe.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/jquery/jquery.tmpl.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/jquery/jquery.json-2.4.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/jquery/jquery.event.move.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/SIPml-api.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/util.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/server.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/index.js') }}"></script>
+
+        
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
 
         <audio id="audio_remote" autoplay="autoplay"></audio>
-        <audio id="sip_ringtone" loop src="{{ asset('sound/ringtone.wav') }}"></audio>
-        <audio id="sip_ringbacktone" loop src="http://localhost/denis//resources/sounds/ringbacktone.wav"></audio>
+        <audio id="sip_ringtone" loop src="{{ asset('sounds/ringtone.wav') }}"></audio>
+        <audio id="sip_ringbacktone" loop src="{{ asset('sounds/ringbacktone.wav') }}"></audio>
     </head>
     <body>
 <header>
@@ -32,9 +62,8 @@
     <div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
         <div class="col-xs-12">
             <div class="box login_logo">
-                <img src="http://localhost/denis//resources/images/hospital_logo.png">
+                <img src="{{ asset('images/hospital_logo.png') }}">
             </div>
-
         </div>
        
         @if (session()->has('info'))

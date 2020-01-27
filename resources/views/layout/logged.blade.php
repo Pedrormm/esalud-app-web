@@ -11,15 +11,15 @@
 
 <nav class="left">
     <div class="user">
-        <img src="http://localhost/denis/resources/images/avatars/admin.png" class="avatar big">
+        <img class="avatar big" src="{{ asset('images/avatars/admin.png') }}">
         <div>
             <span class="name">Denis</span>
             <span class="lastname">Vaillo Sanchez</span>
         </div>
     </div>
 
-<ul>
-            <li>
+    <ul>
+        <li>
             <a name="record" href="?v=record">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -27,7 +27,8 @@
                 </span>
                 <label>Historiales Medicos</label>
             </a>
-        </li>        <li>
+        </li>
+        <li>
             <a name="chats" href="?v=chats">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -35,7 +36,8 @@
                 </span>
                 <label>Mensajeria</label>
             </a>
-        </li>        <li>
+        </li>
+        <li>
             <a name="calendar" href="?v=calendar">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -43,7 +45,8 @@
                 </span>
                 <label>Gestión de citas</label>
             </a>
-        </li>        <li>
+        </li>
+        <li>
             <a name="staff" href="?v=staff">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -51,7 +54,8 @@
                 </span>
                 <label>Gestión del Personal</label>
             </a>
-        </li>        <li>
+        </li>
+        <li>
             <a name="patients" href="?v=patients">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -59,7 +63,8 @@
                 </span>
                 <label>Gestión de Pacientes</label>
             </a>
-        </li>        <li>
+        </li>        
+        <li>
             <a name="users" href="?v=users">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -67,7 +72,8 @@
                 </span>
                 <label>Usuarios</label>
             </a>
-        </li>        <li>
+        </li>        
+        <li>
             <a name="roles" href="?v=roles">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
@@ -75,7 +81,8 @@
                 </span>
                 <label>Gestion de roles</label>
             </a>
-        </li>        <li>
+        </li>        
+        <li>
             <a name="profile" href="?v=profile">
                     <span class="fa-stack fa-2x menu_icon">
                         <i class="fa fa-circle fa-stack-2x"></i>
@@ -84,16 +91,18 @@
                 <label>Ajustes</label>
             </a>
         </li>
-    <li href="">
-        <a href="core/logout.php" name="logout">
-            <span class="fa-stack fa-2x menu_icon">
-                <i class="fa fa-circle fa-stack-2x"></i>
-                <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>
-            </span>
-            <label>Salir</label>
-        </a>
-    </li>
-</ul></nav>
+        <li href="">
+            <a href="core/logout.php" name="logout">
+                <span class="fa-stack fa-2x menu_icon">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>
+                </span>
+                <label>Salir</label>
+            </a>
+        </li>
+    </ul>
+
+</nav>
 
     @include('inc.nav-main')
     <main>
@@ -103,5 +112,6 @@
             $(function(){
                 _Navigator.go("main");
             })
-        </script>    </body>
+        </script>
+    </body>
 </html>

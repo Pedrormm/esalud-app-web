@@ -1,7 +1,7 @@
 <header>
     <nav class="header">
         <div class="header_avatar hidden-xs hidden-sm">
-            <img class="avatar big" src="http://localhost/denis/resources/images/avatars/admin.png">
+            <img class="avatar big" src="{{ asset('images/avatars/admin.png') }}">
         </div>
         <a class="hidden-md hidden-lg">
             <i class="fa fa-bars"></i>

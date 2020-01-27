@@ -14,8 +14,63 @@
 <!--        <link rel="apple-touch-startup-image" sizes="1496x2048" href="images/splash/splash-screen-ipad-landscape-retina.png"   media="(device-width: 768px)	and (orientation: landscape)	and (-webkit-device-pixel-ratio: 2)"/>-->
 
         <title>Hospital VIHrtual</title>
-                        <link href="http://localhost/denis/core/css/core.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/core/css/main.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/core/css/structure.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/core/css/flip.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/views/css/chat.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/views/css/videoconference.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/owl/owl.carousel.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/owl/owl.theme.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/owl/owl.transitions.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/datepicker/datepicker.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/css/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/services/chat/chat.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/services/calendar/default.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/services/records/default.css" rel="stylesheet" type="text/css">                <link href="http://localhost/denis/external/js/CLNDR/clndr.css" rel="stylesheet" type="text/css">                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery-2.1.0.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.touchSwipe.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.tmpl.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.json-2.4.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/jquery/jquery.event.move.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/SIPml-api.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/core.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/util.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/server.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/main.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/navigator.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/popup.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/searcher.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/filter.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/call.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/sip.js"></script>                <script type="text/javascript" src="http://localhost/denis/core/js/user.js"></script>                <script type="text/javascript" src="http://localhost/denis/views/summary/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/calendar/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/chat/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/chat/chat.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/room/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/room/default2.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/permissions/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/users/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/staff/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/patients/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/medicine/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/records/default.js"></script>                <script type="text/javascript" src="http://localhost/denis/services/records/default2.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/owl/owl.carousel.min.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/datepicker/bootstrap-datepicker.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/CLNDR/moment-2.5.1.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/CLNDR/underscore.js"></script>                <script type="text/javascript" src="http://localhost/denis/external/js/CLNDR/clndr.js"></script>            <script type="text/javascript">
-                _User.id     = 1;
+
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/core.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/main.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/structure.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/flip.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/videoconference.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.carousel.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.theme.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.transitions.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('bootstrap/css/bootstrap-theme.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('datepicker/datepicker.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fontawesome/css/font-awesome.min.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('chat/chat.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('calendar/default.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('records/default.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('CLNDR/clndr.css') }}">
+
+                <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.1.0.min.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery/jquery.touchSwipe.min.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery/jquery.tmpl.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery/jquery.json-2.4.min.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/jquery/jquery.event.move.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/SIPml-api.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/util.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/server.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/index.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/main.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/navigator.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/popup.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/searcher.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/filter.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/call.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/sip.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/user.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/summary/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('calendar/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('chat/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('chat/chat.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('room/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('room/default2.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('permissions/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('users/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('staff/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('patients/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('medicine/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('records/default.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('records/default2.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/owl/owl.carousel.min.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('datepicker/bootstrap-datepicker.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('CLNDR/moment-2.5.1.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('CLNDR/underscore.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/CLNDR/clndr.js') }}"></script>
+
+                <!-- _User.id     = 1;
                 _User.name   = 'Denis Vaillo Sanchez';
                 _User.avatar = 'http://localhost/denis/resources/images/avatars/admin.png';
                 _User._sip   = {
@@ -25,11 +80,12 @@
                         url  : 'sip2sip.info'
                 };
                 var base_url = 'http://localhost/denis/';
-            </script>
+            </script> -->
             
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
 
         <audio id="audio_remote" autoplay="autoplay"></audio>
-        <audio id="sip_ringtone" loop src="http://localhost/denis//resources/sounds/ringtone.wav"></audio>
-        <audio id="sip_ringbacktone" loop src="http://localhost/denis//resources/sounds/ringbacktone.wav"></audio>
+        <audio id="sip_ringtone" loop src="{{ asset('sounds/ringtone.wav') }}"></audio>
+        <audio id="sip_ringbacktone" loop src="{{ asset('sounds/ringbacktone.wav') }}"></audio>
+
     </head>
