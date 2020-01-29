@@ -81,7 +81,7 @@
         </div>
         @endif
             <div class="box access_login">
-                <h5>Entra con tu dni y contraseña</h5>
+                <h5>Entra con tu dni y contraseñas</h5>
                 <form method="post" action="{{ url('user/login') }}">
                     @csrf
                     <input type="text" name="dni" placeholder="DNI">
