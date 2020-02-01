@@ -86,6 +86,9 @@
                     @csrf
                     <input type="text" name="dni" placeholder="DNI">
                     <input type="password" name="password" placeholder="Contraseña">
+                    <div>
+                        <input name="remember" type="checkbox" /> Recordar contraseña
+                    </div>
                     <button type="submit" class="button green" type="submit">Entrar</button>
                 </form>
                 <nav class="remember_password">
