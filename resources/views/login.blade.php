@@ -17,6 +17,8 @@
 
         <title>{{ env('APP_VIRTUAL') }}</title>
             <!-- <link href="{{ url('css/core.css') }}" rel="stylesheet" type="text/css"> -->
+            <link href="{{ url('css/userlogin.css') }}" rel="stylesheet" type="text/css">
+
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/core.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/main.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/structure.css') }}">
@@ -81,13 +83,14 @@
         </div>
         @endif
             <div class="box access_login">
-                <h5>Entra con tu dni y contraseñas</h5>
+                <h5>Entra con tu dni y contraseña</h5>
                 <form method="post" action="{{ url('user/login') }}">
                     @csrf
+                    <!-- display: none, block, inline -->
                     <input type="text" name="dni" placeholder="DNI">
                     <input type="password" name="password" placeholder="Contraseña">
-                    <div>
-                        <input name="remember" type="checkbox" /> Recordar contraseña
+                    <div class="rememberme">
+                        <input name="remember" type="checkbox" /> Recordar contraseña 
                     </div>
                     <button type="submit" class="button green" type="submit">Entrar</button>
                 </form>

@@ -1,0 +1,9 @@
+.rememberme input{
+    display: inline;
+}
+
+.rememberme {
+    padding-bottom: 1.5rem;
+    /* display: flex; */
+}
+
