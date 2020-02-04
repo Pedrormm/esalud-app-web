@@ -9,19 +9,33 @@ use App\User;
 class LoginController extends Controller
 {
     public function login(Request $request) {
+        $remember = $request->has('remember') ? true : false;    
+
         $validatedData = $request->validate([
             'dni' => 'required|min:4|max:10|exists:users,dni',
             'password' => 'required|min:6',
         ]);
         $credentials = $request->only('dni', 'password');
 //dd($credentials);
-        if (Auth::attempt($credentials)) {
+/*
+    if (Auth::viaRemember()) {
+        dd(false);
+    }
+*/
+    $rememberme = $request->input('remember');    
+
+        if (Auth::attempt($credentials, $request->has('rememberme'))) {
             // Authentication passed...
-            return redirect()->intended('user/dashboard');
+            //dd($credentials);
+            $user = auth()->user();
+            Auth::login($user,true); 
+            //return redirect()->intended('user/dashboard');
+            return view('user.dashboard',['user'=> $user]);
+
         }
         return back()->withErrors("Authentication failed");
         //dd(false);
-        $dni = $request->input('dni');
+        /*$dni = $request->input('dni');
         $pass = $request->input('password');    
         $user = User::where('dni', $dni)->first();
         if(is_null($user)) {
@@ -44,6 +58,7 @@ class LoginController extends Controller
         return view('user.dashboard',['user'=> $user,'listaUsers'=> $register]);
         // clave y valor, se refiere en la vista la clave
         // Se puede pasar valores como parametro
+        */
     }
 
     public function index() {

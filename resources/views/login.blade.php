@@ -90,7 +90,7 @@
                     <input type="text" name="dni" placeholder="DNI">
                     <input type="password" name="password" placeholder="Contraseña">
                     <div class="rememberme">
-                        <input name="remember" type="checkbox" /> Recordar contraseña 
+                        <input name="remember" type="checkbox" /> Recordar 
                     </div>
                     <button type="submit" class="button green" type="submit">Entrar</button>
                 </form>
