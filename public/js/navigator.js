@@ -4,7 +4,7 @@ var _Navigator = {
     },
 
     initialize : function(wrapper){
-
+        console.log("_Navigator.initialize");
         history.pushState('main', 'Pagina principal', "?v=main");
         _Navigator._vars.wrapper = wrapper.find('main');
 
@@ -71,6 +71,7 @@ var _Navigator = {
     },
 
     go : function(view, from_historic){
+        console.log("_Navigator.go called");
         var params  = view.split("!")
         if(_Navigator._go_to.hasOwnProperty(params[0])){
             if(!from_historic){
@@ -228,7 +229,7 @@ var _Navigator = {
 
         $('nav.top').html(tabs);
         $('nav.top div:first').addClass('on');
-
+      
         if(num_tabs > 1){
             $('main .tabs').owlCarousel({
                 singleItem : true,
@@ -248,5 +249,6 @@ var _Navigator = {
     }
 }
 window.addEventListener('popstate', function(event) {
+    console.log("listener popstate executed");
     _Navigator.go(event.state, true);
 })

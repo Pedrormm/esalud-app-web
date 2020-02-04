@@ -20,7 +20,7 @@
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/structure.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/flip.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/videoconference.css') }}">
+                <!-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/videoconference.css') }}"> -->
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.carousel.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.theme.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.transitions.css') }}">
@@ -38,6 +38,7 @@
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.tmpl.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.json-2.4.min.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.event.move.js') }}"></script>
+                {{--
                 <script type="text/javascript" src="{{ asset('js/SIPml-api.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/util.js') }}"></script>
@@ -68,7 +69,7 @@
                 <script type="text/javascript" src="{{ asset('js/datepicker/bootstrap-datepicker.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/CLNDR/moment-2.5.1.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/CLNDR/underscore.js') }}"></script>
-                <script type="text/javascript" src="{{ asset('js/CLNDR/clndr.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/CLNDR/clndr.js') }}"></script>--}}
 
                 <!-- _User.id     = 1;
                 _User.name   = 'Denis Vaillo Sanchez';
@@ -83,9 +84,5 @@
             </script> -->
             
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
-
-        <audio id="audio_remote" autoplay="autoplay"></audio>
-        <audio id="sip_ringtone" loop src="{{ asset('sounds/ringtone.wav') }}"></audio>
-        <audio id="sip_ringbacktone" loop src="{{ asset('sounds/ringbacktone.wav') }}"></audio>
 
     </head>

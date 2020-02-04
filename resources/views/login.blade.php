@@ -120,5 +120,6 @@
         cursor: pointer;
         margin-top: 7px;
     }
-</style>    </body>
+</style>
+</body>
 </html>

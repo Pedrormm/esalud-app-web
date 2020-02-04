@@ -4,7 +4,7 @@
 $(document).ready(function(){
     console.info = function(){};
 
-    _Navigator.initialize($('body'));
+    //_Navigator.initialize($('body'));
     _Sip.initialize();
 
     /*

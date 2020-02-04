@@ -2,11 +2,14 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     @include('inc.head')
 <body>
+        <audio id="audio_remote" autoplay="autoplay"></audio>
+        <audio id="sip_ringtone" loop src="{{ asset('sounds/ringtone.wav') }}"></audio>
+        <audio id="sip_ringbacktone" loop src="{{ asset('sounds/ringbacktone.wav') }}"></audio>
 @include('inc.header')
 
 <nav class="top">
-    <div class="div_2 on">Noticias</div>
-    <div class="div_2">Notificaciones</div>
+    <div class="div_2 on">Portada</div>
+    <div class="div_2">Noticias</div>
 </nav>
 
 <nav class="left">
@@ -110,7 +113,7 @@
     </main>
         <script type="text/javascript">
             $(function(){
-                _Navigator.go("main");
+               _Navigator.go("main");
             })
         </script>
     </body>
