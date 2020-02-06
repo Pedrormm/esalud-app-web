@@ -10,6 +10,5 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/public/.htccacess
 resources/views/login.blade.php
-public/.htaccess
+/public/.htaccess

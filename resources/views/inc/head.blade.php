@@ -38,6 +38,8 @@
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.tmpl.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.json-2.4.min.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.event.move.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+
                 {{--
                 <script type="text/javascript" src="{{ asset('js/SIPml-api.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
@@ -82,7 +84,9 @@
                 };
                 var base_url = 'http://localhost/denis/';
             </script> -->
-            
+        <script>
+        const _PUBLIC_URL = "{{ asset('') }}";
+        </script>
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
 
     </head>

@@ -5,16 +5,11 @@
     @include('inc.audio')
     @include('inc.header')
 
-    @include('inc.nav-bar-top')
-    @include('inc.nav-bar-left')
+    @yield('nav-bar-top')
     @include('inc.nav-main')
     <main>
         @yield('content')
     </main>
-    <script type="text/javascript">
-        $(function(){
-            _Navigator.go("main");
-        })
-    </script>
+    <div id="debug" style="display:none"></div>
 </body>
 </html>

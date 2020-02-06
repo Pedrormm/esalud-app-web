@@ -6,7 +6,7 @@
         <a class="hidden-md hidden-lg">
             <i class="fa fa-bars"></i>
         </a>
-        <a href=".">
+        <a href="dashboard">
             <i class="fa fa-hospital-o"></i>
         </a>
     </nav>
