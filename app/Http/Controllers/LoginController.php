@@ -16,12 +16,7 @@ class LoginController extends Controller
             'password' => 'required|min:6',
         ]);
         $credentials = $request->only('dni', 'password');
-//dd($credentials);
-/*
-    if (Auth::viaRemember()) {
-        dd(false);
-    }
-*/
+
     $rememberme = $request->input('remember');    
 
         if (Auth::attempt($credentials, $request->has('rememberme'))) {

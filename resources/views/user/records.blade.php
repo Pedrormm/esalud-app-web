@@ -8,15 +8,15 @@
 
 @section('content')
     <div class="tabs">
-        <div class="tab" name="Historiales Medicos">
+        <div class="tab" name="Historiales Médicos">
             <div class="row">
                 <div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
-                    <select class="sel_ord">
-                        <option value="lastname">Ordenado</option>
-                        <option value="lastname">Apellidos</option>
-                        <option value="name">Nombre</option>
-                        <option value="historic">NªHistorial</option>
-                        <option value="dni">DNI</option>
+                    <select class="sel_ord" onclick="#">
+                        <option value="lastname">Ordenado por:</option>
+                        <option value="lastname">Alfbabéticamente por apellidos</option>
+                        <option value="name">Alfbabéticamente por Nombre</option>
+                        <option value="historic">De menor a mayor por NªHistorial</option>
+                        <option value="dni">De menor a mayor por DNI</option>
                     </select>
                 </div>
                 <div class="col-xs-6 col-sm-2 col-md-2">
@@ -41,49 +41,59 @@
                 </div>
             </div>
             <div class="list_records">
-            <div class="record_item col-xs-12 col-sm-6" name="17">
                 @foreach($patients as $patient) 
-                    @php($usuario=DB::table('users')->where('id',$patient->user_id)->get())
-                    @if (count($usuario) > 0)
-                    <div class="box">
-                        <div class="record_left">
-                            <img src="http://localhost/denis/resources/images/avatars/user_woman.png" class="avatar big">
-                        </div>
-                        <div class="record_right">
-                            <div class="row">
-                                <div class=" col-xs-12 col-md-8">
-                                    <div class="row">
-                                        <span class="r_title col-xs-4 col-md-3">Nombre:</span>
-                                        <span class="col-xs-8 col-md-9 dots">{{ $usuario[0]->name }}</span>
-                                        <span class="r_title col-xs-4 col-md-3">Apellidos:</span>
-                                        <span class="col-xs-8 col-md-9 dots">{{ $usuario[0]->lastname }}</span>
-                                        <span class="r_title col-xs-4 col-md-3">Historial:</span>
-                                        <span class="col-xs-8 col-md-9 dots">111444555</span>
-                                        <span class="r_title col-xs-4 col-md-3">DNI:</span>
-                                        <span class="col-xs-8 col-md-9">{{ $usuario[0]->dni }}</span>
-                                    </div>
-                                </div>
-                                <div class="hidden-xs hidden-sm col-md-4">
-                                    <div class="row">
-                                        <span class="r_title hidden-xs col-sm-4">Edad:</span>
-                                        <span class="col-xs-12 col-sm-8">{{ $usuario[0]->birthdate }}</span>
-                                        <span class="r_title hidden-xs col-sm-4">Sexo:</span>
-                                        <span class="col-xs-12 col-sm-8">{{ $usuario[0]->sex }}</span>
-                                        <span class="r_title hidden-xs col-sm-4">Altura:</span>
-                                        <span class="col-xs-12 col-sm-8">{{ $patient->height }}</span>
-                                        <span class="r_title hidden-xs col-sm-4">Peso:</span>
-                                        <span class="col-xs-12 col-sm-8">{{ $patient->weight }}</span>
-                                    </div>
-                                </div>              
-                            </div>          
-                        </div>      
-                    </div>
-                    @endif  
-                @endforeach
-            </div>
+                @php($usuario=DB::table('users')->where('id',$patient->user_id)->get())
+                <!-- @php($usuario=DB::table('users')->where('id','=',3)->get()) -->
+                <!-- @php($usuario=DB::table('users')->where('id',$patient->user_id)->orderBy('name','desc')->get()) -->
 
-        </div>
-    </div>    
+                    <!-- Solo obtener pacientes relacionados con usuarios -->
+                    @if (count($usuario) > 0)
+                        <div class="record_item col-xs-12 col-sm-6" name="17">
+                            <a name="records" href="records"/>                        
+                            <div class="box">
+                                <div class="record_left">
+                                    @if ($usuario[0]->sex = "male")
+                                        <img src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">
+                                    @endif              
+                                    @if ($usuario[0]->sex = "female")
+                                     <!--    <img src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big"> -->
+                                    @endif   
+                                               
+                                </div> <!-- record_left  -->
+                                <div class="record_right">
+                                    <div class="row">
+                                        <div class=" col-xs-12 col-md-8">
+                                            <div class="row">
+                                                <span class="r_title col-xs-4 col-md-3">Nombre:</span>
+                                                <span class="col-xs-8 col-md-9 dots">{{ $usuario[0]->name }}</span>
+                                                <span class="r_title col-xs-4 col-md-3">Apellidos:</span>
+                                                <span class="col-xs-8 col-md-9 dots">{{ $usuario[0]->lastname }}</span>
+                                                <span class="r_title col-xs-4 col-md-3">Historial:</span>
+                                                <span class="col-xs-8 col-md-9 dots">111444555</span>
+                                                <span class="r_title col-xs-4 col-md-3">DNI:</span>
+                                                <span class="col-xs-8 col-md-9">{{ $usuario[0]->dni }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="hidden-xs hidden-sm col-md-4">
+                                            <div class="row">
+                                                <span class="r_title hidden-xs col-sm-4">Edad:</span>
+                                                <span class="col-xs-12 col-sm-8">{{ $usuario[0]->birthdate }}</span>
+                                                <span class="r_title hidden-xs col-sm-4">Sexo:</span>
+                                                <span class="col-xs-12 col-sm-8">{{ $usuario[0]->sex }}</span>
+                                                <span class="r_title hidden-xs col-sm-4">Altura:</span>
+                                                <span class="col-xs-12 col-sm-8">{{ $patient->height }}</span>
+                                                <span class="r_title hidden-xs col-sm-4">Peso:</span>
+                                                <span class="col-xs-12 col-sm-8">{{ $patient->weight }}</span>
+                                            </div>
+                                        </div>              
+                                    </div>          
+                                </div>  <!-- record_right  -->    
+                            </div> <!-- box  -->
+                        </div> <!-- record_item  -->
+                    @endif              
+                @endforeach
+            </div> <!-- list_records  -->
+        </div><!-- Historiales Médicos  -->
 
             <!-- <div class="record_item col-xs-12 col-sm-6" name="10">
                 <div class="box">          
