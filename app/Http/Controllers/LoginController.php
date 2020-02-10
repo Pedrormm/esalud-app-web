@@ -17,13 +17,14 @@ class LoginController extends Controller
         ]);
         $credentials = $request->only('dni', 'password');
 
-    $rememberme = $request->input('remember');    
+        //$rememberme = $request->input('remember');    
 
-        if (Auth::attempt($credentials, $request->has('rememberme'))) {
+      //  if (Auth::attempt($credentials, $request->has('rememberme'))) {
+        if (Auth::attempt($credentials)) {
             // Authentication passed...
-            //dd($credentials);
+            // dd($credentials);
             $user = auth()->user();
-            Auth::login($user,true); 
+            //Auth::login($user,true); 
             //return redirect()->intended('user/dashboard');
             return view('user.dashboard',['user'=> $user]);
 
