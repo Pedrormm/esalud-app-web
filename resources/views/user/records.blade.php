@@ -74,7 +74,7 @@
                                         <div class="hidden-xs hidden-sm col-md-4">
                                             <div class="row">
                                                 <span class="r_title hidden-xs col-sm-4">Edad:</span>
-                                                <span class="col-xs-12 col-sm-8">{{ $patient->birthdate }}</span>
+                                                <span class="col-xs-12 col-sm-8">{{ date("Y") - substr($patient->birthdate,0,4) }}</span>
                                                 <span class="r_title hidden-xs col-sm-4">Sexo:</span>
                                                 <span class="col-xs-12 col-sm-8">{{ $patient->sex }}</span>
                                                 <span class="r_title hidden-xs col-sm-4">Altura:</span>
