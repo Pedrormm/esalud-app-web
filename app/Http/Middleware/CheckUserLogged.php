@@ -17,12 +17,16 @@ class CheckUserLogged
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        if (is_null($user)){
-            $request->session()->flash('info', 'Tu sesion ha caducado por inactividad');
-            
-            return redirect('/');
+        if($request->ajax() && is_null($user)) {
+            return '<div class="alert alert-dange">Llamada inválida</div>';
         }
-
+        else {
+            if (is_null($user)){
+                $request->session()->flash('info', 'Tu sesion ha caducado por inactividad');
+                
+                return redirect('/');
+            }
+        }
         return $next($request);
     
     }

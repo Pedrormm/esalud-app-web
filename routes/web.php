@@ -18,7 +18,7 @@ Route::get('/', function () {
 
 Route::post('/user/login', 'LoginController@login');
 Route::get('user/dashboard', 'LoginController@index')->middleware('checkUserAuth');
-Route::get('user/records', 'RecordsController@index')->middleware('checkUserAuth');
+Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
 
 //dd(false);
 //TODO: Crear un middleware siguiendo el tutorial oficial (se hace con artisan) y llamarlo CheckUserLogged y que lo use el endpoint user/dashboard
@@ -29,4 +29,4 @@ Route::get('test', function() {
 });
 Route::get('user/messages', function() {
     return view('ajax/messages');
-});
+})->middleware('checkUserAuth');
