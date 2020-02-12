@@ -92,14 +92,33 @@
         </div><!-- Historiales Médicos  -->
 
 <script>
+    $(document).ready(function() {  
+
+    if (window.location.href != "{{url('user/records')}}") {
+        if(sessionStorage.getItem('order') !== '') {
+            $('#record_order_type').val(sessionStorage.getItem('order'));
+        }
+        if(sessionStorage.getItem('sex') !== '') {
+            $('#record_sex_filter').val(sessionStorage.getItem('sex'));
+            }
+        if(sessionStorage.getItem('age') !== '') {
+            $('#record_age_filter').val(sessionStorage.getItem('age'));
+        }
+    }
+    });
+
     $('#search').click(function(e) {        
         let ord = $('#record_order_type').val();
         let sexFilter = $('#record_sex_filter').val();
         let ageFilter = $('#record_age_filter').val();
         let nameSearch = $('#record_search_filter').val();
- 
 
-        location.href = "{{url('user/records')}}" + "/" + ord + "/" + sexFilter + "/" + ageFilter + "/" + nameSearch;
+        sessionStorage.setItem('order', ord);
+        sessionStorage.setItem('sex', sexFilter);
+        sessionStorage.setItem('age', ageFilter);
+
+        location.href = "{{url('user/records')}}" + "/" + ord + "/" + sexFilter + "/" 
+        + ageFilter + "/" + nameSearch;
     });
 </script>
            
