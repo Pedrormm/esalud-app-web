@@ -6,7 +6,7 @@
         <a class="hidden-md hidden-lg">
             <i class="fa fa-bars"></i>
         </a>
-        <a href="dashboard">
+        <a name="dashboard" href="{{ URL::asset('/user/dashboard') }}">
             <i class="fa fa-hospital-o"></i>
         </a>
     </nav>

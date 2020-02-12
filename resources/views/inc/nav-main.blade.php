@@ -2,7 +2,7 @@
     
     <ul>
         <li>
-            <a name="records" href="records">
+            <a name="records" href="{{ URL::asset('/user/records') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-folder-open-o fa-stack-1x fa-inverse"></i>
