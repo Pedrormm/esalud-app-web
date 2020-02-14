@@ -37,7 +37,7 @@
                     </select>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-5">
-                    <input type="text" placeholder="Nombre, historial o dni" class="inp_search" id="record_search_filter">
+                    <input type="text" placeholder="Nombre, apellidos, historial o dni" class="inp_search" id="record_search_filter">
                 </div>
                 <div class="col-xs-6 col-sm-2 col-md-2">
                     <button type="button" class="btn btn-primary" id="search">Buscar</button>
@@ -62,9 +62,9 @@
                                         <div class=" col-xs-12 col-md-8">
                                             <div class="row">
                                                 <span class="r_title col-xs-4 col-md-3">Nombre:</span>
-                                                <span class="col-xs-8 col-md-9 dots">{{ $patient->name }}</span>
+                                                <span class="col-xs-8 col-md-9 dots">{{ urldecode($patient->name) }}</span>
                                                 <span class="r_title col-xs-4 col-md-3">Apellidos:</span>
-                                                <span class="col-xs-8 col-md-9 dots">{{ $patient->lastname }}</span>
+                                                <span class="col-xs-8 col-md-9 dots">{{ urldecode($patient->lastname) }}</span>
                                                 <span class="r_title col-xs-4 col-md-3">Historial:</span>
                                                 <span class="col-xs-8 col-md-9 dots">111444555</span>
                                                 <span class="r_title col-xs-4 col-md-3">DNI:</span>
@@ -94,17 +94,17 @@
 <script>
     $(document).ready(function() {  
 
-    if (window.location.href != "{{url('user/records')}}") {
-        if(sessionStorage.getItem('order') !== '') {
-            $('#record_order_type').val(sessionStorage.getItem('order'));
-        }
-        if(sessionStorage.getItem('sex') !== '') {
-            $('#record_sex_filter').val(sessionStorage.getItem('sex'));
+        if (window.location.href != "{{url('user/records')}}") {
+            if(sessionStorage.getItem('order') !== '') {
+                $('#record_order_type').val(sessionStorage.getItem('order'));
             }
-        if(sessionStorage.getItem('age') !== '') {
-            $('#record_age_filter').val(sessionStorage.getItem('age'));
+            if(sessionStorage.getItem('sex') !== '') {
+                $('#record_sex_filter').val(sessionStorage.getItem('sex'));
+                }
+            if(sessionStorage.getItem('age') !== '') {
+                $('#record_age_filter').val(sessionStorage.getItem('age'));
+            }
         }
-    }
     });
 
     $('#search').click(function(e) {        

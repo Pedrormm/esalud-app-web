@@ -3,6 +3,7 @@ $(function() {
 });
 
 function asyncCall(endpoint, jQselector) {
+    console.log("Calling asyncCall with args", arguments);
     $.ajax(_PUBLIC_URL + endpoint, {
         method:'get',
         dataType:'html',

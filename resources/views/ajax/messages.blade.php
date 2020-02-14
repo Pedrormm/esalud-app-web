@@ -6,13 +6,11 @@
         </tr>
     </thead>
     <tbody>
+        @foreach($userMessages as $i=>$userMessage)
         <tr>
-            <td>1</td>
-            <td><a href="{{ asset('message/' . 1) }}">asogihaoighaoigha</td>
+            <td>{{ $i+1 }}</td>
+            <td><a href="{{ asset('message/' . $userMessage->id) }}">{{ $userMessage->messageCorrected }}</td>
         </tr>
-        <tr>
-            <td>2</td>
-            <td><a href="{{ asset('message/' . 2) }}">hola mundo</td>
-        </tr>
+        @endforeach
     </tbody>
 </table>

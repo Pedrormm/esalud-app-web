@@ -27,6 +27,4 @@ Route::get('user/logout', 'LoginController@logout');
 Route::get('test', function() {
     phpinfo();
 });
-Route::get('user/messages', function() {
-    return view('ajax/messages');
-})->middleware('checkUserAuth');
+Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');

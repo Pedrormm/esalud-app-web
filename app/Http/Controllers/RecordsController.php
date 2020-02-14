@@ -15,9 +15,9 @@ use DateInterval;
 class RecordsController extends Controller
 {
 
-    public function get_birthdate_from_string(string $s_date){
+    public function get_birthdate_from_yearstring(string $y_date){
         $CurrentDateTime = new DateTime("now");
-        $CurrentDateTime->sub(new DateInterval('P'.$s_date.'Y'));
+        $CurrentDateTime->sub(new DateInterval('P'.$y_date.'Y'));
         $date = ($CurrentDateTime->format('Y-m-d'));
         return $date;
     }
@@ -35,18 +35,30 @@ class RecordsController extends Controller
                 $sex = explode(" ",$sex_fil);
             }
 
-            $from = $this->get_birthdate_from_string("0");
-            $to = $this->get_birthdate_from_string("140");
+            $from = $this->get_birthdate_from_yearstring("0");
+            $to = $this->get_birthdate_from_yearstring("140");
             if (!is_null($age_fil) && !empty($age_fil) && $age_fil != "no"){
                 $splitedDate = explode("-","$age_fil");
-                $from = $this->get_birthdate_from_string($splitedDate[0]);
-                $to = $this->get_birthdate_from_string($splitedDate[1]);
+                $from = $this->get_birthdate_from_yearstring($splitedDate[0]);
+                $to = $this->get_birthdate_from_yearstring($splitedDate[1]);
             }
-        
+
             $patients = Patient::join('users', 'patient.user_id', 'users.id')->orderBy($ord)
             ->whereIn('sex', $sex)
             ->whereDate('birthdate', '<=', $from)->whereDate('birthdate', '>=', $to)->get();
+
+            if (!is_null($n_search) && !empty($n_search) && isset($n_search)){
+                $patients = Patient::join('users', 'patient.user_id', 'users.id')->orderBy($ord)
+                ->whereIn('sex', $sex)
+                ->whereDate('birthdate', '<=', $from)->whereDate('birthdate', '>=', $to)
+                ->where('name', 'LIKE', '%'.$n_search.'%')
+                ->orWhere('lastname', 'LIKE', '%'.$n_search.'%')
+                ->orWhere('historic', 'LIKE', '%'.$n_search.'%')
+                ->orWhere('dni', 'LIKE', '%'.$n_search.'%')
+                ->get();
+            }
         }
+        // ->whereRaw('name = ? or historic = ? or dni = ?, $n_search')
 
         return view('user/records', ['patients' => $patients,'user' => $user]);
     }
