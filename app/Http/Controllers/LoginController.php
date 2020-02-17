@@ -62,7 +62,7 @@ class LoginController extends Controller
         return view('user.dashboard', compact('user'));
     }
     
-    public function logout() {
+    public function logout(Request $request) {
         Auth::logout();
         return redirect('/')->withError("Session closed");
     }

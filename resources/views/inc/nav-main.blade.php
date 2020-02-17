@@ -11,7 +11,7 @@
             </a>
         </li>
         <li>
-            <a name="chats" href="chats">
+            <a name="chat" href="{{ URL::asset('/user/chat') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-comments-o fa-stack-1x fa-inverse"></i>
@@ -20,7 +20,7 @@
             </a>
         </li>
         <li>
-            <a name="calendar" href="calendar">
+            <a name="calendar" href="{{ URL::asset('/user/calendar') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
@@ -29,7 +29,7 @@
             </a>
         </li>
         <li>
-            <a name="staff" href="staff">
+            <a name="staff" href="{{ URL::asset('/user/staff') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-user-md fa-stack-1x fa-inverse"></i>
@@ -38,7 +38,7 @@
             </a>
         </li>
         <li>
-            <a name="patients" href="patients">
+            <a name="patient" href="{{ URL::asset('/user/patient') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-group fa-stack-1x fa-inverse"></i>
@@ -47,7 +47,7 @@
             </a>
         </li>
         <li>
-            <a name="users" href="users">
+            <a name="user" href="{{ URL::asset('/user/user') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-h-square fa-stack-1x fa-inverse"></i>
@@ -56,7 +56,7 @@
             </a>
         </li>
         <li>
-            <a name="roles" href="roles">
+            <a name="rol" href="{{ URL::asset('/user/rol') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-key fa-stack-1x fa-inverse"></i>
@@ -65,7 +65,7 @@
             </a>
         </li>
         <li>
-            <a name="profiles" href="profiles">
+            <a name="profile" href="{{ URL::asset('/user/profile') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-cog fa-stack-1x fa-inverse"></i>
@@ -74,7 +74,7 @@
             </a>
         </li>
         <li>
-            <a href="logout" name="logout">
+            <a name="logout" href="{{ URL::asset('/user/logout') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>

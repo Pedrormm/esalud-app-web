@@ -15,15 +15,9 @@ use DateInterval;
 class RecordsController extends Controller
 {
 
-    public function get_birthdate_from_yearstring(string $y_date){
-        $CurrentDateTime = new DateTime("now");
-        $CurrentDateTime->sub(new DateInterval('P'.$y_date.'Y'));
-        $date = ($CurrentDateTime->format('Y-m-d'));
-        return $date;
-    }
-
     public function index(string $ord=null, string $sex_fil=null, string $age_fil=null, string $n_search=null) {
         $user = Auth::user();
+
         if (is_null($ord)){
             $ord = 'user_id';
         }
@@ -35,12 +29,12 @@ class RecordsController extends Controller
                 $sex = explode(" ",$sex_fil);
             }
 
-            $from = $this->get_birthdate_from_yearstring("0");
-            $to = $this->get_birthdate_from_yearstring("140");
+            $from = get_birthdate_from_yearstring("0");
+            $to = get_birthdate_from_yearstring("140");
             if (!is_null($age_fil) && !empty($age_fil) && $age_fil != "no"){
                 $splitedDate = explode("-","$age_fil");
-                $from = $this->get_birthdate_from_yearstring($splitedDate[0]);
-                $to = $this->get_birthdate_from_yearstring($splitedDate[1]);
+                $from = get_birthdate_from_yearstring($splitedDate[0]);
+                $to = get_birthdate_from_yearstring($splitedDate[1]);
             }
 
             $patients = Patient::join('users', 'patient.user_id', 'users.id')->orderBy($ord)
@@ -58,9 +52,13 @@ class RecordsController extends Controller
                 ->get();
             }
         }
-        // ->whereRaw('name = ? or historic = ? or dni = ?, $n_search')
 
         return view('user/records', ['patients' => $patients,'user' => $user]);
+    }
+
+    public function showRecord(string $id=null) {
+        $user = Auth::user();        
+        return view('user/recorddisplay', ['id' => $id,'user' => $user]);
     }
 
 }

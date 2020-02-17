@@ -46,8 +46,8 @@
             <div class="list_records">
                 @foreach($patients as $patient) 
                     <!-- Solo obtener pacientes relacionados con usuarios -->
-                        <div class="record_item col-xs-12 col-sm-6" name="17">
-                            <a name="records" href="records"/>                        
+                        <div class="record_item col-xs-12 col-sm-6" name="{{ $patient->id }}">
+                            <a name="records" href="{{ URL::asset('/user/recorddisplay/'.$patient->id) }}"/>                        
                             <div class="box">
                                 <div class="record_left">
                                     @if ($patient->sex=="male")
@@ -74,7 +74,8 @@
                                         <div class="hidden-xs hidden-sm col-md-4">
                                             <div class="row">
                                                 <span class="r_title hidden-xs col-sm-4">Edad:</span>
-                                                <span class="col-xs-12 col-sm-8">{{ date("Y") - substr($patient->birthdate,0,4) }}</span>
+                                                <!-- <span class="col-xs-12 col-sm-8">{{ date("Y") - substr($patient->birthdate,0,4) }}</span> -->
+                                                <span class="col-xs-12 col-sm-8">{{ \Carbon\Carbon::parse($patient->birthdate)->age }}</span>
                                                 <span class="r_title hidden-xs col-sm-4">Sexo:</span>
                                                 <span class="col-xs-12 col-sm-8">{{ $patient->sex }}</span>
                                                 <span class="r_title hidden-xs col-sm-4">Altura:</span>
