@@ -39,15 +39,16 @@
                 <div class="col-xs-12 col-sm-6 col-md-5">
                     <input type="text" placeholder="Nombre, apellidos, historial o dni" class="inp_search" id="record_search_filter">
                 </div>
-                <div class="col-xs-6 col-sm-2 col-md-2">
-                    <button type="button" class="btn btn-primary" id="search">Buscar</button>
+
+                <div class="col-xs-12 col-sm-2">
+                    <button type="button" id="search" class="btn btn-primary bt-search inp_height"><i class="fa fa-search"></i>Buscar</a>
                 </div>
             </div>
             <div class="list_records">
                 @foreach($patients as $patient) 
                     <!-- Solo obtener pacientes relacionados con usuarios -->
                         <div class="record_item col-xs-12 col-sm-6" name="{{ $patient->id }}">
-                            <a name="records" href="{{ URL::asset('/user/recorddisplay/'.$patient->id) }}"/>                        
+                            <a name="records" href="{{ URL::asset('/user/singlerecord/'.$patient->id) }}"/>                        
                             <div class="box">
                                 <div class="record_left">
                                     @if ($patient->sex=="male")

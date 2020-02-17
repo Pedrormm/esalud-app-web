@@ -58,7 +58,7 @@ class RecordsController extends Controller
 
     public function showRecord(string $id=null) {
         $user = Auth::user();        
-        return view('user/recorddisplay', ['id' => $id,'user' => $user]);
+        return view('user/singlerecord', ['id' => $id,'user' => $user]);
     }
 
 }

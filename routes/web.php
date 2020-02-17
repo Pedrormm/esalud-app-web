@@ -20,7 +20,7 @@ Route::post('/user/login', 'LoginController@login');
 Route::get('user/dashboard', 'LoginController@index')->middleware('checkUserAuth');
 Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
 
- Route::get('user/recorddisplay/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
+ Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
 /*
 Route::get( 'user/recorddisplay/{id}', function ( $id) {
     fopen( resource_path( 'views/' . $id . '.blade.php' ), 'w' );
