@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\PieceNew;
+
 class LoginController extends Controller
 {
     public function login(Request $request) {
@@ -59,7 +61,8 @@ class LoginController extends Controller
 
     public function index() {
         $user = Auth::user();
-        return view('user.dashboard', compact('user'));
+        $news = PieceNew::orderByDesc('date')->get();
+        return view('user.dashboard', ['user' => $user,'news' => $news]);
     }
     
     public function logout(Request $request) {

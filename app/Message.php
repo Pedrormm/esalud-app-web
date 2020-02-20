@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    protected $table = 'message';
+    protected $table = 'messages';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id', 'from', 'to', 'message', 'sent', 'read'
+        'user_id_from', 'user_id_to', 'message', 'read', 'created_at', 'updated_at'
     ];
 
     public function fromUser() {

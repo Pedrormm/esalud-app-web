@@ -124,6 +124,7 @@ nav.top > div {
 
 nav.top > div.div_2 {
     width: 50%;
+    cursor: pointer;
 }
 
 nav.top > div.div_3 {

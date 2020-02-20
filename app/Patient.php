@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
-    protected $table = 'patient';
+    protected $table = 'patients';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'historic', 'user_id', 'status', 'height', 'weight'
+        'fk_users_user_id', 'historic', 'status', 'height', 'weight', 'created_at', 'updated_at'
     ];
 
     public function user() {

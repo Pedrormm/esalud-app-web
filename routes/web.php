@@ -28,6 +28,9 @@ Route::get( 'user/recorddisplay/{id}', function ( $id) {
 });
 */
 
+Route::get('user/patients/', 'UsersManagementController@patients')->middleware('checkUserAuth');
+
+
 Route::get('user/logout', 'LoginController@logout');
 Route::get('test', function() {
     phpinfo();

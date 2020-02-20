@@ -1,0 +1,39 @@
+@extends('layout.logged')
+
+@section('nav-bar-top')
+    <nav class="top">
+        <div class="div_2 on">Portada</div>
+        <div class="div_2">Noticias</div>
+    </nav>
+@endsection
+
+@section('content')
+
+<div class="tabs">
+    <div class="tab" name="Pacientes">
+        <div class="box">
+            <h5 class="header_box"><i class="fa fa-group"></i>Listado de pacientes</h5>
+            <div class="row">
+                <div class="col-xs-12 col-sm-10">
+                    <input type="text" placeholder="Buscar por nombre o historial" name="searcher_patients">
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a class="btn btn-primary bt-search inp_height"><i class="fa fa-search"></i>Buscar</a>
+                </div>
+            </div>
+            <div class="row patients_list_header">
+                <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3"><h5>Apellidos, Nombre</h5></div>
+                <div class="hidden-xs col-sm-4 col-md-2 col-lg-2"><h5>Nº Historial</h5></div>
+                <div class="hidden-xs hidden-sm col-md-2 col-lg-2"><h5>Dni</h5></div>
+                <div class="hidden-xs hidden-sm col-md-2 col-lg-2"><h5>Telefono</h5></div>
+                <div class="hidden-xs hidden-sm hidden-md col-lg-2"><h5>Nacimiento</h5></div>
+                <div class="hidden-xs hidden-sm hidden-md col-lg-1"><h5>Sexo</h5></div>
+            </div>
+            <ul class="patients_list list_limit_height-lg">
+                
+            <li class="patient_item" name="4">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_woman.png">              Marques Munoz, Maria          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              987654321          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              paciente1          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              650210074          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1974-10-05          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              female          </div>      </div>  </li><li class="patient_item" name="5">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_woman.png">              Sanchez Sanz, Laura          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              36843287          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              paciente2          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">                        </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1980-01-12          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              female          </div>      </div>  </li><li class="patient_item" name="6">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_man.png">              Rodriguez Cano, Pedro          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              5445300          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              paciente3          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              666222547          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1966-01-20          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              male          </div>      </div>  </li><li class="patient_item" name="10">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_man.png">              Llana Sanchez, Marcos          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              4565454          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              47255641L          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">                        </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1988-01-05          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              male          </div>      </div>  </li><li class="patient_item" name="17">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_woman.png">              Carter Gomez, Gloria          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              111444555          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              3684526R          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              63300245          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1959-06-04          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              female          </div>      </div>  </li><li class="patient_item" name="20">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_man.png">              Perez Lopez, Juan          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              123456789          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              111111111A          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">                        </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1989-02-01          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              male          </div>      </div>  </li><li class="patient_item" name="21">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_man.png">              Muñoz Cartagena, Cesar           </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              425412189          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              222333444A          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">                        </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1970-03-08          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              male          </div>      </div>  </li><li class="patient_item" name="26">      <div class="row">          <div class="col-xs-12 col-sm-8 col-md-6 col-lg-3">              <img class="avatar" src="http://localhost/denis/resources/images/avatars/user_man.png">              Perez Martin, Daniel          </div>          <div class="hidden-xs col-sm-4 col-md-2 col-lg-2">              1318020427          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">              000000A          </div>          <div class="hidden-xs hidden-sm col-md-2 col-lg-2">                        </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-2">              1979-06-08          </div>          <div class="hidden-xs hidden-sm hidden-md col-lg-1">              male          </div>      </div>  </li></ul>
+        </div>
+    </div>
+</div>
+    
+@endsection
