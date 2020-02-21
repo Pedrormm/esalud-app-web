@@ -28,8 +28,8 @@ class LoginController extends Controller
             $user = auth()->user();
             //Auth::login($user,true); 
             //return redirect()->intended('user/dashboard');
-            return view('user.dashboard',['user'=> $user]);
-
+            $news = PieceNew::orderByDesc('date')->get();
+            return view('user.dashboard', ['user' => $user,'news' => $news]);
         }
         return back()->withErrors("Authentication failed");
         //dd(false);
@@ -60,7 +60,7 @@ class LoginController extends Controller
     }
 
     public function index() {
-        $user = Auth::user();
+        $user = Auth::user();        
         $news = PieceNew::orderByDesc('date')->get();
         return view('user.dashboard', ['user' => $user,'news' => $news]);
     }

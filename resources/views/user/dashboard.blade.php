@@ -9,28 +9,24 @@
 
 @section('content')
 
-    Welcome user! Congratulations to pedro!
     <div id="main-container" class="container-fluid">
-
-    <div>
-        @foreach ($news as $piecenew)
-        <div class="box">
-            <h4>{{ $piecenew->title }}</h4>
-            <p>{{ $piecenew->content }}</p>
-            <h6 style="text-align: right">{{ $piecenew->date }}</h6>
-        </div>
-        @endforeach
     </div>
+
+    <div id="news-container" class="container-fluid">
+    </div>
+
     <script>
         $('nav .div_2').click(function(e) {
             let item = $(this).data('item');
             $('nav .div_2').removeClass('on');
             $('nav .div_2').eq(item-1).addClass('on');
             if(item == 1) {
+                document.getElementById("news-container").style.display = "none";
                 asyncCall('user/messages', '#main-container', true);
             }
             else {
-                asyncCall('user/news', '#main-container', true);
+                document.getElementById("main-container").style.display = "none";
+                asyncCall('user/news', '#news-container', true);
             }
         });
         asyncCall('user/messages', '#main-container', true);

@@ -36,3 +36,5 @@ Route::get('test', function() {
     phpinfo();
 });
 Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');
+
+Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
