@@ -38,12 +38,64 @@ class User extends Authenticatable
         //'email_verified_at' => 'datetime',
     ];
 
-    public function patients() {
-        return $this->hasMany("App\Patient");
+    public function analytics() {
+        return $this->hasMany("App\Analytic");
+    }
+
+    public function calls() {
+        return $this->hasMany("App\Call");
+    }
+
+    public function events() {
+        return $this->hasMany("App\Event");
+    }
+
+    public function logs() {
+        return $this->hasMany("App\Log");
+    }
+
+    public function medicines() {
+        return $this->hasMany("App\Medicine");
     }
 
     public function messages() {
         return $this->hasMany("App\Message");
+    }
+
+    public function notes() {
+        return $this->hasMany("App\Note");
+    }
+
+    public function patients() {
+        return $this->hasMany("App\Patient");
+    }
+
+    public function permissions() {
+        return $this->hasMany("App\Permission");
+    }
+
+    public function protocols() {
+        return $this->hasMany("App\Protocol");
+    }
+
+    public function relations() {
+        return $this->hasMany("App\Relation");
+    }
+
+    public function reports() {
+        return $this->hasMany("App\Report");
+    }
+
+    public function staff() {
+        return $this->hasMany("App\Staff");
+    }
+
+    public function warning_reads() {
+        return $this->hasMany("App\Warning_Read");
+    }
+
+    public function warnings() {
+        return $this->hasMany("App\Warning");
     }
 
 }

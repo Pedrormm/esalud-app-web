@@ -23,4 +23,18 @@ class MessageController extends Controller
         return view('ajax/messages', compact('userMessages'));
     }
 
+    public function sendMessage(){
+        $user = Auth::user();
+
+        $message = $user->messages()->create([
+            'message' => $request->input('message')
+        ]);
+
+        return ['status' => 'Mensaje enviado'];
+    }
+
+    public function retrieveMessage(){
+
+    }
+
 }

@@ -22,7 +22,7 @@ class RecordsController extends Controller
             $ord = 'user_id';
         }
 
-        if ((Schema::hasColumn('users', $ord) || Schema::hasColumn('patients', $ord))) {
+      //  if ((Schema::hasColumn('users', $ord) || Schema::hasColumn('patients', $ord))) {
             // Comprobar si columna existe en la BD
             $sex = ['male', 'female'];
             if (!is_null($sex_fil) && !empty($sex_fil) && $sex_fil != "no"){
@@ -40,7 +40,7 @@ class RecordsController extends Controller
             $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
             ->whereIn('sex', $sex)
             ->whereDate('birthdate', '<=', $from)->whereDate('birthdate', '>=', $to)->get();
-
+            
             if (!is_null($n_search) && !empty($n_search) && isset($n_search)){
                 $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
                 ->whereIn('sex', $sex)
@@ -51,7 +51,7 @@ class RecordsController extends Controller
                 ->orWhere('dni', 'LIKE', '%'.$n_search.'%')
                 ->get();
             }
-        }
+       // }
         return view('user/records', ['patients' => $patients,'user' => $user]);
     }
 

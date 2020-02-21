@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
                     <select class="sel_ord" id="record_order_type">
-                        <option value="id">Ordenado por:</option>
+                        <option value="users.id">Ordenado por:</option>
                         <option value="lastname">Alfbabéticamente por apellidos</option>
                         <option value="name">Alfbabéticamente por Nombre</option>
                         <option value="historic">De menor a mayor por NªHistorial</option>
