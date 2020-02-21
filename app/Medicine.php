@@ -4,23 +4,23 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Analytic extends Model
+class Medicine extends Model
 {
-    protected $table = 'analytics';
+    protected $table = 'medicines';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'type', 'user_id_user', 'user_id_creator', 'result', 'deleted', 'created_at', 'updated_at'
+        'user_id_patient', 'user_id_doctor', 'medicine', 'interval', 'stop', 'stop_user', 'created_at', 'updated_at'
     ];
 
-    public function userUser() {
+    public function patientUser() {
         return $this->belongsTo("App\User");
     }
 
-    public function creatorUser() {
+    public function doctorUser() {
         return $this->belongsTo("App\User");
-    }
+    }    
 }
