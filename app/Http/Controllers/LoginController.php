@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\PieceNew;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -19,44 +20,43 @@ class LoginController extends Controller
         ]);
         $credentials = $request->only('dni', 'password');
 
-        //$rememberme = $request->input('remember');    
-
       //  if (Auth::attempt($credentials, $request->has('rememberme'))) {
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             // Authentication passed...
-            // dd($credentials);
             $user = auth()->user();
-            //Auth::login($user,true); 
-            //return redirect()->intended('user/dashboard');
-            $news = PieceNew::orderByDesc('date')->get();
-            return view('user.dashboard', ['user' => $user,'news' => $news]);
+            return redirect()->action('LoginController@index');
+            //return view('user.dashboard', ['user' => $user]);
         }
         return back()->withErrors("Authentication failed");
-        //dd(false);
-        /*$dni = $request->input('dni');
-        $pass = $request->input('password');    
-        $user = User::where('dni', $dni)->first();
+    }
+
+    public function loginForgotten(Request $request) {
+        
+
+        $validatedData = $request->validate([
+            'rem_password' => 'required|min:4|max:10|exists:users,dni',
+        ]);
+       
+        $login = $request->rem_password;
+        $user = User::where('dni', $login)->first();
         if(is_null($user)) {
-            return back()->withErrors("Authentication failed");
+            return response()->back()->withErrors("Invalid login");
         }
-        $passDbEnc = $user->password;
-        if(Hash::check($pass, $passDbEnc)) {
-            if (Hash::needsRehash($passDbEnc)) {
-                $hashed = Hash::make($pass);
-                $user->password = $hashed;
-                $user->save();
-                //update
+        
+        $maxSteps = 1000; //Por seguridad, no vamos a permitir esto
+        $try = 0;
+        do {
+            $token = Str::random(32);
+            $user->remember_token = $token;
+            if($try >= $maxSteps) {
+                // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
+                return response()->back()->withErrors("Internal error");
             }
-        }
-        else {
-            return back()->withErrors("Authentication failed");
-        }
-        $register = User::orderBy('id');
-        // TODO: Generar variables de session llamada 'user_hv' con el objeto $user
-        return view('user.dashboard',['user'=> $user,'listaUsers'=> $register]);
-        // clave y valor, se refiere en la vista la clave
-        // Se puede pasar valores como parametro
-        */
+            $try++;
+        } while (User::where('remember_token', $token)->first() instanceof User);
+        //TODO Coger el $token, guardarlo en remember_token de users y mandar el email personalizado a no se quien (porque no existe ningun mail) usando el email predefinido de laravel para este caso de remember token o mejos aun, creando uno nuevo entero
+
+        dd($token);
     }
 
     public function index() {

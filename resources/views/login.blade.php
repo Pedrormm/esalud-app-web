@@ -103,12 +103,15 @@
                 </nav>
             </div>
             <div class="box request_password" style="display: none">
-                <h5>Si has olvidado tu contraseña introduce tu DNI o email para solicitar una nueva</h5>
-                <input type="text" name="rem_password" value="" placeholder="DNI o email">
-                <button type="submit" class="button green bt-request" type="submit">Solicitar</button>
-                <nav class="back_login">
-                    Volver login
-                </nav>
+                <form method="post" action="{{ url('user/loginForgotten') }}">
+                    @csrf
+                    <h5>Si has olvidado tu contraseña introduce tu DNI o email para solicitar una nueva</h5>
+                    <input type="text" name="rem_password" value="" placeholder="DNI o email">
+                    <button type="submit" class="button green bt-request" type="submit">Solicitar</button>
+                    <nav class="back_login">
+                        Volver login
+                    </nav>
+                </form>
             </div>
         </div>
     </div>

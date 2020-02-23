@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-2">
-                    <button type="button" id="search" class="btn btn-primary bt-search inp_height"><i class="fa fa-search"></i>Buscar</a>
+                    <button type="button" id="hmsearch" class="btn btn-primary bt-search inp_height"><i class="fa fa-search"></i>Buscar</a>
                 </div>
             </div>
             <div class="list_records">
@@ -67,7 +67,7 @@
                                                 <span class="r_title col-xs-4 col-md-3">Apellidos:</span>
                                                 <span class="col-xs-8 col-md-9 dots">{{ urldecode($patient->lastname) }}</span>
                                                 <span class="r_title col-xs-4 col-md-3">Historial:</span>
-                                                <span class="col-xs-8 col-md-9 dots">111444555</span>
+                                                <span class="col-xs-8 col-md-9 dots">{{ $patient->historic }}</span>
                                                 <span class="r_title col-xs-4 col-md-3">DNI:</span>
                                                 <span class="col-xs-8 col-md-9">{{ $patient->dni }}</span>
                                             </div>
@@ -106,10 +106,13 @@
             if(sessionStorage.getItem('age') !== '') {
                 $('#record_age_filter').val(sessionStorage.getItem('age'));
             }
+            if(sessionStorage.getItem('search') !== '') {
+                $('#record_search_filter').val(sessionStorage.getItem('search'));
+            }
         }
     });
 
-    $('#search').click(function(e) {        
+    $('#hmsearch').click(function(e) {        
         let ord = $('#record_order_type').val();
         let sexFilter = $('#record_sex_filter').val();
         let ageFilter = $('#record_age_filter').val();
@@ -118,6 +121,8 @@
         sessionStorage.setItem('order', ord);
         sessionStorage.setItem('sex', sexFilter);
         sessionStorage.setItem('age', ageFilter);
+        sessionStorage.setItem('search', nameSearch);
+
 
         location.href = "{{url('user/records')}}" + "/" + ord + "/" + sexFilter + "/" 
         + ageFilter + "/" + nameSearch;

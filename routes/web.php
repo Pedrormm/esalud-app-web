@@ -10,25 +10,31 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Full view routes
 Route::get('/', function () {
     //session()->flash('info', 'pepe');
+    $user = Auth::user(); //Check for session stablished
+    if($user)
+        return redirect()->action('LoginController@index');
     return view('login');
 });
-
-Route::post('/user/login', 'LoginController@login');
 Route::get('user/dashboard', 'LoginController@index')->middleware('checkUserAuth');
-Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
 
- Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
+// Ajax view routes
+Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
+Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
+
+// Generic purposes rountes
+Route::post('/user/login', 'LoginController@login');
+Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 /*
 Route::get( 'user/recorddisplay/{id}', function ( $id) {
     fopen( resource_path( 'views/' . $id . '.blade.php' ), 'w' );
     return view($id);
 });
 */
-
-Route::get('user/patients/', 'UsersManagementController@patients')->middleware('checkUserAuth');
+Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
+Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');
 
 
 Route::get('user/logout', 'LoginController@logout');
