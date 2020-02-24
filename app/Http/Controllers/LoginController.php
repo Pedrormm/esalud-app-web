@@ -31,6 +31,16 @@ class LoginController extends Controller
             //return view('user.dashboard', ['user' => $user]);
         }
         return back()->withErrors("Authentication failed");
+                /*
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=339ee8d373df86
+MAIL_PASSWORD=968ef15ce5ac31
+MAIL_ENCRYPTION=tls
+MAIL_FROM_NAME="${APP_NAME}"
+        */
+
     }
 
     public function loginForgotten(Request $request) {
@@ -79,13 +89,14 @@ class LoginController extends Controller
             }
         }
 
+
         //$objContact = json_encode($contact);
         $objContact = 'pedroramonmmspam1@gmail.com';
         
         Mail::send('login', ['user' => $objContact], function ($m) use ($user) {
-            $m->from('pedroramonmmspam1@gmail.com', 'Your Application');
+         //   $m->from('pedroramonmmspam1@gmail.com', 'Your Application');
 
-            $m->to('pedroramonmmspam1@gmail.com', 'Prueba')->subject('Your Reminder!');
+            $m->to('pedroramonmmspam1@gmail.com', 'Prueba')->subject('Your Reminder!!');
         });
 
         /*
