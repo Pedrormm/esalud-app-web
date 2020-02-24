@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Patient;
 use App\Staff;
+use DB;
 
 class UsersManagementController extends Controller
 {
@@ -51,4 +52,35 @@ class UsersManagementController extends Controller
         
         return view('user/patient', ['patients' => $patients,'user' => $user]);
     }
+
+    public function showUsers(string $search=null, string $ord=null){
+        $user = Auth::user();
+
+        if (is_null($ord)){
+            $ord = 'users.id';
+        }
+
+        // $users = DB::table('users')->join('patients', 'patients.user_id', 'users.id')
+        // ->join('staff', 'staff.user_id', 'users.id')->orderBy($ord)->get(); 
+
+        $patients = Patient::join('users', 'patients.user_id', 'users.id')
+        ->join('staff', 'staff.user_id', 'users.id')->orderBy($ord)->get();
+
+
+      //  $users = User::all();
+      //  $users = User::orderBy($ord)->leftJoin('patients', 'patients.user_id', 'users.id')->leftJoin('staff', 'staff.user_id', 'users.id')->get();
+        $users = User::with(['patients', 'staff'])->orderBy($ord)->get();
+
+        if (!is_null($search) && !empty($search) && isset($search)){
+            $users = User::with(['patients', 'staff'])->orderBy($ord)        
+            ->where('name', 'LIKE', '%'.$search.'%')
+            ->orWhere('lastname', 'LIKE', '%'.$search.'%')
+            ->orWhere('historic', 'LIKE', '%'.$search.'%')
+            ->orWhere('dni', 'LIKE', '%'.$search.'%')
+            ->get();
+        }
+        
+        return view('user/user', ['patients' => $patients,'user' => $user]);
+    }
 }
+

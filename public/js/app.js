@@ -29,3 +29,14 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer) {
         }
     });
 }
+
+
+function showModal(title, body, htmlFormat) {
+    $('#generic-modal .modal-title').text(title);
+    if(htmlFormat)
+        $('#generic-modal .modal-body p').html(body);
+    else
+        $('#generic-modal .modal-body p').text(body);
+    $('#generic-modal').modal('show');
+
+}

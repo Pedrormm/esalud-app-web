@@ -9,6 +9,7 @@ use App\User;
 use App\PieceNew;
 use App\Mail\EnviarMail;
 use Mail;
+use Reminder;
 
 use Illuminate\Support\Str;
 
@@ -44,8 +45,6 @@ MAIL_FROM_NAME="${APP_NAME}"
     }
 
     public function loginForgotten(Request $request) {
-        
-
         $validatedData = $request->validate([
             'rem_password' => 'required|min:4|max:10|exists:users,dni',
         ]);
@@ -69,55 +68,42 @@ MAIL_FROM_NAME="${APP_NAME}"
             $try++;
         } while (User::where('remember_token', $token)->first() instanceof User);
 
-        $contact = User::where('contact', 'LIKE', '%'.$login.'%')->orwhere('dni', $login)->get();
+        $contact = User::where('email', $login)->orwhere('dni', $login)->get();
 
-        /*foreach($contact as $i=>$ct) {
-           var_dump($contact[$i]->id);
-        }*/
+        if (count($contact) == 0){ // if the user does not exist
+            return redirect()->back()->with(['error' => 'The email or dni provided does not exist']);
+        }
+
+        $email = $contact[0]->email;
 
         User::where('id',$contact[0]->id)->update(['remember_token'=>$token]);
         //TODO Coger el $token, guardarlo en remember_token de users y mandar el email personalizado a no se quien (porque no existe ningun mail) usando el email predefinido de laravel para este caso de remember token o mejor aun, creando uno nuevo entero
 
-        $passDbEnc = $user->password;
-        if(password_verify ($token, $passDbEnc)) {
-            dd(false);
-            if (Hash::needsRehash($passDbEnc)) {
-                dd(true);
-                $hashed = Hash::make($token);
-                $user->password = $hashed;
-                $user->save();
-            }
-        }
+  //      $contact = Sentinel::findById($contact->id);
+        $reminder = Reminder::exists($contact) ? : Reminder::create($contact);
 
+        var_dump($contact->email);
+        var_dump($reminder->code);
+        die();
+
+        Mail::send(
+            'forgot',
+            ['user' => $contact, 'code' => $reminder->code],
+            function($message) use ($contact){
+                $message->to($contact->email);
+                $message->subject("$contact->name $contact->lastname, it has been requested to reset your password");
+            }
+        );
 
         //$objContact = json_encode($contact);
-        $objContact = 'pedroramonmmspam1@gmail.com';
-        
-        Mail::send('login', ['user' => $objContact], function ($m) use ($user) {
-         //   $m->from('pedroramonmmspam1@gmail.com', 'Your Application');
-
-            $m->to('pedroramonmmspam1@gmail.com', 'Prueba')->subject('Your Reminder!!');
-        });
-
         /*
-mipagina.com/recovery/password/recuperar.php?cve=239483492384924829928934823948
-
-$_REQUEST["cve"]
-
-
-////
-Ha solicitado la recuperación de su contraseña
-
-Activiades pendientes:
-          1.-hacer un update del usuario por campo password(where debe ser unicamente por password)
-             -Crear un formulario con dos cajas de texto(input type text) a) Escribe contraseña nueva b) Confirma contraseña nueva , 3 input (hidden) tendra la clave recibida por REQUEST, button submit
-             -el controlador tendrà que hacer el update sobre el where password sea igual a la contraseña encriptada por el campo oculto
-             - una vez hecho el cambio, redireccionar al login para que se logue con su nueva contraseña
-
-Registro de paciente: formulario con el registro (crear modelo y controlador)
-
-
+        Mail::send('login', ['user' => $email], function ($m) use ($user) {
+         //   $m->from($email, 'Your Application');
+            $m->to($email, 'Prueba')->subject('Your Reminder!!');
+        });
         */
+        return redirect()->back()->with(['sucess' => 'A reset email was sent to the email']);
+
     }
 
     public function index() {

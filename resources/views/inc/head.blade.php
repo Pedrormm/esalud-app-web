@@ -24,8 +24,12 @@
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.carousel.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.theme.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/owl/owl.transitions.css') }}">
+               
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/bootstrap/css/bootstrap.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/bootstrap/css/bootstrap-theme.css') }}">
+                
+                <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+               
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/datepicker/datepicker.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/fontawesome/css/font-awesome.min.css') }}">
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat/chat.css') }}">
@@ -39,7 +43,7 @@
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.json-2.4.min.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/jquery/jquery.event.move.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
-
+                <script type="text/javascript" src="{{ asset('js/bootstrap/bootstrap.min.js') }}"></script>
                 {{--
                 <script type="text/javascript" src="{{ asset('js/SIPml-api.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>

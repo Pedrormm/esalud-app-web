@@ -35,6 +35,7 @@ Route::get( 'user/recorddisplay/{id}', function ( $id) {
 */
 Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
 Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');
+Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('checkUserAuth');
 
 
 Route::get('user/logout', 'LoginController@logout');

@@ -5,9 +5,11 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>{{ env('APP_VIRTUAL') }}</title>
+    <title>Forgot</title>
 </head>
 <body>
-    
+    <h1>Hello {{ $user->name }}</h1>
+    <p>It has been requested to reset your password. Please click the password reset button to reset your password
+    </p>
 </body>
 </html>
