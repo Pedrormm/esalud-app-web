@@ -68,85 +68,50 @@
     <div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
         <div class="col-xs-12">
             <div class="box login_logo">
-                <img src="{{ asset('images/hospital_logo.png') }}">
+                <h3>Reseteo de contraseña</h3>
             </div>
         </div>
-       
-        @if (session()->has('info'))
-            <div class="alert alert-success">{{ session()->get('info') }}</div>
-        @endif
-        <div class="col-xs-12">
-        @if ($errors->any())
-        <div class="col-12 alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-                    <li></li>
-            </ul>
-        </div>
-        @endif
-
         @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
         @endif
-
-        @if(session('sucess'))
-            <div class="alert alert-success">
-                {{ session('sucess') }}
-            </div>
-        @endif
-
-            <div class="box access_login">
-                <h5>Entra con tu dni y contraseña</h5>
-                <form method="post" action="{{ url('user/login') }}">
-                    @csrf
-                    <!-- display: none, block, inline -->
-                    <input type="text" name="dni" placeholder="DNI" value="{{ Cookie::get('credencialesDni') }}" required>
-                    <input type="password" name="password" placeholder="Contraseña" required>
-                    <div class="rememberme">
-                        <input name="remember" type="checkbox" {{ (Cookie::has('credencialesDni')) ? 'checked' : '' }}/> Recordar 
-                    </div>
-                    <button type="submit" class="button green" type="submit">Entrar</button>
-                </form>
-                <nav class="remember_password">
-                    ¿Has olvidado tu contraseña?
-                </nav>
-            </div>
-            <div class="box request_password" style="display: none">
-                <form method="post" action="{{ url('user/loginForgotten') }}">
-                    {{ csrf_field() }}
-
-                    <h5>Si has olvidado tu contraseña introduce tu DNI o email para solicitar una nueva</h5>
-                    <input type="text" name="rem_password" value="" placeholder="DNI o email">
-                    <button type="submit" class="button green bt-request" type="submit">Solicitar</button>
-                    <nav class="back_login">
-                        Volver login
-                    </nav>
-                </form>
-            </div>
+        <div class="box access_login">
+            <h3>Reseteo de contraseña</h3>
+            <form method="post" action="{{URL::asset('/passwordchanged')}}">
+                @csrf
+                <input type="hidden" name="token" value="{{ $token }}">
+                <label>Introduzca la nueva contraseña:
+                    <input type="password" name="password" placeholder="Contraseña" id="password"/>
+                </label>
+                <label>Repita la nueva contraseña:
+                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Contraseña"/>
+                <span id='message'></span><br/>
+                <span id='messageLength'></span>
+                </label>
+                <button type="submit" class="button green" type="submit">Guardar</button>
+            </form>
+        </div>
         </div>
     </div>
 </main>
 
-<footer>
-
-</footer>
-
-<style>
-    .login .remember_password,
-    .login .back_login {
-        font-size: 12px;
-        width: 100%;
-        text-align: right;
-        cursor: pointer;
-        margin-top: 7px;
-    }
-</style>
 <div id="debug" style="display:none"></div>
-<!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>-->
+
+<script>
+
+    $('#password, #password_confirmation').on('keyup', function () {
+    if ($('#password').val() == $('#password_confirmation').val()) {
+        $('#message').html('Las contraseñas coinciden').css('color', 'green');
+        if ($('#password').val().length < 6) {
+            $('#messageLength').html('La contraseña debe tener al menos 6 caracteres').css('color', 'blue');
+        }
+    } else 
+        $('#message').html('Las contraseñas no coinciden').css('color', 'red');
+    });
+
+</script>
+
 </body>
+
 </html>

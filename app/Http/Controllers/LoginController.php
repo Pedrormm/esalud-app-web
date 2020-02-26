@@ -10,6 +10,11 @@ use App\PieceNew;
 use App\Mail\EnviarMail;
 use Mail;
 use Reminder;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
+use Session;
+
 
 use Illuminate\Support\Str;
 
@@ -24,24 +29,20 @@ class LoginController extends Controller
         ]);
         $credentials = $request->only('dni', 'password');
 
-      //  if (Auth::attempt($credentials, $request->has('rememberme'))) {
+        if($remember){
+            \Cookie::queue('credencialesDni', $request->dni, 10080);
+            // La cookie se guarda 1 semana
+        }
+        else{
+            \Cookie::queue(\Cookie::forget('credencialesDni'));
+        }
+
         if (Auth::attempt($credentials, $remember)) {
-            // Authentication passed...
+            // Autenticacion realizada...
             $user = auth()->user();
             return redirect()->action('LoginController@index');
-            //return view('user.dashboard', ['user' => $user]);
         }
         return back()->withErrors("Authentication failed");
-                /*
-MAIL_DRIVER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=339ee8d373df86
-MAIL_PASSWORD=968ef15ce5ac31
-MAIL_ENCRYPTION=tls
-MAIL_FROM_NAME="${APP_NAME}"
-        */
-
     }
 
     public function loginForgotten(Request $request) {
@@ -70,40 +71,46 @@ MAIL_FROM_NAME="${APP_NAME}"
 
         $contact = User::where('email', $login)->orwhere('dni', $login)->get();
 
-        if (count($contact) == 0){ // if the user does not exist
+        if (count($contact) == 0){ // Si el usuario no existe
             return redirect()->back()->with(['error' => 'The email or dni provided does not exist']);
         }
 
         $email = $contact[0]->email;
 
         User::where('id',$contact[0]->id)->update(['remember_token'=>$token]);
-        //TODO Coger el $token, guardarlo en remember_token de users y mandar el email personalizado a no se quien (porque no existe ningun mail) usando el email predefinido de laravel para este caso de remember token o mejor aun, creando uno nuevo entero
-
-  //      $contact = Sentinel::findById($contact->id);
-        $reminder = Reminder::exists($contact) ? : Reminder::create($contact);
-
-        var_dump($contact->email);
-        var_dump($reminder->code);
-        die();
-
-        Mail::send(
-            'forgot',
-            ['user' => $contact, 'code' => $reminder->code],
-            function($message) use ($contact){
-                $message->to($contact->email);
-                $message->subject("$contact->name $contact->lastname, it has been requested to reset your password");
-            }
-        );
-
-        //$objContact = json_encode($contact);
-        /*
-        Mail::send('login', ['user' => $email], function ($m) use ($user) {
-         //   $m->from($email, 'Your Application');
-            $m->to($email, 'Prueba')->subject('Your Reminder!!');
+        // Guardar en BD el token
+        
+        Mail::send('mail.forgot', ['token' => $token, 'name' => $contact[0]->name], function ($m) use ($contact) {
+            $m->to($contact[0]->email);
+            $m->subject(urldecode($contact[0]->name)." ". urldecode($contact[0]->lastname).", it has been requested to reset your password");
         });
-        */
+        
         return redirect()->back()->with(['sucess' => 'A reset email was sent to the email']);
 
+    }
+
+    public function forgotPassword($token=null){
+        $user = User::where('remember_token', $token)->get();
+        if ((empty($token)) || (count($user) == 0)){
+            return redirect('/')->withError("Invalid route");
+        }
+        return view('mail.resetpassword', ['token' => $token]);        
+    }
+
+    public function changePassword(Request $request){
+        $validatedData = Validator::make($request->all(), [
+            'password' => 'required|confirmed|min:6',
+        ]); // Tiene que haber un campo 'password_confirmation' para que se pueda dar la validación confirmed
+        
+        if ($validatedData->fails()){
+            return redirect()->back()->withError($validatedData->messages()->first());
+        }
+
+        $pass = Hash::make($request->password);
+
+        User::where('remember_token', $request->token)->update(['password'=>$pass]);
+
+        return redirect('/')->with(['sucess' => 'The password has been changed']);
     }
 
     public function index() {

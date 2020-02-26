@@ -18,11 +18,11 @@ class CheckUserLogged
     {
         $user = Auth::user();
         if($request->ajax() && is_null($user)) {
-            return '<div class="alert alert-dange">Llamada inválida</div>';
+            return '<div class="alert alert-dange">Void call</div>';
         }
         else {
             if (is_null($user)){
-                $request->session()->flash('info', 'Tu sesion ha caducado por inactividad');
+                $request->session()->flash('info', 'Your session has expired due to inactivity. You will need to login again');
                 
                 return redirect('/');
             }

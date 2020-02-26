@@ -24,9 +24,14 @@ Route::get('user/dashboard', 'LoginController@index')->middleware('checkUserAuth
 Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
 Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
 
-// Generic purposes rountes
+// Reset password routes
+Route::get('/password/reset/{token?}', 'LoginController@forgotPassword');
+Route::post('/passwordchanged', 'LoginController@changePassword');
+
+// Generic purposes routes
 Route::post('/user/login', 'LoginController@login');
 Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
+
 /*
 Route::get( 'user/recorddisplay/{id}', function ( $id) {
     fopen( resource_path( 'views/' . $id . '.blade.php' ), 'w' );
