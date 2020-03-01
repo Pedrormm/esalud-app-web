@@ -1,10 +1,22 @@
 @extends('layout.logged')
 
 @section('nav-bar-top')
-    <nav class="top">
-        <div class="div_2 on" data-item="1">Portada</div>
-        <div class="div_2" data-item="2">Noticias</div>
-    </nav>
+
+<nav class="top">
+    <ul class="nav nav-pills nav-fill">
+    <div class="div_2 on">
+        <li class="nav-item">
+            <a class="nav-link active">Portada</a>
+        </li>
+    </div>
+    <div class="div_2">
+        <li class="nav-item">
+            <a class="nav-link">Noticias</a>
+        </li>
+    </div>
+    </ul>
+</nav>
+
 @endsection
 
 @section('content')
@@ -21,9 +33,7 @@
             let item = $(this).data('item');
             $('nav .div_2').removeClass('on');
             $('nav .div_2').eq(item-1).addClass('on');
-            if(item == 1) {
-                //document.getElementById("news-container").style.display = "none";
-                // En jQuer: $('#news-container').hide(); //Mucho mas fácil. Lo se, no lo hacia 
+            if(item == 1) {            
                 asyncCall('user/messages', '#main-container', true);
             }
             else {

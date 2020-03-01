@@ -43,7 +43,7 @@ Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')
 Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('checkUserAuth');
 
 
-Route::get('user/logout', 'LoginController@logout');
+Route::post('user/logout', 'LoginController@logout');
 Route::get('test', function() {
     phpinfo();
 });

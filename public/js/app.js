@@ -1,6 +1,6 @@
 $(function() {
 
-});
+});//#TAG: #onload-jquery
 
 function asyncCall(endpoint, jQselector, displayErrorOnLayer) {
     console.log("Calling asyncCall with args", arguments);
@@ -10,7 +10,7 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer) {
         method:'get',
         dataType:'html',
         async:true,
-    }).success(function(res, st, xhr) {
+    }).done(function(res, st, xhr) {
 
         //console.log("success arguments", arguments);
         if($(jQselector).length) {
@@ -21,7 +21,7 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer) {
             console.warn("Destiantion layer", jQselector, "not found");
         }
     }).fail(function(xhr, status, error) {
-        console.log("fail arguments", arguments);
+        console.error("fail arguments", arguments);
        
         if(displayErrorOnLayer) {
            

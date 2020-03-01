@@ -1,87 +1,119 @@
-<nav class="main hidden-xs hidden-sm">
+    <!-- Sidebar -->
+    <nav>
     
-    <ul>
-        <li>
-            <a name="records" href="{{ URL::asset('/user/records') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-folder-open-o fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Historiales Medicos</label>
-            </a>
-        </li>
-        <li>
-            <a name="chat" href="{{ URL::asset('/user/chat') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-comments-o fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Mensajería</label>
-            </a>
-        </li>
-        <li>
-            <a name="calendar" href="{{ URL::asset('/user/calendar') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Gestión de citas</label>
-            </a>
-        </li>
-        <li>
-            <a name="staff" href="{{ URL::asset('/user/staff') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-user-md fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Gestión del Personal</label>
-            </a>
-        </li>
-        <li>
-            <a name="patient" href="{{ URL::asset('/user/patient') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-group fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Gestión de Pacientes</label>
-            </a>
-        </li>
-        <li>
-            <a name="user" href="{{ URL::asset('/user/user') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-h-square fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Usuarios</label>
-            </a>
-        </li>
-        <li>
-            <a name="rol" href="{{ URL::asset('/user/rol') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-key fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Gestión de roles</label>
-            </a>
-        </li>
-        <li>
-            <a name="profile" href="{{ URL::asset('/user/profile') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-cog fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Ajustes</label>
-            </a>
-        </li>
-        <li>
-            <a name="logout" href="{{ URL::asset('/user/logout') }}">
-                <span class="fa-stack fa-2x menu_icon">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>
-                </span>
-                <label>Salir</label>
-            </a>
-        </li>
-    </ul>
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-</nav>
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">{{ env('APP_NAME') }}</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ URL::asset('/user/dashboard') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Users Heading -->
+        <div class="sidebar-heading">
+            Users
+        </div>
+
+        <!-- Nav Item - Users User management Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>User management</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">User administration:</h6>
+                <a class="collapse-item" href="">Create new user</a>
+                <a class="collapse-item" href="buttons.html">Pacient management</a>
+                <a class="collapse-item" href="cards.html">Staff management</a>
+            </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Medical record -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ URL::asset('/user/records') }}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Medical record</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Communication Heading -->
+        <div class="sidebar-heading">
+            Communication
+        </div>
+
+        <!-- Nav Item - Messaging Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Messaging</span>
+            </a>
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Messages:</h6>
+                <a class="collapse-item" href="utilities-color.html">My messages</a>
+                <a class="collapse-item" href="utilities-border.html">Chat</a>
+                <a class="collapse-item" href="utilities-animation.html">Video call</a>
+            </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Appointments Heading -->
+        <div class="sidebar-heading">
+            Appointments
+        </div>
+
+        <!-- Nav Item - Make an appointment -->
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Make an appointment</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Adjustments Heading -->
+        <div class="sidebar-heading">
+            Adjustments
+        </div>
+
+        <!-- Nav Item - Role management -->
+        <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Role management</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+        </ul>
+    </nav>
+    <!-- End of Sidebar -->
