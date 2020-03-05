@@ -1,7 +1,8 @@
     <!-- Sidebar -->
-    <nav>
+    <nav >
     
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+        >
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -30,17 +31,18 @@
         </div>
 
         <!-- Nav Item - Users User management Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <li class="nav-item{{ (Request::is('user/patient'))? " active":'' }}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserManagement" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
             <span>User management</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUserManagement" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User administration:</h6>
-                <a class="collapse-item" href="">Create new user</a>
-                <a class="collapse-item" href="buttons.html">Pacient management</a>
-                <a class="collapse-item" href="cards.html">Staff management</a>
+                <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/create') }}">Create new user</a>
+                <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/user/user') }}">Show all users</a>
+                <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/user/patient') }}">Patient management</a>
+                <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/user/staff') }}">Staff management</a>
             </div>
             </div>
         </li>
@@ -70,6 +72,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Messages:</h6>
                 <a class="collapse-item" href="utilities-color.html">My messages</a>
+                <a class="collapse-item" href="utilities-color.html">Send message</a>
                 <a class="collapse-item" href="utilities-border.html">Chat</a>
                 <a class="collapse-item" href="utilities-animation.html">Video call</a>
             </div>

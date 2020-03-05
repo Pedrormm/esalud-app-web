@@ -2,20 +2,20 @@
 
 @section('nav-bar-top')
 
-<nav class="top">
-    <ul class="nav nav-pills nav-fill">
-    <div class="div_2 on">
-        <li class="nav-item">
-            <a class="nav-link active">Portada</a>
-        </li>
-    </div>
-    <div class="div_2">
-        <li class="nav-item">
-            <a class="nav-link">Noticias</a>
-        </li>
-    </div>
-    </ul>
-</nav>
+<!-- <nav class="top"> -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Portada</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="news-tab" data-toggle="tab" href="#news" role="tab" aria-controls="profile" aria-selected="false">Noticias</a>
+  </li>
+</ul>
+<!-- <div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"></div>
+  <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab"></div>
+</div> -->
+
 
 @endsection
 
@@ -25,10 +25,9 @@
     <div id="main-container" class="container-fluid">
     </div>
 
-    <div id="news-container" class="container-fluid">
-    </div>
 
     <script>
+        /*
         $('nav .div_2').click(function(e) {
             let item = $(this).data('item');
             $('nav .div_2').removeClass('on');
@@ -38,9 +37,23 @@
             }
             else {
                 //document.getElementById("main-container").style.display = "none";
-                asyncCall('user/news', '#main-container', true);
+            asyncCall('user/messages', '#main-container', true);
             }
         });
-        asyncCall('user/messages', '#main-container', true);
+        asyncCall('user/messages', '#home', true);
+*/
+            $('#home-tab').click(function(e){
+                asyncCall('user/messages', '#main-container', true);
+            });
+
+            $('#news-tab').click(function(e){
+                asyncCall('user/news', '#main-container', true);
+            });
+
+            asyncCall('user/messages', '#main-container', true);
+
+
+
+
     </script>
 @endsection

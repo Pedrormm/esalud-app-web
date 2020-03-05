@@ -18,7 +18,7 @@ class UsersManagementController extends Controller
             $ord = 'users.id';
         }
 
-        $patients = Staff::join('users', 'staff.user_id', 'users.id')->get();
+        $staff = Staff::join('users', 'staff.user_id', 'users.id')->get()->toArray();
 
         if (!is_null($search) && !empty($search) && isset($search)){
             $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)        
@@ -26,10 +26,10 @@ class UsersManagementController extends Controller
             ->orWhere('lastname', 'LIKE', '%'.$search.'%')
             ->orWhere('historic', 'LIKE', '%'.$search.'%')
             ->orWhere('dni', 'LIKE', '%'.$search.'%')
-            ->get();
+            ->get()->toArray();
         }
         
-        return view('user/staff', ['patients' => $patients,'user' => $user]);    
+        return view('user/staff', ['staff' => $staff,'user' => $user]);    
     }
 
     public function showPatients(string $search=null, string $ord=null){
@@ -69,7 +69,7 @@ class UsersManagementController extends Controller
 
       //  $users = User::all();
       //  $users = User::orderBy($ord)->leftJoin('patients', 'patients.user_id', 'users.id')->leftJoin('staff', 'staff.user_id', 'users.id')->get();
-        $users = User::with(['patients', 'staff'])->orderBy($ord)->get();
+        $users = User::with(['patients', 'staff'])->orderBy($ord)->get()->toArray();
 
         if (!is_null($search) && !empty($search) && isset($search)){
             $users = User::with(['patients', 'staff'])->orderBy($ord)        
@@ -77,10 +77,12 @@ class UsersManagementController extends Controller
             ->orWhere('lastname', 'LIKE', '%'.$search.'%')
             ->orWhere('historic', 'LIKE', '%'.$search.'%')
             ->orWhere('dni', 'LIKE', '%'.$search.'%')
-            ->get();
+            ->get()->toArray();
         }
+
+        //dd($users);
         
-        return view('user/user', ['patients' => $patients,'user' => $user]);
+        return view('user/user', ['users' => $users,'user' => $user]);
     }
 }
 

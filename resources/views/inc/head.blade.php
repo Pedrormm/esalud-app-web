@@ -17,6 +17,15 @@
                 <!-- Page level plugins -->
                 <script type="text/javascript" src="{{ asset('vendor/chartjs/Chart.min.js')}}"></script>
 
+                <!-- Datatables-->
+ {{--               <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+                <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>--}}
+                <!-- <script src="{{ asset('vendor/datatables/datatables-demo.js')}}"></script> -->
+                <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/dt-1.10.20/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/dt-1.10.20/datatables.min.js"></script>
+
+
                 <!-- Modernizr-->
                 <script src="{{ asset('vendor/modernizr/modernizr.custom.js')}}"></script>
                 <!-- Storage API-->
@@ -24,9 +33,9 @@
                 <!-- Screenfull-->
                 <script src="{{ asset('vendor/screenfull/dist/screenfull.js')}}"></script>
                 <!-- i18next-->
-                <script src="{{ asset('vendor/i18next/i18next.js')}}"></script>
-                <script src="{{ asset('vendor/i18next-xhr-backend/i18nextXHRBackend.js')}}"></script>
-                <script src="{{ asset('vendor/jquery/dist/jquery.js')}}"></script>
+  {{--              <script src="{{ asset('vendor/i18next/i18next.js')}}"></script>
+                <script src="{{ asset('vendor/i18next-xhr-backend/i18nextXHRBackend.js')}}"></script>--}}
+{{--                <script src="{{ asset('vendor/jquery/dist/jquery.js')}}"></script>--}}
                 <script src="{{ asset('vendor/popper.js/dist/umd/popper.js')}}"></script>
                 <!-- <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.js')}}"></script> -->
 
@@ -39,30 +48,25 @@
                 <!-- Font awesome-->
                 <link href="{{ asset('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
                 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-               
+                <link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
+
                 <!-- Bootstrap styles-->
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{{--                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
 
 
-                <link rel="stylesheet" href="{{ asset('vendor/simple-line-icons/css/simple-line-icons.css')}}"><!-- ANIMATE.CSS-->
-                <link rel="stylesheet" href="{{ asset('vendor/animate.css/animate.css')}}"><!-- WHIRL (spinners)-->
-                <link rel="stylesheet" href="{{ asset('vendor/whirl/dist/whirl.css')}}"><!-- =============== PAGE VENDOR STYLES ===============-->
+                <link rel="stylesheet" href="{{ asset('vendor/simple-line-icons/css/simple-line-icons.css')}}">
+                <!-- ANIMATE.CSS-->
+                <link rel="stylesheet" href="{{ asset('vendor/animate.css/animate.css')}}">
+                <!-- WHIRL (spinners)-->
+                <link rel="stylesheet" href="{{ asset('vendor/whirl/dist/whirl.css')}}">
 
 
                 <!-- =============== CUSTOM STYLES ===============-->
                 <link rel="stylesheet" href="{{ asset('css/app.css')}}" id="maincss">
-                <link href="{{ asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+                <link href="{{ asset('css/sb-admin-2.css')}}" rel="stylesheet">
                 <link rel="stylesheet" href="{{ asset('css/custom-app.css')}}" id="maincss">
 
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/core.css') }}">
-                <!-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/main.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/structure.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/flip.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat.css') }}">
-             
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/chat/chat.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/calendar/default.css') }}">
-                <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/records/default.css') }}">  -->
 
 
                 <!-- =============== CUSTOM SCRIPTS ===============-->

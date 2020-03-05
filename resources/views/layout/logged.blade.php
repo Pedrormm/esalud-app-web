@@ -13,7 +13,7 @@
 
       <!-- Main Content -->
       <div id="content">
-      
+
       @include('inc.header')
 
       @yield('nav-bar-top')

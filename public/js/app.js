@@ -1,11 +1,16 @@
 $(function() {
-
+    if ($('#dataTable').length > 0 ){
+        $('#dataTable').DataTable();
+    }
 });//#TAG: #onload-jquery
 
-function asyncCall(endpoint, jQselector, displayErrorOnLayer) {
+function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
+    
     console.log("Calling asyncCall with args", arguments);
     if(typeof displayErrorOnLayer != 'boolean')
         displayErrorOnLayer = false;
+    if(typeof forceDisplay != 'boolean')
+        forceDisplay = true;
     $.ajax(_PUBLIC_URL + endpoint, {
         method:'get',
         dataType:'html',
@@ -15,7 +20,8 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer) {
         //console.log("success arguments", arguments);
         if($(jQselector).length) {
             $(jQselector).html(res);
-            $(jQselector).show();
+            if(forceDisplay)
+                $(jQselector).show();
         }
         else {
             console.warn("Destiantion layer", jQselector, "not found");
@@ -40,3 +46,4 @@ function showModal(title, body, htmlFormat) {
     $('#generic-modal').modal('show');
 
 }
+

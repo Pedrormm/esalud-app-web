@@ -39,7 +39,7 @@ class RecordsController extends Controller
 
             $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
             ->whereIn('sex', $sex)
-            ->whereDate('birthdate', '<=', $from)->whereDate('birthdate', '>=', $to)->get();
+            ->whereDate('birthdate', '<=', $from)->whereDate('birthdate', '>=', $to)->get()->toArray();
             
             if (!is_null($n_search) && !empty($n_search) && isset($n_search)){
                 $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
@@ -49,9 +49,10 @@ class RecordsController extends Controller
                 ->orWhere('lastname', 'LIKE', '%'.$n_search.'%')
                 ->orWhere('historic', 'LIKE', '%'.$n_search.'%')
                 ->orWhere('dni', 'LIKE', '%'.$n_search.'%')
-                ->get();
+                ->get()->toArray();
             }
        // }
+       //dd($patients[0]['name']);
         return view('user/records', ['patients' => $patients,'user' => $user]);
     }
 

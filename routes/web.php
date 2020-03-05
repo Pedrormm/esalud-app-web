@@ -23,6 +23,12 @@ Route::get('user/dashboard', 'LoginController@index')->middleware('checkUserAuth
 // Ajax view routes
 Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
 Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
+Route::get('message/summary', 'MessageController@showMessagesSummary')->middleware('checkUserAuth');
+Route::get('message/icon', 'MessageController@showIconMessage')->middleware('checkUserAuth');
+
+/*Route::get('message/summary', function() {
+    return view('ajax.messages_summary');
+});*/
 
 // Reset password routes
 Route::get('/password/reset/{token?}', 'LoginController@forgotPassword');

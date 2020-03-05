@@ -1,16 +1,52 @@
 /* ========================================================================
+  Left Nav
+========================================================================== */
+
+.nav-item span{
+  font-size:1.15rem !important; 
+}
+
+
+
+
+/* ========================================================================
   Records
 ========================================================================== */
 
-.filter_row{
+/* mygreen:#99CA6A */
+/* myblue:#4D72DF */
+
+.filter_row, .records_container, .center_elements{
   display: flex;
   justify-content: center;
 }
 
-.margenesa{
-  padding-bottom: 0%;
+.records-color{
+  background-color: #99CA6A !important;
+  color:red;
 }
 
-.card-height{
-  height: 5px;
+.title-style{
+  color: white !important;
+  font-size: 17px;
 }
+
+.body-style{
+  font-size: 16px;
+
+}
+
+.filter_height{
+  height: 2.5rem !important;
+}
+
+.color_white{
+  color:white !important;
+}
+
+.text_left{
+  text-align: left !important;
+}
+
+
+

@@ -33,6 +33,22 @@ class MessageController extends Controller
         return ['status' => 'Mensaje enviado'];
     }
 
+    public function showIconMessage(){
+        $authUser = Auth::user();
+        $userMessages = Message::where('user_id_to', $authUser->id)->where('read', 0)
+        ->orderByDesc('created_at')->get()->toArray();
+        $nMessages = count($userMessages);
+        return view('ajax.message_icon', compact('nMessages'));
+    }
+
+    public function showMessagesSummary(){
+        $authUser = Auth::user();
+        return view('ajax.messages_summary');
+    }
+
+
+
+
     public function retrieveMessage(){
 
     }

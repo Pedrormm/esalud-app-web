@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\PieceNew;
+use App\Message;
 use App\Mail\EnviarMail;
 use Mail;
 use Reminder;
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
+
     public function login(Request $request) {
         $remember = $request->has('remember') ? true : false;    
 
@@ -113,10 +115,23 @@ class LoginController extends Controller
         return redirect('/')->with(['sucess' => 'The password has been changed']);
     }
 
+    const MAX_MESSAGE_LENGTH = 15;
+
     public function index() {
         $user = Auth::user();        
         $news = PieceNew::orderByDesc('date')->get();
-        return view('user.dashboard', ['user' => $user,'news' => $news]);
+
+        $userMessages = Message::where('user_id_to', $user->id)->orderByDesc('created_at')->get();
+        foreach($userMessages as $i=>$userMessage) {
+            $text = urldecode($userMessage->message);
+            /*if(strlen($text) > self::MAX_MESSAGE_LENGTH) {
+                $text = substr($text, 0, self::MAX_MESSAGE_LENGTH) . " ...";
+            }*/
+            $userMessage->messageCorrected = $text;
+            $userMessages[$i] = $userMessage;
+        }
+
+        return view('user.dashboard', ['user' => $user,'news' => $news, 'userMessages' => $userMessages]);
     }
     
     public function logout(Request $request) {
