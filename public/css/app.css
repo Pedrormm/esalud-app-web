@@ -8,6 +8,64 @@
 
 
 
+/* ========================================================================
+  My-messages
+========================================================================== */
+
+
+
+.msj-title{
+  margin-bottom: 2rem;
+}
+
+.new-message{
+  font-weight:800; /* a bit bolder than bold*/
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(58, 172, 139);
+  border-image: initial;
+}
+
+.msj-whole-card{
+  display: flex;
+  justify-content:space-between;
+}
+
+.msj-whole-card:hover{
+  cursor: pointer;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: #4EBCDF;
+}
+
+.link-msj-card{
+  width: 80%;
+}
+
+.msj-card{
+  display: flex;
+  align-items: center;
+}
+
+.msj-date-and-bar{
+  margin-top: 2%;
+  margin-right: 2%;
+  display: block;
+}
+
+.msj-image{
+  margin-left: 2%;
+}
+
+.msj-derecho{
+  display: flex;
+}
+
+.msj-fecha{
+   margin-right:1rem; 
+}
+
+
 
 /* ========================================================================
   Records

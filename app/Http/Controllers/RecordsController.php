@@ -61,4 +61,58 @@ class RecordsController extends Controller
         return view('user/singlerecord', ['id' => $id,'user' => $user]);
     }
 
+    public function settings() {
+        $user = Auth::user();        
+        return view('adjustments/settings', ['user' => $user]);
+    }
+
+    public function updateAvatar(Request $request, $id=null) {
+        $authUser = Auth::user();        
+
+        $user = User::find($id);
+        $userImage = "";
+
+        // Obteniendo nombre de avatar antiguo para poder borrarlo
+        if($user->avatar != null)
+            $userImage = $user->avatar;
+        // Actualizar en BD
+        $user->fill($request->all());
+        
+        //Update Image
+        $file = $request->file('avatar');    
+
+        if($file != null)
+        {
+            $file_name = $file->getClientOriginalName();
+            $file_ext = \File::extension($file_name);
+
+            $time = getTimeName();
+            $new_file_name = $time . '.' . $file_ext;
+
+            //Verify if new name already exist
+            while (\Storage::exists($new_file_name)) 
+            {
+                $time = getTimeName();
+                $new_file_name = $time . '.' . $file_ext;
+            }
+
+            \Storage::disk('avatars')->put($new_file_name,  \File::get($file));
+
+            //Delete old image if exist
+            if($userImage != "")
+                \Storage::delete($userImage);
+
+            $user->avatar = $new_file_name;
+        }
+        else{
+            //Mostrar error
+            var_dump("no hay archivo");
+            die();
+        }
+
+        $user->save();
+
+        return redirect()->back();
+    }
+
 }

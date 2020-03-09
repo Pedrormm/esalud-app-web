@@ -1,5 +1,6 @@
 <?php
-  
+  use Carbon\Carbon;
+
     function imploadValue($types){
         $strTypes = implode(",", $types);
         return $strTypes;
@@ -15,6 +16,15 @@
         $CurrentDateTime->sub(new DateInterval('P'.$y_date.'Y'));
         $date = ($CurrentDateTime->format('Y-m-d'));
         return $date;
+    }
+
+    function getTimeName () {
+
+        $time = Carbon::now()->toDateTimeString();
+        $time = str_replace('-', '', $time);
+        $time = str_replace(':', '', $time);
+        $time = str_replace(' ', '', $time);
+        return $time;
     }
 
     function remove_special_char($text) {

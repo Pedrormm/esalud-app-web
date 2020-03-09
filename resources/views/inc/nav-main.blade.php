@@ -5,7 +5,7 @@
         >
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
             <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
             </div>
@@ -16,7 +16,7 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item{{ (Request::is('user/dashboard'))? " active":'' }}">
             <a class="nav-link" href="{{ URL::asset('/user/dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
@@ -48,7 +48,7 @@
         </li>
 
         <!-- Nav Item - Medical record -->
-        <li class="nav-item">
+        <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">
             <a class="nav-link" href="{{ URL::asset('/user/records') }}">
             <i class="fas fa-fw fa-table"></i>
             <span>Medical record</span></a>
@@ -71,7 +71,7 @@
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Messages:</h6>
-                <a class="collapse-item" href="utilities-color.html">My messages</a>
+                <a class="collapse-item" href="{{ URL::asset('/user/my-messages') }}">My messages</a>
                 <a class="collapse-item" href="utilities-color.html">Send message</a>
                 <a class="collapse-item" href="utilities-border.html">Chat</a>
                 <a class="collapse-item" href="utilities-animation.html">Video call</a>

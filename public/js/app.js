@@ -1,7 +1,10 @@
 $(function() {
+
     if ($('#dataTable').length > 0 ){
         $('#dataTable').DataTable();
     }
+
+
 });//#TAG: #onload-jquery
 
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {

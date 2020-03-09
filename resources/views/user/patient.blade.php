@@ -6,6 +6,40 @@
 
 @section('content')
 
+<!-- <article class="cmess  ">
+                <figure class="fleft"><img src="https://dbwf8q1mv0cee.cloudfront.net/chi/api/user/dtp/wdolmykv10hegj5tw6mosiguzcx829zp0.jpg/51x51cut/?v=5"></figure>
+                <div class="cnt">
+                    <h3 class="bold">Support</h3>
+                    <p>Hola Pedro,
+
+Soy Carmen de Classgap
+
+Me pongo en contacto contigo porque tu profe Danny nos ha comen...</p>
+                </div>
+
+                <div class="soc">
+
+                    <span class="cnvrsDate" data-utcdate="2020-3-5T14:22:00.000Z">1 día, 10 horas</span>
+                </div>
+                <div class="clear"></div>
+            </article> -->
+
+            
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -41,12 +75,17 @@
                   
                     <tr class="text_left">
                         <td class="text_left">
+
+                          @if (!empty($patient->avatar))
+                            <img class="avatar" src="{{ asset('images/avatars/'.$patient->avatar) }}" class="avatar big">                                                               
+                          @else
                             @if ($patient->sex=="male")
                                 <img class="avatar" src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
                             @endif
                             @if ($patient->sex=="female")
                                 <img class="avatar" src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
                             @endif
+                          @endif
                             <span>{{ urldecode($patient->lastname).", ".urldecode($patient->name) }}</span>
                         </td>
                         <td>                        

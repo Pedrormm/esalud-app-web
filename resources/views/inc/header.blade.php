@@ -104,7 +104,7 @@
     </a>
     <!-- Dropdown - Messages -->
     <div id="top-navigator-messages" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
-      <h6 class="dropdown-header">
+      <!-- <h6 class="dropdown-header">
         Message Center
       </h6>
       <a class="dropdown-item d-flex align-items-center" href="#">
@@ -147,7 +147,7 @@
           <div class="small text-gray-500">Chicken the Dog · 2w</div>
         </div>
       </a>
-      <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+      <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a> -->
     </div>
   </li>
 
@@ -165,7 +165,7 @@
         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
         Profile
       </a>
-      <a class="dropdown-item" href="#">
+      <a class="dropdown-item" href="{{ URL::asset('/user/settings') }}">
         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
         Settings
       </a>

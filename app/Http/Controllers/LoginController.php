@@ -119,19 +119,8 @@ class LoginController extends Controller
 
     public function index() {
         $user = Auth::user();        
-        $news = PieceNew::orderByDesc('date')->get();
 
-        $userMessages = Message::where('user_id_to', $user->id)->orderByDesc('created_at')->get();
-        foreach($userMessages as $i=>$userMessage) {
-            $text = urldecode($userMessage->message);
-            /*if(strlen($text) > self::MAX_MESSAGE_LENGTH) {
-                $text = substr($text, 0, self::MAX_MESSAGE_LENGTH) . " ...";
-            }*/
-            $userMessage->messageCorrected = $text;
-            $userMessages[$i] = $userMessage;
-        }
-
-        return view('user.dashboard', ['user' => $user,'news' => $news, 'userMessages' => $userMessages]);
+        return view('user.dashboard', ['user' => $user]);
     }
     
     public function logout(Request $request) {

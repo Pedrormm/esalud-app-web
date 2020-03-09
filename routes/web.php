@@ -26,6 +26,11 @@ Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware
 Route::get('message/summary', 'MessageController@showMessagesSummary')->middleware('checkUserAuth');
 Route::get('message/icon', 'MessageController@showIconMessage')->middleware('checkUserAuth');
 
+Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');
+
+Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
+
+
 /*Route::get('message/summary', function() {
     return view('ajax.messages_summary');
 });*/
@@ -50,9 +55,18 @@ Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')-
 
 
 Route::post('user/logout', 'LoginController@logout');
+Route::get('user/settings', 'RecordsController@settings')->middleware('checkUserAuth');
+
+Route::post('user/avatarupdate/{id?}', [
+    'uses' => 'RecordsController@updateAvatar',
+    'as' => 'avatar.update'
+]);
+
+// Communication purposes routes
+Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
+Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
+
+
 Route::get('test', function() {
     phpinfo();
 });
-Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');
-
-Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
