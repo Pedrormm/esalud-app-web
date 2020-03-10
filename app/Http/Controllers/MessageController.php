@@ -114,12 +114,12 @@ class MessageController extends Controller
 
         $userMessages = $userMessages->toArray();
 
-        // $userFrom = Message::join('users', 'messages.user_id_from', 'users.id')
-        // ->where('user_id_from', $id)
-        // ->first()->toArray();
-        // $userFrom->name = urldecode($userFrom->name);
+        $userFrom = Message::join('users', 'messages.user_id_from', 'users.id')
+        ->where('user_id_from', $id)
+        ->first();
+        $userFrom->name = urldecode($userFrom->name);
+        $userFrom->lastname = urldecode($userFrom->lastname);
 
-        // dd( $userFrom );
         
         return view('communication/my_messages_from_user', ['userMessages' => $userMessages,'user' => $authUser,
         'userFrom' => $userFrom]);

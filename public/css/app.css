@@ -24,15 +24,22 @@
   border-style: solid;
   border-color: rgb(58, 172, 139);
   border-image: initial;
+  -webkit-box-shadow: -5px 8px 20px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: -5px 8px 20px 0px rgba(0,0,0,0.75);
+  box-shadow: -5px 8px 20px 0px rgba(0,0,0,0.75);
+}
+
+.center_elements > card shadow{
+  border-radius: 10px 10px 10px 10px;
 }
 
 .msj-whole-card{
+  border-radius: 10px 10px 10px 10px;
   display: flex;
   justify-content:space-between;
 }
 
 .msj-whole-card:hover{
-  cursor: pointer;
   border-width: 0.5px;
   border-style: solid;
   border-color: #4EBCDF;
