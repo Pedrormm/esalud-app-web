@@ -38,11 +38,8 @@
   border-color: #4EBCDF;
 }
 
-.link-msj-card{
-  width: 80%;
-}
-
 .msj-card{
+  width: 80%;
   display: flex;
   align-items: center;
 }
@@ -63,6 +60,10 @@
 
 .msj-fecha{
    margin-right:1rem; 
+}
+
+.div-link{
+  cursor: pointer;
 }
 
 

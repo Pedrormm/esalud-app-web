@@ -56,26 +56,15 @@ class MessageController extends Controller
     const MAX_MY_MESSAGES_SHOWN_LENGTH = 25;    
     public function showMyMessages(){
         $authUser = Auth::user();
+
         $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
+        ->select('messages.*', 'users.id', 
+        'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.rol')
         ->where('user_id_to', $authUser->id)
-        ->groupBy('users.dni')
         ->orderBy('messages.read')
         ->orderByDesc('messages.created_at')
         ->get();
-/*
-        $userMessages = Message::select(DB::raw('t.*'))
-            ->from(DB::raw('(SELECT * FROM messages 
-            INNER JOIN users ON messages.user_id_from = users.id) t'))
-            ->groupBy('t.user_id_from')
-            ->get();
-*/
 
-        // $userMessages= Message::selectRaw("users.id as userId, user_id_from, user_id_to, message, 
-        // MIN(messages.read) AS minRead, name, lastname, dni, rol, messages.created_at, messages.updated_at")
-        // ->join('users', 'messages.user_id_from', 'users.id')
-        // ->where('user_id_to', $authUser->id)
-        // ->groupBy('users.dni')->orderByDesc('created_at')->get();
-        
         foreach($userMessages as $i=>$userMessage) {
             $text = urldecode($userMessage->message);
             $name = urldecode($userMessage->name);
@@ -89,10 +78,17 @@ class MessageController extends Controller
             $userMessages[$i] = $userMessage;
         }
 
-        $userMessages = $userMessages->toArray();
-        //dd($userMessages);
+        $auxMessages = collect();
+        $processedIds = [];
+        foreach($userMessages as $i=>$userMessage) {
+            if (!in_array($userMessage->user_id_from, $processedIds)){
+                $processedIds[] = $userMessage->user_id_from;
+                $auxMessages->push($userMessage);                
+            }
+        }
 
-        return view('communication/my_messages', ['userMessages' => $userMessages,'user' => $authUser]);
+        $auxMessages = $auxMessages->toArray();
+        return view('communication/my_messages', ['userMessages' => $auxMessages,'user' => $authUser]);
     }
 
 
@@ -100,7 +96,7 @@ class MessageController extends Controller
         $authUser = Auth::user();
         $userIdFromTo = [$authUser->id, $id];
         $userMessages = Message::leftjoin('users', 'messages.user_id_from', 'users.id')
-        ->select('messages.*', 'users.id', 'users.dni', 'users.name', 'users.lastname', 'users.rol')
+        ->select('messages.*', 'users.id', 'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.rol')
         ->whereIn('user_id_to', $userIdFromTo)
         ->whereIn('user_id_from', $userIdFromTo)
         ->orderByDesc('messages.read')
@@ -117,9 +113,16 @@ class MessageController extends Controller
         }
 
         $userMessages = $userMessages->toArray();
+
+        // $userFrom = Message::join('users', 'messages.user_id_from', 'users.id')
+        // ->where('user_id_from', $id)
+        // ->first()->toArray();
+        // $userFrom->name = urldecode($userFrom->name);
+
+        // dd( $userFrom );
         
-        dd($userMessages);
-        return view('communication/my_messages_from_user', ['userMessages' => $userMessages,'user' => $authUser]);
+        return view('communication/my_messages_from_user', ['userMessages' => $userMessages,'user' => $authUser,
+        'userFrom' => $userFrom]);
     }
 
 
