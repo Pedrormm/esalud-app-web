@@ -59,7 +59,7 @@ class MessageController extends Controller
 
         $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
         ->select('messages.*', 'users.id', 
-        'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.rol')
+        'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id')
         ->where('user_id_to', $authUser->id)
         ->orderBy('messages.read')
         ->orderByDesc('messages.created_at')
@@ -96,7 +96,7 @@ class MessageController extends Controller
         $authUser = Auth::user();
         $userIdFromTo = [$authUser->id, $id];
         $userMessages = Message::leftjoin('users', 'messages.user_id_from', 'users.id')
-        ->select('messages.*', 'users.id', 'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.rol')
+        ->select('messages.*', 'users.id', 'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id')
         ->whereIn('user_id_to', $userIdFromTo)
         ->whereIn('user_id_from', $userIdFromTo)
         ->orderByDesc('messages.read')

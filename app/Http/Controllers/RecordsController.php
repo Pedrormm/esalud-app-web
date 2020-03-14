@@ -15,6 +15,11 @@ use DateInterval;
 class RecordsController extends Controller
 {
 
+    public function __construct()
+    {
+        // Se puede llamar al middleware desde el constructor
+    }
+
     public function index(string $ord=null, string $sex_fil=null, string $age_fil=null, string $n_search=null) {
         $user = Auth::user();
 

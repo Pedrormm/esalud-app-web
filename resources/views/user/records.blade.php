@@ -56,15 +56,17 @@
                                 <!-- START card-->
                                 <div class="card card-default card-demo records-color" id=""  >
                                     <div class="card-header records-color" >
-                                            <a class="float-left title-style" name="records" href="http://localhost/ejApp2/public/user/singlerecord/{{($patient['id'])}}">
-                                            {{ urldecode($patient['name'])." ". urldecode($patient['lastname'])}}
-                                            </a>
-                                            
-                                            <a class="float-right" href="#" data-tool="card-dismiss" data-toggle="tooltip" title="Close Card">
-                                                    <em class="fa fa-times"></em>
-                                            </a>
-                                            <a class="float-right" href="#" data-tool="card-collapse" data-toggle="tooltip" title="Collapse Card" data-start-collapsed><em class="fa fa-plus"></em>
-                                            </a>
+                                        <a class="float-left title-style" name="records"
+                                         href="http://localhost/ejApp2/public/user/singlerecord/{{($patient['id'])}}">
+                                        {{ urldecode($patient['name'])." ". urldecode($patient['lastname'])}}
+                                        </a>
+                                        
+                                        <a class="float-right" href="#" data-tool="card-dismiss" 
+                                        data-toggle="tooltip" title="Close Card">
+                                            <em class="fa fa-times"></em>
+                                        </a>
+                                        <a class="float-right" href="#" data-tool="card-collapse" data-toggle="tooltip" title="Collapse Card" data-start-collapsed><em class="fa fa-plus"></em>
+                                        </a>
                                     </div><!-- .card-wrapper is the element to be collapsed-->
                                     <div class="card-wrapper">
                                         <div class="card-body">

@@ -22,6 +22,7 @@
             <span>Dashboard</span></a>
         </li>
 
+        @if ($user->role_id == 4)
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -46,6 +47,7 @@
             </div>
             </div>
         </li>
+        @endif
 
         <!-- Nav Item - Medical record -->
         <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">

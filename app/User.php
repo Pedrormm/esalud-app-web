@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'lastname',  'contact', 'dni', 'birthdate', 'avatar', 'sex', 'blood', 'information', 'deleted', 'sip_name', 'sip_id', 'sip_pass', 'rol', 'rol_perms'
+        'name', 'lastname',  'contact', 'dni', 'birthdate', 'avatar', 'sex', 'blood', 'information', 'deleted', 'sip_name', 'sip_id', 'sip_pass', 'role_id', 'rol_perms'
     ];
 
     /**
@@ -84,6 +84,10 @@ class User extends Authenticatable
 
     public function reports() {
         return $this->hasMany("App\Report");
+    }
+
+    public function role_id() {
+        return $this->belongsTo("App\Role");
     }
 
     public function staff() {

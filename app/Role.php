@@ -13,11 +13,22 @@ class Analytic extends Model
      * @var array
      */
     protected $fillable = [
-        'flag_meaning', 'default_permission', 'permission_name', 'created_at', 'updated_at'
+        'name', 'user_id_creator', 'created_at', 'updated_at'
     ];
+
+    public function user_creator() {
+        return $this->belongsTo("App\User");
+    }
 
     public function rol_permission() {
         return $this->hasMany("App\Rol_Permission");
     }
+
+    public function users() {
+        return $this->hasMany("App\User");
+    }
+
+
+
 
 }
