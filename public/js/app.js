@@ -1,7 +1,12 @@
 $(function() {
 
     if ($('#dataTable').length > 0 ){
-        $('#dataTable').DataTable();
+        $('#dataTable').DataTable({
+            "scrollY": 250,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+            }    
+        });
     }
 
 

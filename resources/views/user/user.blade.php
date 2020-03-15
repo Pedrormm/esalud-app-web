@@ -51,7 +51,7 @@
                             <span>{{ urldecode($singleUser['lastname']).", ".urldecode($singleUser['name']) }}</span>
                         </td>
                         <td>                        
-                            <span>{{ $singleUser['rol'] }}</span>          
+                            <span>{{ $singleUser['role_id'] }}</span>          
                         </td>
                         <td>
                             <span>{{ $singleUser['dni'] }}</span>          
