@@ -18,17 +18,13 @@ Route::get('/', function () {
         return redirect()->action('LoginController@index');
     return view('login');
 });
-/*
+
 Route::group(['middleware' => ['checkUserAuth', 'checkUserRole']], function () {
 
     Route::get('user/dashboard', 'LoginController@index');
     
-    });
-    */
-
-    Route::get('user/dashboard', 'LoginController@index')->middleware('checkUserAuth');
-
-
+});
+    
 
 // Ajax view routes
 Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');

@@ -5,7 +5,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Closure;
 use Session;
 
-class checkUserRole
+class CheckUserRole
 {
     protected $auth;
 

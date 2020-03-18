@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Analytic extends Model
+class Role extends Model
 {
     protected $table = 'analytics';
     /**
@@ -16,11 +16,11 @@ class Analytic extends Model
         'name', 'user_id_creator', 'created_at', 'updated_at'
     ];
 
-    public function user_creator() {
+    public function userCreator() {
         return $this->belongsTo("App\User");
     }
 
-    public function rol_permission() {
+    public function rolPermission() {
         return $this->hasMany("App\Rol_Permission");
     }
 

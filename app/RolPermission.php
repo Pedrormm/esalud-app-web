@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Analytic extends Model
+class RolPermission extends Model
 {
     protected $table = 'analytics';
     /**
@@ -17,10 +17,10 @@ class Analytic extends Model
     ];
 
     public function role() {
-        return $this->belongsTo("App\Role");
+        return $this->belongsTo(App\Role::class);
     }
 
     public function permission() {
-        return $this->belongsTo("App\Permission");
+        return $this->belongsTo(App\Permission::class);
     }
 }

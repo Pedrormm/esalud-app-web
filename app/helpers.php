@@ -1,6 +1,6 @@
 <?php
   use Carbon\Carbon;
-
+    
     function imploadValue($types){
         $strTypes = implode(",", $types);
         return $strTypes;
