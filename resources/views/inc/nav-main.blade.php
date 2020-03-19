@@ -22,7 +22,7 @@
             <span>Dashboard</span></a>
         </li>
 
-        @if ($user->role_id == 4)
+        @if ($user->role_id == HV_ROLES::PERM_ADMIN)
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -99,20 +99,23 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Adjustments Heading -->
-        <div class="sidebar-heading">
-            Adjustments
-        </div>
+        @if ($user->role_id == HV_ROLES::PERM_ADMIN)
+            <!-- Adjustments Heading -->
+            <div class="sidebar-heading">
+                Adjustments
+            </div>
 
-        <!-- Nav Item - Role management -->
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Role management</span></a>
-        </li>
+            <!-- Nav Item - Role management -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ URL::asset('/user/appointments') }}"
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Role management</span></a>
+            </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+    
+        @endif
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

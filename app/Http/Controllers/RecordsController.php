@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Patient;
+use App\Role;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use DateTime;
@@ -71,6 +72,12 @@ class RecordsController extends Controller
         return view('adjustments/settings', ['user' => $user]);
     }
 
+    public function roleManagement() {
+        $user = Auth::user();
+        $roles = Role::orderBy("Role.id")->get();
+        return view('adjustments/roleManagement', ['user' => $user, 'roles' => $roles]);
+    }
+
     public function updateAvatar(Request $request, $id=null) {
         $authUser = Auth::user();        
 
@@ -119,5 +126,6 @@ class RecordsController extends Controller
 
         return redirect()->back();
     }
+    
 
 }

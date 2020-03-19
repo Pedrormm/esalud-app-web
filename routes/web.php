@@ -68,6 +68,8 @@ Route::post('user/avatarupdate/{id?}', [
     'as' => 'avatar.update'
 ]);
 
+Route::get('user/roleManagement', 'RecordsController@roleManagement')->middleware('checkUserAuth');
+
 // Communication purposes routes
 Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
 Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
