@@ -9,3 +9,10 @@ class HV_ROLES{
     const PERM_ADMIN = 4;
 
 }
+
+class HV_PERMISSIONS{
+    const NONE = 0;
+    const READ = 1;
+    const READ_WRITE = 2;
+
+}

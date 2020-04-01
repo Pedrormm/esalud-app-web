@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;
-use App\Patient;
-use App\Role;
+use App\Models\User;
+use App\Models\Patient;
+use App\Models\Role;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use DateTime;

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;
-use App\Patient;
-use App\Staff;
+use App\Models\User;
+use App\Models\Patient;
+use App\Models\Staff;
 use DB;
 
 class UsersManagementController extends Controller

@@ -107,7 +107,7 @@
 
             <!-- Nav Item - Role management -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ URL::asset('/user/appointments') }}"
+                <a class="nav-link" href="{{ URL::asset('/user/roleManagement') }}"
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Role management</span></a>
             </li>
