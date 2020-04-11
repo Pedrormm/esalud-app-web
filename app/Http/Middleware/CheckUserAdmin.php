@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 use App\Models\User;
 class CheckUserAdmin
 {
@@ -19,7 +20,9 @@ class CheckUserAdmin
        
         if (in_array(HV_ROLES::PERM_ADMIN, User::getPermissions($user->id, HV_PERMISSIONS::READ_WRITE)))
             return $next($request);
-        else 
+        else{
+            //delivering an error
+        }
 
     }
 }

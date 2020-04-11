@@ -324,4 +324,24 @@ class User extends Model
     {
         return $this->hasMany(\App\Models\WarningsRead::class, 'user_id');
     }
+
+    public static function getPermissions(int $userId, int $valuePermission = null) {
+        //\DB::enableQueryLog();
+        $results = self::select('roles_permissions.permission_id')->join('roles_permissions', 'roles_permissions.role_id', 'users.role_id')
+        ->where('users.id', $userId);
+        if(!is_null($valuePermission))
+            $results = $results->where('roles_permissions.value', $valuePermission);
+        $permissions = $results->get();
+        //dd(\DB::getQueryLog());
+        return $permissions->pluck('permission_id')->toArray();
+    }
+
+    public function scopeActive($query) {
+        return $query->where('disabled', 0);
+        // This allows to call User::active()->all();
+    }
+    
+    public function scopeActiveUsers($query) {
+        return $query->whereNotNull('role_id');
+    }
 }

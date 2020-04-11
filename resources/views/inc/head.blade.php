@@ -73,7 +73,8 @@
                 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/sb-admin-2.js')}}"></script>
                 <script src="{{ asset('js/custom-app.js')}}"></script>
-
+                {{-- bootbox --}}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
                
         <script>
                 const _PUBLIC_URL = "{{ asset('') }}";

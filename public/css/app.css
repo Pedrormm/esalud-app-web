@@ -1,4 +1,69 @@
 /* ========================================================================
+  Modal
+========================================================================== */
+.btn-secondary:hover{
+  color:black !important;
+}
+
+modal {
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color:#18456b;
+  color:white;
+}
+
+.modal-header .close {
+  color:#fff;
+}
+
+.modal-header .close:hover {
+  background-color: initial;
+  color:#fff;
+}
+
+.modalMinimize{
+  font-size: 14px !important;
+  margin-top: -7px !important;  
+}
+
+caption {
+  caption-side: top !important;
+}
+
+.toolbar {
+  float: left; 
+  margin-right:2%;
+}
+
+
+/* ========================================================================
+  roleEdit
+========================================================================== */
+
+.tabla_permisos_roles{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.tabla_permisos_roles tbody{
+  text-align: center;
+}
+
+.tabla_permisos_roles tbody label input{
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.tabla_permisos_roles thead th{
+  min-width:8.75rem;
+}
+
+
+
+
+/* ========================================================================
   Left Nav
 ========================================================================== */
 

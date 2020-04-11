@@ -55,7 +55,11 @@ Route::get( 'user/recorddisplay/{id}', function ( $id) {
     return view($id);
 });
 */
-Route::get('user/roleManagement', 'RecordsController@roleManagement')->middleware('checkUserAuth','checkUserAdmin');
+Route::get('user/roleManagement', 'RoleController@index')->middleware('checkUserAuth');
+Route::get('user/roleManagement/edit/{id}', 'RoleController@edit')->middleware('checkUserAuth');
+Route::put('user/roleManagement/update', 'RoleController@update')->middleware('checkUserAuth');
+Route::delete('user/roleManagement/delete/{id}', 'RoleController@destroy')->middleware('checkUserAuth');
+
 
 Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
 Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');
@@ -88,6 +92,7 @@ Route::resource('staff', 'StaffController');
 Route::resource('calls', 'CallController');
 
 Route::resource('notes', 'NoteController');
-*/
+
 
 Route::resource('patients', 'PatientController');
+*/

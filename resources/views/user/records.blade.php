@@ -40,7 +40,9 @@
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <input type="text" placeholder="Nombre, apellidos, historial o dni" class="inp_search filter_height" id="record_search_filter">
                 </div>
-                <button type="button" id="hmsearch" class="col-xs-12 col-sm-1 col-md-1 btn btn-primary bt-search filter_height"><i class="fa fa-search"></i>Buscar</a>
+                <button type="button" id="hmsearch" class="col-xs-12 col-sm-1 col-md-1 btn btn-primary bt-search
+                 filter_height"><i class="fa fa-search"></i>&ensp;Buscar</a>
+                
             </div>
 
             <!-- <div class="records-color">alksadadla as</div> -->
