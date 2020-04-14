@@ -33,7 +33,7 @@
                     @foreach ($roles as $rol)
                       @php ($count = DB::table("users")->where('role_id', $rol->idRole)->get()->count())
                       <tr>
-                        <td>{{ $rol->nameRole }}</td>
+                        <td data-role-id="{{ $rol->idRole }}">{{ $rol->nameRole }}</td>
                         <td><button type="button" class="btn btn-primary">Usuarios asociados</a></td>
                         <td>{{ $rol->dni }}</td>
                         <td>{{ $count }}</td>

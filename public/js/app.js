@@ -134,12 +134,35 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
         $('#saveModal').off();
    
 }
-function showInlineError(status,message) {
+/**
+ * Show an inline message in #error-conatiner container
+ * @author Pedro deMadrid
+ * @param int|string status 
+ * @param string message 
+ * @param int timeout 0 for no disappear, >0 seconds to disappear
+ */
+function showInlineError(status,message, timeout=0) {
     $('#error-container').show().text(message);
+    if(timeout>0) {
+        setTimeout(function() {
+            $('#error-container').hide(500);
+        }, timeout*1000);
+    }
 
 }
-function showInlineMessage(message) {
+/**
+ * Show an inline message in #message-conatiner container
+ * @author Pedro deMadrid
+ * @param string message 
+ * @param int timeout 0 for no disappear, >0 seconds to disappear
+ */
+function showInlineMessage(message, timeout=0) {
     $('#message-container').show().text(message);
+    if(timeout>0) {
+        setTimeout(function() {
+            $('#message-container').hide(500);
+        }, timeout*1000);
+    }
 }
 function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false) {
     $('#generic-modal .modal-title').text(title);
@@ -158,7 +181,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
     }
    
     if(htmlFormat)
-        $('#generic-modal .modal-body p').html(body);
+        $('#generic-modal .modal-body').html(body);
     else if (url) {
         $.ajax({
             url: url,
@@ -172,7 +195,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         //$('#generic-modal').modal('show');
     } 
     else
-        $('#generic-modal .modal-body p').text(body);
+        $('#generic-modal .modal-body').text(body);
 
     $('#generic-modal').modal({
         backdrop: 'static',
@@ -198,6 +221,29 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
 
 
 }//--fin showModal
+
+
+function showModalConfirm(title="Title", message="No message", callback=function(){}, optConfirmText="Ok") {
+    $('#generic-modal .modal-title').text(title);
+    $('#generic-modal .modal-body').text(message);
+    callback = (function() {
+        let cachedFunction = callback;
+        return function() {
+            console.log("Calling callback before");
+            cachedFunction.apply(this, arguments);
+            $('#generic-modal').modal('hide');
+            console.log("Calling callback afger");
+        }
+    })();
+
+    $('#saveModal').click(callback);
+    
+    if(optConfirmText !== undefined) {
+        $('#saveModal').text(optConfirmText);
+    }
+    $('#generic-modal').modal('show');
+}//--fin showModalConfirm
+
 
 function dragElement(elmnt) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
