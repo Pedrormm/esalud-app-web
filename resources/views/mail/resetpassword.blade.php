@@ -42,7 +42,7 @@
             <script type="text/javascript" src="{{ asset('js/jquery/jquery.tmpl.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/jquery/jquery.json-2.4.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/jquery/jquery.event.move.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/application.js') }}"></script>
 
             <script type="text/javascript" src="{{ asset('js/SIPml-api.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>

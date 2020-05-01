@@ -235,4 +235,13 @@ class RoleController extends AppBaseController
 
         return redirect(route('roles.index'));
     }
+
+    public function usersRolesView($id){
+        $user = Auth::user();
+        $usersRole = Role::with('user1s')->where('id',$id)->get();
+        $usersRole = $usersRole->toArray();
+        // dd($usersRole);
+
+        return view('adjustments.usersRoleEdit',['usersRole' => $usersRole, 'user' => $user]);
+    }
 }

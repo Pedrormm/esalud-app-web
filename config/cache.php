@@ -85,6 +85,11 @@ return [
             'endpoint' => env('DYNAMODB_ENDPOINT'),
         ],
 
+        'openvidu' => [
+            'driver' => 'openvidu',
+            'table' => 'openvidu_cache'
+        ],
+
     ],
 
     /*

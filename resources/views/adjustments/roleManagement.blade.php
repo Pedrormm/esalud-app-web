@@ -34,12 +34,18 @@
                       @php ($count = DB::table("users")->where('role_id', $rol->idRole)->get()->count())
                       <tr>
                         <td data-role-id="{{ $rol->idRole }}">{{ $rol->nameRole }}</td>
-                        <td><button type="button" class="btn btn-primary">Usuarios asociados</a></td>
+                        <td>
+                          {{-- <button type="button" class="btn btn-primary">Usuarios asociados</a> --}}
+                            <a href="{{ URL::asset('/role/userManagement/edit/'.$rol->idRole)  }}" class="btn btn-primary role-users-modal"
+                              data-name-role="{{ $rol->nameRole }}" data-role-id="{{ $rol->idRole }}" role="button">
+                              Usuarios asociados
+                            </a>                       
+                        </td>
                         <td>{{ $rol->dni }}</td>
                         <td>{{ $count }}</td>
                         <td>
                           <a href="{{ URL::asset('/user/roleManagement/edit/'.$rol->idRole)  }}" class="btn btn-primary role-modal"
-                            data-name-role="{{ $rol->nameRole }}" data-role-id="{{ $rol->idRole }}">
+                            data-name-role="{{ $rol->nameRole }}" data-role-id="{{ $rol->idRole }}" role="button">
                             Editar
                           </a>					
                         </td><!-- boton actualizar (solo disponible si somos nosotros mismos) -->
@@ -54,5 +60,17 @@
 
         </div>
         <!-- /.container-fluid -->
+
+  <script>
+    $('.role-users-modal').on('click', function(e){
+        e.preventDefault();
+        showModal('Usuarios aplicados del rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl'); 
+    });
+
+    $('.role-modal').on('click', function(e){
+        e.preventDefault();
+        showModal('Editar rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl', true, true); 
+    });
+  </script>
 
 @endsection

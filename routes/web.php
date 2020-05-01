@@ -49,16 +49,6 @@ Route::post('/passwordchanged', 'LoginController@changePassword');
 Route::post('/user/login', 'LoginController@login');
 Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 
-/*
-Route::get( 'user/recorddisplay/{id}', function ( $id) {
-    fopen( resource_path( 'views/' . $id . '.blade.php' ), 'w' );
-    return view($id);
-});
-*/
-Route::get('user/roleManagement', 'RoleController@index')->middleware('checkUserAuth');
-Route::get('user/roleManagement/edit/{id}', 'RoleController@edit')->middleware('checkUserAuth');
-Route::put('user/roleManagement/update', 'RoleController@update')->middleware('checkUserAuth');
-Route::delete('user/roleManagement/delete/{id}', 'RoleController@destroy')->middleware('checkUserAuth');
 
 
 Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
@@ -78,6 +68,29 @@ Route::post('user/avatarupdate/{id?}', [
 // Communication purposes routes
 Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
 Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
+Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
+
+
+/*
+Route::get( 'user/recorddisplay/{id}', function ( $id) {
+    fopen( resource_path( 'views/' . $id . '.blade.php' ), 'w' );
+    return view($id);
+});
+*/
+
+// Admin routes
+Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () {
+
+    Route::get('user/roleManagement', 'RoleController@index');
+    Route::get('user/roleManagement/edit/{id}', 'RoleController@edit');
+    Route::put('user/roleManagement/update', 'RoleController@update');
+    Route::delete('user/roleManagement/delete/{id}', 'RoleController@destroy');
+    Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
+    
+});
+
+// Route::post('pusher/auth', 'VideoCallController@authenticatePusher');
+Route::match(array('GET', 'POST'), 'pusher/auth', 'VideoCallController@authenticatePusher');
 
 
 Route::get('test', function() {

@@ -1,0 +1,223 @@
+/* ========================================================================
+  Video
+========================================================================== */
+  .navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  .video_container {
+    width: 500px;
+    height: 380px;
+    margin: 0px auto;
+    border: 2px solid #645cff;
+    position: relative;
+    box-shadow: 1px 1px 11px #9e9e9e;
+  }
+
+  .my_video {
+    width: 130px;
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    border: 6px solid #2196F3;
+    border-radius: 6px;
+    z-index: 2;
+  }
+
+  .user_video {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+
+/* ========================================================================
+  Modal
+========================================================================== */
+.btn-secondary:hover{
+  color:black !important;
+}
+
+modal {
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color:#18456b;
+  color:white;
+}
+
+.modal-header .close {
+  color:#fff;
+}
+
+.modal-header .close:hover {
+  background-color: initial;
+  color:#fff;
+}
+
+.modalMinimize{
+  font-size: 14px !important;
+  margin-top: -7px !important;  
+}
+
+caption {
+  caption-side: top !important;
+}
+
+.toolbar {
+  float: left; 
+  margin-right:2%;
+}
+
+
+/* ========================================================================
+  roleEdit
+========================================================================== */
+
+.tabla_permisos_roles{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.tabla_permisos_roles tbody{
+  text-align: center;
+}
+
+.tabla_permisos_roles tbody label input{
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.tabla_permisos_roles thead th{
+  min-width:8.75rem;
+}
+
+
+
+
+/* ========================================================================
+  Left Nav
+========================================================================== */
+
+.nav-item span{
+  font-size:1.15rem !important; 
+}
+
+
+
+/* ========================================================================
+  My-messages
+========================================================================== */
+
+
+
+.msj-title{
+  margin-bottom: 2rem;
+}
+
+
+.new-message{
+  font-weight:800; /* a bit bolder than bold*/
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(58, 172, 139);
+  border-image: initial;
+  -webkit-box-shadow: -5px 8px 20px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: -5px 8px 20px 0px rgba(0,0,0,0.75);
+  box-shadow: -5px 8px 20px 0px rgba(0,0,0,0.75);
+}
+
+.center_elements > card shadow{
+  border-radius: 10px 10px 10px 10px;
+}
+
+.msj-whole-card{
+  border-radius: 10px 10px 10px 10px;
+  display: flex;
+  justify-content:space-between;
+}
+
+.msj-whole-card:hover{
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: #4EBCDF;
+}
+
+.msj-card{
+  width: 80%;
+  display: flex;
+  align-items: center;
+}
+
+.msj-date-and-bar{
+  margin-top: 2%;
+  margin-right: 2%;
+  display: block;
+}
+
+.msj-image{
+  margin-left: 2%;
+}
+
+.msj-derecho{
+  display: flex;
+}
+
+.msj-fecha{
+   margin-right:1rem; 
+}
+
+.div-link{
+  cursor: pointer;
+}
+
+
+
+/* ========================================================================
+  Records
+========================================================================== */
+
+/* mygreen:#99CA6A */
+/* myblue:#4D72DF */
+
+.filter_row, .records_container, .center_elements{
+  display: flex;
+  justify-content: center;
+}
+
+.records-color{
+  background-color: #99CA6A !important;
+  color:red;
+}
+
+.title-style{
+  color: white !important;
+  font-size: 17px;
+}
+
+.body-style{
+  font-size: 16px;
+
+}
+
+.filter_height{
+  height: 2.5rem !important;
+}
+
+.color_white{
+  color:white !important;
+}
+
+.text_left{
+  text-align: left !important;
+}
+
+
+

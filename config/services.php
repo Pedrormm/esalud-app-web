@@ -32,4 +32,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'openvidu' => [
+        'app' => env('OPENVIDU_APP'), //At the moment, always "OPENVIDUAPP"
+        'domain' => env('OPENVIDU_DOMAIN'), //Your OpenVidu Server machine public IP
+        'port' => env('OPENVIDU_PORT'), //Listening port of your OpenVidu server, default 4443
+        'secret' => env('OPENVIDU_SECRET'), //The password used to secure your OpenVidu Server
+        'debug' => env('OPENVIDU_DEBUG') // true or false
+    ]
+
 ];

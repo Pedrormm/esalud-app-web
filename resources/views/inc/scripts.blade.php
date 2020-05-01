@@ -1,4 +1,4 @@
-                <!-- <script src="{{ asset('js/custom-app.js')}}"></script> -->
+                <!-- <script src="{{ asset('js/custom-application.js')}}"></script> -->
 <script>
     asyncCall('message/icon', '#messagesDropdown', true);
      $('#messagesDropdown').click();

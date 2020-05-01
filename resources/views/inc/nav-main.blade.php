@@ -75,8 +75,8 @@
                 <h6 class="collapse-header">Custom Messages:</h6>
                 <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/user/my-messages') }}">My messages</a>
                 <a id="navSubitemSendMessage" class="collapse-item" href="{{ URL::asset('/user/send-message') }}">Send message</a>
-                <a id="navSubitemChat" class="collapse-item" href="{{ URL::asset('/user/chat') }}">Chat</a>
-                <a id="navSubitemVideocall" class="collapse-item" href="{{ URL::asset('/user/videocall') }}">Video call</a>
+                <a id="navSubitemChat" class="collapse-item" href="{{ URL::asset('/openvidu/token') }}">Chat</a>
+                <a id="navSubitemVideocall" class="collapse-item" href="{{ URL::asset('/user/video-call') }}">Video call</a>
             </div>
             </div>
         </li>

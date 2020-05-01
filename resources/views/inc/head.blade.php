@@ -62,7 +62,7 @@
 
 
                 <!-- =============== CUSTOM STYLES ===============-->
-                <link rel="stylesheet" href="{{ asset('css/app.css')}}" id="maincss">
+                <link rel="stylesheet" href="{{ asset('css/application.css')}}" id="maincss">
                 <link href="{{ asset('css/sb-admin-2.css')}}" rel="stylesheet">
                 <link rel="stylesheet" href="{{ asset('css/custom-app.css')}}" id="maincss">
 
@@ -70,11 +70,30 @@
 
 
                 <!-- =============== CUSTOM SCRIPTS ===============-->
-                <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+                <script type="text/javascript" src="{{ asset('js/application.js') }}"></script>
                 <script type="text/javascript" src="{{ asset('js/sb-admin-2.js')}}"></script>
                 <script src="{{ asset('js/custom-app.js')}}"></script>
                 {{-- bootbox --}}
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+
+                {{-- Bootstrap select --}}
+                <!-- Latest compiled and minified CSS -->
+                {{-- https://developer.snapappointments.com/bootstrap-select/ --}}
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+                <!-- Latest compiled and minified JavaScript -->
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+                <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+                {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script> --}}
+
+                <link rel="stylesheet" 
+                href="{{ asset('modules/ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min.css')}}">
+                
+                <script type="text/javascript" 
+                src="{{ asset('modules/ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js')}}">
+                </script>
+
                
         <script>
                 const _PUBLIC_URL = "{{ asset('') }}";
