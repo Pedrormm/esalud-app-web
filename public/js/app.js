@@ -62617,6 +62617,9 @@ function (_Component) {
       hasMedia: false,
       otherUserId: null
     };
+    _this.users = [];
+    _this.users = window.allUsers;
+    console.log("allusers ", _this.users);
     _this.user = window.user;
     console.log("user " + window.user.id); // this.peer = {};
 
@@ -62628,6 +62631,9 @@ function (_Component) {
     _this.callTo = _this.callTo.bind(_assertThisInitialized(_this));
     _this.setupPusher = _this.setupPusher.bind(_assertThisInitialized(_this));
     _this.startPeer = _this.startPeer.bind(_assertThisInitialized(_this));
+    _this.selectedUserId = null; // this.selectedUserId = this.users[0].id;
+    // console.log('con this.selectedUserId',this.selectedUserId);
+
     return _this;
   }
 
@@ -62727,7 +62733,7 @@ function (_Component) {
       });
       peer.on('stream', function (stream) {
         //Callback for user stream, the user video
-        console.log("Recibe User Video"); // alert("Recibe User Video");
+        console.log("Recibe User Video");
 
         try {
           _this4.userVideo.srcObject = stream;
@@ -62747,6 +62753,14 @@ function (_Component) {
         _this4.peers[userId] = undefined;
       });
       return peer;
+    }
+  }, {
+    key: "selectUser",
+    value: function selectUser(e) {
+      console.log('selectUser', e);
+      this.selectedUserId = e.target.value;
+      console.log('selectedUserId', this.selectedUserId);
+      $("#callButton").css("display", "inline");
     } // Function to call other users
 
   }, {
@@ -62767,16 +62781,47 @@ function (_Component) {
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "app"
-        }, [1, 2, 3, 4].map(function (userId) {
-          return _this5.user.id !== userId ?
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            key: userId,
-            onClick: function onClick() {
-              return _this5.callTo(userId);
-            }
-          }, "Call ", userId) : null;
-        }),
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "selectpicker selectUserToCall",
+          "data-live-search": "true",
+          "data-style": "btn-info",
+          title: "Busque usuario por nombre, apellidos o dni",
+          "data-width": "35%",
+          "data-header": "Busque usuario por nombre, apellidos o dni",
+          onChange: function onChange(e) {
+            return _this5.selectUser(e);
+          }
+        }, Object.keys(this.users).map(function (role, roleId) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
+              key: roleId,
+              label: role
+            }, Object.keys(_this5.users[role]).map(function (u) {
+              return _this5.users[role][u].id !== user.id ?
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+                "data-subtext": _this5.users[role][u].dni,
+                key: "".concat(u, "-").concat(role, ".id"),
+                value: _this5.users[role][u].id
+              }, _this5.users[role][u].name, " ", _this5.users[role][u].lastname) : null;
+            }))
+          );
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          id: "callButton",
+          className: "btn btn-primary",
+          onClick: function onClick() {
+            return _this5.callTo(_this5.selectedUserId);
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-phone"
+        }), "\u2002Call"),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "video_container"

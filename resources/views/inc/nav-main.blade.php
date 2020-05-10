@@ -67,7 +67,7 @@
         <!-- Nav Item - Messaging Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommunication" aria-expanded="true" aria-controls="collapseCommunication">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="fa fa-users"></i>
             <span>Messaging</span>
             </a>
             <div id="collapseCommunication" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">

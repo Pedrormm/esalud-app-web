@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use DB;
 use Flash;
 use Response;
+use App\Models\User;
 use App\Models\Role;
 use App\Models\RolePermission;
 use App\Models\Permissions;
@@ -132,14 +133,8 @@ class RoleController extends AppBaseController
     // Es el post que lo guarda en BD
     public function update(Request $request)
     {
-        //return $this->jsonResponse(0, "El rol ".$request->name." ha sido editado correctamente");
-        //var_dump($all);
-        //return response()->json(['all' => $all]);
-
-       // die();
         if($request->ajax()) {
             $requestdata = $request->all();
-
             $role = Role::find($request->idRole);
            
             $validator = Validator::make($request->all(), [
@@ -184,30 +179,9 @@ class RoleController extends AppBaseController
                     $role_permission->save();
                 }
             }
-
-            
-            
-            //$role->save();
-            ///return response()->json(['message' => 'Actualizado correctamente', 'url' => '/expediente']);
-
             return $this->jsonResponse(0, "El rol ".$request->name." ha sido editado correctamente");
         }
-//        return redirect()->back();
-        /*
-        $role = $this->roleRepository->find($id);
 
-        if (empty($role)) {
-            Flash::error('Role not found');
-
-            return redirect(route('roles.index'));
-        }
-
-        $role = $this->roleRepository->update($request->all(), $id);
-
-        Flash::success('Role updated successfully.');
-
-        return redirect(route('roles.index'));
-        */
     }
 
     /**
@@ -236,12 +210,68 @@ class RoleController extends AppBaseController
         return redirect(route('roles.index'));
     }
 
-    public function usersRolesView($id){
+    public function usersRolesView($id, string $searchPhrase=null){
         $user = Auth::user();
         $usersRole = Role::with('user1s')->where('id',$id)->get();
         $usersRole = $usersRole->toArray();
-        // dd($usersRole);
 
-        return view('adjustments.usersRoleEdit',['usersRole' => $usersRole, 'user' => $user]);
+        $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name', 
+        'users.lastname', 'users.dni', 'users.birthdate','users.sex','users.email','users.blood','users.role_id' )
+        ->join('users', 'users.role_id', 'roles.id')->where('users.role_id', '<>', $id)
+        ->get();
+
+        $grouped = $usersNotInRole->groupBy('role_name');
+
+        $roles = Role::orderBy('id')->get();
+
+        $allUsers = User::with('role')->orderBy('users.id')->get();
+        $allUsers = $allUsers->groupBy('id')->toArray();
+
+        return view('adjustments.usersRoleEdit',['id' => $id,'allUsers' => $allUsers, 'usersNotInRole' => $grouped,
+         'usersRole' => $usersRole, 'roles' => $roles, 'user' => $user]);
+    }
+
+    public function editNotInRole($id){
+        $user = Auth::user();
+
+        $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name', 
+        'users.lastname', 'users.dni', 'users.birthdate','users.sex','users.email','users.blood','users.role_id' )
+        ->join('users', 'users.role_id', 'roles.id')->where('users.role_id', '<>', $id)
+        ->get();
+
+        $grouped = $usersNotInRole->groupBy('role_name');
+
+        $roles = Role::orderBy('id')->get();
+
+        $allUsers = User::with('role')->orderBy('users.id')->get();
+        $allUsers = $allUsers->groupBy('id')->toArray();
+
+        return view('adjustments.usersNotInRoleEdit',['allUsers' => $allUsers, 'usersNotInRole' => $grouped,
+        'roles' => $roles, 'user' => $user]);
+    }
+
+
+    public function updateNotInRole(Request $request)
+    {
+        $requestData = $request->all();
+        $retrievedData = [];
+
+        foreach($requestData as $key => $value){
+            $user_to_change = User::find($key);
+            $user_to_change->role_id = $value;
+            $user_to_change->save();
+            array_push($retrievedData, $user_to_change->toArray());
+        }
+
+        $response = "Se han modificado los roles de los siguientes usuarios: ";
+        foreach ($retrievedData as $key => $value) {
+            $role_name = Role::find($value["role_id"]);
+            $value['role_name']=$role_name->toArray();
+            $eachResponse = "<br> Al usuario ".$value["name"]." ".$value["lastname"]." con id ".$value["id"]
+            ." se le ha asignado el rol ".$value["role_name"]["name"];
+            $response .= $eachResponse;
+        }
+
+        return $this->jsonResponse(0, $response);
     }
 }

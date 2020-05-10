@@ -14,6 +14,10 @@
       }
 
       window.csrfToken = "{{ csrf_token() }}";
+
+      window.allUsers = <?=$allUsers?>;
+
+
     </script>
   @endif
 
@@ -25,9 +29,11 @@
       <div class="card-header py-3">
         <h4 class="m-0 font-weight-bold text-primary text-center">Videollamada</h4>
       </div>
-
       <div class="card-body">
         <div id="app">
+          
+        </div>
+        <div id="videoConf">
           
         </div>
       </div>
@@ -38,8 +44,6 @@
 </div>
   <script src="{{asset('js/app.js')}}" >
   </script>
-
-
                  
     
 @endsection

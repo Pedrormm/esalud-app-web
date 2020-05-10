@@ -27,6 +27,9 @@ export default class App extends Component {
             otherUserId: null
         };  
 
+        this.users = [];
+        this.users = window.allUsers;
+        console.log("allusers ",this.users);
         this.user = window.user;
         console.log("user "+ window.user.id);
         // this.peer = {};
@@ -38,6 +41,10 @@ export default class App extends Component {
         this.callTo = this.callTo.bind(this);
         this.setupPusher = this.setupPusher.bind(this);
         this.startPeer = this.startPeer.bind(this);
+        this.selectedUserId = null;
+        // this.selectedUserId = this.users[0].id;
+        // console.log('con this.selectedUserId',this.selectedUserId);
+
     }
 
     componentWillMount(){
@@ -143,6 +150,13 @@ export default class App extends Component {
         return peer;
     }
 
+    selectUser(e){
+        console.log('selectUser',e);
+        this.selectedUserId=e.target.value;
+        console.log('selectedUserId',this.selectedUserId);
+        $("#callButton").css("display", "inline");
+    }
+
     // Function to call other users
     callTo(userId) {
         // if(this.peers === undefined)
@@ -154,20 +168,40 @@ export default class App extends Component {
     render() {
         return (
             <div className="app">
-                {/* All the contacts should be fetched from the database in here, loop through them with a search 
-                functionality, displayed them in here and show a call button */}
-                {/* The temporally solution would be: */}
-                {/* The button calls the userIde */}
-                {[1,2,3,4].map((userId) => {
+                <select className="selectpicker selectUserToCall" data-live-search="true" data-style="btn-info"
+                title="Busque usuario por nombre, apellidos o dni" data-width="35%"       
+                data-header="Busque usuario por nombre, apellidos o dni" onChange={(e) => this.selectUser(e)}>
+                    {Object.keys(this.users).map((role, roleId) => {                      
+                        return (
+                            <optgroup key={ roleId } label={ role }>
+                            {
+                                Object.keys(this.users[role]).map(u => {
+                                return (                               
+                                    this.users[role][u].id !== user.id ?
+                                    <option data-subtext={this.users[role][u].dni} key={`${u}-${role}.id`} value={this.users[role][u].id}>
+                                    {this.users[role][u].name} {this.users[role][u].lastname}</option> : null                             
+                                );
+                                })
+                            }
+                            </optgroup>
+                        );                                        
+                    })}
+                </select> 
+
+                <button id="callButton" className="btn btn-primary" 
+                onClick={ () => this.callTo(this.selectedUserId)}><i className="fa fa-phone"></i>&ensp;Call</button>
+
+
+                {/*[1,2,3,4].map((userId) => {
                     return this.user.id !== userId ? <button key={userId} onClick={() => this.callTo(userId)}>Call {userId}</button> : null;
-                })} 
+                })*/} 
 
                 {/* Video for the caller and the reciever */}
                 <div className="video_container">
                     <video className="my_video" ref={(ref) => {this.myVideo = ref;}}></video>
                     <video className="user_video" ref={(ref) => {this.userVideo = ref;}}></video>
                 </div>
-                
+
             </div>
         );
     }

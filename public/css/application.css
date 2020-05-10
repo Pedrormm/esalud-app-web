@@ -1,3 +1,29 @@
+
+/* ========================================================================
+  usersRoleEdit
+========================================================================== */
+#usersDistRole{
+  margin-right: 30%;
+  margin-left: 30%;
+  margin-bottom: 2em;
+
+  border-radius: 1em 1em 1em 1em;
+  box-shadow: 0.217em 0.217em 0.217em 0em rgba(0,0,0,0.75);
+}
+
+.users-picker{
+  /* margin-top: 2em ; */
+  margin-bottom: 2em ;
+
+}
+
+#tableUsersNotInRole{
+  display: none;
+  width:100%;
+}
+
+
+
 /* ========================================================================
   Video
 ========================================================================== */
@@ -34,6 +60,17 @@
     width: 100%;
     height: 100%;
     z-index: 1;
+  }
+
+  #callButton{
+    display: none;
+    border-radius: 0.75em 0.75em 0.75em 0.75em;
+    margin-top: -2em;
+  }
+
+  .selectUserToCall{
+    margin-right: 2em;
+    margin-bottom: 2em;
   }
 
 

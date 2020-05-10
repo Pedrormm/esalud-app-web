@@ -18,7 +18,9 @@
 
       @yield('nav-bar-top')
       <div id="error-container" style="display:none" class="alert alert-danger"></div>
-      <div id="message-container" style="display:none" class="alert alert-success"></div>
+      <div id="message-container" style="display:none" class="alert alert-success">
+        
+      </div>
       @yield('content')
 
 

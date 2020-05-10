@@ -2,14 +2,6 @@
   <link rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/roleEdit.css') }}">
 
-
-
-
-
-
-
-
-
   <form action="{{ URL::asset('/user/roleManagement/update')  }}" method="PUT" id="editRole">
     {{ csrf_field() }}
     <input type="hidden" name="idRole" value="{{ $roles['id'] }}">
@@ -93,7 +85,7 @@
   </form>
   
   <script>
-    let roleId = {{ $roles['id'] }};
+    roleId = {{ $roles['id'] }};
   </script>
   <script type="text/javascript" src="{{ asset('js/role-edit.js') . '?r=' . rand() }}"></script>
   

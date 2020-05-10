@@ -50,7 +50,7 @@
                           </a>					
                         </td><!-- boton actualizar (solo disponible si somos nosotros mismos) -->
                         <td><button type="button" class="btn btn-danger" id="roleDelete"
-                          data-role-id="{{ $rol->idRole }}">Borrar</button></td>
+                          data-role-id="{{ $rol->idRole }}"><i class="fa fa-trash"></i>&ensp;Borrar</button></td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -58,14 +58,17 @@
               </div>
             </div>
 
+          <a href="{{ URL::asset('/role/userManagementNotInRole/edit/')  }}" class="btn btn-primary" 
+          id="usersDistRole" data-name-role=""><i class="fa fa-plus-circle"></i>&ensp;
+          Crear nuevo rol
+          </a>  
+          
+
         </div>
         <!-- /.container-fluid -->
 
   <script>
-    $('.role-users-modal').on('click', function(e){
-        e.preventDefault();
-        showModal('Usuarios aplicados del rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl'); 
-    });
+
 
     $('.role-modal').on('click', function(e){
         e.preventDefault();

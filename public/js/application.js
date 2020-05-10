@@ -25,10 +25,9 @@ $(function() {
 
 
 
-
 });//#TAG: #onload-jquery
-
-
+let PublicURL= location.href.substr(0, location.href.indexOf('public'));  
+let roleId;
 
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
     
@@ -63,9 +62,10 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
 }
 
 function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOkFunction=function(){}, closeModal=true) {
-    
+
     let funcName = "saveasoghag";
-        
+    console.log("datos: ",data);
+
         if(closeModal) {
             callbackOkFunction = (function() {
                 let cachedFunction = callbackOkFunction;
@@ -77,6 +77,9 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
         }
         $.ajax(url,
             {
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 dataType: type,
                 method: method,
                 data: data
@@ -108,12 +111,15 @@ function showInlineError(status,message, timeout=0) {
 }
 /**
  * Show an inline message in #message-conatiner container
- * @author Pedro deMadrid
+ * @author Pedro 
  * @param string message 
  * @param int timeout 0 for no disappear, >0 seconds to disappear
  */
 function showInlineMessage(message, timeout=0) {
-    $('#message-container').show().text(message);
+    $('#message-container').show().html(message);
+    // $('#message-container').show().text('this\n has\\n <br> new\r\n lines');
+    // $('#message-container').show().html("<strong>Leave blanco if there is already a Record<br>for today!&#13;&#10;This will auto-calculate based on the previous Record.</strong>");
+
     if(timeout>0) {
         setTimeout(function() {
             $('#message-container').hide(500);
@@ -201,6 +207,17 @@ function showModalConfirm(title="Title", message="No message", callback=function
 }//--fin showModalConfirm
 
 
+function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+  }
+
 function dragElement(elmnt) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (document.getElementById(elmnt.id + "header")) {
@@ -241,3 +258,4 @@ function dragElement(elmnt) {
         document.onmousemove = null;
     }
     }
+

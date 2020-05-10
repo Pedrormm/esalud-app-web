@@ -86,7 +86,12 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () 
     Route::put('user/roleManagement/update', 'RoleController@update');
     Route::delete('user/roleManagement/delete/{id}', 'RoleController@destroy');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
-    
+    Route::get('role/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
+    Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
+    // Route::create('role/create', 'RoleController@create');
+    // Route::get('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
+    // Route::put('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
+
 });
 
 // Route::post('pusher/auth', 'VideoCallController@authenticatePusher');

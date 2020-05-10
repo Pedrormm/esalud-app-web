@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 use App\Models\User;
+// use App\Http\Requests\Request;
 class CheckUserAdmin
 {
     /**
