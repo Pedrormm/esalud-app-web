@@ -26,8 +26,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#24#h',
                 'stop' => 'El paciente sufre una intolerancia a la medicación, mejor evitarlo',
                 'stop_user' => 2,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -38,8 +38,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '4#1#d',
                 'stop' => 'No tolera el tratamiento',
                 'stop_user' => 2,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -50,8 +50,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '3#1#d',
                 'stop' => '0',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -62,8 +62,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#1#d',
                 'stop' => '0',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -74,8 +74,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#15#d',
                 'stop' => '0',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -86,8 +86,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '4#1#d',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -98,8 +98,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '5#2#m',
                 'stop' => 'Mejor no empezarlo',
                 'stop_user' => 2,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             7 => 
             array (
@@ -110,8 +110,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#8#h',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             8 => 
             array (
@@ -122,8 +122,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '2#6#h',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             9 => 
             array (
@@ -134,8 +134,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#12#h',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             10 => 
             array (
@@ -146,8 +146,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#8#h',
                 'stop' => 'Erronea',
                 'stop_user' => 2,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             11 => 
             array (
@@ -158,8 +158,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '2#1#w',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             12 => 
             array (
@@ -170,8 +170,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '4#1#d',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             13 => 
             array (
@@ -182,8 +182,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#1#d',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             14 => 
             array (
@@ -194,8 +194,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '5#2#w',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             15 => 
             array (
@@ -206,8 +206,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#1#m',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             16 => 
             array (
@@ -218,8 +218,8 @@ class MedicinesTableSeeder extends Seeder
                 'interval' => '1#8#h',
                 'stop' => '',
                 'stop_user' => 0,
-                'created_at' => '2020-02-17 20:16:33',
-                'updated_at' => '2020-02-17 20:16:33',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

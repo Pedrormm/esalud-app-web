@@ -24,8 +24,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 1,
                 'value' => 1,
                 'value_name' => 'READ',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -34,8 +34,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 2,
                 'value' => 2,
                 'value_name' => 'READ_AND_WRITE',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -44,8 +44,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 3,
                 'value' => 2,
                 'value_name' => 'READ_AND_WRITE',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -54,8 +54,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 4,
                 'value' => 2,
                 'value_name' => 'READ_AND_WRITE',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -64,8 +64,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 1,
                 'value' => 1,
                 'value_name' => 'READ',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -74,8 +74,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 2,
                 'value' => 2,
                 'value_name' => 'READ_AND_WRITE',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -84,8 +84,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 3,
                 'value' => 0,
                 'value_name' => 'NONE',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             7 => 
             array (
@@ -94,8 +94,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 4,
                 'value' => 1,
                 'value_name' => 'READ',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             8 => 
             array (
@@ -104,8 +104,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 1,
                 'value' => 1,
                 'value_name' => 'READ',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             9 => 
             array (
@@ -114,8 +114,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 2,
                 'value' => 1,
                 'value_name' => 'READ',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             10 => 
             array (
@@ -124,8 +124,8 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 3,
                 'value' => 1,
                 'value_name' => 'READ',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             11 => 
             array (
@@ -134,8 +134,88 @@ class RolesPermissionsTableSeeder extends Seeder
                 'permission_id' => 4,
                 'value' => 0,
                 'value_name' => 'NONE',
-                'created_at' => '2020-03-12 20:31:14',
-                'updated_at' => '2020-03-12 20:31:14',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            12 => 
+            array (
+                'id' => 13,
+                'role_id' => 4,
+                'permission_id' => 1,
+                'value' => 2,
+                'value_name' => 'READ_AND_WRITE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            13 => 
+            array (
+                'id' => 14,
+                'role_id' => 4,
+                'permission_id' => 2,
+                'value' => 2,
+                'value_name' => 'READ_AND_WRITE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            14 => 
+            array (
+                'id' => 15,
+                'role_id' => 4,
+                'permission_id' => 3,
+                'value' => 2,
+                'value_name' => 'READ_AND_WRITE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            15 => 
+            array (
+                'id' => 16,
+                'role_id' => 4,
+                'permission_id' => 4,
+                'value' => 2,
+                'value_name' => 'READ_AND_WRITE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            16 => 
+            array (
+                'id' => 17,
+                'role_id' => 5,
+                'permission_id' => 1,
+                'value' => 0,
+                'value_name' => 'NONE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            17 => 
+            array (
+                'id' => 18,
+                'role_id' => 5,
+                'permission_id' => 2,
+                'value' => 0,
+                'value_name' => 'NONE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            18 => 
+            array (
+                'id' => 19,
+                'role_id' => 5,
+                'permission_id' => 3,
+                'value' => 0,
+                'value_name' => 'NONE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            19 => 
+            array (
+                'id' => 20,
+                'role_id' => 5,
+                'permission_id' => 4,
+                'value' => 0,
+                'value_name' => 'NONE',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

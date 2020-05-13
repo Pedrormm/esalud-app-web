@@ -43,7 +43,8 @@ class Role extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'user_id_creator' => 'integer'
+        'user_id_creator' => 'integer',
+        'delible' => 'integer'
     ];
 
     /**

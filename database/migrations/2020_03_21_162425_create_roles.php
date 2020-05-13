@@ -17,6 +17,7 @@ class CreateRoles extends Migration
             $table->smallIncrements('id');
             $table->string('name', 250)->nullable()->index()->comment('Nombre del rol');
             $table->unsignedBigInteger('user_id_creator')->comment('Id del creador');
+            $table->unsignedSmallInteger('delible')->nullable()->default(0)->comment('Campo puede ser borrado');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -2,12 +2,12 @@
 /* ========================================================================
   usersRoleEdit
 ========================================================================== */
-#usersDistRole{
+.borderShadow{
   margin-right: 30%;
   margin-left: 30%;
   margin-bottom: 2em;
 
-  border-radius: 1em 1em 1em 1em;
+  border-radius: 1em !important;
   box-shadow: 0.217em 0.217em 0.217em 0em rgba(0,0,0,0.75);
 }
 
@@ -256,5 +256,10 @@ caption {
   text-align: left !important;
 }
 
+/* ========================================================================
+  Logged
+========================================================================== */
 
-
+.dNone{
+  display: none;
+}

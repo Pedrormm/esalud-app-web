@@ -20,8 +20,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 11,
                 'user_id_patient' => 5,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -29,8 +29,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 5,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -38,8 +38,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 4,
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -47,8 +47,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 11,
                 'user_id_patient' => 4,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -56,8 +56,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 11,
                 'user_id_patient' => 6,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -65,8 +65,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 10,
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -74,8 +74,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 11,
                 'user_id_patient' => 10,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             7 => 
             array (
@@ -83,8 +83,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 14,
                 'user_id_patient' => 6,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             8 => 
             array (
@@ -92,8 +92,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 16,
                 'user_id_patient' => 17,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             9 => 
             array (
@@ -101,8 +101,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 11,
                 'user_id_patient' => 17,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             10 => 
             array (
@@ -110,8 +110,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 12,
                 'user_id_patient' => 17,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             11 => 
             array (
@@ -119,8 +119,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 12,
                 'user_id_patient' => 19,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             12 => 
             array (
@@ -128,8 +128,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 20,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             13 => 
             array (
@@ -137,8 +137,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 10,
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             14 => 
             array (
@@ -146,8 +146,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 10,
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             15 => 
             array (
@@ -155,8 +155,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 2,
                 'user_id_patient' => 10,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             16 => 
             array (
@@ -164,8 +164,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 25,
                 'user_id_patient' => 21,
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             17 => 
             array (
@@ -173,8 +173,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 25,
                 'user_id_patient' => 21,
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             18 => 
             array (
@@ -182,8 +182,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 25,
                 'user_id_patient' => 21,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             19 => 
             array (
@@ -191,8 +191,8 @@ class PatientsDoctorsTableSeeder extends Seeder
                 'user_id_doctor' => 25,
                 'user_id_patient' => 26,
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:24:03',
-                'updated_at' => '2020-02-17 20:24:03',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
     }

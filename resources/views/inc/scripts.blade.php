@@ -3,6 +3,9 @@
     asyncCall('message/icon', '#messagesDropdown', true);
      $('#messagesDropdown').click();
     asyncCall('message/summary', '#top-navigator-messages', true, false);
+    @if($errors->any())
+        showInlineError(0, "{{$errors->first()}}", 10);
+    @endif
 
     {{-- Code for nav-main.blade.php --}}
     @if((Request::is('user/create') || (Request::is('user/user')) || Request::is('user/patient') 
@@ -12,6 +15,8 @@
     Request::is('user/chat') || Request::is('user/videocall') ))
         $('#collapseCommunication').collapse('show');
     @endif
+    var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+
     
 
     @if(Request::is('user/create'))

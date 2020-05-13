@@ -1,11 +1,12 @@
 $('#saveModal').click(function() {  
-  saveModalActionAjax($('#urlNotInRole').val(), _rolesForChange, 'POST  ', 'json', function(res) {
-      if(res.status == 0) {
-          showInlineMessage(res.message, 20);
-      }
-      else {
-          showInlineError(res.status, res.message, 5);
-      }
+  saveModalActionAjax($('#urlNotInRole').val(), _rolesForChange, 'POST', 'json', function(res) {
+    if(res.status == 0) {
+      $('#tableRoles').DataTable().ajax.reload();
+      showInlineMessage(res.message, 20);
+    }
+    else {
+      showInlineError(res.status, res.message, 5);
+    }
   });
 
 });
@@ -88,12 +89,5 @@ $('#saveModal').click(function() {
     });   
   }
 
-  // function addRoleAndUserIdtoJson(selector, json, userIdData='user-id'){
-  //   selector.on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-  //     let roleId = this.options[clickedIndex].value;
-  //     let userId = $(this).data(userIdData);
-  //     json[userId] = parseInt(roleId); 
-  //   });   
-  // }
 
  

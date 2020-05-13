@@ -24,8 +24,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Inicio Tratamiento',
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -34,8 +34,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase inicial',
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -44,8 +44,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase 33',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -54,8 +54,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase 4',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -64,8 +64,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase 5',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -74,8 +74,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase 6',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -84,8 +84,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase 7',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             7 => 
             array (
@@ -94,8 +94,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 4,
                 'name' => 'Inicio Sesiones',
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             8 => 
             array (
@@ -104,8 +104,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Fase 6',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             9 => 
             array (
@@ -114,8 +114,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Test',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             10 => 
             array (
@@ -124,8 +124,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'Newwww',
                 'deleted_at' => date("Y-m-d H:i:s"),
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             11 => 
             array (
@@ -134,8 +134,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 19,
                 'name' => 'Fase 1',
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             12 => 
             array (
@@ -144,8 +144,8 @@ class ProtocolsTableSeeder extends Seeder
                 'user_id_user' => 10,
                 'name' => 'fin',
                 'deleted_at' => null,
-                'created_at' => '2020-02-17 20:18:00',
-                'updated_at' => '2020-02-17 20:18:00',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

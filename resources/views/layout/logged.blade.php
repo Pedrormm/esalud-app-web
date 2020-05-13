@@ -17,10 +17,8 @@
       @include('inc.header')
 
       @yield('nav-bar-top')
-      <div id="error-container" style="display:none" class="alert alert-danger"></div>
-      <div id="message-container" style="display:none" class="alert alert-success">
-        
-      </div>
+        <div id="error-container" class="alert alert-danger dNone"></div>
+        <div id="message-container" class="alert alert-success dNone"></div>
       @yield('content')
 
 

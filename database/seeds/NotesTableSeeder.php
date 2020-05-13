@@ -24,8 +24,8 @@ class NotesTableSeeder extends Seeder
                 'text' => '',
                 'event' => 11,
                 'visible' => 0,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -34,8 +34,8 @@ class NotesTableSeeder extends Seeder
                 'text' => 'asdasd',
                 'event' => 11,
                 'visible' => 0,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -44,8 +44,8 @@ class NotesTableSeeder extends Seeder
                 'text' => 'Esta nota quiero que la lea mi médico, para poder saber como estoy. Atentamente, Pedro',
                 'event' => 17,
                 'visible' => 1,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -54,8 +54,8 @@ class NotesTableSeeder extends Seeder
                 'text' => 'asdasdasd',
                 'event' => 18,
                 'visible' => 1,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -64,8 +64,8 @@ class NotesTableSeeder extends Seeder
                 'text' => 'Pregunta por medicación',
                 'event' => 24,
                 'visible' => 1,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -74,8 +74,8 @@ class NotesTableSeeder extends Seeder
                 'text' => 'No me encuentro bien',
                 'event' => 32,
                 'visible' => 1,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -84,8 +84,8 @@ class NotesTableSeeder extends Seeder
                 'text' => 'Hola esto es una prueba',
                 'event' => 58,
                 'visible' => 1,
-                'created_at' => '2020-02-17 20:16:54',
-                'updated_at' => '2020-02-17 20:16:54',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

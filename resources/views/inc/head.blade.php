@@ -96,6 +96,7 @@
                 src="{{ asset('modules/ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js')}}">
                 </script>
 
+                <script type="text/javascript" src="{{ asset('js/typo/typo.js') }}"></script>
 
 
                

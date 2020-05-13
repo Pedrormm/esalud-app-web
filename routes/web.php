@@ -86,12 +86,16 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () 
     Route::put('user/roleManagement/update', 'RoleController@update');
     Route::delete('user/roleManagement/delete/{id}', 'RoleController@destroy');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
+    Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
+    Route::post('roles/view', 'RoleController@ajaxViewMainRolesDatatable');
+    Route::get('roles/view', 'RoleController@ajaxViewMainRolesDatatable');
+
     Route::get('role/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
     Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
-    // Route::create('role/create', 'RoleController@create');
-    // Route::get('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
-    // Route::put('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
-
+    Route::get('role/newRole', 'RoleController@newRole');
+    Route::post('role/create', 'RoleController@create');
+    Route::get('role/create', 'RoleController@create');
+    
 });
 
 // Route::post('pusher/auth', 'VideoCallController@authenticatePusher');

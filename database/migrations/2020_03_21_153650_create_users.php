@@ -29,7 +29,7 @@ class CreateUsers extends Migration
             $table->string('avatar', 250)->nullable()->comment('Avatar del usuario');
             $table->enum('sex',['male','female'])->index()->comment('Genéro del usuario');
             $table->enum('blood',['0-','0+','A-','A+','B-','B+','AB-','AB+'])->index()->comment('Grupo sanguíneo del usuario');
-            $table->unsignedSmallInteger('role_id')->comment('Rol de usuario');
+            $table->unsignedSmallInteger('role_id')->nullable()->comment('Rol de usuario');
             $table->string('remember_token', 500)->comment('Recordar contraseña');
             $table->softDeletes();
             $table->timestamps();

@@ -24,8 +24,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '111444555',
                 'height' => 0,
                 'weight' => 0,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -34,8 +34,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '123456789',
                 'height' => 172,
                 'weight' => 76,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -44,8 +44,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '1318020427',
                 'height' => 180,
                 'weight' => 80,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -54,8 +54,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '22215128345100',
                 'height' => 0,
                 'weight' => 0,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -64,8 +64,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '36843287',
                 'height' => 159,
                 'weight' => 58,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -74,8 +74,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '425412189',
                 'height' => 180,
                 'weight' => 76,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -84,8 +84,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '4565454',
                 'height' => 178,
                 'weight' => 86,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             7 => 
             array (
@@ -94,8 +94,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '5users445300',
                 'height' => 198,
                 'weight' => 110,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             8 => 
             array (
@@ -104,8 +104,8 @@ class PatientsTableSeeder extends Seeder
                 'historic' => '987654321',
                 'height' => 180,
                 'weight' => 96,
-                'created_at' => '2020-02-18 21:30:37',
-                'updated_at' => '2020-02-18 21:30:37',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

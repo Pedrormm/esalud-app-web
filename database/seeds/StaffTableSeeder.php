@@ -26,8 +26,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '41',
                 'room' => '666',
                 'h_phone' => '112',
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -38,8 +38,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '',
                 'room' => '25',
                 'h_phone' => '',
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -50,8 +50,8 @@ class StaffTableSeeder extends Seeder
                 'office' => NULL,
                 'room' => NULL,
                 'h_phone' => NULL,
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -62,8 +62,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '125',
                 'room' => '112',
                 'h_phone' => '999662',
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
@@ -74,8 +74,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '',
                 'room' => '',
                 'h_phone' => '',
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             5 => 
             array (
@@ -86,8 +86,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '444',
                 'room' => '201',
                 'h_phone' => NULL,
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             6 => 
             array (
@@ -98,8 +98,8 @@ class StaffTableSeeder extends Seeder
                 'office' => NULL,
                 'room' => NULL,
                 'h_phone' => NULL,
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             7 => 
             array (
@@ -110,8 +110,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '55P',
                 'room' => '',
                 'h_phone' => '',
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             8 => 
             array (
@@ -122,8 +122,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '',
                 'room' => 'Urgencias',
                 'h_phone' => '',
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             9 => 
             array (
@@ -134,8 +134,8 @@ class StaffTableSeeder extends Seeder
                 'office' => '005',
                 'room' => '55L',
                 'h_phone' => NULL,
-                'created_at' => '2020-02-17 20:20:04',
-                'updated_at' => '2020-02-17 20:20:04',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

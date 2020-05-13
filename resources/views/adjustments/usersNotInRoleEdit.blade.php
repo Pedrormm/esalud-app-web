@@ -67,7 +67,6 @@
   
   <script>
     allUsers = @json($allUsers);
-    roles = @json($roles);
 
   </script>
   <script type="text/javascript" src="{{ asset('js/users-not-in-role.js') . '?r=' . rand() }}"></script>

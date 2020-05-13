@@ -23,8 +23,8 @@ class PermissionsTableSeeder extends Seeder
                 'flag_meaning' => 'LOGIN',
                 'default_permission' => 1,
                 'permission_name' => 'READ',
-                'created_at' => '2020-03-12 20:30:48',
-                'updated_at' => '2020-03-12 20:30:48',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
@@ -32,8 +32,8 @@ class PermissionsTableSeeder extends Seeder
                 'flag_meaning' => 'PROFILE',
                 'default_permission' => 2,
                 'permission_name' => 'READ_AND_WRITE',
-                'created_at' => '2020-03-12 20:30:48',
-                'updated_at' => '2020-03-12 20:30:48',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             2 => 
             array (
@@ -41,8 +41,8 @@ class PermissionsTableSeeder extends Seeder
                 'flag_meaning' => 'NEWS',
                 'default_permission' => 1,
                 'permission_name' => 'READ',
-                'created_at' => '2020-03-12 20:30:48',
-                'updated_at' => '2020-03-12 20:30:48',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
@@ -50,8 +50,8 @@ class PermissionsTableSeeder extends Seeder
                 'flag_meaning' => 'ROLE_ASSIGNMENT',
                 'default_permission' => 0,
                 'permission_name' => 'NONE',
-                'created_at' => '2020-03-12 20:30:48',
-                'updated_at' => '2020-03-12 20:30:48',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
             ),
         ));
         

@@ -39,16 +39,18 @@ class RoleController extends AppBaseController
      */
     public function index(Request $request)
     {
+
         $user = Auth::user();
         $roles = Role::join('users', 'roles.user_id_creator', 'users.id')
         ->select(DB::raw('roles.id as idRole, roles.name as nameRole, user_id_creator, users.id as idUser,
         users.name as nameUser, lastname, dni, role_id'))
         ->orderBy('roles.id')->get();
-        //dd($roles->toArray());
-        /*$roles->map(function($rol) {
-            $rol->count =DB:goiaghaogag;
-            return $rol;
-        });*/
+
+        foreach($roles as $rol){
+            $count = DB::table("users")->where('role_id', $rol->idRole)->get()->count();
+            $rol->count = $count;
+        }
+
         return view('adjustments/roleManagement', ['roles' => $roles,'user' => $user]);
     }
 
@@ -57,9 +59,72 @@ class RoleController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('roles.create');
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'name' => [
+                'required',
+                'string',
+                'min:2',
+                'max:50',
+                Rule::unique('roles')->where(function ($query) {
+                    return $query->where('deleted_at', NULL);
+                })
+            ],
+        ]);
+
+        if($validator->fails()){
+            $errors = implode(',',$validator->messages()->all());
+            return $this->jsonResponse(1, $errors);
+        }
+
+        $role = new Role;
+        $role->name = $request->name;
+        $role->user_id_creator = $user->id;
+        $role->save();
+
+        $numberPermissions = Permissions::get()->count();
+        $maxRoleId = RolePermission::max('role_id');
+
+        $data = array();
+        for ($i = 1; $i <= $numberPermissions; $i++) {
+            $radio="optradio".$i;
+            $data[] =[
+                        'role_id' => $maxRoleId+1,
+                        'permission_id' => $i,
+                        'value' => $request->$radio,
+                        'value_name' => getValueName($request->$radio),
+                    ];                 
+        }
+        RolePermission::insert($data);
+
+        // foreach($request->all() as $key => $value){
+        //     if(strpos($key,'optradio')!==false){
+        //         // error_log($key);
+        //         // dump($key);
+        //         $role_permission_id = str_replace('optradio','',$key);
+        //         $role_permission = RolePermission::find($role_permission_id);
+        //         $role_permission->value = $value;
+        //         $value_name = '';
+                // switch($value){
+                //     case 0:
+                //         $value_name = 'NONE';
+                //     break;
+                //     case 1:
+                //         $value_name = 'READ';
+                //     break;
+                //     case 2:
+                //         $value_name = 'READ_AND_WRITE';
+                //     break;
+                // }
+        //         $role_permission->value_name = $value_name;
+        //         $role_permission->save();
+        //     }
+        // }
+
+        return $this->jsonResponse(0, "El rol ".$request->name." ha sido creado");
     }
 
     /**
@@ -142,7 +207,7 @@ class RoleController extends AppBaseController
                     'required',
                     'string',
                     'min:2',
-                    'max:150',
+                    'max:50',
                     Rule::unique('roles')->ignore($role->id)->where(function ($query) {
                         return $query->where('deleted_at', NULL);
                     })
@@ -273,5 +338,35 @@ class RoleController extends AppBaseController
         }
 
         return $this->jsonResponse(0, $response);
+    }
+
+    public function newRole(){
+        $user = Auth::user();
+        $permissions = Permissions::get()->toArray();
+
+        return view('adjustments.newRole',['permissions' => $permissions, 'user' => $user]);
+    }
+
+    public function ajaxUserRolesDatatable($id){
+        $uRoles = Role::with('user1s')->where('id',$id)->get()->toArray();
+        $uRoles=$uRoles[0]["user1s"];
+
+        return ['data' => $uRoles];
+        // return response()->json(['data')=>$uRoles);
+    }
+
+    public function ajaxViewMainRolesDatatable(){
+        $mRoles = Role::join('users', 'roles.user_id_creator', 'users.id')
+        ->select(DB::raw('roles.id as idRole, roles.name as nameRole, user_id_creator, users.id as idUser,
+        users.name as nameUser, lastname, dni, role_id'))
+        ->orderBy('roles.id')->get();
+
+        foreach($mRoles as $rol){
+            $count = DB::table("users")->where('role_id', $rol->idRole)->get()->count();
+            $rol->count = $count;
+        }
+
+        return ['data' => $mRoles->toArray()];
+        // return response()->json($mRoles);
     }
 }

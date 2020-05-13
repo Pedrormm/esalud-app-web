@@ -27,6 +27,23 @@
         return $time;
     }
 
+    function getValueName (string $value) {
+        $value_name="";
+        switch($value){
+            case 0:
+                $value_name = 'NONE';
+            break;
+            case 1:
+                $value_name = 'READ';
+            break;
+            case 2:
+                $value_name = 'READ_AND_WRITE';
+            break;
+        }
+        return $value_name;
+    }
+
+
     function remove_special_char($text) {
     
             $t = $text;

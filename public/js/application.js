@@ -2,28 +2,11 @@ $(function() {
 
     if ($('#dataTable').length > 0 ){
         $('#dataTable').DataTable({
-            // "responsive": true,
-            // "scrollY": 250,
-            // "language": {
-            //     "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
-            // },
-            // dom: '<"toolbar">frtip',
-            // fnInitComplete: function(){
-            //     $('div.toolbar').html('Custom tool bar!');
-            // },
-            "dom": '<"toolbar">flrtip',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
             },
-
         });
     }
-   
-    // $("div.toolbar").html
-    // ('<input type="checkbox" name="select_all" value="1" id="example-select-all"><lable>Get all Records</lable>');
-
-
-
 
 });//#TAG: #onload-jquery
 let PublicURL= location.href.substr(0, location.href.indexOf('public'));  
@@ -63,8 +46,8 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
 
 function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOkFunction=function(){}, closeModal=true) {
 
-    let funcName = "saveasoghag";
-    console.log("datos: ",data);
+    let funcName = "saveModalActionAjax";
+    // console.log("datos: ",data);
 
         if(closeModal) {
             callbackOkFunction = (function() {
@@ -75,11 +58,12 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
                 };
             })();
         }
+       
         $.ajax(url,
             {
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+                },  
                 dataType: type,
                 method: method,
                 data: data
@@ -95,7 +79,7 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
 }
 /**
  * Show an inline message in #error-conatiner container
- * @author Pedro deMadrid
+ * @author Pedro 
  * @param int|string status 
  * @param string message 
  * @param int timeout 0 for no disappear, >0 seconds to disappear
@@ -208,10 +192,10 @@ function showModalConfirm(title="Title", message="No message", callback=function
 
 
 function getAge(dateString) {
-    var today = new Date();
-    var birthDate = new Date(dateString);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
+    let today = new Date();
+    let birthDate = new Date(dateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
     }
@@ -219,7 +203,7 @@ function getAge(dateString) {
   }
 
 function dragElement(elmnt) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (document.getElementById(elmnt.id + "header")) {
         /* if present, the header is where you move the DIV from:*/
         document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
@@ -257,5 +241,69 @@ function dragElement(elmnt) {
         document.onmouseup = null;
         document.onmousemove = null;
     }
-    }
+}
+
+// $('#element').donetyping(callback[, timeout=5000])
+// Fires callback when a user has finished typing. This is determined by the time elapsed
+// since the last keystroke and timeout parameter or the blur event--whichever comes first.
+//   @callback: function to be called when even triggers
+//   @timeout:  (default=2000) timeout, in ms, to to wait before triggering event if not
+//              caused by blur.
+;(function($){
+    $.fn.extend({
+        donetyping: function(callback,timeout){
+            timeout = timeout || 2e3; // 2 seconds default timeout
+            var timeoutReference,
+                doneTyping = function(el){
+                    if (!timeoutReference) return;
+                    timeoutReference = null;
+                    callback.call(el);
+                };
+            return this.each(function(i,el){
+                var $el = $(el);
+                // Chrome Fix (Use keyup over keypress to detect backspace)
+                $el.is(':input') && $el.on('keyup keypress paste',function(e){
+                    // This catches the backspace button in chrome, but also prevents
+                    // the event from triggering too preemptively. Without this line,
+                    // using tab/shift+tab will make the focused element fire the callback.
+                    if (e.type=='keyup' && e.keyCode!=8) return;
+                    
+                    // Check if timeout has been set. If it has, "reset" the clock and
+                    // start over again.
+                    if (timeoutReference) clearTimeout(timeoutReference);
+                    timeoutReference = setTimeout(function(){
+                        // if we made it here, our timeout has elapsed. Fire the callback
+                        doneTyping(el);
+                    }, timeout);
+                }).on('blur',function(){
+                    // If we can, fire the event since we're leaving the field
+                    doneTyping(el);
+                });
+            });
+        }
+    });
+})(jQuery);
+
+function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, charLimit=2) {
+    // Via Regex. Allowing multiple separators 
+    let splitStr = str.toLowerCase().split(pattern);
+    
+        for (let i = 0; i < splitStr.length; i++) {
+            // console.log('Original: ', splitStr[i]);
+            if (spellCheck){
+                let array_of_suggestions = dictionary.suggest(splitStr[i]);
+                // console.log(array_of_suggestions, array_of_suggestions[0]);
+                if (array_of_suggestions && array_of_suggestions.length) {   
+                    splitStr[i] = array_of_suggestions[0];
+                }
+            }
+            // console.log('Palabra: ', splitStr[i]);
+            let caseCondition = allCase ? (splitStr[i].length > charLimit || i == 0) : (i == 0);
+            if (caseCondition){
+                splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+            }           
+        }
+
+    return splitStr.join(' '); 
+}
 
