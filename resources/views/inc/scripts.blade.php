@@ -15,6 +15,7 @@
     Request::is('user/chat') || Request::is('user/videocall') ))
         $('#collapseCommunication').collapse('show');
     @endif
+    
     var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
 
     

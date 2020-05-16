@@ -2,13 +2,11 @@
   <link rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/roleEdit.css') }}">
 
-  <form action="{{ URL::asset('/user/roleManagement/update')  }}" method="PUT" id="editRole">
+  <form id="editRole">
     {{ csrf_field() }}
     <input type="hidden" name="idRole" value="{{ $roles['id'] }}">
-    <input type="hidden" name="urlRole" id="urlRole" value="{{ URL::asset('/user/roleManagement/update')  }}">
+    {{-- <input type="hidden" name="urlRole" id="urlRole" value="{{ URL::asset('/user/roleManagement/update')  }}"> --}}
   
-    {{-- {{ dd($roles) }} --}}
-
     <div class="row">
         <div class="col-md-12">
             <div class="card">

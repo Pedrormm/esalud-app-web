@@ -84,17 +84,18 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () 
     Route::get('user/roleManagement', 'RoleController@index');
     Route::get('user/roleManagement/edit/{id}', 'RoleController@edit');
     Route::put('user/roleManagement/update', 'RoleController@update');
-    Route::delete('user/roleManagement/delete/{id}', 'RoleController@destroy');
+    Route::get('user/roleManagement/update', 'RoleController@update');
+
+    // Route::delete('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
+    Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
     Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
     Route::post('roles/view', 'RoleController@ajaxViewMainRolesDatatable');
-    Route::get('roles/view', 'RoleController@ajaxViewMainRolesDatatable');
 
     Route::get('role/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
     Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
     Route::get('role/newRole', 'RoleController@newRole');
     Route::post('role/create', 'RoleController@create');
-    Route::get('role/create', 'RoleController@create');
     
 });
 

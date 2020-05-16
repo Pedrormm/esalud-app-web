@@ -22,7 +22,6 @@ class RecordsController extends Controller
     }
 
     public function index(string $ord=null, string $sex_fil=null, string $age_fil=null, string $n_search=null) {
-        $user = Auth::user();
 
         if (is_null($ord)){
             $ord = 'user_id';
@@ -59,28 +58,18 @@ class RecordsController extends Controller
             }
        // }
        //dd($patients[0]['name']);
-        return view('user/records', ['patients' => $patients,'user' => $user]);
+        return view('user/records', ['patients' => $patients]);
     }
 
     public function showRecord(string $id=null) {
-        $user = Auth::user();        
-        return view('user/singlerecord', ['id' => $id,'user' => $user]);
+        return view('user/singlerecord', ['id' => $id]);
     }
 
     public function settings() {
-        $user = Auth::user();        
-        return view('adjustments/settings', ['user' => $user]);
+        return view('adjustments/settings');
     }
 
-    // public function roleManagement() {
-    //     $user = Auth::user();
-    //     $roles = Role::orderBy("Role.id")->get();
-    //     return view('adjustments/roleManagement', ['user' => $user, 'roles' => $roles]);
-    // }
-
     public function updateAvatar(Request $request, $id=null) {
-        $authUser = Auth::user();        
-
         $user = User::find($id);
         $userImage = "";
 
@@ -117,9 +106,16 @@ class RecordsController extends Controller
             $user->avatar = $new_file_name;
         }
         else{
-            //Mostrar error
-            var_dump("no hay archivo");
-            die();
+            //Showing an error
+            if($request->ajax()) {
+                return response()->json([
+                    'status'=>1,
+                    'messages'=>'There is no file'
+                ]);
+            }
+            else{
+                return redirect()->back()->withErrors(['There is no file', 'No file']);
+            }
         }
 
         $user->save();
