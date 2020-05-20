@@ -86,7 +86,7 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () 
     Route::put('user/roleManagement/update', 'RoleController@update');
     Route::get('user/roleManagement/update', 'RoleController@update');
 
-     Route::delete('role/delete/{id}', 'RoleController@destroy');
+    Route::delete('role/delete/{id}', 'RoleController@destroy');
     Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
     Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
