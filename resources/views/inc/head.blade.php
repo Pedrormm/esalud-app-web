@@ -98,7 +98,6 @@
 
                 <script type="text/javascript" src="{{ asset('js/typo/typo.js') }}"></script>
 
-
                
         <script>
                 const _PUBLIC_URL = "{{ asset('') }}";

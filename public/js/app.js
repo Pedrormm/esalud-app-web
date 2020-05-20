@@ -62618,10 +62618,10 @@ function (_Component) {
       otherUserId: null
     };
     _this.users = [];
-    _this.users = window.allUsers;
-    console.log("allusers ", _this.users);
-    _this.user = window.user;
-    console.log("user " + window.user.id); // this.peer = {};
+    _this.users = window.allUsers; //console.log("allusers ",this.users);
+
+    _this.user = window.user; //console.log("user "+ window.user.id);
+    // this.peer = {};
 
     _this.peers = {};
     _this.mediaHandler = new _MediaHandler__WEBPACK_IMPORTED_MODULE_2__["default"]();
@@ -62634,6 +62634,7 @@ function (_Component) {
     _this.selectedUserId = null; // this.selectedUserId = this.users[0].id;
     // console.log('con this.selectedUserId',this.selectedUserId);
 
+    _this.incoming = false;
     return _this;
   }
 
@@ -62656,8 +62657,35 @@ function (_Component) {
           _this2.myVideo.src = URL.createObjectURL(stream);
         }
 
-        _this2.myVideo.play();
+        try {
+          _this2.myVideo.play();
+        } catch (e) {
+          console.error('user play error', e.message);
+        }
       });
+    }
+  }, {
+    key: "incomingCall",
+    value: function incomingCall(signal) {
+      console.log("Hay una llamada entrante", signal);
+      var peer = this.peers[signal.userId];
+      console.log("incomingCall peer", peer);
+      console.log("peers on self and on userid", this.peers, this.peers[this.user.id]); // if peer doesn't already exists, we got an incoming call
+
+      if (peer === undefined) {
+        // The one that is calling us
+        this.setState({
+          otherUserId: signal.userId
+        });
+        console.log('He sido llamado por: ', signal.userId); // peer = this.startPeer(signal.userId, false);
+
+        this.peers[signal.userId] = this.startPeer(signal.userId, false);
+      } else {
+        console.log("Full Signal, soy el que llama: ", signal);
+      } // peer.signal(signal.data);
+
+
+      this.peers[signal.userId].signal(signal.data);
     } // Pusher setup
 
   }, {
@@ -62684,26 +62712,20 @@ function (_Component) {
       this.channel = this.pusher.subscribe('presence-video-channel'); // Once the user is authorized dispatch calls can be made from the client side
 
       this.channel.bind("client-signal-".concat(this.user.id), function (signal) {
-        // If a have a peer open (someone is calling me, as a response because I called him first)
+        // If a have a peer open (someone is calling me, as a response because I called him first):
         // Every time we create a peer we assign it to its userId
-        console.log("Signal id: " + signal.userId); // if(this.peers === undefined)
-        //     this.peers = new Array();
+        console.log("Signal id aqui recibe: ", signal);
 
-        var peer = _this3.peers[signal.userId]; // if peer doesn't already exists, we got an incoming call
-
-        if (peer === undefined) {
-          // The one that is calling us
-          _this3.setState({
-            otherUserId: signal.userId
+        if (signal.data.type == 'offer') {
+          showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
+            _this3.incomingCall(signal);
+          }, function () {
+            //TODO: Reset the call when cancel is pressed
+            location.reload(); // this.endCall(signal.userId);
           });
-
-          console.log('startPeer 2', signal.userId);
-          peer = _this3.startPeer(signal.userId, false);
-        } else {
-          console.log("Full Signal: ", signal);
+        } else if (signal.data.type == 'answer') {
+          _this3.incomingCall(signal);
         }
-
-        peer.signal(signal.data);
       });
     }
   }, {
@@ -62733,44 +62755,84 @@ function (_Component) {
       });
       peer.on('stream', function (stream) {
         //Callback for user stream, the user video
-        console.log("Recibe User Video");
+        console.log("Recibe User Video", stream, _this4.peers);
 
         try {
           _this4.userVideo.srcObject = stream;
         } catch (e) {
-          _this4.userVideo.src = URL.createObjectURL(stream);
+          _this4.userVideo.src = URL.createObjectURL(stream); // for older browsers
         }
 
-        _this4.userVideo.play();
+        try {
+          _this4.userVideo.play();
+        } catch (e) {
+          console.error('user play error', e.message);
+        }
+      });
+      peer.on('track', function () {
+        console.log('new track arrived... ');
+      });
+      peer.on('removestream', function () {
+        //removeRemoteVideoElement(peerid); 
+        console.log("stream removed... ");
+      });
+      peer.on('data', function (data) {
+        console.log('data: ' + data);
+        console.log("DESTRUIDO!");
+      }); // peer.on('error', (err) => { 
+      //     console.log('error', err);
+      // });
+
+      peer.on('connect', function () {
+        $("#callButton").css("display", "none");
+        $("#destroyButton").css("display", "inline");
+        console.log('connect...');
       });
       peer.on('close', function () {
-        var peer = _this4.peers[userId];
+        console.log('close...');
 
-        if (peer !== undefined) {
-          peer.destroy();
-        }
-
-        _this4.peers[userId] = undefined;
+        _this4.endCall(userId);
       });
       return peer;
     }
   }, {
     key: "selectUser",
     value: function selectUser(e) {
-      console.log('selectUser', e);
-      this.selectedUserId = e.target.value;
-      console.log('selectedUserId', this.selectedUserId);
+      //console.log('selectUser',e);
+      this.selectedUserId = e.target.value; //console.log('selectedUserId',this.selectedUserId);
+
       $("#callButton").css("display", "inline");
+      $("#destroyButton").css("display", "none");
     } // Function to call other users
 
   }, {
     key: "callTo",
     value: function callTo(userId) {
-      // if(this.peers === undefined)
-      //     this.peers=new Array();
       this.peers[userId] = this.startPeer(userId); // Assigning the peer this userId
 
-      console.log("peers: " + userId, this.peers);
+      console.log("peers userid: " + userId);
+      console.log("all kind of peers: ", this.peers);
+      console.log("asigned peer: ", this.peers[userId]);
+    }
+  }, {
+    key: "endCall",
+    value: function endCall(userId) {
+      console.log("cancel incomingCall peer: ", this.peers); // try{
+      //     this.userVideo.srcObject = null;
+      // } catch (e) {
+      //     this.userVideo.src = URL.createObjectURL(null);
+      // }
+      // let peer = this.peers[userId];
+
+      var peer = Object.values(this.peers)[0];
+
+      if (peer !== undefined) {
+        peer.destroy();
+      } else {}
+
+      this.peers[userId] = undefined;
+      $("#destroyButton").css("display", "none");
+      $("#callButton").css("display", "inline");
     }
   }, {
     key: "render",
@@ -62822,6 +62884,18 @@ function (_Component) {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
           className: "fa fa-phone"
         }), "\u2002Call"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          id: "destroyButton",
+          className: "btn btn-danger",
+          onClick: function onClick() {
+            return _this5.endCall(_this5.selectedUserId);
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fas fa-phone-slash"
+        }), "\u2002End call"),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "video_container"

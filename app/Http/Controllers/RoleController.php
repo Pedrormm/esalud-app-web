@@ -40,7 +40,6 @@ class RoleController extends AppBaseController
     public function index(Request $request)
     {
 
-        $user = Auth::user();
         $roles = Role::join('users', 'roles.user_id_creator', 'users.id')
         ->select(DB::raw('roles.id as idRole, roles.name as nameRole, user_id_creator, users.id as idUser,
         users.name as nameUser, lastname, dni, role_id'))
@@ -51,7 +50,7 @@ class RoleController extends AppBaseController
             $rol->count = $count;
         }
 
-        return view('adjustments/roleManagement', ['roles' => $roles,'user' => $user]);
+        return view('adjustments/roleManagement', ['roles' => $roles]);
     }
 
     /**
@@ -99,30 +98,6 @@ class RoleController extends AppBaseController
                     ];                 
         }
         RolePermission::insert($data);
-
-        // foreach($request->all() as $key => $value){
-        //     if(strpos($key,'optradio')!==false){
-        //         // error_log($key);
-        //         // dump($key);
-        //         $role_permission_id = str_replace('optradio','',$key);
-        //         $role_permission = RolePermission::find($role_permission_id);
-        //         $role_permission->value = $value;
-        //         $value_name = '';
-                // switch($value){
-                //     case 0:
-                //         $value_name = 'NONE';
-                //     break;
-                //     case 1:
-                //         $value_name = 'READ';
-                //     break;
-                //     case 2:
-                //         $value_name = 'READ_AND_WRITE';
-                //     break;
-                // }
-        //         $role_permission->value_name = $value_name;
-        //         $role_permission->save();
-        //     }
-        // }
 
         return $this->jsonResponse(0, "El rol ".$request->name." ha sido creado");
     }
@@ -174,7 +149,6 @@ class RoleController extends AppBaseController
      */
     public function edit(int $id)
     {
-        $user = Auth::user();
         $roles = Role::with('rolesPermissions.permission')->find($id);
         $roles = $roles->toArray();
         $permissions = Permissions::all();
@@ -184,7 +158,7 @@ class RoleController extends AppBaseController
             return redirect(route('roles.index'));
         }
 
-        return view('adjustments.roleEdit',['roles' => $roles,'permissions' => $permissions,'user' => $user]);
+        return view('adjustments.roleEdit',['roles' => $roles,'permissions' => $permissions]);
     }
 
     /**
@@ -195,56 +169,50 @@ class RoleController extends AppBaseController
      *
      * @return Response
      */
-    // Es el post que lo guarda en BD
     public function update(Request $request)
     {
         if($request->ajax()) {
-            $requestdata = $request->all();
-            $role = Role::find($request->idRole);
-           
-            $validator = Validator::make($request->all(), [
-                'name' => [
-                    'required',
-                    'string',
-                    'min:2',
-                    'max:50',
-                    Rule::unique('roles')->ignore($role->id)->where(function ($query) {
-                        return $query->where('deleted_at', NULL);
-                    })
-                ],
-            ]);
-
-            if($validator->fails()){
-                $errors = implode(',',$validator->messages()->all());
-                return $this->jsonResponse(1, $errors);
-            }
-
-            $role->name = $request->name;
-
-            $role->save();
-
-            foreach($requestdata as $key => $value){
-                if(strpos($key,'optradio')!==false){
-                    $role_permission_id = str_replace('optradio','',$key);
-                    $role_permission = RolePermission::find($role_permission_id);
-                    $role_permission->value = $value;
-                    $value_name = '';
-                    switch($value){
-                        case 0:
-                            $value_name = 'NONE';
-                        break;
-                        case 1:
-                            $value_name = 'READ';
-                        break;
-                        case 2:
-                            $value_name = 'READ_AND_WRITE';
-                        break;
-                    }
-                    $role_permission->value_name = $value_name;
-                    $role_permission->save();
+            if ($request->idRole != \HV_ROLES::PERM_ADMIN){
+                $requestdata = $request->all();
+                $role = Role::find($request->idRole);
+               
+                $validator = Validator::make($request->all(), [
+                    'name' => [
+                        'required',
+                        'string',
+                        'min:2',
+                        'max:50',
+                        Rule::unique('roles')->ignore($role->id)->where(function ($query) {
+                            return $query->where('deleted_at', NULL);
+                        })
+                    ],
+                ]);
+    
+                if($validator->fails()){
+                    $errors = implode(',',$validator->messages()->all());
+                    return $this->jsonResponse(1, $errors);
                 }
+    
+                $role->name = $request->name;
+                $role->save();
+    
+                foreach($requestdata as $key => $value){
+                    if(strpos($key,'optradio')!==false){
+                        $role_permission_id = str_replace('optradio','',$key);
+                        $role_permission = RolePermission::find($role_permission_id);
+                        $role_permission->value = $value;
+                        $role_permission->value_name = getValueName($value);
+                        $role_permission->save();
+                    }
+                }
+                return $this->jsonResponse(0, "El rol ".$request->name." ha sido editado correctamente");
             }
-            return $this->jsonResponse(0, "El rol ".$request->name." ha sido editado correctamente");
+            else{
+                return $this->jsonResponse(1, "Permiso denegado"); 
+            }
+        }
+        else{
+            return $this->jsonResponse(1, "Permiso denegado");
         }
 
     }
@@ -276,7 +244,6 @@ class RoleController extends AppBaseController
     }
 
     public function usersRolesView($id, string $searchPhrase=null){
-        $user = Auth::user();
         $usersRole = Role::with('user1s')->where('id',$id)->get();
         $usersRole = $usersRole->toArray();
 
@@ -293,11 +260,10 @@ class RoleController extends AppBaseController
         $allUsers = $allUsers->groupBy('id')->toArray();
 
         return view('adjustments.usersRoleEdit',['id' => $id,'allUsers' => $allUsers, 'usersNotInRole' => $grouped,
-         'usersRole' => $usersRole, 'roles' => $roles, 'user' => $user]);
+         'usersRole' => $usersRole, 'roles' => $roles]);
     }
 
     public function editNotInRole($id){
-        $user = Auth::user();
 
         $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name', 
         'users.lastname', 'users.dni', 'users.birthdate','users.sex','users.email','users.blood','users.role_id' )
@@ -312,7 +278,7 @@ class RoleController extends AppBaseController
         $allUsers = $allUsers->groupBy('id')->toArray();
 
         return view('adjustments.usersNotInRoleEdit',['allUsers' => $allUsers, 'usersNotInRole' => $grouped,
-        'roles' => $roles, 'user' => $user]);
+        'roles' => $roles]);
     }
 
 
@@ -341,18 +307,23 @@ class RoleController extends AppBaseController
     }
 
     public function newRole(){
-        $user = Auth::user();
         $permissions = Permissions::get()->toArray();
 
-        return view('adjustments.newRole',['permissions' => $permissions, 'user' => $user]);
+        return view('adjustments.newRole',['permissions' => $permissions]);
     }
+
+    public function confirmDeleteRole(){
+        $roles = Role::find($id);
+
+        return view('adjustments.confirmDeleteRole',['roles' => $roles]);
+    }
+    
 
     public function ajaxUserRolesDatatable($id){
         $uRoles = Role::with('user1s')->where('id',$id)->get()->toArray();
         $uRoles=$uRoles[0]["user1s"];
 
-        return ['data' => $uRoles];
-        // return response()->json(['data')=>$uRoles);
+        return response()->json(['data' => $uRoles]);
     }
 
     public function ajaxViewMainRolesDatatable(){
@@ -366,7 +337,7 @@ class RoleController extends AppBaseController
             $rol->count = $count;
         }
 
-        return ['data' => $mRoles->toArray()];
-        // return response()->json($mRoles);
+        return response()->json(['data' => $mRoles]);
+
     }
 }

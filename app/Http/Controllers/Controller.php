@@ -14,4 +14,6 @@ class Controller extends BaseController
     protected function jsonResponse(string $status, string $message) {
         return response()->json(['status' => $status, 'message' => $message]);
     }
+
+    
 }

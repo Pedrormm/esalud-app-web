@@ -7,6 +7,7 @@ $('#saveModal').click(function() {
     else {
       showInlineError(res.status, res.message, 5);
     }
+    $('#saveModal').off("click");
   });
 
 });

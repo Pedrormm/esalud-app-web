@@ -62,11 +62,13 @@
     z-index: 1;
   }
 
-  #callButton{
+  #callButton, #destroyButton{
     display: none;
     border-radius: 0.75em 0.75em 0.75em 0.75em;
     margin-top: -2em;
+    margin-left: 3em;
   }
+
 
   .selectUserToCall{
     margin-right: 2em;

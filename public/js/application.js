@@ -110,7 +110,9 @@ function showInlineMessage(message, timeout=0) {
         }, timeout*1000);
     }
 }
-function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false) {
+function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false,
+    secondstoCancel=null) {
+    $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
     if (size){
         $('.modal-dialog').addClass(size);
@@ -135,13 +137,73 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         }).done(function(res) {
             $('#generic-modal .modal-body').html(res);
         });
-        //$('#generic-modal').modal('show').find('.modal-body').load(url);
+        // $('#generic-modal').modal('show').find('.modal-body').load(url);
         //$('#generic-modal .modal-body').load(url);
         //$('#generic-modal .modal-body').html(url);
-        //$('#generic-modal').modal('show');
+        // $('#generic-modal').modal('show');
+
     } 
-    else
+    else{
         $('#generic-modal .modal-body').text(body);
+    }
+
+    if ($.isNumeric(secondstoCancel)){
+        let seconds = secondstoCancel;
+        //Esto inicializa el boton close del modal con los segundos a descontar
+        let cont = (function(displaySeconds){
+            // Si no existia lo creo, sino lo actualizo
+            if(!$('#count').length) {
+                $("div.modal-footer button[data-dismiss='modal'].btn-secondary").append(
+                    $('<span />').attr('id', 'count').addClass("font-weight-bold").text(' ['+displaySeconds+']')
+                );
+            }
+            else {
+                $('#count').text(' [' + displaySeconds + ']');
+            }
+                //console.log("Pero yo quien soy?");
+            //Esto no hace nada $( this ).off( event );
+        });
+        function refreshCountdown() {
+            // console.log("refreshCountdown con", seconds, "segudnos");
+            seconds--;
+            $("#count").text(" ["+seconds+"]");
+            if (seconds <= 0){
+                clearInterval(countdown);
+                console.log("Se destruye el intevalo countdown");
+            } 
+        }
+        cont(secondstoCancel);
+
+        //let seconds = $("#count").text().replace(/\[|\]/g,'');
+        console.log("Seconds to disable: " + seconds);
+        // Esto actualiza el contador visual del boton close
+        let countdown = setInterval(refreshCountdown, 1000);
+
+        let moveTimer;
+
+        $("#generic-modal").on("mouseout",function(){
+            clearTimeout(moveTimer);
+        });
+
+        $("#generic-modal").on("mousemove keypress",function(){
+            // console.log("I'm moving");
+            cont(secondstoCancel);
+            seconds = secondstoCancel;
+            //countdown = setInterval(refreshCountdown);
+            clearTimeout(moveTimer);
+
+            moveTimer = setTimeout(function(){
+                // console.log("I stopped moving");
+                $("#generic-modal").fadeTo(800, 0).slideUp(800, function(){
+                    $(this).modal('hide'); 
+                });
+                $("#generic-modal").stop().off();
+            },secondstoCancel*1000)
+        });
+    }
+    else{
+        $("#count").remove();
+    }
 
     $('#generic-modal').modal({
         backdrop: 'static',
@@ -166,28 +228,40 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
     });
 
 
+
 }//--fin showModal
 
 
-function showModalConfirm(title="Title", message="No message", callback=function(){}, optConfirmText="Ok") {
-    $('#generic-modal .modal-title').text(title);
-    $('#generic-modal .modal-body').text(message);
+function showModalConfirm(title="Title", message="No message", callback=function(){},callbackClose=function(){}, optConfirmText="Ok",
+secondsToCancel=null, avoidClose=true) {
+    let mainId = '#generic-modal';
+    let buttonOkId = '#saveModal';
+    let buttonCloseId = '#closeModal';
+    $('.modal-title').text(title);
+    $(mainId + ' .modal-body').text(message);
     callback = (function() {
         let cachedFunction = callback;
         return function() {
-            console.log("Calling callback before");
             cachedFunction.apply(this, arguments);
-            $('#generic-modal').modal('hide');
-            console.log("Calling callback afger");
+            $(mainId).modal('hide');
         }
     })();
 
-    $('#saveModal').click(callback);
+    callbackClose = (function() {
+        let cachedFunction = callbackClose;
+        return function() {
+            cachedFunction.apply(this, arguments);
+        }
+    })();
+
+    $(buttonOkId).click(callback);
+
+    $(buttonCloseId).click(callbackClose);
     
     if(optConfirmText !== undefined) {
-        $('#saveModal').text(optConfirmText);
+        $(buttonOkId).text(optConfirmText);
     }
-    $('#generic-modal').modal('show');
+    $(mainId).modal('show');
 }//--fin showModalConfirm
 
 
@@ -307,3 +381,10 @@ function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, char
     return splitStr.join(' '); 
 }
 
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }

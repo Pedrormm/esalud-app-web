@@ -1,9 +1,8 @@
 <link rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/roleEdit.css') }}">  
   
-  <form action="{{ URL::asset('/user/roleManagement/update')  }}" method="POST" id="newRole">
+  <form id="newRole">
     {{ csrf_field() }}
-    {{-- {{ dd($permissions) }} --}}
 
     <div class="row">
         <div class="col-md-12">
@@ -88,69 +87,3 @@
  <script type="text/javascript" src="{{ asset('js/new-role.js') . '?r=' . rand() }}"></script>
 
 
-
-
-
- {{-- <script type="text/javascript" src="{{ asset('js/typo/typo.js') }}"></script>
-
- <script type="text/javascript">
-    var dictionary;
-    
-    function load() {
-        $( '#loading-progress' ).append( 'Loading affix data...' ).append( $( '<br />' ) );
-        
-        // $.get( 'js/typo/dictionaries/en_US/en_US.aff', function ( affData ) {
-        $.get( 'http://localhost/esalud-app-web/public/js/typo/dictionaries/en_US/en_US.aff', function ( affData ) {      
-        // $.get( "{{ asset('js/typo/dictionaries/en_US/en_US.aff') }}", function ( affData ) {
-
-            $( '#loading-progress' ).append( 'Loading English dictionary (this takes a few seconds)...' ).append( $( '<br />' ) );
-            
-            // $.get( 'js/typo/dictionaries/en_US/en_US.dic', function ( wordsData ) {
-            $.get( 'http://localhost/esalud-app-web/public/js/typo/dictionaries/en_US/en_US.dic', function ( wordsData ) {
-
-            // $.get( "{{ asset('js/typo/dictionaries/en_US/en_US.dic') }}", function ( wordsData ) {
-
-                $( '#loading-progress' ).append( 'Initializing Typo...' );
-        
-                dictionary = new Typo( "en_US", affData, wordsData );
-                
-                checkWord( 'mispelled' );
-            } );
-        } );
-    }
-    
-    function checkWord( word ) {
-        var wordForm = $( '#word-form' );
-        wordForm.hide();
-        
-        var resultsContainer = $( '#results' );
-        resultsContainer.html( '' );
-        
-        resultsContainer.append( $( '<p>' ).text( "Is '" + word + "' spelled correctly?" ) );
-
-        var is_spelled_correctly = dictionary.check( word );
-        
-        resultsContainer.append( $( '<p>' ).append( $( '<code>' ).text( is_spelled_correctly ? 'yes' : 'no' ) ) );
-        
-        if ( ! is_spelled_correctly ) {
-            resultsContainer.append( $( '<p>' ).text( "Finding spelling suggestions for '" + word + "'..." ) );
-            
-            var array_of_suggestions = dictionary.suggest( word );
-
-            resultsContainer.append( $( '<p>' ).append( $( '<code>' ).text( array_of_suggestions.join( ', ' ) ) ) );
-        }
-        
-        wordForm.show();
-    }
-</script>
-<div onload="load();">
-    <h1>Typo.js Demo</h1>
-    <p>This page is an example of how you could use <a href="http://github.com/cfinke/Typo.js">Typo.js</a> in a webpage if you need spellchecking beyond what the OS provides.</p>
-    <p id="loading-progress"></p>
-    <div id="results"></div>
-    <form method="GET" action="" onsubmit="checkWord( document.getElementById( 'word' ).value ); return false;" id="word-form" style="display: none;">
-        <p>Try another word:</p>
-        <input type="text" id="word" value="mispelled" />
-        <input type="submit" value="Spellcheck" />
-    </form>
-</div> --}}
