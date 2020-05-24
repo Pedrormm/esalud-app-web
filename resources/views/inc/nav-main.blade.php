@@ -1,8 +1,7 @@
     <!-- Sidebar -->
     <nav >
     
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
-        >
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
@@ -19,7 +18,7 @@
         <li class="nav-item{{ (Request::is('user/dashboard'))? " active":'' }}">
             <a class="nav-link" href="{{ URL::asset('/user/dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span style="font-size:1.15rem">Dashboard</span></a>
         </li>
 
         @if ($user->role_id == HV_ROLES::PERM_ADMIN)
@@ -33,7 +32,8 @@
 
         <!-- Nav Item - Users User management Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserManagement" aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserManagement" aria-expanded="true" 
+            aria-controls="collapseUserManagement">
             <i class="fas fa-fw fa-cog"></i>
             <span>User management</span>
             </a>
@@ -66,11 +66,12 @@
 
         <!-- Nav Item - Messaging Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommunication" aria-expanded="true" aria-controls="collapseCommunication">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommunication" aria-expanded="true" 
+            aria-controls="collapseCommunication">
             <i class="fa fa-users"></i>
             <span>Messaging</span>
             </a>
-            <div id="collapseCommunication" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div id="collapseCommunication" class="collapse" aria-labelledby="headingCommunication" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Messages:</h6>
                 <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/user/my-messages') }}">My messages</a>

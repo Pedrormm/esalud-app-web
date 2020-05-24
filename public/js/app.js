@@ -62599,23 +62599,26 @@ if (/public\//.test(location.href)) {
   }
 }
 
-var URL = location.href.substr(0, location.href.indexOf('public'));
+var URL = location.href.substr(0, location.href.indexOf('public')); // PublicURL + 'public/roles/view'
+
+var loadedReceptorURL;
 
 var App =
 /*#__PURE__*/
 function (_Component) {
   _inherits(App, _Component);
 
-  function App() {
+  function App(props) {
     var _this;
 
     _classCallCheck(this, App);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this)); // Creating local state. To know the Id of the other person
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props)); // Creating local state. To know the Id of the other person
 
     _this.state = {
       hasMedia: false,
-      otherUserId: null
+      otherUserId: null,
+      mode: props.mode ? props.mode : 'hold'
     };
     _this.users = [];
     _this.users = window.allUsers; //console.log("allusers ",this.users);
@@ -62635,34 +62638,73 @@ function (_Component) {
     // console.log('con this.selectedUserId',this.selectedUserId);
 
     _this.incoming = false;
+    _this.incomingCall = _this.incomingCall.bind(_assertThisInitialized(_this));
+    _this.endCall = _this.incomingCall.bind(_assertThisInitialized(_this));
+    console.log("loadedReceptorURL:", loadedReceptorURL);
+
+    if (loadedReceptorURL) {
+      setTimeout(function () {
+        console.log("---+ LOADED!!!!!!!!! +---");
+      }, 5000);
+    }
+
+    _this.handleFullScreen = _this.handleFullScreen.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
-    key: "componentWillMount",
-    value: function componentWillMount() {
+    key: "componentDidMount",
+    value: function componentDidMount() {
       var _this2 = this;
 
-      this.mediaHandler.getPermissions().then(function (stream) {
-        _this2.setState({
-          hasMedia: true
+      if (this.state.mode == 'call') {
+        this.mediaHandler.getPermissions().then(function (stream) {
+          _this2.setState({
+            hasMedia: true
+          });
+
+          try {
+            // Because of depracation and browsers support
+            _this2.user.stream = stream;
+            _this2.myVideo.srcObject = stream;
+          } catch (e) {
+            // Assigning source of my video the URL of the stream to have a source available
+            _this2.myVideo.src = URL.createObjectURL(stream);
+          }
+
+          try {
+            _this2.myVideo.play();
+          } catch (e) {
+            console.error('user play error', e.message);
+          }
         });
+        document.addEventListener('fullscreenchange', this.handleFullScreen, false);
+        document.addEventListener('webkitfullscreenchange', this.handleFullScreen, false);
+        document.addEventListener('mozfullscreenchange', this.handleFullScreen, false);
+        document.addEventListener('MSFullscreenChange', this.handleFullScreen, false);
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {// document.removeEventListener('fullscreenchange', this.handleFullScreen, false);
+      // document.removeEventListener('webkitfullscreenchange', this.handleFullScreen, false);
+      // document.removeEventListener('mozfullscreenchange', this.handleFullScreen, false);
+      // document.removeEventListener('MSFullscreenChange', this.handleFullScreen, false);
+    }
+  }, {
+    key: "handleFullScreen",
+    value: function handleFullScreen(e) {
+      if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null) {
+        console.log('EVENTO VENTANA ');
+        $(".user_video")[0].webkitExitFullscreen(); // videoElement.webkitExitFullscreen();
+        // var play = document.getElementById('userVideo').play();
+        // console.log("play: ", play);
+        // var fullScreen = document.getElementById('userVideo').fullScreen();
+        // console.log("fullScreen: ", fullScreen);
 
-        try {
-          // Because of depracation and browsers support
-          _this2.user.stream = stream;
-          _this2.myVideo.srcObject = stream;
-        } catch (e) {
-          // Assigning source of my video the URL of the stream to have a source available
-          _this2.myVideo.src = URL.createObjectURL(stream);
-        }
-
-        try {
-          _this2.myVideo.play();
-        } catch (e) {
-          console.error('user play error', e.message);
-        }
-      });
+        var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+        var event = state ? 'FullscreenOn' : 'FullscreenOff'; // Run code on exit
+      }
     }
   }, {
     key: "incomingCall",
@@ -62714,17 +62756,25 @@ function (_Component) {
       this.channel.bind("client-signal-".concat(this.user.id), function (signal) {
         // If a have a peer open (someone is calling me, as a response because I called him first):
         // Every time we create a peer we assign it to its userId
-        console.log("Signal id aqui recibe: ", signal);
+        console.log("Signal id aqui recibe: ", signal); // window.location.href = URL + 'public/user/video-call';
+
+        loadedReceptorURL = true; // window.location.href = URL + 'public/user/video-call';
 
         if (signal.data.type == 'offer') {
           showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
             _this3.incomingCall(signal);
-          }, function () {
-            //TODO: Reset the call when cancel is pressed
-            location.reload(); // this.endCall(signal.userId);
+          }, function () {//TODO: Reset the call when cancel is pressed
+            // window.history.pushState('Cancel', 'Cancel', URL + 'public/user/records');
+            // window.history.forward();
+            // location.reload();
+            // this.forceUpdate();
+            // $(".app").load(location.href + " #video_container>*"); 
+            // this.endCall(signal.userId);
           });
         } else if (signal.data.type == 'answer') {
           _this3.incomingCall(signal);
+        } else {
+          console.log("Tipo de llamada no reconocida");
         }
       });
     }
@@ -62779,13 +62829,17 @@ function (_Component) {
       peer.on('data', function (data) {
         console.log('data: ' + data);
         console.log("DESTRUIDO!");
-      }); // peer.on('error', (err) => { 
-      //     console.log('error', err);
-      // });
-
+      });
+      peer.on('error', function (err) {
+        console.log('error', err);
+      });
       peer.on('connect', function () {
         $("#callButton").css("display", "none");
         $("#destroyButton").css("display", "inline");
+        $(".user_video").prop("controls", true);
+        $(".user_video").prop("webkitAllowFullScreen", true);
+        $(".user_video").prop("mozAllowFullScreen", true);
+        $(".user_video").prop("allowFullScreen", true);
         console.log('connect...');
       });
       peer.on('close', function () {
@@ -62817,12 +62871,14 @@ function (_Component) {
   }, {
     key: "endCall",
     value: function endCall(userId) {
-      console.log("cancel incomingCall peer: ", this.peers); // try{
-      //     this.userVideo.srcObject = null;
-      // } catch (e) {
-      //     this.userVideo.src = URL.createObjectURL(null);
-      // }
-      // let peer = this.peers[userId];
+      console.log("cancel incomingCall peer: ", this.peers);
+
+      try {
+        this.userVideo.srcObject = null;
+      } catch (e) {
+        this.userVideo.src = URL.createObjectURL(null);
+      } // let peer = this.peers[userId];
+
 
       var peer = Object.values(this.peers)[0];
 
@@ -62835,86 +62891,128 @@ function (_Component) {
       $("#callButton").css("display", "inline");
     }
   }, {
+    key: "fun_name",
+    value: function fun_name() {
+      console.log("FULL SCREEN");
+      var targetelement = document.getElementById("video_container");
+
+      if (targetelement.requestFullscreen) {
+        targetelement.requestFullscreen();
+      }
+
+      if (targetelement.webkitRequestFullscreen) {
+        targetelement.webkitRequestFullscreen();
+      }
+
+      if (targetelement.mozRequestFullScreen) {
+        targetelement.mozRequestFullScreen();
+      }
+
+      if (targetelement.msRequestFullscreen) {
+        targetelement.msRequestFullscreen();
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this5 = this;
 
-      return (
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "app"
-        },
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-          className: "selectpicker selectUserToCall",
-          "data-live-search": "true",
-          "data-style": "btn-info",
-          title: "Busque usuario por nombre, apellidos o dni",
-          "data-width": "35%",
-          "data-header": "Busque usuario por nombre, apellidos o dni",
-          onChange: function onChange(e) {
-            return _this5.selectUser(e);
-          }
-        }, Object.keys(this.users).map(function (role, roleId) {
-          return (
-            /*#__PURE__*/
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
-              key: roleId,
-              label: role
-            }, Object.keys(_this5.users[role]).map(function (u) {
-              return _this5.users[role][u].id !== user.id ?
+      var mode = this.state.mode;
+
+      if (mode == 'call') {
+        return (
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "app"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+            className: "selectpicker selectUserToCall",
+            "data-live-search": "true",
+            "data-style": "btn-info",
+            title: "Busque usuario por nombre, apellidos o dni",
+            "data-width": "35%",
+            "data-header": "Busque usuario por nombre, apellidos o dni",
+            onChange: function onChange(e) {
+              return _this5.selectUser(e);
+            }
+          }, Object.keys(this.users).map(function (role, roleId) {
+            return (
               /*#__PURE__*/
-              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-                "data-subtext": _this5.users[role][u].dni,
-                key: "".concat(u, "-").concat(role, ".id"),
-                value: _this5.users[role][u].id
-              }, _this5.users[role][u].name, " ", _this5.users[role][u].lastname) : null;
-            }))
-          );
-        })),
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          id: "callButton",
-          className: "btn btn-primary",
-          onClick: function onClick() {
-            return _this5.callTo(_this5.selectedUserId);
-          }
-        },
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-phone"
-        }), "\u2002Call"),
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          id: "destroyButton",
-          className: "btn btn-danger",
-          onClick: function onClick() {
-            return _this5.endCall(_this5.selectedUserId);
-          }
-        },
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fas fa-phone-slash"
-        }), "\u2002End call"),
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "video_container"
-        },
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
-          className: "my_video",
-          ref: function ref(_ref) {
-            _this5.myVideo = _ref;
-          }
-        }),
-        /*#__PURE__*/
-        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
-          className: "user_video",
-          ref: function ref(_ref2) {
-            _this5.userVideo = _ref2;
-          }
-        })))
-      );
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
+                key: roleId,
+                label: role
+              }, Object.keys(_this5.users[role]).map(function (u) {
+                return _this5.users[role][u].id !== user.id ?
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+                  "data-subtext": _this5.users[role][u].dni,
+                  key: "".concat(u, "-").concat(role, ".id"),
+                  value: _this5.users[role][u].id
+                }, _this5.users[role][u].name, " ", _this5.users[role][u].lastname) : null;
+              }))
+            );
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "callButton",
+            className: "btn btn-primary",
+            onClick: function onClick() {
+              return _this5.callTo(_this5.selectedUserId);
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fa fa-phone"
+          }), "\u2002Call"),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "destroyButton",
+            className: "btn btn-danger",
+            onClick: function onClick() {
+              return _this5.endCall(_this5.selectedUserId);
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-phone-slash"
+          }), "\u2002End call"),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            id: "video_container"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
+            muted: true,
+            className: "my_video",
+            ref: function ref(_ref) {
+              _this5.myVideo = _ref;
+            }
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
+            className: "user_video",
+            id: "userVideo",
+            ref: function ref(_ref2) {
+              _this5.userVideo = _ref2;
+            }
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "whatever",
+            onClick: function onClick() {
+              return _this5.fun_name();
+            }
+          }, "Full screen")))
+        );
+      } else if (mode == 'receive') {
+        return (
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hola mundo2")
+        );
+      } else {
+        return null;
+      }
     }
   }]);
 
@@ -62926,7 +63024,9 @@ function (_Component) {
 if (document.getElementById('app')) {
   react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(
   /*#__PURE__*/
-  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('app'));
+  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, {
+    mode: "call"
+  }), document.getElementById('app'));
 }
 
 /***/ }),

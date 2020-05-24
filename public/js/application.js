@@ -8,6 +8,9 @@ $(function() {
         });
     }
 
+
+
+
 });//#TAG: #onload-jquery
 let PublicURL= location.href.substr(0, location.href.indexOf('public'));  
 let roleId;
@@ -388,3 +391,6 @@ function sleep(milliseconds) {
       currentDate = Date.now();
     } while (currentDate - date < milliseconds);
   }
+
+
+

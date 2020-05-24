@@ -2339,47 +2339,47 @@
 
     }
 
-    function savePortletOrder(event, ui) {
+    // function savePortletOrder(event, ui) {
 
-        var data = Storages.localStorage.get(STORAGE_KEY_NAME);
+    //     var data = Storages.localStorage.get(STORAGE_KEY_NAME);
 
-        if (!data) { data = {}; }
+    //     if (!data) { data = {}; }
 
-        data[this.id] = $(this).sortable('toArray');
+    //     data[this.id] = $(this).sortable('toArray');
 
-        if (data) {
-            Storages.localStorage.set(STORAGE_KEY_NAME, data);
-        }
+    //     if (data) {
+    //         Storages.localStorage.set(STORAGE_KEY_NAME, data);
+    //     }
 
-    }
+    // }
 
-    function loadPortletOrder() {
+    // function loadPortletOrder() {
 
-        var data = Storages.localStorage.get(STORAGE_KEY_NAME);
+    //     var data = Storages.localStorage.get(STORAGE_KEY_NAME);
 
-        if (data) {
+    //     if (data) {
 
-            var porletId = this.id,
-                cards = data[porletId];
+    //         var porletId = this.id,
+    //             cards = data[porletId];
 
-            if (cards) {
-                var portlet = $('#' + porletId);
+    //         if (cards) {
+    //             var portlet = $('#' + porletId);
 
-                $.each(cards, function(index, value) {
-                    $('#' + value).appendTo(portlet);
-                });
-            }
+    //             $.each(cards, function(index, value) {
+    //                 $('#' + value).appendTo(portlet);
+    //             });
+    //         }
 
-        }
+    //     }
 
-    }
+    // }
 
-    // Reset porlet save state
-    window.resetPorlets = function(e) {
-        Storages.localStorage.remove(STORAGE_KEY_NAME);
-        // reload the page
-        window.location.reload();
-    }
+    // // Reset porlet save state
+    // window.resetPorlets = function(e) {
+    //     Storages.localStorage.remove(STORAGE_KEY_NAME);
+    //     // reload the page
+    //     window.location.reload();
+    // }
 
 })();
 // HTML5 Sortable demo
@@ -2584,10 +2584,26 @@
                 });
             }
             this.confirm = function() {
-                this.animate(this.cardParent, function() {
-                    triggerEvent(EVENT_REMOVED, this.cardParent);
-                    this.remove(this.cardParent);
-                })
+                let $this = $(this.cardParent);
+                let that = this;
+                $this.css({
+                    '-moz-transform':'scale(1.1)',
+                    '-webkit-transform':'scale(1.1)',
+                    '-o-transform':'scale(1.1)',
+                    '-ms-transform:':'scale(1.1)',
+                    'transform':'scale(1.1)',
+                    '-moz-transition':'transform 0.5s ease-in-out',
+                    '-webkit-transition':'transform 0.5s ease-in-out',
+                    '-o-transition':'transform 0.5s ease-in-out',
+                    '-ms-transition:':'transform 0.5s ease-in-out',
+                    'transition':'transform 0.5s ease-in-out'                  
+                });
+
+                // this.animate(this.cardParent, function() {
+                $this.bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
+                    triggerEvent(EVENT_REMOVED, that.cardParent);
+                    that.remove(that.cardParent);
+                });
             }
             this.cancel = function() {
                 this.removing = false;
@@ -2841,78 +2857,7 @@
     }
 
 })();
-// TRANSLATION
-// -----------------------------------
 
-(function() {
-    'use strict';
-
-    $(initTranslation);
-
-
-    var pathPrefix = 'server/i18n'; // folder of json files
-    var STORAGEKEY = 'jq-appLang';
-    var savedLanguage = Storages.localStorage.get(STORAGEKEY);
-
-    function initTranslation() {
-        i18next
-            .use(i18nextXHRBackend)
-            // .use(LanguageDetector)
-            .init({
-                fallbackLng: savedLanguage || 'en',
-                backend: {
-                    loadPath: pathPrefix + '/{{ns}}-{{lng}}.json',
-                },
-                ns: ['site'],
-                defaultNS: 'site',
-                debug: false
-            }, function(err, t) {
-                // initialize elements
-                applyTranlations();
-                // listen to language changes
-                attachChangeListener();
-            })
-
-        function applyTranlations() {
-            var list = [].slice.call(document.querySelectorAll('[data-localize]'))
-            list.forEach(function(item) {
-                var key = item.getAttribute('data-localize')
-                if (i18next.exists(key)) item.innerHTML = i18next.t(key);
-            })
-        }
-
-        function attachChangeListener() {
-            var list = [].slice.call(document.querySelectorAll('[data-set-lang]'))
-            list.forEach(function(item) {
-
-                item.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'A') e.preventDefault();
-                    var lang = item.getAttribute('data-set-lang')
-                    if (lang) {
-                        i18next.changeLanguage(lang, function(err) {
-                            if (err) console.log(err)
-                            else {
-                                applyTranlations();
-                                Storages.localStorage.set(STORAGEKEY, lang);
-                            }
-                        });
-                    }
-                    activateDropdown(item)
-                });
-
-            })
-        }
-
-        function activateDropdown(item) {
-            if (item.classList.contains('dropdown-item')) {
-                item.parentElement.previousElementSibling.innerHTML = item.innerHTML;
-            }
-        }
-
-    }
-
-
-})();
 // NAVBAR SEARCH
 // -----------------------------------
 

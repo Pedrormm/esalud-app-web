@@ -45,7 +45,6 @@
                 
             </div>
 
-            <!-- <div class="records-color">alksadadla as</div> -->
 
             <div class="list_records ">
                                 
@@ -63,11 +62,13 @@
                                         {{ urldecode($patient['name'])." ". urldecode($patient['lastname'])}}
                                         </a>
                                         
-                                        <a class="float-right" href="#" data-tool="card-dismiss" 
-                                        data-toggle="tooltip" title="Close Card">
+                                        <a class="float-right card-btn" data-tool="card-dismiss" 
+                                        data-toggle="tooltip">
                                             <em class="fa fa-times"></em>
                                         </a>
-                                        <a class="float-right" href="#" data-tool="card-collapse" data-toggle="tooltip" title="Collapse Card" data-start-collapsed><em class="fa fa-plus"></em>
+                                        <a class="float-right card-btn" data-tool="card-collapse" 
+                                        data-toggle="tooltip" data-start-collapsed>
+                                            <em class="fa fa-plus"></em>
                                         </a>
                                     </div><!-- .card-wrapper is the element to be collapsed-->
                                     <div class="card-wrapper">
