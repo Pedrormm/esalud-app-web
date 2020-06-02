@@ -1,11 +1,3 @@
-@extends('layout.logged')
-
-@section('nav-bar-top')
-
-@endsection
-
-@section('content')
-
   @if (auth()->user())
     <script>
       window.user = {
@@ -45,7 +37,7 @@
   <!-- /.container-fluid -->
   
 </div>
-  <script id="videoApp" src="{{asset('js/app.js')}}" >
-  </script>      
+  <script src="{{asset('js/app.js')}}" >
+  </script>
+                 
     
-@endsection

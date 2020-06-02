@@ -11,26 +11,18 @@ use App\Models\User;
 
 class VideoCallController extends Controller
 {
-    public function showVideoCall(){
-        $authUser = Auth::user();
-        // $allUsers = User::select('id','name','lastname', 'role_id')->orderBy('users.id')->get()->toArray();
-
+    public function showVideoCall(Request $request){
         $allUsers = User::select('users.id','users.name','lastname','dni','role_id','roles.name as role_name')
         ->join('roles', 'roles.id', 'users.role_id')->orderBy('users.id')->get()->groupBy('role_name')->toArray();
+        $signalSent="#";
+        if($request->ajax()) {
+            $signalSent= ($request->all());
+            return view('communication/video_call_ajax', ['allUsers' => json_encode($allUsers),
+            'signalSent' => $signalSent]);
+        }
 
-
-    //     <select 
-    //     className="selectpicker" data-live-search="true"              
-    //    data-header="Busque por nombre o apellidos"
-    //    onChange={(e) => this.selectUser(e)} 
-    //    >
-    //         { this.users.map((user) => {
-    //         return this.user.id !== user.id ? <option key={ user.id } value={ user.id }>
-    //             { user.name } { user.lastname }</option> : null;
-    //         })}
-    //     </select> 
-        
-        return view('communication/video_call', ['allUsers' => json_encode($allUsers),'user' => $authUser]);
+        return view('communication/video_call', ['allUsers' => json_encode($allUsers),
+        'signalSent' => $signalSent]);
     }
 
     public function authenticatePusher(Request $request){

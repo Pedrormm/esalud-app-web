@@ -45,7 +45,6 @@
                 
             </div>
 
-
             <div class="list_records ">
                                 
                 @foreach(array_chunk($patients, 2) as $chunk)

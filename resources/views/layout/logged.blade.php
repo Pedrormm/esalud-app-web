@@ -101,7 +101,32 @@ aria-hidden="true">
        </div>     
      </div>
    </div>
-</div>       
+</div>
+
+@if(\Route::current()->uri != 'user/video-call') 
+  @if (auth()->user()) 
+  <script>
+    window.user = {
+      id: {{ ($user->id) }},
+      dni: "{{ ($user->dni) }}"
+    }
+
+    window.csrfToken = "{{ csrf_token() }}";   
+    window.allUsers = [];
+
+    window.signalSent = "#";
+
+  </script>
+
+  
+  <div id="app">    
+  </div>
+
+  <script src="{{asset('js/app.js')}}" >
+  </script>
+
+  @endif
+@endif
 
 @include('inc.scripts')
 

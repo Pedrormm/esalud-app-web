@@ -110,6 +110,7 @@ module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/li
 var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
 var settle = __webpack_require__(/*! ./../core/settle */ "./node_modules/axios/lib/core/settle.js");
 var buildURL = __webpack_require__(/*! ./../helpers/buildURL */ "./node_modules/axios/lib/helpers/buildURL.js");
+var buildFullPath = __webpack_require__(/*! ../core/buildFullPath */ "./node_modules/axios/lib/core/buildFullPath.js");
 var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
 var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
 var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
@@ -132,7 +133,8 @@ module.exports = function xhrAdapter(config) {
       requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
     }
 
-    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+    var fullPath = buildFullPath(config.baseURL, config.url);
+    request.open(config.method.toUpperCase(), buildURL(fullPath, config.params, config.paramsSerializer), true);
 
     // Set the request timeout in MS
     request.timeout = config.timeout;
@@ -193,7 +195,11 @@ module.exports = function xhrAdapter(config) {
 
     // Handle timeout
     request.ontimeout = function handleTimeout() {
-      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
+      var timeoutErrorMessage = 'timeout of ' + config.timeout + 'ms exceeded';
+      if (config.timeoutErrorMessage) {
+        timeoutErrorMessage = config.timeoutErrorMessage;
+      }
+      reject(createError(timeoutErrorMessage, config, 'ECONNABORTED',
         request));
 
       // Clean up request
@@ -207,7 +213,7 @@ module.exports = function xhrAdapter(config) {
       var cookies = __webpack_require__(/*! ./../helpers/cookies */ "./node_modules/axios/lib/helpers/cookies.js");
 
       // Add xsrf header
-      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
         cookies.read(config.xsrfCookieName) :
         undefined;
 
@@ -230,8 +236,8 @@ module.exports = function xhrAdapter(config) {
     }
 
     // Add withCredentials to request if needed
-    if (config.withCredentials) {
-      request.withCredentials = true;
+    if (!utils.isUndefined(config.withCredentials)) {
+      request.withCredentials = !!config.withCredentials;
     }
 
     // Add responseType to request if needed
@@ -510,7 +516,15 @@ Axios.prototype.request = function request(config) {
   }
 
   config = mergeConfig(this.defaults, config);
-  config.method = config.method ? config.method.toLowerCase() : 'get';
+
+  // Set config.method
+  if (config.method) {
+    config.method = config.method.toLowerCase();
+  } else if (this.defaults.method) {
+    config.method = this.defaults.method.toLowerCase();
+  } else {
+    config.method = 'get';
+  }
 
   // Hook up interceptors middleware
   var chain = [dispatchRequest, undefined];
@@ -627,6 +641,38 @@ module.exports = InterceptorManager;
 
 /***/ }),
 
+/***/ "./node_modules/axios/lib/core/buildFullPath.js":
+/*!******************************************************!*\
+  !*** ./node_modules/axios/lib/core/buildFullPath.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isAbsoluteURL = __webpack_require__(/*! ../helpers/isAbsoluteURL */ "./node_modules/axios/lib/helpers/isAbsoluteURL.js");
+var combineURLs = __webpack_require__(/*! ../helpers/combineURLs */ "./node_modules/axios/lib/helpers/combineURLs.js");
+
+/**
+ * Creates a new URL by combining the baseURL with the requestedURL,
+ * only when the requestedURL is not already an absolute URL.
+ * If the requestURL is absolute, this function returns the requestedURL untouched.
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} requestedURL Absolute or relative URL to combine
+ * @returns {string} The combined full path
+ */
+module.exports = function buildFullPath(baseURL, requestedURL) {
+  if (baseURL && !isAbsoluteURL(requestedURL)) {
+    return combineURLs(baseURL, requestedURL);
+  }
+  return requestedURL;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/lib/core/createError.js":
 /*!****************************************************!*\
   !*** ./node_modules/axios/lib/core/createError.js ***!
@@ -671,8 +717,6 @@ var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/util
 var transformData = __webpack_require__(/*! ./transformData */ "./node_modules/axios/lib/core/transformData.js");
 var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
 var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
-var isAbsoluteURL = __webpack_require__(/*! ./../helpers/isAbsoluteURL */ "./node_modules/axios/lib/helpers/isAbsoluteURL.js");
-var combineURLs = __webpack_require__(/*! ./../helpers/combineURLs */ "./node_modules/axios/lib/helpers/combineURLs.js");
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -692,11 +736,6 @@ function throwIfCancellationRequested(config) {
 module.exports = function dispatchRequest(config) {
   throwIfCancellationRequested(config);
 
-  // Support baseURL config
-  if (config.baseURL && !isAbsoluteURL(config.url)) {
-    config.url = combineURLs(config.baseURL, config.url);
-  }
-
   // Ensure headers exist
   config.headers = config.headers || {};
 
@@ -711,7 +750,7 @@ module.exports = function dispatchRequest(config) {
   config.headers = utils.merge(
     config.headers.common || {},
     config.headers[config.method] || {},
-    config.headers || {}
+    config.headers
   );
 
   utils.forEach(
@@ -834,13 +873,23 @@ module.exports = function mergeConfig(config1, config2) {
   config2 = config2 || {};
   var config = {};
 
-  utils.forEach(['url', 'method', 'params', 'data'], function valueFromConfig2(prop) {
+  var valueFromConfig2Keys = ['url', 'method', 'params', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy'];
+  var defaultToConfig2Keys = [
+    'baseURL', 'url', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress',
+    'maxContentLength', 'validateStatus', 'maxRedirects', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath'
+  ];
+
+  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
     if (typeof config2[prop] !== 'undefined') {
       config[prop] = config2[prop];
     }
   });
 
-  utils.forEach(['headers', 'auth', 'proxy'], function mergeDeepProperties(prop) {
+  utils.forEach(mergeDeepPropertiesKeys, function mergeDeepProperties(prop) {
     if (utils.isObject(config2[prop])) {
       config[prop] = utils.deepMerge(config1[prop], config2[prop]);
     } else if (typeof config2[prop] !== 'undefined') {
@@ -852,13 +901,25 @@ module.exports = function mergeConfig(config1, config2) {
     }
   });
 
-  utils.forEach([
-    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
-    'timeout', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
-    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'maxContentLength',
-    'validateStatus', 'maxRedirects', 'httpAgent', 'httpsAgent', 'cancelToken',
-    'socketPath'
-  ], function defaultToConfig2(prop) {
+  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  var axiosKeys = valueFromConfig2Keys
+    .concat(mergeDeepPropertiesKeys)
+    .concat(defaultToConfig2Keys);
+
+  var otherKeys = Object
+    .keys(config2)
+    .filter(function filterAxiosKeys(key) {
+      return axiosKeys.indexOf(key) === -1;
+    });
+
+  utils.forEach(otherKeys, function otherKeysDefaultToConfig2(prop) {
     if (typeof config2[prop] !== 'undefined') {
       config[prop] = config2[prop];
     } else if (typeof config1[prop] !== 'undefined') {
@@ -966,13 +1027,12 @@ function setContentTypeIfUnset(headers, value) {
 
 function getDefaultAdapter() {
   var adapter;
-  // Only Node.JS has a process variable that is of [[Class]] process
-  if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(/*! ./adapters/http */ "./node_modules/axios/lib/adapters/xhr.js");
-  } else if (typeof XMLHttpRequest !== 'undefined') {
+  if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
     adapter = __webpack_require__(/*! ./adapters/xhr */ "./node_modules/axios/lib/adapters/xhr.js");
+  } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(/*! ./adapters/http */ "./node_modules/axios/lib/adapters/xhr.js");
   }
   return adapter;
 }
@@ -1494,7 +1554,6 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -1510,6 +1569,27 @@ var toString = Object.prototype.toString;
  */
 function isArray(val) {
   return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is a Buffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Buffer, otherwise false
+ */
+function isBuffer(val) {
+  return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
+    && typeof val.constructor.isBuffer === 'function' && val.constructor.isBuffer(val);
 }
 
 /**
@@ -1566,16 +1646,6 @@ function isString(val) {
  */
 function isNumber(val) {
   return typeof val === 'number';
-}
-
-/**
- * Determine if a value is undefined
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if the value is undefined, otherwise false
- */
-function isUndefined(val) {
-  return typeof val === 'undefined';
 }
 
 /**
@@ -4407,28 +4477,6 @@ if (typeof Object.create === 'function') {
       ctor.prototype.constructor = ctor
     }
   }
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/is-buffer/index.js":
-/*!*****************************************!*\
-  !*** ./node_modules/is-buffer/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-module.exports = function isBuffer (obj) {
-  return obj != null && obj.constructor != null &&
-    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
 }
 
 
@@ -56996,7 +57044,8 @@ if (false) {} else {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(Buffer) {var debug = __webpack_require__(/*! debug */ "./node_modules/simple-peer/node_modules/debug/src/browser.js")('simple-peer')
+/* WEBPACK VAR INJECTION */(function(Buffer) {/*! simple-peer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+var debug = __webpack_require__(/*! debug */ "./node_modules/simple-peer/node_modules/debug/src/browser.js")('simple-peer')
 var getBrowserRTC = __webpack_require__(/*! get-browser-rtc */ "./node_modules/get-browser-rtc/index.js")
 var randombytes = __webpack_require__(/*! randombytes */ "./node_modules/randombytes/browser.js")
 var stream = __webpack_require__(/*! readable-stream */ "./node_modules/simple-peer/node_modules/readable-stream/readable-browser.js")
@@ -57011,8 +57060,9 @@ function filterTrickle (sdp) {
   return sdp.replace(/a=ice-options:trickle\s\n/g, '')
 }
 
-function makeError (message, code) {
-  var err = new Error(message)
+function makeError (err, code) {
+  if (typeof err === 'string') err = new Error(err)
+  if (err.error instanceof Error) err = err.error
   err.code = code
   return err
 }
@@ -57043,6 +57093,7 @@ class Peer extends stream.Duplex {
 
     this.initiator = opts.initiator || false
     this.channelConfig = opts.channelConfig || Peer.channelConfig
+    this.negotiated = this.channelConfig.negotiated
     this.config = Object.assign({}, Peer.config, opts.config)
     this.offerOptions = opts.offerOptions || {}
     this.answerOptions = opts.answerOptions || {}
@@ -57081,7 +57132,7 @@ class Peer extends stream.Duplex {
     this._channel = null
     this._pendingCandidates = []
 
-    this._isNegotiating = !this.initiator // is this peer waiting for negotiation to complete?
+    this._isNegotiating = this.negotiated ? false : !this.initiator // is this peer waiting for negotiation to complete?
     this._batchedNegotiation = false // batch synchronous negotiations
     this._queuedNegotiation = false // is there a queued negotiation request?
     this._sendersAwaitingStable = []
@@ -57129,7 +57180,7 @@ class Peer extends stream.Duplex {
     // - onfingerprintfailure
     // - onnegotiationneeded
 
-    if (this.initiator) {
+    if (this.initiator || this.negotiated) {
       this._setupData({
         channel: this._pc.createDataChannel(this.channelName, this.channelConfig)
       })
@@ -57379,7 +57430,10 @@ class Peer extends stream.Duplex {
         }, 0)
       }
     } else {
-      if (!this._isNegotiating) {
+      if (this._isNegotiating) {
+        this._queuedNegotiation = true
+        this._debug('already negotiating, queueing')
+      } else {
         this._debug('requesting negotiation from initiator')
         this.emit('signal', { // request initiator to renegotiate
           renegotiate: true
@@ -62441,6 +62495,73 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js/ControlsHandler.js":
+/*!*****************************************!*\
+  !*** ./resources/js/ControlsHandler.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getControls; });
+// ControlsHandler.js
+function getControls() {
+  var helper_calculateDuration = function helper_calculateDuration(duration) {
+    var seconds = parseInt(duration % 60);
+    var minutes = parseInt(duration % 3600 / 60);
+    var hours = parseInt(duration / 3600);
+    return {
+      hours: helper_pad(hours),
+      minutes: helper_pad(minutes.toFixed()),
+      seconds: helper_pad(seconds.toFixed())
+    };
+  };
+
+  var helper_pad = function helper_pad(number) {
+    if (number > -10 && number < 10) {
+      return '0' + number;
+    } else {
+      return number;
+    }
+  };
+
+  var updateCurrentTime = function updateCurrentTime() {
+    $(eleStartTime).html("".concat(currentDuration.hours, ":").concat(currentDuration.minutes, ":").concat(currentDuration.seconds));
+  };
+
+  var currentTimeInSeconds = 0;
+  var currentDuration = null;
+  var volumeValue = 1;
+  var video = $(".user_video")[0];
+  var volumeBar = $("#volume-bar")[0];
+  var elePlayPauseBtn = ".toggle-play-pause";
+  var eleStartTime = ".start-time";
+  var eleToggleVolume = ".toggle-volume"; // Play the video
+
+  $(elePlayPauseBtn).on('click', function () {
+    $(elePlayPauseBtn).hasClass('play') ? video.play() : video.pause();
+    $(elePlayPauseBtn).toggleClass('play pause');
+  }); // Toggle volume on/off
+
+  $(eleToggleVolume).on('click', function () {
+    video.volume = video.volume ? 0 : volumeValue;
+    $(eleToggleVolume).toggleClass('on off');
+  }); // Update the video volume
+
+  volumeBar.addEventListener("change", function () {
+    video.volume = volumeBar.value;
+  }); // Update the current time
+
+  $(".user_video").on('timeupdate', function () {
+    currentTimeInSeconds = video.currentTime;
+    currentDuration = helper_calculateDuration(currentTimeInSeconds);
+    updateCurrentTime();
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/MediaHandler.js":
 /*!**************************************!*\
   !*** ./resources/js/MediaHandler.js ***!
@@ -62560,10 +62681,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _MediaHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../MediaHandler */ "./resources/js/MediaHandler.js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! simple-peer */ "./node_modules/simple-peer/index.js");
-/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(simple_peer__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _ControlsHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ControlsHandler */ "./resources/js/ControlsHandler.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! simple-peer */ "./node_modules/simple-peer/index.js");
+/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(simple_peer__WEBPACK_IMPORTED_MODULE_5__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -62587,6 +62709,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var APP_KEY = '9e2cbb3bb69dab826cef';
 var _PUBLIC_URL = location.href;
 
@@ -62600,8 +62723,7 @@ if (/public\//.test(location.href)) {
 }
 
 var URL = location.href.substr(0, location.href.indexOf('public')); // PublicURL + 'public/roles/view'
-
-var loadedReceptorURL;
+// var loadedReceptorURL;
 
 var App =
 /*#__PURE__*/
@@ -62618,15 +62740,21 @@ function (_Component) {
     _this.state = {
       hasMedia: false,
       otherUserId: null,
-      mode: props.mode ? props.mode : 'hold'
+      // mode: props.mode ? props.mode :'hold'
+      mode: window.location.href == URL + 'public/user/video-call' || isABootstrapModalOpen() ? props.mode : 'receive'
     };
+    console.log(window.location.href);
     _this.users = [];
     _this.users = window.allUsers; //console.log("allusers ",this.users);
 
-    _this.user = window.user; //console.log("user "+ window.user.id);
+    _this.user = window.user; // console.log("user ", window.user);
     // this.peer = {};
 
     _this.peers = {};
+    _this.signalSent = window.signalSent;
+    console.log("signalSent: ", _this.signalSent);
+    _this.loadedReceptorURL = _this.signalSent == "#" || _this.signalSent == null ? false : true;
+    console.log("loadedReceptorURL:", _this.loadedReceptorURL);
     _this.mediaHandler = new _MediaHandler__WEBPACK_IMPORTED_MODULE_2__["default"]();
 
     _this.setupPusher();
@@ -62638,17 +62766,14 @@ function (_Component) {
     // console.log('con this.selectedUserId',this.selectedUserId);
 
     _this.incoming = false;
+    _this.isFullScreen = false;
     _this.incomingCall = _this.incomingCall.bind(_assertThisInitialized(_this));
-    _this.endCall = _this.incomingCall.bind(_assertThisInitialized(_this));
-    console.log("loadedReceptorURL:", loadedReceptorURL);
+    _this.endCall = _this.endCall.bind(_assertThisInitialized(_this));
+    _this.fullScreen = _this.fullScreen.bind(_assertThisInitialized(_this));
+    _this.handleFullScreen = _this.handleFullScreen.bind(_assertThisInitialized(_this)); // this.isABootstrapModalOpen = this.isABootstrapModalOpen.bind(this);
 
-    if (loadedReceptorURL) {
-      setTimeout(function () {
-        console.log("---+ LOADED!!!!!!!!! +---");
-      }, 5000);
-    }
-
-    _this.handleFullScreen = _this.handleFullScreen.bind(_assertThisInitialized(_this));
+    console.log("MODAL: ", isABootstrapModalOpen());
+    console.log("ending constructor all kind of peers: ", _this.peers);
     return _this;
   }
 
@@ -62657,32 +62782,63 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (this.state.mode == 'call') {
-        this.mediaHandler.getPermissions().then(function (stream) {
-          _this2.setState({
-            hasMedia: true
-          });
+      console.log("componentDidMount all kind of peers: ", this.peers); // if(this.state.mode=='call'){
 
-          try {
-            // Because of depracation and browsers support
-            _this2.user.stream = stream;
-            _this2.myVideo.srcObject = stream;
-          } catch (e) {
-            // Assigning source of my video the URL of the stream to have a source available
-            _this2.myVideo.src = URL.createObjectURL(stream);
-          }
-
-          try {
-            _this2.myVideo.play();
-          } catch (e) {
-            console.error('user play error', e.message);
-          }
+      this.mediaHandler.getPermissions().then(function (stream) {
+        _this2.setState({
+          hasMedia: true
         });
-        document.addEventListener('fullscreenchange', this.handleFullScreen, false);
-        document.addEventListener('webkitfullscreenchange', this.handleFullScreen, false);
-        document.addEventListener('mozfullscreenchange', this.handleFullScreen, false);
-        document.addEventListener('MSFullscreenChange', this.handleFullScreen, false);
-      }
+
+        try {
+          // Because of depracation and browsers support
+          console.log("stream ", stream);
+          _this2.user.stream = stream;
+          _this2.myVideo.srcObject = stream;
+        } catch (e) {
+          // Assigning source of my video the URL of the stream to have a source available
+          _this2.myVideo.src = URL.createObjectURL(stream);
+        }
+
+        try {
+          _this2.myVideo.play();
+        } catch (e) {
+          console.error('user play error', e.message);
+        }
+      });
+      document.addEventListener('fullscreenchange', this.handleFullScreen, false);
+      document.addEventListener('webkitfullscreenchange', this.handleFullScreen, false);
+      document.addEventListener('mozfullscreenchange', this.handleFullScreen, false);
+      document.addEventListener('MSFullscreenChange', this.handleFullScreen, false);
+      $(function () {
+        Object(_ControlsHandler__WEBPACK_IMPORTED_MODULE_3__["default"])();
+      });
+
+      if (this.loadedReceptorURL) {
+        console.log("loadedReceptorURL!!"); // setTimeout(function() {
+
+        console.log("---+ LOADED!!!!!!!!! +---"); // console.log("Hay una llamada entrante con this.peers",this.peers); 
+        // let peer = this.peers[this.signalSent.userId];
+        // console.log("incomingCall peer",peer);
+        // console.log("peers on self and on userid",this.peers, this.peers[this.user.id]);
+        // // if peer doesn't already exists, we got an incoming call
+        // if(peer === undefined) {
+        // The one that is calling us
+
+        this.setState({
+          otherUserId: this.signalSent.userId
+        });
+        console.log('He sido llamado por: ', this.signalSent.userId); // peer = this.startPeer(this.signalSent.userId, false);
+
+        var peer = this.startPeer(this.signalSent.userId, false); // this.peers[signalSent.userId] = this.startPeer(signalSent.userId, false);
+        // } else{
+        //     console.log("Full signalSent, soy el que llama: ",signalSent);
+        // }
+
+        console.log("mi data es: ", this.signalSent.data);
+        peer.signal(this.signalSent.data); // this.peers[signalSent.userId].this.signalSent(signalSent.data);
+        // }, 5000);
+      } // }
+
     }
   }, {
     key: "componentWillUnmount",
@@ -62695,21 +62851,17 @@ function (_Component) {
     key: "handleFullScreen",
     value: function handleFullScreen(e) {
       if (document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement !== null) {
-        console.log('EVENTO VENTANA ');
-        $(".user_video")[0].webkitExitFullscreen(); // videoElement.webkitExitFullscreen();
-        // var play = document.getElementById('userVideo').play();
-        // console.log("play: ", play);
-        // var fullScreen = document.getElementById('userVideo').fullScreen();
-        // console.log("fullScreen: ", fullScreen);
-
+        console.log('EVENTO VENTANA! ');
+        $(".user_video")[0].webkitExitFullscreen();
         var state = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
-        var event = state ? 'FullscreenOn' : 'FullscreenOff'; // Run code on exit
+        var event = state ? 'FullscreenOn' : 'FullscreenOff';
       }
     }
   }, {
     key: "incomingCall",
     value: function incomingCall(signal) {
       console.log("Hay una llamada entrante", signal);
+      console.log("Hay una llamada entrante con this.peers", this.peers);
       var peer = this.peers[signal.userId];
       console.log("incomingCall peer", peer);
       console.log("peers on self and on userid", this.peers, this.peers[this.user.id]); // if peer doesn't already exists, we got an incoming call
@@ -62727,6 +62879,7 @@ function (_Component) {
       } // peer.signal(signal.data);
 
 
+      console.log("mi data es: ", signal.data);
       this.peers[signal.userId].signal(signal.data);
     } // Pusher setup
 
@@ -62735,10 +62888,11 @@ function (_Component) {
     value: function setupPusher() {
       var _this3 = this;
 
-      // console.log("This User id: "+this.user.id);
+      console.log("setup pusher"); // console.log("This User id: "+this.user.id);
       // console.log("Signal id: "+signal.userId);
-      pusher_js__WEBPACK_IMPORTED_MODULE_3___default.a.logToConsole = true;
-      this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_3___default.a(APP_KEY, {
+
+      pusher_js__WEBPACK_IMPORTED_MODULE_4___default.a.logToConsole = true;
+      this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_4___default.a(APP_KEY, {
         // authEndpoint: 'https://localhost/esalud-app-web/public/pusher/auth',
         authEndpoint: URL + 'public/pusher/auth',
         cluster: 'ap2',
@@ -62757,20 +62911,60 @@ function (_Component) {
         // If a have a peer open (someone is calling me, as a response because I called him first):
         // Every time we create a peer we assign it to its userId
         console.log("Signal id aqui recibe: ", signal); // window.location.href = URL + 'public/user/video-call';
-
-        loadedReceptorURL = true; // window.location.href = URL + 'public/user/video-call';
+        // this.loadedReceptorURL = true;
+        // window.location.href = URL + 'public/user/video-call';
 
         if (signal.data.type == 'offer') {
-          showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
-            _this3.incomingCall(signal);
-          }, function () {//TODO: Reset the call when cancel is pressed
-            // window.history.pushState('Cancel', 'Cancel', URL + 'public/user/records');
-            // window.history.forward();
-            // location.reload();
-            // this.forceUpdate();
-            // $(".app").load(location.href + " #video_container>*"); 
-            // this.endCall(signal.userId);
-          });
+          if (window.location.href != URL + 'public/user/video-call') {
+            showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
+              // window.location.replace(URL+'public/user/video-call/'+JSON.stringify(signal));
+              console.log("NO EN VENTANA VIDEO");
+              $("#video-modal").modal("show");
+              $('#video-modal .modalCollapse').show();
+              $("#video-modal .modal-body").collapse('show');
+              $("#video-modal .modalCollapse").click(function () {
+                $('#video-modal .modal-body').collapse('toggle');
+                var icon = this.querySelector('i');
+                $('#video-modal .modal-body').on('hidden.bs.collapse', function () {
+                  icon.classList.remove('fa-caret-square-down');
+                  icon.classList.add('fa-caret-square-right');
+                });
+                $('#video-modal .modal-body').on('shown.bs.collapse', function () {
+                  icon.classList.remove('fa-caret-square-right');
+                  icon.classList.add('fa-caret-square-down');
+                });
+                return;
+              });
+              $('#video-modal').on('hidden.bs.modal', function () {
+                location.reload();
+              }); // let videoWindows = $('.app').detach();
+              // $("#contenedorVideo").css("display", "block");
+              // let videoWindows = $('#contenedorVideo').detach();
+              // this.loadedReceptorURL = true;
+              // console.log("signalsent before",signal);
+              // showModal('Videollamada ', videoWindows.html(), true);
+              //showModal('Videollamada ', '', false, URL + 'public/user/video-call', 'modal-xl', true, true, "POST",
+              //signal, true);
+
+              _this3.incomingCall(signal);
+            }, function () {
+              //TODO: Reset the call when cancel is pressed
+              _this3.endCall(signal.userId);
+            });
+          } else {
+            console.log("EN VENTANA VIDEO");
+            showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
+              _this3.incomingCall(signal);
+            }, function () {
+              //TODO: Reset the call when cancel is pressed
+              // window.history.pushState('Cancel', 'Cancel', URL + 'public/user/records');
+              // window.history.forward();
+              // location.reload();
+              // this.forceUpdate();
+              // $(".app").load(location.href + " #video_container>*"); 
+              _this3.endCall(signal.userId);
+            });
+          }
         } else if (signal.data.type == 'answer') {
           _this3.incomingCall(signal);
         } else {
@@ -62785,7 +62979,7 @@ function (_Component) {
 
       var initiator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       // Creating a peer
-      var peer = new simple_peer__WEBPACK_IMPORTED_MODULE_4___default.a({
+      var peer = new simple_peer__WEBPACK_IMPORTED_MODULE_5___default.a({
         initiator: initiator,
         //of the call
         stream: this.user.stream,
@@ -62836,10 +63030,11 @@ function (_Component) {
       peer.on('connect', function () {
         $("#callButton").css("display", "none");
         $("#destroyButton").css("display", "inline");
-        $(".user_video").prop("controls", true);
-        $(".user_video").prop("webkitAllowFullScreen", true);
-        $(".user_video").prop("mozAllowFullScreen", true);
-        $(".user_video").prop("allowFullScreen", true);
+        $(".video-controls").css("display", "block"); // $(".user_video").prop("controls",true);
+        // $(".user_video").prop("webkitAllowFullScreen",true); 
+        // $(".user_video").prop("mozAllowFullScreen",true); 
+        // $(".user_video").prop("allowFullScreen",true); 
+
         console.log('connect...');
       });
       peer.on('close', function () {
@@ -62871,45 +63066,60 @@ function (_Component) {
   }, {
     key: "endCall",
     value: function endCall(userId) {
-      console.log("cancel incomingCall peer: ", this.peers);
+      if (window.location.href != URL + 'public/user/video-call') {
+        $("#video-modal").modal("hide");
+      }
 
-      try {
-        this.userVideo.srcObject = null;
-      } catch (e) {
-        this.userVideo.src = URL.createObjectURL(null);
-      } // let peer = this.peers[userId];
+      location.reload(); // console.log("cancel incomingCall peer: ",this.peers);
+      // try{
+      //     this.userVideo.srcObject = null;
+      // } catch (e) {
+      //     this.userVideo.src = URL.createObjectURL(null);
+      // }
+      // // let peer = this.peers[userId];
+      // let peer = Object.values(this.peers)[0]
+      // if(peer !== undefined) {
+      //     peer.destroy();
+      // }
+      // else{
+      // }
+      // this.peers[userId] = undefined;
 
-
-      var peer = Object.values(this.peers)[0];
-
-      if (peer !== undefined) {
-        peer.destroy();
-      } else {}
-
-      this.peers[userId] = undefined;
       $("#destroyButton").css("display", "none");
       $("#callButton").css("display", "inline");
     }
   }, {
-    key: "fun_name",
-    value: function fun_name() {
-      console.log("FULL SCREEN");
+    key: "fullScreen",
+    value: function fullScreen() {
+      var isInFullScreen = document.fullscreenElement && document.fullscreenElement !== null || document.webkitFullscreenElement && document.webkitFullscreenElement !== null || document.mozFullScreenElement && document.mozFullScreenElement !== null || document.msFullscreenElement && document.msFullscreenElement !== null;
       var targetelement = document.getElementById("video_container");
 
-      if (targetelement.requestFullscreen) {
-        targetelement.requestFullscreen();
-      }
+      if (!isInFullScreen) {
+        if (targetelement.requestFullscreen) {
+          targetelement.requestFullscreen();
+        }
 
-      if (targetelement.webkitRequestFullscreen) {
-        targetelement.webkitRequestFullscreen();
-      }
+        if (targetelement.webkitRequestFullscreen) {
+          targetelement.webkitRequestFullscreen();
+        }
 
-      if (targetelement.mozRequestFullScreen) {
-        targetelement.mozRequestFullScreen();
-      }
+        if (targetelement.mozRequestFullScreen) {
+          targetelement.mozRequestFullScreen();
+        }
 
-      if (targetelement.msRequestFullscreen) {
-        targetelement.msRequestFullscreen();
+        if (targetelement.msRequestFullscreen) {
+          targetelement.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
       }
     }
   }, {
@@ -62998,17 +63208,286 @@ function (_Component) {
             }
           }),
           /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-controls"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-playback-controls"
+          },
+          /*#__PURE__*/
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            id: "whatever",
+            className: "control-btn toggle-play-pause pause"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-play play-icon icon"
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-pause pause-icon icon"
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-volume-control"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "control-btn toggle-volume on"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-volume-up icon volume-on"
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-volume-mute icon volume-off"
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            type: "range",
+            id: "volume-bar",
+            min: "0",
+            max: "1",
+            step: "0.1",
+            defaultValue: "1"
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-right-side"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "start-time time"
+          }, "00:00:00"),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "fScreen",
             onClick: function onClick() {
-              return _this5.fun_name();
+              return _this5.fullScreen();
             }
-          }, "Full screen")))
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "control-btn"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-compress icon"
+          }))))))))
         );
       } else if (mode == 'receive') {
         return (
           /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hola mundo2")
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "modal fade",
+            id: "video-modal",
+            tabIndex: "-1",
+            role: "dialog",
+            "aria-hidden": "true"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "modal-dialog modal-dialog-centered",
+            role: "document"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "modal-content"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            id: "generic-modalheader"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            id: "head-modal",
+            className: "modal-header"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+            className: "modal-title"
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "modalWindowButtons"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            type: "button",
+            className: "close icon_close",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            "aria-hidden": "true"
+          }, "\xD7")),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            type: "button",
+            className: "close modalCollapse"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            "aria-hidden": "true"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fa fa-caret-square-down"
+          }))),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            type: "button",
+            className: "close modalMinimize"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            "aria-hidden": "true"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fa fa-minus"
+          }), " "))))),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "modal-body"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "app",
+            id: "contenedorVideo"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "destroyButton",
+            className: "btn btn-danger btn-video-end",
+            onClick: function onClick() {
+              return _this5.endCall(_this5.selectedUserId);
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-phone-slash"
+          }), "\u2002End call"),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            id: "video_container"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
+            muted: true,
+            className: "my_video",
+            ref: function ref(_ref3) {
+              _this5.myVideo = _ref3;
+            }
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
+            className: "user_video",
+            id: "userVideo",
+            ref: function ref(_ref4) {
+              _this5.userVideo = _ref4;
+            }
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            id: "video_container"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
+            muted: true,
+            className: "my_video",
+            ref: function ref(_ref5) {
+              _this5.myVideo = _ref5;
+            }
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
+            className: "user_video",
+            id: "userVideo",
+            ref: function ref(_ref6) {
+              _this5.userVideo = _ref6;
+            }
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-controls"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-playback-controls"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "control-btn toggle-play-pause pause"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-play play-icon icon"
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-pause pause-icon icon"
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-volume-control"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "control-btn toggle-volume on"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-volume-up icon volume-on"
+          }),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-volume-mute icon volume-off"
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            type: "range",
+            id: "volume-bar",
+            min: "0",
+            max: "1",
+            step: "0.1",
+            defaultValue: "1"
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "video-right-side"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "start-time time"
+          }, "00:00:00"),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "fScreen",
+            onClick: function onClick() {
+              return _this5.fullScreen();
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "control-btn"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fas fa-compress icon"
+          })))))))))),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "modal-footer"
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            type: "button",
+            className: "btn btn-secondary",
+            "data-dismiss": "modal"
+          }, "Close")))))
         );
       } else {
         return null;

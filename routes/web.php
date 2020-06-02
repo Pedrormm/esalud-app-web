@@ -69,6 +69,7 @@ Route::post('user/avatarupdate/{id?}', [
 Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
 Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
 Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
+Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
 
 
 /*

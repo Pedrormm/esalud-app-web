@@ -96,7 +96,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
                         $('#rolesDataTable').ajax.refresh();
                     }
                 }).error(function(xrh, st, err) {
-                    showInlineError("Erorr en ajax" + err);
+                    showInlineError("Error en ajax" + err);
                 });
             });
             // showModal('Borrar rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), '', true, true); 

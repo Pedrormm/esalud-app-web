@@ -113,8 +113,8 @@ function showInlineMessage(message, timeout=0) {
         }, timeout*1000);
     }
 }
-function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false,
-    secondstoCancel=null) {
+function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
+     removeApp=false, secondstoCancel=null) {
     $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
     if (size){
@@ -135,6 +135,9 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         $('#generic-modal .modal-body').html(body);
     else if (url) {
         $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, 
             url: url,
 
         }).done(function(res) {
@@ -229,7 +232,9 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         return;
 
     });
-
+    if (removeApp == true){
+        $('#app').remove();
+    }
 
 
 }//--fin showModal
@@ -391,6 +396,10 @@ function sleep(milliseconds) {
       currentDate = Date.now();
     } while (currentDate - date < milliseconds);
   }
+
+ function isABootstrapModalOpen() {
+    return $('.modal.show').length >0;
+}
 
 
 
