@@ -37,6 +37,9 @@
     @if(Request::is('user/my-messages'))
         $('#navSubitemMyMessages').css('background-color', '#eaecf4');
         $('#navSubitemMyMessages').addClass('active');
+    @elseif(Request::is('comm/messaging'))
+        $('#navSubitemMessaging').css('background-color', '#eaecf4');
+        $('#navSubitemMessaging').addClass('active');
     @elseif(Request::is('user/send-message'))
         $('#navSubitemSendMessage').css('background-color', '#eaecf4');
         $('#navSubitemSendMessage').addClass('active');

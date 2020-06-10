@@ -34,7 +34,16 @@ Route::get('message/icon', 'MessageController@showIconMessage')->middleware('che
 
 Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');
 
+Route::get('user/index', 'LoginController@indexDashboard')->middleware('checkUserAuth');
+
+
 Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
+
+Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('checkUserAuth');
+Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('checkUserAuth');
+Route::get('comm/viewMessagesFrom/{id}', 'MessageController@viewMessagesFrom')->middleware('checkUserAuth');
+
+
 
 
 /*Route::get('message/summary', function() {
@@ -68,6 +77,7 @@ Route::post('user/avatarupdate/{id?}', [
 // Communication purposes routes
 Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
 Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
+Route::get('comm/messaging', 'MessageController@showMessaging')->middleware('checkUserAuth');
 Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
 Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
 

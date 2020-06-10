@@ -1,5 +1,5 @@
 $('#saveModal').click(function() {
-    saveModalActionAjax(PublicURL+"public/user/roleManagement/update", $('#editRole').serialize(), 'GET', 'json', function(res) {
+    saveModalActionAjax(PublicURL+"user/roleManagement/update", $('#editRole').serialize(), 'GET', 'json', function(res) {
         if(res.status == 0) {
             showInlineMessage(res.message, 5);
             $('#mainTableRoles').DataTable().ajax.reload();

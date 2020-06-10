@@ -122,6 +122,12 @@ class LoginController extends Controller
 
         return view('user.dashboard', ['user' => $user]);
     }
+
+    public function indexDashboard() {
+        $authUser = Auth::user();
+
+        return view('ajax/indexDashboard', []);
+    }
     
     public function logout(Request $request) {
         Auth::logout();

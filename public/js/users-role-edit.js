@@ -11,7 +11,7 @@ let _dataTableRoles = $('#tableRoles').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }, 
-            url: PublicURL + 'public/role/userManagementInRole/edit/' + currentIdRole,
+            url: PublicURL + 'role/userManagementInRole/edit/' + currentIdRole,
             method: "POST",
             dataSrc: "data",
             xhrFields: {
@@ -77,7 +77,7 @@ let _dataTableRoles = $('#tableRoles').DataTable({
               let roleId = this.options[clickedIndex].value;
               let userId = $(this).data('user-id');
               _currentRolesForChange[userId] = parseInt(roleId);
-              saveModalActionAjax(PublicURL+"public/role/userManagementNotInRole/update", _currentRolesForChange, 'POST', 'json', function(res) {
+              saveModalActionAjax(PublicURL+"role/userManagementNotInRole/update", _currentRolesForChange, 'POST', 'json', function(res) {
               if(res.status == 0) {
                   $('#tableRoles').DataTable().ajax.reload();
                   showInlineMessage(res.message, 20);

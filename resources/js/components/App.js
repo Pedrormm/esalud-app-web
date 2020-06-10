@@ -2,34 +2,21 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import MediaHandler from '../MediaHandler';
 import customControls from '../ControlsHandler';
+import * as utils from '../VideoUtils';
 import Pusher from 'pusher-js';
 import Peer from 'simple-peer';
 
 const APP_KEY = '9e2cbb3bb69dab826cef';
 
-let _PUBLIC_URL = location.href;
-if(/public\//.test(location.href)) {
-    let matches = location.href.match(/public\/(.+)/i);
-    let place = location.href.search("/public/");
-
-    if(place !== -1) {
-        _PUBLIC_URL = location.href.substr(place, place+8);
-    }
-}
-
-var URL= location.href.substr(0, location.href.indexOf('public')); 
-// PublicURL + 'public/roles/view'
-// var loadedReceptorURL;
-
 export default class App extends Component {
     constructor(props){
         super(props);
-        // Creating local state. To know the Id of the other person
+        // Creating local state. To know the Id of the other person and mode
         this.state = {
             hasMedia: false,
             otherUserId: null,
             // mode: props.mode ? props.mode :'hold'
-            mode: (window.location.href == (URL+'public/user/video-call')) || isABootstrapModalOpen()  ? props.mode :'receive'
+            mode: utils.isInVideoCallView() || isABootstrapModalOpen()  ? props.mode :'receive'
         };  
         console.log(window.location.href);
 
@@ -70,6 +57,8 @@ export default class App extends Component {
         this.handleFullScreen = this.handleFullScreen.bind(this);
         // this.isABootstrapModalOpen = this.isABootstrapModalOpen.bind(this);
 
+        // this.backupPeer;
+
         console.log("MODAL: ", isABootstrapModalOpen());
         console.log("ending constructor all kind of peers: ",this.peers);
 
@@ -106,7 +95,9 @@ export default class App extends Component {
             document.addEventListener('MSFullscreenChange', this.handleFullScreen, false);
 
             $(function() {
-                customControls()
+                if (utils.isInVideoCallView()){
+                    customControls()
+                }
             });           
             
             if (this.loadedReceptorURL){
@@ -182,6 +173,7 @@ export default class App extends Component {
             console.log('He sido llamado por: ', signal.userId);
             // peer = this.startPeer(signal.userId, false);
             this.peers[signal.userId] = this.startPeer(signal.userId, false);
+            // this.backupPeer = this.peers[signal.userId];
         } else{
             console.log("Full Signal, soy el que llama: ",signal);
         }
@@ -199,7 +191,7 @@ export default class App extends Component {
         Pusher.logToConsole = true;
         this.pusher = new Pusher(APP_KEY, {
             // authEndpoint: 'https://localhost/esalud-app-web/public/pusher/auth',
-            authEndpoint: URL+'public/pusher/auth',
+            authEndpoint: PublicURL+'pusher/auth',
             cluster: 'ap2',
             auth: { 
                 // Auth object that will have to authorized
@@ -215,23 +207,36 @@ export default class App extends Component {
         // Once the user is authorized dispatch calls can be made from the client side
 
 
-
+        let peerBackup = Object.values(this.peers)[0]
+        let peersBackup = this.peers;
 
         this.channel.bind(`client-signal-${this.user.id}`, (signal) => {
             // If a have a peer open (someone is calling me, as a response because I called him first):
             // Every time we create a peer we assign it to its userId
             console.log("Signal id aqui recibe: ",signal);
-            // window.location.href = URL + 'public/user/video-call';
-        
-
-                // this.loadedReceptorURL = true;
-                // window.location.href = URL + 'public/user/video-call';
-                
-
                 if(signal.data.type=='offer'){
-                    if (window.location.href != (URL+'public/user/video-call')){
-                        showModalConfirm("Llamada entrante","¿Desea aceptar la llamada?",()=>{
-                            // window.location.replace(URL+'public/user/video-call/'+JSON.stringify(signal));
+                    let whoCalls="";
+
+                    $.ajax(PublicURL + 'video/getUserInfo', {
+                        dataType: "text",
+                        data: {id: signal.userId},
+                        method:'get',
+                        async: false,
+                    }).done(function(res){
+                        whoCalls = res;
+                    })
+                    .fail(function(xhr, st, err) {
+                        console.error("error in video/getUserInfo " + xhr, st, err);
+                    });
+
+                    if (!utils.isInVideoCallView()){
+                        
+
+                        
+
+
+                        showModalConfirm("Llamada de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
+                            // window.location.replace(PublicURL+'user/video-call/'+JSON.stringify(signal));
                             console.log("NO EN VENTANA VIDEO");
 
                             $("#video-modal").modal("show");
@@ -259,17 +264,6 @@ export default class App extends Component {
                                 location.reload();
                             });
 
-
-                       
-                            // let videoWindows = $('.app').detach();
-                            // $("#contenedorVideo").css("display", "block");
-                            // let videoWindows = $('#contenedorVideo').detach();
-
-                            // this.loadedReceptorURL = true;
-                            // console.log("signalsent before",signal);
-                            // showModal('Videollamada ', videoWindows.html(), true);
-                            //showModal('Videollamada ', '', false, URL + 'public/user/video-call', 'modal-xl', true, true, "POST",
-                            //signal, true);
                             this.incomingCall(signal);
                         },()=>{
                             //TODO: Reset the call when cancel is pressed
@@ -280,11 +274,12 @@ export default class App extends Component {
                     }
                     else{
                         console.log("EN VENTANA VIDEO");
-                        showModalConfirm("Llamada entrante","¿Desea aceptar la llamada?",()=>{
+                        // this.usersIds[signal.userId]
+                        showModalConfirm("Llamada entrante de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
                             this.incomingCall(signal);
                         },()=>{
                             //TODO: Reset the call when cancel is pressed
-                            // window.history.pushState('Cancel', 'Cancel', URL + 'public/user/records');
+                            // window.history.pushState('Cancel', 'Cancel', PublicURL + 'user/records');
                             // window.history.forward();
                             // location.reload();
                             // this.forceUpdate();
@@ -358,11 +353,15 @@ export default class App extends Component {
         peer.on('connect', function () {
             $("#callButton").css("display", "none");
             $("#destroyButton").css("display", "inline");
-            $(".video-controls").css("display", "block");
-            // $(".user_video").prop("controls",true);
-            // $(".user_video").prop("webkitAllowFullScreen",true); 
-            // $(".user_video").prop("mozAllowFullScreen",true); 
-            // $(".user_video").prop("allowFullScreen",true); 
+            if (utils.isInVideoCallView()){
+                $(".video-controls").css("display", "block");
+            }
+            else{
+                $(".user_video").prop("controls",true);
+                $(".user_video").prop("webkitAllowFullScreen",true); 
+                $(".user_video").prop("mozAllowFullScreen",true); 
+                $(".user_video").prop("allowFullScreen",true); 
+            }
             console.log('connect...');
 
         });
@@ -388,37 +387,59 @@ export default class App extends Component {
     // Function to call other users
     callTo(userId) {
         this.peers[userId] = this.startPeer(userId); // Assigning the peer this userId
+        // this.backupPeer = this.peers[userId];
         console.log("peers userid: "+ userId);
         console.log("all kind of peers: ",this.peers);
         console.log("asigned peer: ",this.peers[userId]);
     }
 
     endCall(userId){
-        if (window.location.href != (URL+'public/user/video-call')){
-            $("#video-modal").modal("hide");
+        // if (!utils.isInVideoCallView()){
+        //     $("#video-modal").modal("hide");
+        // }
+        // location.reload();
+
+        console.log("cancel incomingCall peer: ",this.peers);
+
+        try{
+            this.userVideo.srcObject = null;
+        } catch (e) {
+            this.userVideo.src = URL.createObjectURL(null);
         }
-        location.reload();
 
-        // console.log("cancel incomingCall peer: ",this.peers);
+        // let peer = this.peers[userId];
+        let peer = Object.values(this.peers)[0];
+        let peerKey = Object.keys(this.peers)[0];
 
-        // try{
-        //     this.userVideo.srcObject = null;
-        // } catch (e) {
-        //     this.userVideo.src = URL.createObjectURL(null);
-        // }
+        if(peerKey !== undefined) {
+        //    peer.destroy();
+            // console.log("****************BackupPeer", this.backupPeer);
+            console.log("peerkey vs userId:", peerKey, userId);
+            console.log("****** before destroy",this.peers[peerKey]);
+            this.peers[peerKey].destroy();
+            //delete this.peers[userId];
+            console.log("****** after destroy",this.peers[peerKey]);
+            //this.peers[userId] = this.startPeer(userId);
+            // this.peers[userId] = this.backupPeer;
+            console.log("****** after startPeer",this.peers[userId]);
+            
 
-        // // let peer = this.peers[userId];
-        // let peer = Object.values(this.peers)[0]
+        }
+        else{
 
-        // if(peer !== undefined) {
-        //     peer.destroy();
-        // }
-        // else{
+        }
+        //this.peers[userId] = undefined;
+        // peer = peerBackup;
+        // this.peers = peersBackup;
+        //this.peers = {};
 
-        // }
-        // this.peers[userId] = undefined;
         $("#destroyButton").css("display", "none");
         $("#callButton").css("display", "inline");
+        $(".video-controls").css("display", "none");
+
+        // peerBackup = $(peer).extends(true);
+        // peerBackup = peer;
+        // peer = peerBackup;
 
     }
 
@@ -526,7 +547,7 @@ export default class App extends Component {
                                     <button id="fScreen" onClick={ () => this.fullScreen()}>                                   
                                         <div className="control-btn">
                                             <i className="fas fa-compress icon"></i>
-                                            {/* <img src={ URL+"public/images/fullScreenIcon.png"}></img> */}
+                                            {/* <img src={ URL+"images/fullScreenIcon.png"}></img> */}
                                         </div>
                                     </button>
                                 </div>                                
@@ -572,40 +593,7 @@ export default class App extends Component {
                                     ref={(ref) => {this.myVideo = ref;}}></video>
                                     <video className="user_video" id="userVideo"
                                     ref={(ref) => {this.userVideo = ref;}}></video>
-                                    {/* <button id="fScreen" onClick={ () => this.fullScreen()}>Full screen</button> */}
-                                
-                                        <div id="video_container">
-                                            <video muted className="my_video" 
-                                            ref={(ref) => {this.myVideo = ref;}}></video>
-                                            <video className="user_video" id="userVideo"
-                                            ref={(ref) => {this.userVideo = ref;}}></video>
-
-                                            <div className="video-controls">
-                                                <div className="video-playback-controls">
-                                                    <button className="control-btn toggle-play-pause pause">
-                                                        <i className="fas fa-play play-icon icon"></i>
-                                                        <i className="fas fa-pause pause-icon icon"></i>
-                                                    </button>
-                                                    <div className="video-volume-control">
-                                                        <button className="control-btn toggle-volume on">
-                                                            <i className="fas fa-volume-up icon volume-on"></i>
-                                                            <i className="fas fa-volume-mute icon volume-off"></i>
-                                                        </button>
-                                                        <input type="range" id="volume-bar" min="0" max="1" step="0.1" defaultValue="1"/>
-                                                    </div>
-                                                    <div className="video-right-side">
-                                                        <div className="start-time time">00:00:00</div>
-                                                        <button id="fScreen" onClick={ () => this.fullScreen()}>                                   
-                                                            <div className="control-btn">
-                                                                <i className="fas fa-compress icon"></i>
-                                                                {/* <img src={ URL+"public/images/fullScreenIcon.png"}></img> */}
-                                                            </div>
-                                                        </button>
-                                                    </div>                                
-                                                </div>
-                                            </div>
-                                        </div>                                
-                               
+                    
                                 </div>
 
                             </div>

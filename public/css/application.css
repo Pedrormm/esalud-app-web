@@ -23,6 +23,403 @@
 }
 
 
+/* ========================================================================
+  Messaging
+========================================================================== */
+
+@media (max-width: 768px) {
+  .contactsList{
+     /* background-color: yellow !important; */
+
+     -webkit-box-shadow: none !important;
+     -moz-box-shadow: none !important;
+     box-shadow: none !important;
+
+  }
+
+  .messagingContainer{
+    height: 80vh;
+    
+  }
+
+  .messagingCardBody{
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .conversation{
+    display: none !important;
+  }
+
+  .cHeader button{
+    display: inline;
+    /* border-radius: 50%; */
+    width: 30px; 
+    height: 30px; 
+    padding: 6px 0px; 
+    border-radius: 15px; 
+    font-size: 13px; 
+    text-align: center; 
+    margin-left: 2%;
+    margin-bottom: 1.5%;
+  }
+
+  .cHeader h4{
+    display: inline;
+    border-bottom: none !important;
+    /* margin: 10%; */
+  }
+
+  .conversationMobile{
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;    
+  }
+
+  .cMessagesFeed{
+    /* border-top: 1px dashed #dfdfdf; */
+    margin-top:1% !important;
+    max-height: none !important;
+    /* background: radial-gradient( #8fd5eb, #f2f2f2) !important; */
+  }
+
+  .cMessageComposer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cMessageComposer textarea{
+    display: inline;
+    height: 40px;
+    border-radius: 25px !important;
+    
+
+  }
+
+  .cMessageComposer i{
+    /* width: 4%; */
+    margin-right: 0.3em;
+    display: inline;
+    /* border-radius: 50%; */
+
+    /* width: 30px; 
+    height: 30px; 
+    padding: 6px 0px; 
+    border-radius: 15px; 
+    font-size: 20px; 
+    text-align: center;  */
+
+    /* margin-left: 2%;
+    margin-bottom: 1.5%; */
+
+    width: 50px; 
+    height: 50px; 
+    padding: 7px 10px; 
+    border-radius: 25px; 
+    font-size: 37px; 
+    text-align: center;
+    cursor: pointer; 
+  }
+
+  .contactsList li .contactInfo p {
+    /* background: yellow; */
+    /* display: none; */
+  }
+}
+
+.scroller {
+  /* Firefox */
+  width: auto;
+  height: auto;
+  overflow-y: scroll;
+  /* scrollbar-color: #0A4C95 #C2D2E4; */
+  scrollbar-color:#808080 #C2D2E4;
+  scrollbar-width: thin;
+
+
+  /* -moz-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  -moz-border-radius: 10px;
+  border-radius: 10px; */
+
+  /* IE */
+  scrollbar-base-color: #808080;
+  scrollbar-face-color: #808080;
+  scrollbar-3dlight-color: #dfdfdf;
+  scrollbar-highlight-color: #f2f2f2;
+  scrollbar-track-color: white;
+  scrollbar-arrow-color: #a6a6a6;
+  scrollbar-shadow-color: #a6a6a6;
+  scrollbar-dark-shadow-color: #f2f2f2;
+
+}
+
+.scroller::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+.scroller::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* Handle */
+.scroller::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /* background: #0A4C95; */
+  /* background: #224ABE;  */
+  /* background: #4EBCDF; */
+  background: #808080;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+.scroller::-webkit-scrollbar-thumb:window-inactive {
+/* background: #81c4f9;  */
+}
+
+.messagingCardBody{
+  padding-left: 0 !important;
+}
+
+.messagingContainer{
+  display: flex;
+  padding: 0;
+}
+
+.conversation{
+  flex:5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cHeader h4{
+  font-size: 24px;
+  padding: 10px;
+  margin:0;
+  /* border-bottom: 1px dashed #dfdfdf; */
+}
+
+.selectAContact{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectAContact span{
+  font-size: 24px;
+  font-weight: bold;
+  /* background-color: #c0c0c0; */
+  background-color: #224ABE;
+  /* background: radial-gradient( #224ABE, #4EBCDF); */
+
+  padding: 1px 20px;
+  color:white;  
+  border-radius: 25px !important;
+  opacity: 0.6;
+
+  position: relative;
+  line-height: 0.9;
+  text-align: center;
+}
+
+.cMessagesFeed{
+  border-top: 1px dashed #dfdfdf;
+  /* background-color: #f2f2f2; */
+  /* background-image: linear-gradient(to right, #f2f2f2, rgba(255,0,0,1)); */
+  /* background-image: linear-gradient(to bottom right,white, #ebebeb); */
+
+  /* background-image: linear-gradient(to right, black, blue 50%, black 100%);
+
+  background-repeat: no-repeat; */
+
+  /* background: radial-gradient(#e66465, #9198e5); */
+  /* background: radial-gradient( #4EBCDF, #f2f2f2); */
+  /* background-image: url("/images/clouds.jpg"); */
+  /* background-image: url("/images/sky.jpg"); */
+  background: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url("/images/sky.jpg");
+  background-position: 50% 100%;
+  background-size: cover;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;  
+  /* background: radial-gradient( #8fd5eb, #f2f2f2); */
+
+  height: 100%;
+  /* max-height: 71vh; */
+  max-height: 76vh;
+  font-size: 15px;
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;  
+}
+
+.cMessagesFeed ul{
+  padding: 5px;
+}
+
+.cMessagesFeed li{
+  margin: 10px 0;
+  width: 100%;
+}
+
+.cMessagesFeed .text{
+  max-width: 100%;
+  border-radius: 5px;
+  padding: 12px;
+  display: inline-block;
+}
+
+.cMessagesFeed .alienUser{
+  text-align: right;
+}
+
+.cMessagesFeed .alienUser .text{
+  /* background: #a6a6a6; */
+  background: #c0c0c0;
+  font-weight: bold;
+}
+
+.cMessagesFeed .ownUser{
+  text-align: left;
+}
+
+.cMessagesFeed .ownUser .text{
+  /* background: #81c4f9; */
+  /* background: #4EBCDF;
+  color:white; */
+
+  /* background-color: #224ABE; */
+  background-color: rgba(34, 74, 190, 0.5);
+  /* opacity: 0.3; */
+  color: white;
+
+
+}
+
+.cMessageComposer textarea{
+  width: 96%;
+  /* margin-top: 10px; */
+  margin: 10px;
+  resize:none;
+  border-radius: 4px;
+  border: 1px solid #dfdfdf;
+  padding: 6px;
+  background-color: #f2f2f2;
+}
+
+.cMessageComposer textarea:hover{
+  border: 1px solid #81c4f9;
+}
+
+.contactsList{
+  /* transform: perspective(400px) rotateY(-1deg); */
+  -webkit-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 6px 6px 5px 0px rgba(0,0,0,0.5);
+
+  border-radius: 15px 15px 15px 15px;
+  -moz-border-radius: 15px 15px 15px 15px;
+  -webkit-border-radius: 15px 15px 15px 15px;
+  border: 0px solid #000000;
+
+  flex:2;
+  /* max-height: 37.5em; */
+  /* max-height: 75vh; */
+  max-height: 80vh;
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;  
+  border-left: 1px solid #a6a6a6; 
+}
+
+.contactsList:hover{
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.contactsList ul{
+  padding-left: 0;
+}
+ 
+.contactsList li{
+  margin: 0 !important;
+  display: flex;
+  border-bottom: 1px solid #a6a6a6;
+  /* height: 5em; */
+  position: relative;
+  cursor: pointer;
+  padding-top: 1.2em;
+  padding-bottom: 1.2em;
+}
+
+.contactsList li:nth-child(odd) {
+  background-color: #a6a6a6;
+}
+
+.contactsList li:nth-child(even) {
+  background-color: #c0c0c0;
+}
+
+
+.contactsList li:hover{
+  /* background-color: #4EBCDF; */
+  /* background-color: white; */
+  background-color: #f2f2f2;
+}
+
+.contactsList .selectedContact{
+  background-color: #224ABE !important;
+  color:white;
+}
+
+.contactsList li .contactAvatar{
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.contactsList li .avatarContactSize{
+  width: 3em;
+  height: 3em;
+  vertical-align: middle;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.contactsList li .contactInfo{
+  flex: 2;
+  overflow: hidden;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contactsList li .contactInfo p{
+  margin:0;
+}
+
+.contactsList li .contactInfo .fullName{
+  font-weight: 900;
+}
+
+.contactsList li .contactInfo .dni{
+  opacity: 0.7;
+  font-style: italic;
+}
+
+
+.cMessageComposer textarea{
+  /* pointer-events: none; */
+}
+
 
 /* ========================================================================
   Video

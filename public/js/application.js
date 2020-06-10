@@ -12,7 +12,10 @@ $(function() {
 
 
 });//#TAG: #onload-jquery
-let PublicURL= location.href.substr(0, location.href.indexOf('public'));  
+
+let PublicURL= location.href.substring(0, location.href.includes('.test')? location.href.indexOf('.test')+6 : 
+ location.href.includes('public') ? location.href.indexOf('public')+7:console.log("Url not found"));
+
 let roleId;
 
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
@@ -397,9 +400,52 @@ function sleep(milliseconds) {
     } while (currentDate - date < milliseconds);
   }
 
- function isABootstrapModalOpen() {
+function isABootstrapModalOpen() {
     return $('.modal.show').length >0;
 }
 
+function isInVideoCallView() {
+    return window.location.href != (URL+'user/video-call');
+}
+
+function sendMessage() {
+    let writtenMessage = $(".cMessageComposer textarea").val();
+    if (writtenMessage && (writtenMessage != "")){
+
+        // Creating a post event to the backEnd with the contactId and the message text, to then add it to the msj array
+        // console.log(writtenMessage);
+
+        // If we don't have a selectedContact
+
+        $(".cMessageComposer textarea").val('');     
+    }
+}
+
+function scrollToBottom(element, speed=10) {
+    setTimeout(function() {
+        $(element).animate({ scrollTop: $(document).height() }, 10);
+
+        let docHeight = getDocHeight();
+        let scrollHeight = $(window).scrollTop() + $(window).height();
+
+        setTimeout(function() {            
+            if (docHeight !== scrollHeight){
+                console.log("not bottom!");
+                let maxValue = Number.MAX_SAFE_INTEGER;
+                let bigInt = BigInt(Math.pow(maxValue,2));   
+                $(element).animate({ scrollTop: bigInt }, 'slow');
+            }
+        }, 50);
+    }, 50);
+}
+
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        D.body.scrollHeight, D.documentElement.scrollHeight,
+        D.body.offsetHeight, D.documentElement.offsetHeight,
+        D.body.clientHeight, D.documentElement.clientHeight
+    );
+}
 
 

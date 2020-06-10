@@ -11,7 +11,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, 
-        url: PublicURL + 'public/roles/view',
+        url: PublicURL + 'roles/view',
         method: "POST",
         dataSrc: "data",
         xhrFields: {
@@ -39,7 +39,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                return     '<a href="'+PublicURL+'public/role/userManagement/edit/'+row.idRole+'"' + 
+                return     '<a href="'+PublicURL+'role/userManagement/edit/'+row.idRole+'"' + 
                             ' class="btn btn-primary role-users-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             'Usuarios asociados' +
@@ -49,7 +49,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                return     '<a href="'+PublicURL+'public/user/roleManagement/edit/'+row.idRole+'"' + 
+                return     '<a href="'+PublicURL+'user/roleManagement/edit/'+row.idRole+'"' + 
                             ' class="btn btn-primary role-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             'Editar' +
@@ -59,7 +59,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                return     '<a href="'+PublicURL+'public/role/confirmDelete/'+row.idRole+'"' + 'id="roleDelete"'+
+                return     '<a href="'+PublicURL+'role/confirmDelete/'+row.idRole+'"' + 'id="roleDelete"'+
                             ' class="btn btn-danger roleDelete" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             '<i class="fa fa-trash"></i>&ensp;Borrar' +

@@ -20,9 +20,27 @@ class VideoCallController extends Controller
             return view('communication/video_call_ajax', ['allUsers' => json_encode($allUsers),
             'signalSent' => $signalSent]);
         }
+        // $usersIds = User::select("users.id", DB::raw("CONCAT(users.name,' ',users.lastname) as full_name"))
+        // ->get();
 
-        return view('communication/video_call', ['allUsers' => json_encode($allUsers),
+        // // Making an associative array with keys->values
+        // $usersIds = $usersIds->mapWithKeys(function ($item) {
+        //     return [$item['id'] => $item['full_name']];
+        // });
+
+        // $usersIds = $usersIds->toArray();
+
+        return view('communication/video_call', ['allUsers' => json_encode($allUsers), 
         'signalSent' => $signalSent]);
+    }
+
+    public function getUserInfo(Request $request){
+        if($request->ajax()) {
+            $user_to_be_found = User::select(DB::raw("CONCAT(users.name,' ',users.lastname) as full_name"))
+            ->where('id', $request->id)->get()->pluck('full_name');
+
+            return Response($user_to_be_found[0]);
+        }
     }
 
     public function authenticatePusher(Request $request){

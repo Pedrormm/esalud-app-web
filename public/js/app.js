@@ -62610,6 +62610,23 @@ function () {
 
 /***/ }),
 
+/***/ "./resources/js/VideoUtils.js":
+/*!************************************!*\
+  !*** ./resources/js/VideoUtils.js ***!
+  \************************************/
+/*! exports provided: isInVideoCallView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isInVideoCallView", function() { return isInVideoCallView; });
+// VideoUtils.js
+function isInVideoCallView() {
+  return window.location.href == PublicURL + 'user/video-call';
+}
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -62682,10 +62699,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _MediaHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../MediaHandler */ "./resources/js/MediaHandler.js");
 /* harmony import */ var _ControlsHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ControlsHandler */ "./resources/js/ControlsHandler.js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! simple-peer */ "./node_modules/simple-peer/index.js");
-/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(simple_peer__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _VideoUtils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../VideoUtils */ "./resources/js/VideoUtils.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! simple-peer */ "./node_modules/simple-peer/index.js");
+/* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(simple_peer__WEBPACK_IMPORTED_MODULE_6__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -62710,20 +62728,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var APP_KEY = '9e2cbb3bb69dab826cef';
-var _PUBLIC_URL = location.href;
-
-if (/public\//.test(location.href)) {
-  var matches = location.href.match(/public\/(.+)/i);
-  var place = location.href.search("/public/");
-
-  if (place !== -1) {
-    _PUBLIC_URL = location.href.substr(place, place + 8);
-  }
-}
-
-var URL = location.href.substr(0, location.href.indexOf('public')); // PublicURL + 'public/roles/view'
-// var loadedReceptorURL;
 
 var App =
 /*#__PURE__*/
@@ -62735,13 +62741,13 @@ function (_Component) {
 
     _classCallCheck(this, App);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props)); // Creating local state. To know the Id of the other person
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props)); // Creating local state. To know the Id of the other person and mode
 
     _this.state = {
       hasMedia: false,
       otherUserId: null,
       // mode: props.mode ? props.mode :'hold'
-      mode: window.location.href == URL + 'public/user/video-call' || isABootstrapModalOpen() ? props.mode : 'receive'
+      mode: _VideoUtils__WEBPACK_IMPORTED_MODULE_4__["isInVideoCallView"]() || isABootstrapModalOpen() ? props.mode : 'receive'
     };
     console.log(window.location.href);
     _this.users = [];
@@ -62772,6 +62778,7 @@ function (_Component) {
     _this.fullScreen = _this.fullScreen.bind(_assertThisInitialized(_this));
     _this.handleFullScreen = _this.handleFullScreen.bind(_assertThisInitialized(_this)); // this.isABootstrapModalOpen = this.isABootstrapModalOpen.bind(this);
 
+    _this.backupPeer;
     console.log("MODAL: ", isABootstrapModalOpen());
     console.log("ending constructor all kind of peers: ", _this.peers);
     return _this;
@@ -62810,7 +62817,9 @@ function (_Component) {
       document.addEventListener('mozfullscreenchange', this.handleFullScreen, false);
       document.addEventListener('MSFullscreenChange', this.handleFullScreen, false);
       $(function () {
-        Object(_ControlsHandler__WEBPACK_IMPORTED_MODULE_3__["default"])();
+        if (_VideoUtils__WEBPACK_IMPORTED_MODULE_4__["isInVideoCallView"]()) {
+          Object(_ControlsHandler__WEBPACK_IMPORTED_MODULE_3__["default"])();
+        }
       });
 
       if (this.loadedReceptorURL) {
@@ -62874,6 +62883,7 @@ function (_Component) {
         console.log('He sido llamado por: ', signal.userId); // peer = this.startPeer(signal.userId, false);
 
         this.peers[signal.userId] = this.startPeer(signal.userId, false);
+        this.backupPeer = this.peers[signal.userId];
       } else {
         console.log("Full Signal, soy el que llama: ", signal);
       } // peer.signal(signal.data);
@@ -62891,10 +62901,10 @@ function (_Component) {
       console.log("setup pusher"); // console.log("This User id: "+this.user.id);
       // console.log("Signal id: "+signal.userId);
 
-      pusher_js__WEBPACK_IMPORTED_MODULE_4___default.a.logToConsole = true;
-      this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_4___default.a(APP_KEY, {
+      pusher_js__WEBPACK_IMPORTED_MODULE_5___default.a.logToConsole = true;
+      this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_5___default.a(APP_KEY, {
         // authEndpoint: 'https://localhost/esalud-app-web/public/pusher/auth',
-        authEndpoint: URL + 'public/pusher/auth',
+        authEndpoint: PublicURL + 'pusher/auth',
         cluster: 'ap2',
         auth: {
           // Auth object that will have to authorized
@@ -62907,17 +62917,31 @@ function (_Component) {
 
       this.channel = this.pusher.subscribe('presence-video-channel'); // Once the user is authorized dispatch calls can be made from the client side
 
+      var peerBackup = Object.values(this.peers)[0];
+      var peersBackup = this.peers;
       this.channel.bind("client-signal-".concat(this.user.id), function (signal) {
         // If a have a peer open (someone is calling me, as a response because I called him first):
         // Every time we create a peer we assign it to its userId
-        console.log("Signal id aqui recibe: ", signal); // window.location.href = URL + 'public/user/video-call';
-        // this.loadedReceptorURL = true;
-        // window.location.href = URL + 'public/user/video-call';
+        console.log("Signal id aqui recibe: ", signal);
 
         if (signal.data.type == 'offer') {
-          if (window.location.href != URL + 'public/user/video-call') {
-            showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
-              // window.location.replace(URL+'public/user/video-call/'+JSON.stringify(signal));
+          var whoCalls = "";
+          $.ajax(PublicURL + 'video/getUserInfo', {
+            dataType: "text",
+            data: {
+              id: signal.userId
+            },
+            method: 'get',
+            async: false
+          }).done(function (res) {
+            whoCalls = res;
+          }).fail(function (xhr, st, err) {
+            console.error("error in video/getUserInfo " + xhr, st, err);
+          });
+
+          if (!_VideoUtils__WEBPACK_IMPORTED_MODULE_4__["isInVideoCallView"]()) {
+            showModalConfirm("Llamada de " + whoCalls, "¿Desea aceptar la llamada?", function () {
+              // window.location.replace(PublicURL+'user/video-call/'+JSON.stringify(signal));
               console.log("NO EN VENTANA VIDEO");
               $("#video-modal").modal("show");
               $('#video-modal .modalCollapse').show();
@@ -62937,14 +62961,7 @@ function (_Component) {
               });
               $('#video-modal').on('hidden.bs.modal', function () {
                 location.reload();
-              }); // let videoWindows = $('.app').detach();
-              // $("#contenedorVideo").css("display", "block");
-              // let videoWindows = $('#contenedorVideo').detach();
-              // this.loadedReceptorURL = true;
-              // console.log("signalsent before",signal);
-              // showModal('Videollamada ', videoWindows.html(), true);
-              //showModal('Videollamada ', '', false, URL + 'public/user/video-call', 'modal-xl', true, true, "POST",
-              //signal, true);
+              });
 
               _this3.incomingCall(signal);
             }, function () {
@@ -62952,12 +62969,13 @@ function (_Component) {
               _this3.endCall(signal.userId);
             });
           } else {
-            console.log("EN VENTANA VIDEO");
-            showModalConfirm("Llamada entrante", "¿Desea aceptar la llamada?", function () {
+            console.log("EN VENTANA VIDEO"); // this.usersIds[signal.userId]
+
+            showModalConfirm("Llamada entrante de " + whoCalls, "¿Desea aceptar la llamada?", function () {
               _this3.incomingCall(signal);
             }, function () {
               //TODO: Reset the call when cancel is pressed
-              // window.history.pushState('Cancel', 'Cancel', URL + 'public/user/records');
+              // window.history.pushState('Cancel', 'Cancel', PublicURL + 'user/records');
               // window.history.forward();
               // location.reload();
               // this.forceUpdate();
@@ -62979,7 +62997,7 @@ function (_Component) {
 
       var initiator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       // Creating a peer
-      var peer = new simple_peer__WEBPACK_IMPORTED_MODULE_5___default.a({
+      var peer = new simple_peer__WEBPACK_IMPORTED_MODULE_6___default.a({
         initiator: initiator,
         //of the call
         stream: this.user.stream,
@@ -63030,10 +63048,15 @@ function (_Component) {
       peer.on('connect', function () {
         $("#callButton").css("display", "none");
         $("#destroyButton").css("display", "inline");
-        $(".video-controls").css("display", "block"); // $(".user_video").prop("controls",true);
-        // $(".user_video").prop("webkitAllowFullScreen",true); 
-        // $(".user_video").prop("mozAllowFullScreen",true); 
-        // $(".user_video").prop("allowFullScreen",true); 
+
+        if (_VideoUtils__WEBPACK_IMPORTED_MODULE_4__["isInVideoCallView"]()) {
+          $(".video-controls").css("display", "block");
+        } else {
+          $(".user_video").prop("controls", true);
+          $(".user_video").prop("webkitAllowFullScreen", true);
+          $(".user_video").prop("mozAllowFullScreen", true);
+          $(".user_video").prop("allowFullScreen", true);
+        }
 
         console.log('connect...');
       });
@@ -63059,6 +63082,7 @@ function (_Component) {
     value: function callTo(userId) {
       this.peers[userId] = this.startPeer(userId); // Assigning the peer this userId
 
+      this.backupPeer = this.peers[userId];
       console.log("peers userid: " + userId);
       console.log("all kind of peers: ", this.peers);
       console.log("asigned peer: ", this.peers[userId]);
@@ -63066,27 +63090,44 @@ function (_Component) {
   }, {
     key: "endCall",
     value: function endCall(userId) {
-      if (window.location.href != URL + 'public/user/video-call') {
-        $("#video-modal").modal("hide");
-      }
+      // if (!utils.isInVideoCallView()){
+      //     $("#video-modal").modal("hide");
+      // }
+      // location.reload();
+      console.log("cancel incomingCall peer: ", this.peers);
 
-      location.reload(); // console.log("cancel incomingCall peer: ",this.peers);
-      // try{
-      //     this.userVideo.srcObject = null;
-      // } catch (e) {
-      //     this.userVideo.src = URL.createObjectURL(null);
-      // }
-      // // let peer = this.peers[userId];
-      // let peer = Object.values(this.peers)[0]
-      // if(peer !== undefined) {
-      //     peer.destroy();
-      // }
-      // else{
-      // }
-      // this.peers[userId] = undefined;
+      try {
+        this.userVideo.srcObject = null;
+      } catch (e) {
+        this.userVideo.src = URL.createObjectURL(null);
+      } // let peer = this.peers[userId];
+
+
+      var peer = Object.values(this.peers)[0];
+      var peerKey = Object.keys(this.peers)[0];
+
+      if (peerKey !== undefined) {
+        //    peer.destroy();
+        console.log("****************BackupPeer", this.backupPeer);
+        console.log("peerkey vs userId:", peerKey, userId);
+        console.log("****** before destroy", this.peers[peerKey]); //this.peers[peerKey].destroy();
+
+        delete this.peers[userId];
+        console.log("****** after destroy", this.peers[peerKey]); //this.peers[userId] = this.startPeer(userId);
+
+        this.peers[userId] = this.backupPeer;
+        console.log("****** after startPeer", this.peers[userId]);
+      } else {} //this.peers[userId] = undefined;
+      // peer = peerBackup;
+      // this.peers = peersBackup;
+      //this.peers = {};
+
 
       $("#destroyButton").css("display", "none");
       $("#callButton").css("display", "inline");
+      $(".video-controls").css("display", "none"); // peerBackup = $(peer).extends(true);
+      // peerBackup = peer;
+      // peer = peerBackup;
     }
   }, {
     key: "fullScreen",
@@ -63389,95 +63430,7 @@ function (_Component) {
             ref: function ref(_ref4) {
               _this5.userVideo = _ref4;
             }
-          }),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            id: "video_container"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
-            muted: true,
-            className: "my_video",
-            ref: function ref(_ref5) {
-              _this5.myVideo = _ref5;
-            }
-          }),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
-            className: "user_video",
-            id: "userVideo",
-            ref: function ref(_ref6) {
-              _this5.userVideo = _ref6;
-            }
-          }),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "video-controls"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "video-playback-controls"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "control-btn toggle-play-pause pause"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-play play-icon icon"
-          }),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-pause pause-icon icon"
-          })),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "video-volume-control"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "control-btn toggle-volume on"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-volume-up icon volume-on"
-          }),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-volume-mute icon volume-off"
-          })),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-            type: "range",
-            id: "volume-bar",
-            min: "0",
-            max: "1",
-            step: "0.1",
-            defaultValue: "1"
-          })),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "video-right-side"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "start-time time"
-          }, "00:00:00"),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            id: "fScreen",
-            onClick: function onClick() {
-              return _this5.fullScreen();
-            }
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "control-btn"
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fas fa-compress icon"
-          })))))))))),
+          })))),
           /*#__PURE__*/
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "modal-footer"
