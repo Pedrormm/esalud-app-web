@@ -63,7 +63,10 @@
                             <div class="contactInfo">
                               <p class="fullName">{{ $contact->name. " ".$contact->lastname }}</p>
                               <p class="dni">{{ $contact->dni }}</p>
-                            </div>                    
+                            </div>
+                            @if ($contact->unread)
+                              <span class="unread">{{ $contact->unread }}</span>
+                            @endif
                           </li>
                           
                         @endforeach

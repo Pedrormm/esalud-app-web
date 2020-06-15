@@ -18,7 +18,7 @@ class CreateMessages extends Migration
             $table->bigInteger('user_id_from')->unsigned()->comment('Emisor del mensaje');
             $table->bigInteger('user_id_to')->unsigned()->comment('Receptor del mensaje');
             $table->longText('message')->nullable()->comment('Texto del mensaje');
-            $table->smallInteger('read')->nullable()->comment('Mensaje leído');
+            $table->boolean('read')->nullable()->default(false)->comment('Mensaje leído');
             $table->softDeletes();
             $table->timestamps();
         });

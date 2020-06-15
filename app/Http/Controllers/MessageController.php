@@ -139,50 +139,25 @@ class MessageController extends Controller
 
 
     public function showMessaging(){
-        $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
-        ->select('messages.*', 'users.id', 
-        'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id')
-        ->where('user_id_to', auth()->id())
-        ->orderBy('messages.read')
-        ->orderByDesc('messages.created_at')
+        // Adding a lastMessageDate field to contact collection
+
+        $contacts = DB::table("users_with_messages_view")
+        ->select(\DB::raw('id, dni, sex, name, lastname, email, phone, avatar, MAX(`message_date`) as message_date'))
+        ->where('id', '!=', auth()->id())
+        ->groupBy('id')
+        ->orderByDesc(\DB::raw("MAX(message_date)"))
         ->get();
 
-        foreach($userMessages as $i=>$userMessage) {
-            $text = urldecode($userMessage->message);
-            $name = urldecode($userMessage->name);
-            $lastname = urldecode($userMessage->lastname);
-            $userMessage->messageCorrected = $text;
-            $userMessage->name = $name;
-            $userMessage->lastname = $lastname;
-            $userMessages[$i] = $userMessage;
-        }
-
-        $auxMessages = collect();
-        $processedIds = [];
-        foreach($userMessages as $i=>$userMessage) {
-            if (!in_array($userMessage->user_id_from, $processedIds)){
-                $processedIds[] = $userMessage->user_id_from;
-                $auxMessages->push($userMessage);                
-            }
-        }
-        $last_messages_to_logged_user = $auxMessages->toArray();
-
-        $auxMessages = $auxMessages->toArray();
-        $messages = []; //List of messages
-
-        //Array of contacts. Get all users except the authenticated one
-        $contacts = User::select('users.id', 'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.email', 'users.phone', 'users.avatar')
-        ->where('id', '!=', auth()->id())->get();
+        $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')->orderBy('messages.read')
+        ->where('user_id_to', auth()->id())->get();
 
         // Get a collection of items where sender_id is the user who sent us a message
         // and messages_count is the number of unread messages we have from him
         $unreadIds = Message::select(\DB::raw('`user_id_from` as sender_id, count(`user_id_from`) as messages_count'))
             ->where('user_id_to', auth()->id())
-            ->where('read', 0)
+            ->where('read', false)
             ->groupBy('user_id_from')
             ->get();
-
-        // dd($unreadIds->toArray());
 
         // Add an unread key to each contact with the count of unread messages
         $contacts = $contacts->map(function($contact) use ($unreadIds) {
@@ -193,9 +168,7 @@ class MessageController extends Controller
             return $contact;
         });
 
-        // dd($contacts->toArray());
-        return view('communication/messaging', ['userMessages' => $auxMessages,
-        'messages' => $messages, 'contacts' => $contacts]);
+        return view('communication/messaging', ['contacts' => $contacts]);
     }
 
     public function getContactInfo(Request $request){
@@ -216,9 +189,17 @@ class MessageController extends Controller
                 $q->where('user_id_from', $id);
                 $q->where('user_id_to', auth()->id());
             })
+            // ->update(['read' => true])
             ->get();
 
-            // dd($messages->toArray());
+            // $messages_from_user->each(function($item, $key) {
+            //     if (($item->read == false) && ($item->user_id_to == auth()->id()) ){
+            //         $item->read = true;
+            //         $item->save();
+            //     }
+            // });
+
+            // dd($messages_from_user->toArray());
 
             // Messages from the Request user id to the auth user Id
             $response = [
@@ -233,7 +214,7 @@ class MessageController extends Controller
     public function getMessagesFor($id)
     {
         // Mark all messages with the selected contact as read
-        Message::where('user_id_from', $id)->where('user_id_to', auth()->id())->update(['read' => 1]);
+        Message::where('user_id_from', $id)->where('user_id_to', auth()->id())->update(['read' => true]);
 
         // Get all messages between the authenticated user and the selected user
         $messages = Message::where(function($q) use ($id) {
@@ -274,15 +255,21 @@ class MessageController extends Controller
 
     public function send(Request $request)
     {
-        $message = Message::create([
-            'user_id_from' => auth()->id(),
-            'user_id_to' => $request->contact_id,
-            'message' => $request->message
-        ]);
+        if($request->ajax()) {
 
-        broadcast(new NewMessage($message));
+            $text = $request->msj;
+            $contact_id = (int)$request->contact_id;
 
-        return response()->json($message);
+            $message = Message::create([
+                'user_id_from' => auth()->id(),
+                'user_id_to' => $contact_id,
+                'message' => $text
+            ]);
+
+            // broadcast(new NewMessage($message));
+
+            return response()->json($message);
+        }
     }
     
 

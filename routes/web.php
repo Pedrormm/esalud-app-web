@@ -36,12 +36,13 @@ Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth'
 
 Route::get('user/index', 'LoginController@indexDashboard')->middleware('checkUserAuth');
 
-
 Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
 
 Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('checkUserAuth');
 Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('checkUserAuth');
 Route::get('comm/viewMessagesFrom/{id}', 'MessageController@viewMessagesFrom')->middleware('checkUserAuth');
+Route::post('comm/send', 'MessageController@send')->middleware('checkUserAuth');
+
 
 
 

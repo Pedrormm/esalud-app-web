@@ -52,7 +52,7 @@ export default class App extends Component {
         this.incomingCall = this.incomingCall.bind(this);
         this.endCall = this.endCall.bind(this);
         this.fullScreen = this.fullScreen.bind(this);
-
+        this.audioVideoPermissions = this.audioVideoPermissions.bind(this);
 
         this.handleFullScreen = this.handleFullScreen.bind(this);
         // this.isABootstrapModalOpen = this.isABootstrapModalOpen.bind(this);
@@ -65,29 +65,34 @@ export default class App extends Component {
 
     }
 
+    audioVideoPermissions(){
+        console.log("audioVideoPermissions");
+        this.mediaHandler.getPermissions()
+            .then((stream) => {
+                this.setState({hasMedia: true});
+                try{
+                    // Because of depracation and browsers support
+                    console.log("stream ", stream)
+                    this.user.stream = stream;
+                    this.myVideo.srcObject = stream;
+                } catch (e) {
+                    // Assigning source of my video the URL of the stream to have a source available
+                    this.myVideo.src = URL.createObjectURL(stream);
+                }
+                try{
+                    this.myVideo.play();
+                } catch (e) {
+                    console.error('user play error',e.message);
+                }
+            })
+    }
+
     componentDidMount(){
         console.log("componentDidMount all kind of peers: ",this.peers);
         
         // if(this.state.mode=='call'){
 
-            this.mediaHandler.getPermissions()
-                .then((stream) => {
-                    this.setState({hasMedia: true});
-                    try{
-                        // Because of depracation and browsers support
-                        console.log("stream ", stream)
-                        this.user.stream = stream;
-                        this.myVideo.srcObject = stream;
-                    } catch (e) {
-                        // Assigning source of my video the URL of the stream to have a source available
-                        this.myVideo.src = URL.createObjectURL(stream);
-                    }
-                    try{
-                        this.myVideo.play();
-                    } catch (e) {
-                        console.error('user play error',e.message);
-                    }
-                })
+            this.audioVideoPermissions();
 
             document.addEventListener('fullscreenchange', this.handleFullScreen, false);
             document.addEventListener('webkitfullscreenchange', this.handleFullScreen, false);
@@ -291,6 +296,10 @@ export default class App extends Component {
                 else if(signal.data.type=='answer'){
                     this.incomingCall(signal);
                 }
+                else if(signal.data.type=='close'){
+                    console.log(signal.userId);
+                    this.endCall(signal.userId);
+                }
                 else{
                     console.log("Tipo de llamada no reconocida");
                 }
@@ -343,12 +352,12 @@ export default class App extends Component {
 
         peer.on('data', (data) => { 
             console.log('data: ' + data);
-            console.log("DESTRUIDO!");
+            // console.log("DESTRUIDO!");
         });
 
-        peer.on('error', (err) => { 
-            console.log('error', err);
-        });
+        // peer.on('error', (err) => { 
+        //     console.log('error ', err);
+        // });
 
         peer.on('connect', function () {
             $("#callButton").css("display", "none");
@@ -368,8 +377,8 @@ export default class App extends Component {
 
         peer.on('close', () => {
             console.log('close...');
-            this.endCall(userId);
-
+            if (this.peers[Object.values(this.peers)[0]] !== undefined)
+                this.endCall(userId);
         });
 
         return peer;
@@ -391,6 +400,7 @@ export default class App extends Component {
         console.log("peers userid: "+ userId);
         console.log("all kind of peers: ",this.peers);
         console.log("asigned peer: ",this.peers[userId]);
+        this.audioVideoPermissions();
     }
 
     endCall(userId){
@@ -413,17 +423,32 @@ export default class App extends Component {
 
         if(peerKey !== undefined) {
         //    peer.destroy();
+            if (this.user.id == userId){
+                this.channel.trigger(`client-signal-${peerKey}`, { 
+                    type: 'close',
+                    userId: this.user.id,
+                    data: {type:'close'}
+                });
+            }
+
             // console.log("****************BackupPeer", this.backupPeer);
             console.log("peerkey vs userId:", peerKey, userId);
             console.log("****** before destroy",this.peers[peerKey]);
+            // this.peers[peerKey].signal("Close");
             this.peers[peerKey].destroy();
-            //delete this.peers[userId];
+            // delete this.peers[userId];
             console.log("****** after destroy",this.peers[peerKey]);
             //this.peers[userId] = this.startPeer(userId);
             // this.peers[userId] = this.backupPeer;
             console.log("****** after startPeer",this.peers[userId]);
+            this.peers[peerKey] = undefined;
+            // setTimeout(function() {            
+  
+            // }, 50);
+            // document.querySelector('#video_container').remove();
+            // $("#video_container").detach();
+            this.audioVideoPermissions();
             
-
         }
         else{
 
@@ -431,7 +456,7 @@ export default class App extends Component {
         //this.peers[userId] = undefined;
         // peer = peerBackup;
         // this.peers = peersBackup;
-        //this.peers = {};
+        // this.peers = {};
 
         $("#destroyButton").css("display", "none");
         $("#callButton").css("display", "inline");
@@ -514,7 +539,7 @@ export default class App extends Component {
                     onClick={ () => this.callTo(this.selectedUserId)}><i className="fa fa-phone"></i>&ensp;Call</button>
 
                     <button id="destroyButton" className="btn btn-danger" 
-                    onClick={ () => this.endCall(this.selectedUserId)}><i className="fas fa-phone-slash"></i>&ensp;End call</button>
+                    onClick={ () => this.endCall(this.user.id)}><i className="fas fa-phone-slash"></i>&ensp;End call</button>
 
                     {/*[1,2,3,4].map((userId) => {
                         return this.user.id !== userId ? <button key={userId} onClick={() => this.callTo(userId)}>Call {userId}</button> : null;

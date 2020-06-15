@@ -17,42 +17,43 @@ else {
         $(".contactsList li").removeClass( "selectedContact");
         this.classList.add("selectedContact");
         let contactId = this.getAttribute("value"); 
+        updateUnread(contactId, true);
+
         $.ajax(PublicURL + 'comm/getContactInfo', {
             dataType: 'json',
             data: {id: contactId},
             method:'get',
         }).done(function(res){
+            let contact = res["user_to_be_found"][0];
 
             // Asigning the found contact to variable to be used later, in handle incoming
             // selectedContact = res["user_to_be_found"];
 
-        //  messages = res["messages_from_user"];
-            
-            let fullName = res["user_to_be_found"][0].name + " " +res["user_to_be_found"][0].lastname;
-            $(".conversation .cHeader h4").text(res["user_to_be_found"][0] ? fullName : 'Select a Contact');
+            let fullName = contact.name + " " +contact.lastname;
+            $(".conversation .cHeader h4").text(contact ? fullName : 'Select a Contact');
 
-            if (res["user_to_be_found"][0]){
-            let msjs = res["messages_from_user"];
+            if (contact){
+                let msjs = res["messages_from_user"];
 
-            let str = '<ul>';
+                let str = '<ul class="messagesListFromUser">';
 
-            msjs.forEach(function(msj) {
-                if ((msj.user_id_from == res["user_to_be_found"][0].id) && (msj.user_id_to == authUser.id)){
-                str += '<li class="ownUser"><div class="text">'+ msj.message + '</div></li>';
-                }
-                else if ((msj.user_id_from == authUser.id) && (msj.user_id_to == res["user_to_be_found"][0].id)){
-                str += '<li class="alienUser"><div class="text">'+ msj.message + '</div></li>';
-                }
-                else{
-                //Error
-                console.error("User message id not found or incorrect");
-                }
+                msjs.forEach(function(msj) {
+                    if ((msj.user_id_from == contact.id) && (msj.user_id_to == authUser.id)){
+                    str += '<li class="ownUser"><div class="text">'+ msj.message + '</div></li>';
+                    }
+                    else if ((msj.user_id_from == authUser.id) && (msj.user_id_to == contact.id)){
+                    str += '<li class="alienUser"><div class="text">'+ msj.message + '</div></li>';
+                    }
+                    else{
+                    //Error
+                    console.error("User message id not found or incorrect");
+                    }
 
-            }); 
+                }); 
 
-            str += '</ul>';
-            // document.getElementById("cMessagesFeed").innerHTML = str;
-            $(".cMessagesFeed").html(str);
+                str += '</ul>';
+                // document.getElementById("cMessagesFeed").innerHTML = str;
+                $(".cMessagesFeed").html(str);
             }
 
 
@@ -75,20 +76,21 @@ else {
             })
 
             $(".cMessagesFeed").addClass("scroller");                     
-
-            $(".cMessageComposer").keydown(function(event){
-            if(event.key === 'Enter') {
-                event.preventDefault();
-                sendMessage();
-            }
-            });
+            $('.cMessageComposer').data('recipient-id', contact.id);
             
         })
         .fail(function(xhr, st, err) {
             console.error("error in comm/getContactInfo " + xhr, st, err);
         }); 
     }
-
+    $(".cMessageComposer").keydown(function(event){
+        if(event.key === 'Enter') {
+            event.preventDefault();
+            let writtenMessage = $(".cMessageComposer textarea");
+            console.log("selectedUserId", $(this).data('recipient-id'));
+            sendMessage(writtenMessage, $(this).data('recipient-id'));
+        }
+    });
     arrContacts.forEach((c) => { c.addEventListener('click', handleContactClick);})       
     // Watcher. Scroll when there's a change in the messages feed. Watcher for contacts and for messages.
     // Call when clicked on  a contact. It'll also be called when a new message is created
@@ -97,5 +99,30 @@ else {
             scrollToBottom(".cMessagesFeed");
         }
     });
+
+    function updateUnread(contactId, reset) {
+        let found = $('.contactsList li[value='+contactId+']');
+
+        if (found[0]){
+            console.log("found", found[0]);
+            let unReadFound = found.find('.unread');
+            if (reset){
+                if (unReadFound[0])
+                    unReadFound.remove();              
+            }
+            else{
+                if (unReadFound[0]){
+                    unReadFound.text(parseInt(unReadFound.text())+1);
+                }
+                else{
+                    found.append($('<span />').addClass("unread").text('1'));
+                } 
+            }
+        }
+        else{
+            console.log("Not found");
+        }
+
+    } 
 
 }

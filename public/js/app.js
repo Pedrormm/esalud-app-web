@@ -62776,21 +62776,21 @@ function (_Component) {
     _this.incomingCall = _this.incomingCall.bind(_assertThisInitialized(_this));
     _this.endCall = _this.endCall.bind(_assertThisInitialized(_this));
     _this.fullScreen = _this.fullScreen.bind(_assertThisInitialized(_this));
+    _this.audioVideoPermissions = _this.audioVideoPermissions.bind(_assertThisInitialized(_this));
     _this.handleFullScreen = _this.handleFullScreen.bind(_assertThisInitialized(_this)); // this.isABootstrapModalOpen = this.isABootstrapModalOpen.bind(this);
+    // this.backupPeer;
 
-    _this.backupPeer;
     console.log("MODAL: ", isABootstrapModalOpen());
     console.log("ending constructor all kind of peers: ", _this.peers);
     return _this;
   }
 
   _createClass(App, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
+    key: "audioVideoPermissions",
+    value: function audioVideoPermissions() {
       var _this2 = this;
 
-      console.log("componentDidMount all kind of peers: ", this.peers); // if(this.state.mode=='call'){
-
+      console.log("audioVideoPermissions");
       this.mediaHandler.getPermissions().then(function (stream) {
         _this2.setState({
           hasMedia: true
@@ -62812,6 +62812,13 @@ function (_Component) {
           console.error('user play error', e.message);
         }
       });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      console.log("componentDidMount all kind of peers: ", this.peers); // if(this.state.mode=='call'){
+
+      this.audioVideoPermissions();
       document.addEventListener('fullscreenchange', this.handleFullScreen, false);
       document.addEventListener('webkitfullscreenchange', this.handleFullScreen, false);
       document.addEventListener('mozfullscreenchange', this.handleFullScreen, false);
@@ -62882,8 +62889,7 @@ function (_Component) {
         });
         console.log('He sido llamado por: ', signal.userId); // peer = this.startPeer(signal.userId, false);
 
-        this.peers[signal.userId] = this.startPeer(signal.userId, false);
-        this.backupPeer = this.peers[signal.userId];
+        this.peers[signal.userId] = this.startPeer(signal.userId, false); // this.backupPeer = this.peers[signal.userId];
       } else {
         console.log("Full Signal, soy el que llama: ", signal);
       } // peer.signal(signal.data);
@@ -62985,6 +62991,10 @@ function (_Component) {
           }
         } else if (signal.data.type == 'answer') {
           _this3.incomingCall(signal);
+        } else if (signal.data.type == 'close') {
+          console.log(signal.userId);
+
+          _this3.endCall(signal.userId);
         } else {
           console.log("Tipo de llamada no reconocida");
         }
@@ -63039,12 +63049,11 @@ function (_Component) {
         console.log("stream removed... ");
       });
       peer.on('data', function (data) {
-        console.log('data: ' + data);
-        console.log("DESTRUIDO!");
-      });
-      peer.on('error', function (err) {
-        console.log('error', err);
-      });
+        console.log('data: ' + data); // console.log("DESTRUIDO!");
+      }); // peer.on('error', (err) => { 
+      //     console.log('error ', err);
+      // });
+
       peer.on('connect', function () {
         $("#callButton").css("display", "none");
         $("#destroyButton").css("display", "inline");
@@ -63062,8 +63071,7 @@ function (_Component) {
       });
       peer.on('close', function () {
         console.log('close...');
-
-        _this4.endCall(userId);
+        if (_this4.peers[Object.values(_this4.peers)[0]] !== undefined) _this4.endCall(userId);
       });
       return peer;
     }
@@ -63081,11 +63089,12 @@ function (_Component) {
     key: "callTo",
     value: function callTo(userId) {
       this.peers[userId] = this.startPeer(userId); // Assigning the peer this userId
+      // this.backupPeer = this.peers[userId];
 
-      this.backupPeer = this.peers[userId];
       console.log("peers userid: " + userId);
       console.log("all kind of peers: ", this.peers);
       console.log("asigned peer: ", this.peers[userId]);
+      this.audioVideoPermissions();
     }
   }, {
     key: "endCall",
@@ -63108,19 +63117,36 @@ function (_Component) {
 
       if (peerKey !== undefined) {
         //    peer.destroy();
-        console.log("****************BackupPeer", this.backupPeer);
+        if (this.user.id == userId) {
+          this.channel.trigger("client-signal-".concat(peerKey), {
+            type: 'close',
+            userId: this.user.id,
+            data: {
+              type: 'close'
+            }
+          });
+        } // console.log("****************BackupPeer", this.backupPeer);
+
+
         console.log("peerkey vs userId:", peerKey, userId);
-        console.log("****** before destroy", this.peers[peerKey]); //this.peers[peerKey].destroy();
+        console.log("****** before destroy", this.peers[peerKey]); // this.peers[peerKey].signal("Close");
 
-        delete this.peers[userId];
+        this.peers[peerKey].destroy(); // delete this.peers[userId];
+
         console.log("****** after destroy", this.peers[peerKey]); //this.peers[userId] = this.startPeer(userId);
+        // this.peers[userId] = this.backupPeer;
 
-        this.peers[userId] = this.backupPeer;
         console.log("****** after startPeer", this.peers[userId]);
+        this.peers[peerKey] = undefined; // setTimeout(function() {            
+        // }, 50);
+        // document.querySelector('#video_container').remove();
+        // $("#video_container").detach();
+
+        this.audioVideoPermissions();
       } else {} //this.peers[userId] = undefined;
       // peer = peerBackup;
       // this.peers = peersBackup;
-      //this.peers = {};
+      // this.peers = {};
 
 
       $("#destroyButton").css("display", "none");
@@ -63221,7 +63247,7 @@ function (_Component) {
             id: "destroyButton",
             className: "btn btn-danger",
             onClick: function onClick() {
-              return _this5.endCall(_this5.selectedUserId);
+              return _this5.endCall(_this5.user.id);
             }
           },
           /*#__PURE__*/

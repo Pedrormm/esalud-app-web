@@ -169,8 +169,6 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
             else {
                 $('#count').text(' [' + displaySeconds + ']');
             }
-                //console.log("Pero yo quien soy?");
-            //Esto no hace nada $( this ).off( event );
         });
         function refreshCountdown() {
             // console.log("refreshCountdown con", seconds, "segudnos");
@@ -408,17 +406,38 @@ function isInVideoCallView() {
     return window.location.href != (URL+'user/video-call');
 }
 
-function sendMessage() {
-    let writtenMessage = $(".cMessageComposer textarea").val();
-    if (writtenMessage && (writtenMessage != "")){
+function sendMessage(writtenMessage="", userToMessageId=null) {
+    let msj = writtenMessage.val();
+    if (msj && (msj != "")){
 
-        // Creating a post event to the backEnd with the contactId and the message text, to then add it to the msj array
-        // console.log(writtenMessage);
+        console.log(msj);
+        console.log(userToMessageId);
+        $.ajax(PublicURL + 'comm/send', {
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },  
+            dataType: 'json',
+            data: {contact_id: userToMessageId, msj: msj},
+            method:'post',
+        }).done(function(res){
+            // We push the new message into the messages array cause we already have the other messages locally
+            // We add the msj to the parent
+            saveNewMessage(res);
+        })
+        .fail(function(xhr, st, err) {
+            console.error("error in comm/send " + xhr, st, err);
+        }); 
 
-        // If we don't have a selectedContact
-
-        $(".cMessageComposer textarea").val('');     
+        writtenMessage.val('');     
     }
+}
+
+function saveNewMessage(messageObj) {
+    console.log("message",messageObj.message);
+    // We just have to append the message after the last li, with the proper class
+    $(".messagesListFromUser").append(
+        $('<li />').addClass("alienUser").append($('<div />').addClass("text").text(messageObj.message))
+    );
 }
 
 function scrollToBottom(element, speed=10) {
@@ -430,7 +449,7 @@ function scrollToBottom(element, speed=10) {
 
         setTimeout(function() {            
             if (docHeight !== scrollHeight){
-                console.log("not bottom!");
+                // console.log("not bottom!");
                 let maxValue = Number.MAX_SAFE_INTEGER;
                 let bigInt = BigInt(Math.pow(maxValue,2));   
                 $(element).animate({ scrollTop: bigInt }, 'slow');

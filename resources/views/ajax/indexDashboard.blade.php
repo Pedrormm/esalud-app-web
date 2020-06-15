@@ -1,4 +1,6 @@
-{{-- <img class="" src="{{ asset('images/healthIndex.png') }}">  --}}
+    {{-- <div class="indexImgContainer">
+        <img class="" src="{{ asset('images/healthIndex.png') }}"> 
+    </div> --}}
 
 
 {{-- <table class="table table-hover">
