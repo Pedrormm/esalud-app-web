@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Message;
 use App\Models\User;
 use DB;
+use App\Custom\PusherFactory;
 
 
 class MessageController extends Controller
@@ -229,7 +230,7 @@ class MessageController extends Controller
         return response()->json($messages);
     }
 
-    public function viewMessagesFrom($id){
+    public function viewMessagesFromMobile($id){
 
         $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name', 
         'users.lastname', 'users.email', 'users.phone', 'users.avatar')
@@ -249,7 +250,7 @@ class MessageController extends Controller
 
         // dd($messages_from_user->toArray());        
 
-        return view('communication/view_messages_from', ['userFound' => $user_to_be_found,
+        return view('communication/view_messages_from_mobile', ['userFound' => $user_to_be_found,
         'userMessages' => $messages_from_user]);
     }
 
@@ -266,6 +267,8 @@ class MessageController extends Controller
                 'message' => $text
             ]);
 
+            // $message->log = PusherFactory::make()->trigger('chat', 'send', ['data' => $message]);
+            
             // broadcast(new NewMessage($message));
 
             return response()->json($message);

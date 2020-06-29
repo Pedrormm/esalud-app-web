@@ -11,6 +11,27 @@ use DB;
 
 class UsersManagementController extends Controller
 {
+    public function newUser(){
+        $user = Auth::user();
+
+        if (is_null($ord)){
+            $ord = 'users.id';
+        }
+
+        $staff = Staff::join('users', 'staff.user_id', 'users.id')->get()->toArray();
+
+        if (!is_null($search) && !empty($search) && isset($search)){
+            $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)        
+            ->where('name', 'LIKE', '%'.$search.'%')
+            ->orWhere('lastname', 'LIKE', '%'.$search.'%')
+            ->orWhere('historic', 'LIKE', '%'.$search.'%')
+            ->orWhere('dni', 'LIKE', '%'.$search.'%')
+            ->get()->toArray();
+        }
+        
+        return view('user/newUser', ['staff' => $staff,'user' => $user]);    
+    }
+
     public function showStaff(string $search=null, string $ord=null){
         $user = Auth::user();
 

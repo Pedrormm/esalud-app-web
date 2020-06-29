@@ -16,7 +16,7 @@
             <div class="card-body messagingCardBody">
 
                 <div class="messagingContainer">
-                    <div class="conversationMobile" data-contact="#selectedContact">
+                    <div class="conversationMobile" data-selectedUserId={{ $userFound[0]["id"] }}>
                         
                         <div class="cHeader">
                             <button type="button" class="btn btn-primary">
@@ -25,11 +25,9 @@
                             <h4>{{ $userFound[0]["name"] . " " . $userFound[0]["lastname"] }}</h4>
                         </div>
 
-                                   
+                         
                         <div class="cMessagesFeed scroller" style="max-height: 64vh; overflow: scroll;">
                             <ul>
-                                {{-- <li class="ownUser"><div class="text">Hola, da cita a Gema</div>
-                                </li> --}}
                                 @foreach ($userMessages as $userMessage)
 
                                     @if ($userMessage["user_id_from"] == $user->id)
@@ -64,11 +62,11 @@
     </div>
     <!-- /.container-fluid -->
 
-    <script type="text/javascript" src="{{ asset('js/viewMessagesFrom.js')}}"></script>
+    <script>
+        let authUser = @json($user->toArray());
+    </script>
 
-<script>
-
-</script>
-
+    <script type="text/javascript" src="{{ asset('js/viewMessagesFromMobile.js')}}"></script>
     
 @endsection
+

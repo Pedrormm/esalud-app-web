@@ -13,7 +13,7 @@ class CreateViewUsersWithMessagesView extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE VIEW users_with_messages_view AS
+        DB::statement("CREATE OR REPLACE VIEW users_with_messages_view AS
         SELECT * FROM (
         SELECT A.*,B.created_at as message_date FROM
         users A

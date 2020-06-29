@@ -1,6 +1,18 @@
+
     $(function() {
         $(".cMessageComposer textarea").focus();
         scrollToBottom(".cMessagesFeed");
+    });
+
+    let pusher = chatPusherInit();
+    let chatPusher = pusher[0];
+    let chatChannel = pusher[1];
+
+    chatChannel.bind(`client-send`, (data) => {
+        console.log("Recibido client-send", data);
+        if (data.idReceiver == authUser.id){
+            saveNewMessage(data);
+        }
     });
 
     $('.cHeader button').on('click', function(e){
@@ -43,11 +55,9 @@
     $(".cMessageComposer textarea").keydown(function(event){
         if(event.key === 'Enter') {
             event.preventDefault();
-            sendMessage();
+            let writtenMessage = $(".cMessageComposer textarea");
+            sendMessage(writtenMessage, $(".conversationMobile").attr("data-selectedUserId"),
+            authUser.id, chatChannel);
         }
 
-    });
-    $('.cMessageComposer i').on('click', function(e){
-        e.preventDefault();
-        sendMessage();
     });

@@ -62,6 +62,8 @@ export default class App extends Component {
         console.log("MODAL: ", isABootstrapModalOpen());
         console.log("ending constructor all kind of peers: ",this.peers);
 
+        this.globalStream = null;
+        this.globalTrack = null;
 
     }
 
@@ -178,6 +180,7 @@ export default class App extends Component {
             console.log('He sido llamado por: ', signal.userId);
             // peer = this.startPeer(signal.userId, false);
             this.peers[signal.userId] = this.startPeer(signal.userId, false);
+            console.log("****** after asigning peers to startPeer ",this.peers);
             // this.backupPeer = this.peers[signal.userId];
         } else{
             console.log("Full Signal, soy el que llama: ",signal);
@@ -193,7 +196,7 @@ export default class App extends Component {
         console.log("setup pusher");
         // console.log("This User id: "+this.user.id);
        // console.log("Signal id: "+signal.userId);
-        Pusher.logToConsole = true;
+        Pusher.logToConsole = false;
         this.pusher = new Pusher(APP_KEY, {
             // authEndpoint: 'https://localhost/esalud-app-web/public/pusher/auth',
             authEndpoint: PublicURL+'pusher/auth',
@@ -236,12 +239,9 @@ export default class App extends Component {
 
                     if (!utils.isInVideoCallView()){
                         
-
-                        
-
-
                         showModalConfirm("Llamada de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
                             // window.location.replace(PublicURL+'user/video-call/'+JSON.stringify(signal));
+                            $('#saveModal').off('click');
                             console.log("NO EN VENTANA VIDEO");
 
                             $("#video-modal").modal("show");
@@ -266,7 +266,7 @@ export default class App extends Component {
                             });
 
                             $('#video-modal').on('hidden.bs.modal', function () {
-                                location.reload();
+                                // location.reload();
                             });
 
                             this.incomingCall(signal);
@@ -327,6 +327,7 @@ export default class App extends Component {
 
         peer.on('stream', (stream) => { //Callback for user stream, the user video
             console.log("Recibe User Video",stream, this.peers);
+            this.globalStream = stream;
 
             try {
                 this.userVideo.srcObject = stream;
@@ -341,8 +342,9 @@ export default class App extends Component {
             }
         });
 
-        peer.on('track', () => {
-            console.log('new track arrived... ');  
+        peer.on('track', (track, stream) => {
+            this.globalTrack = track;
+            console.log('new track arrived... ', track, stream);  
         });
     
         peer.on('removestream', () => {
@@ -400,7 +402,7 @@ export default class App extends Component {
         console.log("peers userid: "+ userId);
         console.log("all kind of peers: ",this.peers);
         console.log("asigned peer: ",this.peers[userId]);
-        this.audioVideoPermissions();
+        // this.audioVideoPermissions();
     }
 
     endCall(userId){
@@ -411,6 +413,7 @@ export default class App extends Component {
 
         console.log("cancel incomingCall peer: ",this.peers);
 
+        this.userVideo.pause();
         try{
             this.userVideo.srcObject = null;
         } catch (e) {
@@ -423,6 +426,10 @@ export default class App extends Component {
 
         if(peerKey !== undefined) {
         //    peer.destroy();
+            // peer.removeTrack(this.globalTrack);
+            // peer.removeStream(this.globalStream);
+            // peer.removeTrack(this.globalStream.getAudioTracks()[0], stream);
+
             if (this.user.id == userId){
                 this.channel.trigger(`client-signal-${peerKey}`, { 
                     type: 'close',
@@ -445,9 +452,19 @@ export default class App extends Component {
             // setTimeout(function() {            
   
             // }, 50);
-            // document.querySelector('#video_container').remove();
-            // $("#video_container").detach();
-            this.audioVideoPermissions();
+            console.log("****** after undefined",this.peers);
+            // this.peers = {};
+
+            // document.querySelector('#userVideo').remove();
+            
+            // let newVideo = document.createElement("video");
+            // newVideo.className = "user_video";
+            // newVideo.id = "userVideo";
+
+            // $(newVideo).insertAfter("#myVideo");
+            // this.userVideo = newVideo;
+
+            // this.audioVideoPermissions();
             
         }
         else{
@@ -549,7 +566,7 @@ export default class App extends Component {
 
                     {/* Video for the caller and the reciever */}
                     <div id="video_container">
-                        <video muted className="my_video" 
+                        <video muted className="my_video" id="myVideo"
                         ref={(ref) => {this.myVideo = ref;}}></video>
                         <video className="user_video" id="userVideo"
                         ref={(ref) => {this.userVideo = ref;}}></video>

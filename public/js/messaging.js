@@ -1,7 +1,50 @@
+
+
+let pusher = chatPusherInit();
+let chatPusher = pusher[0];
+let chatChannel = pusher[1];
+
+chatChannel.bind(`client-send`, (data) => {
+    console.log("Recibido client-send", data);
+    if (data.idReceiver == authUser.id){
+        let written = saveNewMessage(data);
+        updateUnread(data.idSender, false, written);
+    }
+});
+
 let width = $(window).width();
+
+function updateUnread(contactId, reset, written=false) {
+    let found = $('.contactsList li[value='+contactId+']');
+    // console.log(contactId);
+    if (found[0]){
+        // console.log("found", found[0]);
+        let unReadFound = found.find('.unread');
+        if (reset){
+            if (unReadFound[0])
+                unReadFound.remove();              
+        }
+        else{
+            console.log("WWW");
+            if (!written){
+                if (unReadFound[0]){
+                    unReadFound.text(parseInt(unReadFound.text())+1);
+                }
+                else{
+                    found.append($('<span />').addClass("unread").text('1'));
+                } 
+            }
+        }
+    }
+    else{
+        console.log("Not found");
+    }
+} 
+
 if (width < 768) {
     $('.contactsList li').click(function(e) {
-        location.assign(PublicURL+"comm/viewMessagesFrom"+"/"+$(this).val());
+        updateUnread($(this).val(), true);
+        location.assign(PublicURL+"comm/viewMessagesFromMobile"+"/"+$(this).val());
     });
 } 
 else {
@@ -35,7 +78,7 @@ else {
             if (contact){
                 let msjs = res["messages_from_user"];
 
-                let str = '<ul class="messagesListFromUser">';
+                let str = '<ul>';
 
                 msjs.forEach(function(msj) {
                     if ((msj.user_id_from == contact.id) && (msj.user_id_to == authUser.id)){
@@ -87,8 +130,9 @@ else {
         if(event.key === 'Enter') {
             event.preventDefault();
             let writtenMessage = $(".cMessageComposer textarea");
-            console.log("selectedUserId", $(this).data('recipient-id'));
-            sendMessage(writtenMessage, $(this).data('recipient-id'));
+            // console.log("selectedUserId", $(this).data('recipient-id'));
+
+            sendMessage(writtenMessage, $(this).data('recipient-id'), authUser.id, chatChannel);
         }
     });
     arrContacts.forEach((c) => { c.addEventListener('click', handleContactClick);})       
@@ -100,29 +144,6 @@ else {
         }
     });
 
-    function updateUnread(contactId, reset) {
-        let found = $('.contactsList li[value='+contactId+']');
 
-        if (found[0]){
-            console.log("found", found[0]);
-            let unReadFound = found.find('.unread');
-            if (reset){
-                if (unReadFound[0])
-                    unReadFound.remove();              
-            }
-            else{
-                if (unReadFound[0]){
-                    unReadFound.text(parseInt(unReadFound.text())+1);
-                }
-                else{
-                    found.append($('<span />').addClass("unread").text('1'));
-                } 
-            }
-        }
-        else{
-            console.log("Not found");
-        }
-
-    } 
 
 }

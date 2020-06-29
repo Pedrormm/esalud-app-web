@@ -19,7 +19,6 @@
     }
 
     function getTimeName () {
-
         $time = Carbon::now()->toDateTimeString();
         $time = str_replace('-', '', $time);
         $time = str_replace(':', '', $time);
@@ -71,3 +70,18 @@
     
             return $t;
     }
+
+    function createUniqueToken(string $table, string $field, int $maxChars=16) {
+        $maxIterations = HV_MAX_ITERATION_TOKEN;
+        $iteration = 0;
+        do {
+            $newToken = str_random($maxChars);
+            if($iteration>$maxIterations) {
+                return false;
+            }
+            $iteration++;
+        }while(\DB::table($table)->select($field)->where($field,'=',$newToken)->count());
+        return $newToken;
+    }
+
+    

@@ -40,7 +40,7 @@ Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
 
 Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('checkUserAuth');
 Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('checkUserAuth');
-Route::get('comm/viewMessagesFrom/{id}', 'MessageController@viewMessagesFrom')->middleware('checkUserAuth');
+Route::get('comm/viewMessagesFromMobile/{id}', 'MessageController@viewMessagesFromMobile')->middleware('checkUserAuth');
 Route::post('comm/send', 'MessageController@send')->middleware('checkUserAuth');
 
 
@@ -64,6 +64,9 @@ Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
 Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');
 Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('checkUserAuth');
+Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('checkUserAuth');
+
+Route::get('user/create', 'UsersManagementController@create')->middleware('checkUserAuth');
 
 
 Route::post('user/logout', 'LoginController@logout');

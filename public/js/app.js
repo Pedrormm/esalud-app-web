@@ -62782,6 +62782,8 @@ function (_Component) {
 
     console.log("MODAL: ", isABootstrapModalOpen());
     console.log("ending constructor all kind of peers: ", _this.peers);
+    _this.globalStream = null;
+    _this.globalTrack = null;
     return _this;
   }
 
@@ -62889,7 +62891,8 @@ function (_Component) {
         });
         console.log('He sido llamado por: ', signal.userId); // peer = this.startPeer(signal.userId, false);
 
-        this.peers[signal.userId] = this.startPeer(signal.userId, false); // this.backupPeer = this.peers[signal.userId];
+        this.peers[signal.userId] = this.startPeer(signal.userId, false);
+        console.log("****** after asigning peers to startPeer ", this.peers); // this.backupPeer = this.peers[signal.userId];
       } else {
         console.log("Full Signal, soy el que llama: ", signal);
       } // peer.signal(signal.data);
@@ -62907,7 +62910,7 @@ function (_Component) {
       console.log("setup pusher"); // console.log("This User id: "+this.user.id);
       // console.log("Signal id: "+signal.userId);
 
-      pusher_js__WEBPACK_IMPORTED_MODULE_5___default.a.logToConsole = true;
+      pusher_js__WEBPACK_IMPORTED_MODULE_5___default.a.logToConsole = false;
       this.pusher = new pusher_js__WEBPACK_IMPORTED_MODULE_5___default.a(APP_KEY, {
         // authEndpoint: 'https://localhost/esalud-app-web/public/pusher/auth',
         authEndpoint: PublicURL + 'pusher/auth',
@@ -62948,6 +62951,7 @@ function (_Component) {
           if (!_VideoUtils__WEBPACK_IMPORTED_MODULE_4__["isInVideoCallView"]()) {
             showModalConfirm("Llamada de " + whoCalls, "¿Desea aceptar la llamada?", function () {
               // window.location.replace(PublicURL+'user/video-call/'+JSON.stringify(signal));
+              $('#saveModal').off('click');
               console.log("NO EN VENTANA VIDEO");
               $("#video-modal").modal("show");
               $('#video-modal .modalCollapse').show();
@@ -62965,8 +62969,7 @@ function (_Component) {
                 });
                 return;
               });
-              $('#video-modal').on('hidden.bs.modal', function () {
-                location.reload();
+              $('#video-modal').on('hidden.bs.modal', function () {// location.reload();
               });
 
               _this3.incomingCall(signal);
@@ -63028,6 +63031,7 @@ function (_Component) {
       peer.on('stream', function (stream) {
         //Callback for user stream, the user video
         console.log("Recibe User Video", stream, _this4.peers);
+        _this4.globalStream = stream;
 
         try {
           _this4.userVideo.srcObject = stream;
@@ -63041,8 +63045,9 @@ function (_Component) {
           console.error('user play error', e.message);
         }
       });
-      peer.on('track', function () {
-        console.log('new track arrived... ');
+      peer.on('track', function (track, stream) {
+        _this4.globalTrack = track;
+        console.log('new track arrived... ', track, stream);
       });
       peer.on('removestream', function () {
         //removeRemoteVideoElement(peerid); 
@@ -63093,8 +63098,7 @@ function (_Component) {
 
       console.log("peers userid: " + userId);
       console.log("all kind of peers: ", this.peers);
-      console.log("asigned peer: ", this.peers[userId]);
-      this.audioVideoPermissions();
+      console.log("asigned peer: ", this.peers[userId]); // this.audioVideoPermissions();
     }
   }, {
     key: "endCall",
@@ -63104,6 +63108,7 @@ function (_Component) {
       // }
       // location.reload();
       console.log("cancel incomingCall peer: ", this.peers);
+      this.userVideo.pause();
 
       try {
         this.userVideo.srcObject = null;
@@ -63117,6 +63122,9 @@ function (_Component) {
 
       if (peerKey !== undefined) {
         //    peer.destroy();
+        // peer.removeTrack(this.globalTrack);
+        // peer.removeStream(this.globalStream);
+        // peer.removeTrack(this.globalStream.getAudioTracks()[0], stream);
         if (this.user.id == userId) {
           this.channel.trigger("client-signal-".concat(peerKey), {
             type: 'close',
@@ -63139,10 +63147,15 @@ function (_Component) {
         console.log("****** after startPeer", this.peers[userId]);
         this.peers[peerKey] = undefined; // setTimeout(function() {            
         // }, 50);
-        // document.querySelector('#video_container').remove();
-        // $("#video_container").detach();
 
-        this.audioVideoPermissions();
+        console.log("****** after undefined", this.peers); // this.peers = {};
+        // document.querySelector('#userVideo').remove();
+        // let newVideo = document.createElement("video");
+        // newVideo.className = "user_video";
+        // newVideo.id = "userVideo";
+        // $(newVideo).insertAfter("#myVideo");
+        // this.userVideo = newVideo;
+        // this.audioVideoPermissions();
       } else {} //this.peers[userId] = undefined;
       // peer = peerBackup;
       // this.peers = peersBackup;
@@ -63262,6 +63275,7 @@ function (_Component) {
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("video", {
             muted: true,
             className: "my_video",
+            id: "myVideo",
             ref: function ref(_ref) {
               _this5.myVideo = _ref;
             }

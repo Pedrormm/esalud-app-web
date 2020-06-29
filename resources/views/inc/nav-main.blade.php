@@ -21,7 +21,10 @@
             <span style="font-size:1.15rem">Dashboard</span></a>
         </li>
 
-        @if ($user->role_id == HV_ROLES::PERM_ADMIN)
+
+        @if ( in_array($user->role_id, [HV_ROLES::PERM_DOCTOR,HV_ROLES::PERM_HELPER,HV_ROLES::PERM_ADMIN],
+         true ) ) 
+
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -40,7 +43,7 @@
             <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUserManagement" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User administration:</h6>
-                <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/create') }}">Create new user</a>
+                <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/newUser') }}">Create new user</a>
                 <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/user/user') }}">Show all users</a>
                 <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/user/patient') }}">Patient management</a>
                 <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/user/staff') }}">Staff management</a>

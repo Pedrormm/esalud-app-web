@@ -16,6 +16,7 @@ $(function() {
 let PublicURL= location.href.substring(0, location.href.includes('.test')? location.href.indexOf('.test')+6 : 
  location.href.includes('public') ? location.href.indexOf('public')+7:console.log("Url not found"));
 
+ 
 let roleId;
 
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
@@ -243,10 +244,10 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
 
 function showModalConfirm(title="Title", message="No message", callback=function(){},callbackClose=function(){}, optConfirmText="Ok",
 secondsToCancel=null, avoidClose=true) {
-    let mainId = '#generic-modal';
-    let buttonOkId = '#saveModal';
-    let buttonCloseId = '#closeModal';
-    $('.modal-title').text(title);
+    let mainId = '#confirm-modal';
+    let buttonOkId = '#okConfirmModal';
+    let buttonCloseId = '#closeModalConfirm';
+    $(mainId + ' .modal-title').text(title);
     $(mainId + ' .modal-body').text(message);
     callback = (function() {
         let cachedFunction = callback;
@@ -255,6 +256,11 @@ secondsToCancel=null, avoidClose=true) {
             $(mainId).modal('hide');
         }
     })();
+
+    $(mainId).modal({
+        backdrop: 'static',
+        keyboard: false
+    });
 
     callbackClose = (function() {
         let cachedFunction = callbackClose;
@@ -406,12 +412,15 @@ function isInVideoCallView() {
     return window.location.href != (URL+'user/video-call');
 }
 
-function sendMessage(writtenMessage="", userToMessageId=null) {
+function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channel=null ) {
     let msj = writtenMessage.val();
     if (msj && (msj != "")){
+        channel.trigger(`client-send`, { 
+            idSender: idSender,
+            idReceiver: userToMessageId,
+            message: msj
+        });
 
-        console.log(msj);
-        console.log(userToMessageId);
         $.ajax(PublicURL + 'comm/send', {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -422,7 +431,7 @@ function sendMessage(writtenMessage="", userToMessageId=null) {
         }).done(function(res){
             // We push the new message into the messages array cause we already have the other messages locally
             // We add the msj to the parent
-            saveNewMessage(res);
+            saveNewMessage(res, true);
         })
         .fail(function(xhr, st, err) {
             console.error("error in comm/send " + xhr, st, err);
@@ -432,17 +441,29 @@ function sendMessage(writtenMessage="", userToMessageId=null) {
     }
 }
 
-function saveNewMessage(messageObj) {
-    console.log("message",messageObj.message);
+function saveNewMessage(messageObj, alienUser=false) {
+    let appended = false;
+    console.log("messageSave",messageObj.message);
     // We just have to append the message after the last li, with the proper class
-    $(".messagesListFromUser").append(
-        $('<li />').addClass("alienUser").append($('<div />').addClass("text").text(messageObj.message))
-    );
+    if (alienUser){
+        $(".cMessagesFeed ul").append(
+            $('<li />').addClass("alienUser").append($('<div />').addClass("text").text(messageObj.message))
+        );  
+    }
+    else{
+        $(".cMessagesFeed ul").append(
+            $('<li />').addClass("ownUser").append($('<div />').addClass("text").text(messageObj.message))
+        );
+    }
+    if($(".cMessagesFeed ul").length > 0)
+        appended = true;
+
+    return appended;
 }
 
 function scrollToBottom(element, speed=10) {
     setTimeout(function() {
-        $(element).animate({ scrollTop: $(document).height() }, 10);
+        $(element).animate({ scrollTop: $(document).height() }, speed);
 
         let docHeight = getDocHeight();
         let scrollHeight = $(window).scrollTop() + $(window).height();
@@ -465,6 +486,29 @@ function getDocHeight() {
         D.body.offsetHeight, D.documentElement.offsetHeight,
         D.body.clientHeight, D.documentElement.clientHeight
     );
+}
+
+function chatPusherInit() {
+    Pusher.logToConsole = false;
+
+    let chatPusher = new Pusher("9e2cbb3bb69dab826cef", {
+        authEndpoint: PublicURL+'pusher/auth',
+        cluster: 'ap2',
+        encrypted: true,
+        auth: { 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, 
+            params: authUser.id,
+        }
+    });
+    
+    chatPusher.connection.bind( 'error', function( err ) {
+        console.log("Pusher chat error: ",err);
+    });
+    
+    let chatChannel = chatPusher.subscribe('presence-chat-channel');
+    return [chatPusher, chatChannel];
 }
 
 

@@ -113,7 +113,10 @@
 
                 <script type="text/javascript" src="{{ asset('js/typo/typo.js') }}"></script>
 
-               
+                {{-- Pusher --}}
+                <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
+
+
         <script>
                 const _PUBLIC_URL = "{{ asset('') }}";
         </script>
