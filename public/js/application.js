@@ -16,6 +16,13 @@ $(function() {
 let PublicURL= location.href.substring(0, location.href.includes('.test')? location.href.indexOf('.test')+6 : 
  location.href.includes('public') ? location.href.indexOf('public')+7:console.log("Url not found"));
 
+Date.prototype.today = function () { 
+    return ((this.getDate() < 10)?"0":"") + this.getDate() +"-"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"-"+ this.getFullYear();
+}
+
+Date.prototype.timeNow = function () {
+     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
  
 let roleId;
 
@@ -431,6 +438,7 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
         }).done(function(res){
             // We push the new message into the messages array cause we already have the other messages locally
             // We add the msj to the parent
+            console.log("res: ",res);
             saveNewMessage(res, true);
         })
         .fail(function(xhr, st, err) {
@@ -441,23 +449,32 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
     }
 }
 
-function saveNewMessage(messageObj, alienUser=false) {
+function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
     let appended = false;
-    console.log("messageSave",messageObj.message);
+    let oldLength = $(".cMessagesFeed li").length;
+    let currentDate = new Date().today() + " " + new Date().timeNow();
+
+    console.log("messageSave",messageObj.message, currentDate);
     // We just have to append the message after the last li, with the proper class
     if (alienUser){
         $(".cMessagesFeed ul").append(
-            $('<li />').addClass("alienUser").append($('<div />').addClass("text").text(messageObj.message))
+            $('<li />').addClass("alienUser").append($('<div />').addClass("text").append($('<span />').text(messageObj.message)).append($('<p />').addClass("dateFeed").text(currentDate)) )
         );  
     }
     else{
-        $(".cMessagesFeed ul").append(
-            $('<li />').addClass("ownUser").append($('<div />').addClass("text").text(messageObj.message))
-        );
+        if (($('.contactsList .selectedContact').attr("value") == contactToWriteId) 
+        || ($(".conversationMobile").attr("data-selectedUserId") ==  contactToWriteId) ){
+            $(".cMessagesFeed ul").append(
+                $('<li />').addClass("ownUser").append($('<div />').addClass("text").append($('<span />').text(messageObj.message)).append($('<p />').addClass("dateFeed").text(currentDate)) )
+            );
+        }
     }
-    if($(".cMessagesFeed ul").length > 0)
+    if($(".cMessagesFeed li").length > oldLength)
         appended = true;
 
+    if (appended==false)    
+        updateHeaderMessages(true);
+        
     return appended;
 }
 
@@ -510,5 +527,26 @@ function chatPusherInit() {
     let chatChannel = chatPusher.subscribe('presence-chat-channel');
     return [chatPusher, chatChannel];
 }
+
+function updateHeaderMessages(add=false, msjRead=0) {
+    let icon = $('#numMessagesHeader');
+    let num = icon.text();
+
+    if(add){
+        if (num && (num>0) ) 
+            icon.text(parseInt(num)+1);
+        else
+            icon.text(1);
+    }
+    else
+        icon.text(parseInt(num)-parseInt(msjRead));
+
+    if (icon.text() < 1){
+        icon.empty();
+        $('#numMessagesHeader').removeClass("badge");
+    }
+    else
+        $('#numMessagesHeader').addClass("badge");
+} 
 
 

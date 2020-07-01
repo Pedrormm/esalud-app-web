@@ -280,9 +280,15 @@
 }
 
 .cMessagesFeed .alienUser .text{
-  /* background: #a6a6a6; */
-  background: #c0c0c0;
+  /* background: #81c4f9; */
+  /* background: #4EBCDF;
+  color:white; */
+  /* background-color: #224ABE; */
+  /* opacity: 0.3; */
+  background-color: rgba(34, 74, 190, 0.5);
+  color: white;
   font-weight: bold;
+
 }
 
 .cMessagesFeed .ownUser{
@@ -290,16 +296,17 @@
 }
 
 .cMessagesFeed .ownUser .text{
-  /* background: #81c4f9; */
-  /* background: #4EBCDF;
-  color:white; */
+  /* background: #a6a6a6; */
+  background: #c0c0c0;
+  font-weight: bold;
+}
 
-  /* background-color: #224ABE; */
-  background-color: rgba(34, 74, 190, 0.5);
-  /* opacity: 0.3; */
-  color: white;
-
-
+.cMessagesFeed .dateFeed{
+  text-align: right;
+  margin: 0 !important;
+  font-weight: 100;
+  font-style: italic;
+  opacity: 0.7;
 }
 
 .cMessageComposer textarea{
@@ -374,6 +381,10 @@
   background-color: #f2f2f2;
 }
 
+.contactsList li:hover .dateInfo{
+  color:#4EBCDF;
+}
+
 .contactsList .selectedContact{
   background-color: #224ABE !important;
   color:white;
@@ -445,9 +456,46 @@
   border-radius: 25px; 
 }
 
+.contactsList li .unread{
+  /* background: #82e0a8; */
+  background: #4EBCDF;
+  /* background: yellow; */
+  color:white;
+  /* color: black; */
+  position: absolute;
+  right:8%; 
+  top:30px;
+  display:flex;
+  font-weight: 700;
+  min-width: 20px;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 25px; 
+}
+
+.contactsList li .dateInfo{
+  /* background: #4EBCDF; */
+  color:white;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 25px;
+  width: 90%;
+  /* margin-right:25%; */
+}
 
 .cMessageComposer textarea{
   /* pointer-events: none; */
+}
+
+#chat-sound{
+  display:none;
 }
 
 

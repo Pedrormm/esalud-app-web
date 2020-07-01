@@ -40,6 +40,7 @@ Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
 
 Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('checkUserAuth');
 Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('checkUserAuth');
+Route::get('comm/updateReadMessages', 'MessageController@updateReadMessages')->middleware('checkUserAuth');
 Route::get('comm/viewMessagesFromMobile/{id}', 'MessageController@viewMessagesFromMobile')->middleware('checkUserAuth');
 Route::post('comm/send', 'MessageController@send')->middleware('checkUserAuth');
 

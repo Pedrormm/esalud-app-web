@@ -103,6 +103,10 @@ aria-hidden="true">
    </div>
 </div>
 
+<audio id="chat-sound" style="display: none">
+  <source src="{{ asset('sounds/chat.mp3') }}" />
+</audio>
+
 @if(\Route::current()->uri != 'user/video-call') 
   @if (auth()->user()) 
   <script>

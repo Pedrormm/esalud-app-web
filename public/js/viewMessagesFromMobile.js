@@ -9,9 +9,14 @@
     let chatChannel = pusher[1];
 
     chatChannel.bind(`client-send`, (data) => {
-        console.log("Recibido client-send", data);
+        console.log("Recibido client-send Mobile", data);
         if (data.idReceiver == authUser.id){
-            saveNewMessage(data);
+            let written = saveNewMessage(data, false, data.idSender );
+            if (!written){
+                let alert_sound = document.getElementById("chat-sound");
+                console.log(alert_sound);
+                alert_sound.play();
+            }
         }
     });
 
@@ -23,7 +28,18 @@
     $('.cMessagesFeed').bind('DOMSubtreeModified', function(e) {
         if (e.target.innerHTML.length > 0) {
             scrollToBottom(".cMessagesFeed");
+            $.ajax(PublicURL + 'comm/updateReadMessages', {
+                dataType: 'json',
+                data: {id: $(".conversationMobile").attr("data-selectedUserId")},
+                method:'get',
+            }).done(function(res){
+               
+            })
+            .fail(function(xhr, st, err) {
+                console.error("error in comm/updateReadMessages " + xhr, st, err);
+            }); 
         }
+        
     });
 
     $( ".cMessagesFeed" ).css({"overflow": "hidden", "overflow-x": "hidden", "overflow-y": "hidden"});
@@ -59,5 +75,4 @@
             sendMessage(writtenMessage, $(".conversationMobile").attr("data-selectedUserId"),
             authUser.id, chatChannel);
         }
-
     });

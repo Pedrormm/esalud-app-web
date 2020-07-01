@@ -63,6 +63,9 @@
                             <div class="contactInfo">
                               <p class="fullName">{{ $contact->name. " ".$contact->lastname }}</p>
                               <p class="dni">{{ $contact->dni }}</p>
+                              @if ($contact->unread)
+                                <p class="dateInfo">{{ $contact->dateHumanReadable }}</p>
+                              @endif
                             </div>
                             @if ($contact->unread)
                               <span class="unread">{{ $contact->unread }}</span>
@@ -73,6 +76,7 @@
 
                       </ul>
                     </div>
+
                     {{-- --end List of Contacts --}}
 
                 </div>

@@ -33,13 +33,23 @@
                                     @if ($userMessage["user_id_from"] == $user->id)
                                         <li class="alienUser">
                                             <div class="text">
-                                                {{ $userMessage["message"] }}
+                                                <span>
+                                                    {{ $userMessage["message"] }}
+                                                </span>
+                                                <p class="dateFeed">
+                                                    {{ $userMessage["date_spa"] }}
+                                                </p>
                                             <div>                    
                                         </li>
                                     @else
                                         <li class="ownUser">
                                             <div class="text">
-                                                {{ $userMessage["message"] }}
+                                                <span>
+                                                    {{ $userMessage["message"] }}
+                                                </span>
+                                                <p class="dateFeed">
+                                                    {{ $userMessage["date_spa"] }}
+                                                </p>
                                             <div>                    
                                         </li>
                                     @endif                                                          
@@ -57,6 +67,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

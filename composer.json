@@ -16,6 +16,7 @@
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "laravelcollective/html": "^6.0",
+        "nesbot/carbon": "^2.35",
         "orangehill/iseed": "^2.6",
         "pusher/pusher-php-server": "^4.1",
         "squareetlabs/laravel-openvidu": "^1.1"
