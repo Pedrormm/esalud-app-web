@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\Patient;
-use App\Models\Role;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use DateTime;
 use DatePeriod;
 use DateInterval;
+
+use App\Models\User;
+use App\Models\Patient;
+use App\Models\Event;
+use App\Models\Role;
+use App\Models\Analytic;
+use App\Models\Medicine;
+use App\Models\Protocol;
 
 class RecordsController extends Controller
 {
@@ -61,8 +66,23 @@ class RecordsController extends Controller
         return view('user/records', ['patients' => $patients]);
     }
 
-    public function showRecord(string $id=null) {
-        return view('user/singlerecord', ['id' => $id]);
+    public function showRecord($id) {
+		$user = User::find($id);	
+		$patient = Patient::getPatientByUser($user->id);
+        $events = Event::eventsForUser($user->id);
+        $analytics1 = Analytic::analytics_type1_by_user($user->id);
+        $analytics2 = Analytic::analytics_type2_by_user($user->id);
+        $medicines = Medicine::medicine_by_user($user->id);
+        $protocols = Protocol::protocol_by_user($user->id);
+
+		/*echo "<pre>";
+		print_r($informes);
+		echo "</pre>";
+        echo die();*/
+        
+        return view('user.singlerecord')->with('usuario',$user)->with('patient',$patient)
+        ->with('events',$events)->with('analytics1',$analytics1)->with('analytics2',$analytics2)
+        ->with('medicines',$medicines)->with('protocols',$protocols);
     }
 
     public function settings() {

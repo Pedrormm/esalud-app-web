@@ -60,7 +60,13 @@ function updateUnread(contactId, reset, written=false) {
     else{
         console.log("Not found");
     }
-} 
+}
+
+function dropdownDisplay(el) {
+    let dropdown = el.parentNode.querySelector('.dropdown-content');
+    dropdown.style.display="block";
+}
+
 
 if (width < 768) {
     $('.contactsList li').click(function(e) {
@@ -86,15 +92,42 @@ else {
     $(".cMessageComposer textarea").prop( "disabled", true );
     $(".cMessageComposer textarea").css("display", "none");
 
+    let contactId=localStorage.getItem("contact-id");
+    if (contactId){
+        localStorage.removeItem("contact-id");
+        handleContactClick(null, contactId);
+    }
+
     const arrContacts = Array.from(document.querySelectorAll('.contactsList li'));
 
-    function handleContactClick() {
+    function handleContactClick(e,requiredId=null) {
+
+        // Removing last URL parameters without refreshing page
+        let localizacion = location.href;
+        let finalCharacters = localizacion.substring(localizacion.lastIndexOf('/')+1, localizacion.length)
+        if ((localizacion.substr(-1) !== "/") && !(isNumber(finalCharacters)) )
+            localizacion = localizacion + "/";
+        let mURL= localizacion.substring(0, localizacion.lastIndexOf('/'));
+        if (location.href !== mURL){
+            console.log("distintas: ",location.href, mURL);
+            window.history.pushState('object', document.title, mURL);
+        }
+        
+        let contactId = (requiredId === null) ? $(this).attr("value"):requiredId; 
+        // let contactId = this.getAttribute("value");
+
+        $(".conversation").css("height", $(".contactsList").height());
+
         $(".contactsList li").removeClass( "selectedContact");
-        this.classList.add("selectedContact");
-        let contactId = this.getAttribute("value"); 
-        let selectedContactNotReadMessages = this.querySelector("span");
-        if (selectedContactNotReadMessages)
-            updateHeaderMessages(false, parseInt(selectedContactNotReadMessages.innerText.trim()));
+        // this.classList.add("selectedContact");
+        let current = $(`.contactsList li[value=${contactId}]`);
+        current.addClass("selectedContact");
+        console.log("contactId: ",contactId);
+        // let selectedContactNotReadMessages = this.querySelector("span");
+        let selectedContactNotReadMessages = current.find("span");
+        // console.log(selectedContactNotReadMessages[0]);
+        if (selectedContactNotReadMessages[0])
+            updateHeaderMessages(false, contactId, null, parseInt(selectedContactNotReadMessages[0].innerText.trim()));
         updateUnread(contactId, true);
 
         $.ajax(PublicURL + 'comm/getContactInfo', {
@@ -132,10 +165,13 @@ else {
 
                 msjs.forEach(function(msj) {
                     if ((msj.user_id_from == contact.id) && (msj.user_id_to == authUser.id)){
-                        str += '<li class="ownUser"><div class="text"><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
+                        str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
+                        str += '<div class="dropdown-content"><a href="">Ocultar mensaje</a><a href="">Eliminar mensaje</a><a href="">Ver información</a></div></div></li>'
                     }
                     else if ((msj.user_id_from == authUser.id) && (msj.user_id_to == contact.id)){
-                        str += '<li class="alienUser"><div class="text"><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
+                        str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
+                        str += '<div class="dropdown-content"><a href="">Ocultar mensaje</a><a href="">Eliminar mensaje</a><a href="">Ver información</a></div></div></li>'
+                        // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
                         // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';
                     }
                     else{
@@ -199,6 +235,29 @@ else {
         }
     });
 
+    let prevHeight = $('.contactsList').height();
+    $('.contactsList').attrchange({
+        callback: function (e) {
+            let currentHeight = $(this).height();            
+            if (prevHeight !== currentHeight) {
+            //    console.log('height changed from ' + prevHeight + ' to ' + currentHeight);
+                $(".conversation").css("height", currentHeight);
+                scrollToBottom(".cMessagesFeed");
+                prevHeight = currentHeight;
+            }            
+        }
+    });
 
+    // Closing dropdown messages menus if open 
+    window.onclick = function(event) {
+        if (!event.target.matches('.fa-sort-down')) {
+            let dropdowns = document.getElementsByClassName("dropdown-content");
+            let i;
+            for (i = 0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i];
+                openDropdown.style.display="none";
+            }
+        }
+    }
 
 }

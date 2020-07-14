@@ -116,6 +116,10 @@
                 {{-- Pusher --}}
                 <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
 
+                {{-- Js  attrchange --}}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/attrchange/2.0.1/attrchange.min.js"></script>
+
+
 
         <script>
                 const _PUBLIC_URL = "{{ asset('') }}";

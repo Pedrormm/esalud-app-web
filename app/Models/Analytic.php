@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Analytic
@@ -89,4 +90,15 @@ class Analytic extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id_user');
     }
+
+
+    public static function analytics_type1_by_user($user_id){
+        $analytics = DB::select('SELECT * FROM analytics WHERE user_id_user = '.$user_id.' AND type = 1');
+		return $analytics;
+    }
+    
+    public static function analytics_type2_by_user($user_id){
+        $analytics = DB::select('SELECT * FROM analytics WHERE user_id_user = '.$user_id.' AND type = 2');
+		return $analytics;
+	}
 }

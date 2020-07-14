@@ -39,8 +39,30 @@ class MessageController extends Controller
 
     public function showMessagesSummary(){
         $authUser = Auth::user();
-        $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')->orderBy('messages.read')
-        ->where('user_id_to', $authUser->id)->get();
+
+        // $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
+        // ->orderBy('messages.read')
+        // ->where('user_id_to', $authUser->id)
+        // ->groupBy('messages.user_id_from')
+        // ->get();
+
+        $userMessages = Message::where('user_id_to', $authUser->id)
+        ->orderBy('messages.created_at', 'desc')
+        ->orderBy('messages.read')
+        ->join('users', 'messages.user_id_from', 'users.id')
+        ->select('messages.id AS messages_id', 'messages.message', 'messages.read', 'messages.user_id_to', 'messages.user_id_from',
+         'messages.created_at', 'users.id AS users_id', 'users.dni', 'users.sex', 'users.name', 
+            'users.lastname', 'users.email', 'users.phone', 'users.avatar')
+        ->get()
+        ->unique('user_id_from');
+
+        $unreadIds = Message::select(\DB::raw('`user_id_from` as sender_id, count(`user_id_from`) as messages_count'))
+            ->where('user_id_to', auth()->id())
+            ->where('read', false)
+            ->groupBy('user_id_from')
+            ->get();
+
+
         foreach($userMessages as $i=>$userMessage) {
             $text = urldecode($userMessage->message);
             if(strlen($text) > self::MAX_MESSAGE_LENGTH) {
@@ -48,11 +70,29 @@ class MessageController extends Controller
             }
             $userMessage->messageCorrected = $text;
             $userMessages[$i] = $userMessage;
+            $userMessage->unread_count = 0;
+
+            foreach($unreadIds as $j=>$unreadId) {
+                if ($unreadId->sender_id == $userMessage->user_id_from){
+                    $userMessage->unread_count = $unreadId->messages_count;
+                }
+            }
+            $userMessage->date_spa = $userMessage->created_at->format('d-m-Y H:i:s');
+            $userMessage->date_eng = $userMessage->created_at->format('m-d-Y h:i:s A');
+            $userMessage->dateHumanReadable = Carbon::parse($userMessage->date_spa)->diffForHumans(Carbon::now());
+            $userMessage->dateHumanReadable = str_replace(" before","", $userMessage->dateHumanReadable);
+
+            $userMessage->dateHumanReadable = str_replace([' seconds', ' second'], 's', $userMessage->dateHumanReadable);
+            $userMessage->dateHumanReadable = str_replace([' minutes', ' minute'], 'min', $userMessage->dateHumanReadable);
+            $userMessage->dateHumanReadable = str_replace([' hours', ' hour'], 'h', $userMessage->dateHumanReadable);
+            $userMessage->dateHumanReadable = str_replace([' months', ' month'], 'M', $userMessage->dateHumanReadable);
+            $userMessage->dateHumanReadable = str_replace([' years', ' year'], 'y', $userMessage->dateHumanReadable);
+
         }
 
         $userMessages = $userMessages->toArray();
         
-
+        // dd ($userMessages);
         return view('ajax.messages_summary', compact('userMessages'));
     }
 
@@ -140,7 +180,7 @@ class MessageController extends Controller
     }
 
 
-    public function showMessaging(){
+    public function showMessaging($id=null){
         // Adding a lastMessageDate field to contact collection
 
         $contacts = DB::table("users_with_messages_view")
@@ -289,6 +329,19 @@ class MessageController extends Controller
             // dd($messages_from_user->toArray());
 
             return response()->json($messages_from_user);
+        }
+    }
+
+    public function getUserFromId(Request $request){
+        if($request->ajax()) {
+
+            $id = $request->id;
+
+            $found_user = User::find($id, ['id', 'dni', 'name', 'lastname', 'sex', 'avatar']);
+
+            // dd($found_user->toArray());
+
+            return response()->json($found_user);
         }
     }
 

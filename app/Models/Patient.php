@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
+
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -67,4 +69,12 @@ class Patient extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
+	
+	
+	public static function getPatientByUser($user_id){
+		
+		$patient = DB::select('SELECT * FROM patients WHERE user_id = '.$user_id.'');
+		return $patient[0];
+		
+	}
 }

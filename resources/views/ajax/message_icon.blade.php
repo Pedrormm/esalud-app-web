@@ -16,7 +16,7 @@
         $('#numMessagesHeader').addClass("badge");
     }
 
-    if (window.location.href != (PublicURL+'comm/messaging') && !(window.location.href.startsWith(PublicURL+'comm/viewMessagesFromMobile')) ){
+    if (!(window.location.href.startsWith(PublicURL+'comm/messaging')) && !(window.location.href.startsWith(PublicURL+'comm/viewMessagesFromMobile')) ){
         window.pusher = chatPusherInit();
         window.chatPusher = pusher[0];
         window.chatChannel = pusher[1];
@@ -27,11 +27,13 @@
             if (data.idReceiver == authUser.id) {
                 if (selectedValue){
                     if (selectedValue.toString().trim() !== data.idSender.toString().trim()) {
-                        updateHeaderMessages(true);
+                        console.log("if: ",data.idSender.toString().trim());
+                        updateHeaderMessages(true, data.idSender.toString().trim(), data.message);        
                     }
                 }
                 else{
-                    updateHeaderMessages(true);        
+                    console.log("else: ",data.idSender.toString().trim(), data.message);
+                    updateHeaderMessages(true, data.idSender.toString().trim(), data.message);        
                 }
                 let alert_sound = document.getElementById("chat-sound");
                 console.log(alert_sound);

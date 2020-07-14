@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Medicine
@@ -84,4 +85,25 @@ class Medicine extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id_patient');
     }
+
+    public static function interval($interval1){
+        $interval = explode('#', $interval1);
+        $interval_text = $interval[0] . ' cada ' . $interval[1] . ' ';
+
+        switch($interval[2]){
+            case 'h': $interval_text .= 'hora/s';break;
+            case 'd': $interval_text .= 'dia/s';break;
+            case 'w': $interval_text .= 'semana/s';break;
+            case 'm': $interval_text .= 'mes/es';break;
+            case 'y': $interval_text .= 'año/s';break;
+        }
+
+        return $interval_text;
+    }
+
+    public static function medicine_by_user($user_id){
+
+        $medicines = DB::select('SELECT medicines.*, type_medicines.name as nameMedicine FROM medicines INNER JOIN type_medicines ON type_medicines.id = medicines.type_medicine_id WHERE medicines.user_id_patient = '.$user_id.'');
+		return $medicines;
+	}
 }

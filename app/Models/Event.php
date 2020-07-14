@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Event
@@ -85,4 +86,9 @@ class Event extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id_patient');
     }
+	
+	public static function eventsForUser($user_id){
+		$events = DB::select('SELECT events.*,reports.* FROM events INNER JOIN reports ON reports.event_id = events.id WHERE events.user_id_patient = '.$user_id.' and reports.report != "" ');
+		return $events;
+	}
 }

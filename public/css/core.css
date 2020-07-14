@@ -155,7 +155,7 @@ ol {
     margin-bottom: 20px;
 }
 li {
-    cursor: pointer;
+    /* cursor: pointer; */
     line-height: 18px;
     margin-bottom:5px;
 }

@@ -473,7 +473,7 @@ function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
         appended = true;
 
     if (appended==false)    
-        updateHeaderMessages(true);
+        updateHeaderMessages(true, contactToWriteId, messageObj.message);
         
     return appended;
 }
@@ -528,18 +528,80 @@ function chatPusherInit() {
     return [chatPusher, chatChannel];
 }
 
-function updateHeaderMessages(add=false, msjRead=0) {
+function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
     let icon = $('#numMessagesHeader');
     let num = icon.text();
+    
+    let top = $("#top-navigator-messages a[data-contact-id="+ contactToWriteId +"]") 
 
     if(add){
         if (num && (num>0) ) 
             icon.text(parseInt(num)+1);
         else
             icon.text(1);
+
+        if (top[0]){
+            let nod = top.find('.text-truncate').html(message);
+            nod.parent().addClass( "font-weight-bold" );
+            top.find('.headerDate').html("Recently");
+            console.log("top ",nod.parent()[0],top[0], nod[0]);
+    
+            let unread = top.find('.unread');
+            if (unread[0]){
+                unread.text(parseInt(num)+1);
+            }
+            else{
+                top.append(
+                    $('<div />').addClass("mr-3 header-unread").append($('<span />').addClass("unread").text("1"))
+                ); 
+            }  
+        }
+        else{
+            console.log("No se encuentra en el header");
+
+            // Ajax call to get the userName and avatar from id
+            $.ajax(PublicURL + 'comm/getUserFromId', {
+                dataType: 'json',
+                data: {id: contactToWriteId},
+                method:'get',
+            }).done(function(res){
+                console.log("respuesta",res);
+                let whatToInsert =
+                ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${PublicURL}comm/messaging' >`+
+                 "<div class='dropdown-list-image mr-3'>"+
+                    `<img class='rounded-circle' src='${(res.avatar) ? PublicURL+"images/avatars/"+res.avatar : ((res.sex == "male") ? PublicURL+"images/avatars/user_man.PNG": (res.sex == "female")? PublicURL+"images/avatars/user_woman.PNG":null) }' alt='Foto de perfil'>`+  
+                         "<div class='status-indicator bg-success'></div>"+
+                 "</div>"+
+                 "<div class='mr-3 font-weight-bold'>"+
+                    `<div class='text-truncate'>${message}</div>`+
+                    `<div class='small text-gray-500'>${res.name+" "+res.lastname} · <span class='headerDate'>Recently</span>`+
+                     "</div>"+
+                 "</div>"+
+                 "<div class='mr-3 header-unread'></div>"+
+                 "<div class='mr-3 header-unread'><span class='unread'>1</span></div></a>";
+ 
+                window.localStorage.setItem("contact-id",contactToWriteId);
+
+                $(whatToInsert).insertAfter('#top-navigator-messages .dropdown-header');
+
+            })
+            .fail(function(xhr, st, err) {
+                console.error("error in comm/getUserNameFromId " + xhr, st, err);
+            }); 
+
+        }
     }
-    else
+    else{
         icon.text(parseInt(num)-parseInt(msjRead));
+        // Check if children of top have font-weight-bold class
+        if (top[0]){
+            $('.top-message').removeClass('font-weight-bold');
+            $('.header-unread .unread').remove();
+        }
+        else{
+            console.log("No ha sido seleccionado");
+        }
+    }
 
     if (icon.text() < 1){
         icon.empty();
@@ -547,6 +609,12 @@ function updateHeaderMessages(add=false, msjRead=0) {
     }
     else
         $('#numMessagesHeader').addClass("badge");
+}
+
+function isNumber(n) {
+     return /^-?[\d.]+(?:e-?\d+)?$/.test(n); 
 } 
+
+
 
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Protocol
@@ -73,4 +74,9 @@ class Protocol extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id_user');
     }
+
+    public static function protocol_by_user($user_id){
+        $protocols = DB::select('SELECT * FROM protocols WHERE user_id_user = '.$user_id.'');
+		return $protocols;
+	}
 }

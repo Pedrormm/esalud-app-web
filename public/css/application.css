@@ -2,6 +2,7 @@
 /* ========================================================================
   usersRoleEdit
 ========================================================================== */
+
 .borderShadow{
   margin-right: 30%;
   margin-left: 30%;
@@ -34,7 +35,7 @@
      -webkit-box-shadow: none !important;
      -moz-box-shadow: none !important;
      box-shadow: none !important;
-
+     resize: none !important;
   }
 
   .messagingContainer{
@@ -82,6 +83,7 @@
     margin-top:1% !important;
     max-height: none !important;
     /* background: radial-gradient( #8fd5eb, #f2f2f2) !important; */
+    cursor: default;
   }
 
   .cMessageComposer{
@@ -195,6 +197,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* max-height: 400px; */
 }
 
 .cHeader h4{
@@ -241,6 +244,7 @@
   /* background: radial-gradient( #4EBCDF, #f2f2f2); */
   /* background-image: url("/images/clouds.jpg"); */
   /* background-image: url("/images/sky.jpg"); */
+  
   background: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url("/images/sky.jpg");
   background-position: 50% 100%;
   background-size: cover;
@@ -285,11 +289,114 @@
   color:white; */
   /* background-color: #224ABE; */
   /* opacity: 0.3; */
+
+
   background-color: rgba(34, 74, 190, 0.5);
   color: white;
   font-weight: bold;
-
 }
+
+.cMessagesFeed .alienUser .text:hover{
+  /* cursor: pointer; */
+}
+
+.cMessagesFeed .text {
+  /* background: #0F0F6D;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 2em;
+  padding: 1.5rem;
+  border: 0; */
+  font-family: Hack, monospace;
+  transition: all 0.5s;
+  border-radius: 10px;
+  width: auto;
+  position: relative;
+}
+
+.cMessagesFeed .text::after {
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 400;
+  position: absolute;
+  left: 85%;
+  top: 31%;
+  right: 5%;
+  bottom: 0;
+  opacity: 0;
+}
+
+.cMessagesFeed .text:hover {
+    transition: all 0.5s;
+    border-radius: 10px;
+    box-shadow: 0px 6px 15px #0000ff61;
+    padding: 1.5rem 3.5rem 1.5rem 1.5rem;
+}
+
+.cMessagesFeed .ownUser .text:hover {
+  background:rgba(192,192,192,0.5);
+}
+
+.cMessagesFeed .alienUser .text:hover {
+    background: #2b2bff;
+}
+
+.cMessagesFeed .text:hover .textIcon {
+  display: block;
+}
+
+.cMessagesFeed .ownUser .text:hover .textIcon {
+  -webkit-text-stroke: 2px black;
+} 
+
+.cMessagesFeed .alienUser .text:hover .textIcon {
+  -webkit-text-stroke: 2px #F2F2F2;
+} 
+
+.cMessagesFeed .text:hover::after {
+  opacity: 1;
+  transition: all 0.5s;
+}
+
+.cMessagesFeed .textIcon{
+  position:absolute;
+  right:7px;
+  top:0px;
+  display: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  margin-bottom: 1em;
+  border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+ }
+
+ .cMessagesFeed .alienUser .dropdown-content{
+    right:0.5em;
+    top:4em;
+    box-shadow: 0px 0px 16px 8px rgba(0,0,0,0.2);
+ }
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+  color:black;
+}
+
 
 .cMessagesFeed .ownUser{
   text-align: left;
@@ -343,6 +450,8 @@
   overflow-x: hidden;
   overflow-y: hidden;  
   border-left: 1px solid #a6a6a6; 
+
+  resize: vertical;
 }
 
 .contactsList:hover{
@@ -434,6 +543,34 @@
 .contactsList li .contactInfo .dni{
   opacity: 0.7;
   font-style: italic;
+}
+
+.headerDate{
+  font-size: 80% !important;
+}
+
+.header-unread {
+  position: absolute;
+  right:8%; 
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-unread .unread{
+  background: #4EBCDF;
+  color:white;
+  position: absolute;
+  right:8%; 
+  display:flex;
+  font-weight: 700;
+  min-width: 20px;
+  justify-content: center;
+  align-items: center;
+  line-height: 20px;
+  font-size: 12px;
+  padding: 0 4px;
+  border-radius: 25px; 
 }
 
 .contactsList li .unread{
@@ -928,4 +1065,64 @@ caption {
 
 .dNone{
   display: none;
+}
+
+
+
+.box.box-success {
+    border-top-color: #00a65a;
+}
+.box {
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border-top: 3px solid #d2d6de;
+        border-top-color: rgb(210, 214, 222);
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.box-header.with-border {
+    border-bottom: 1px solid #f4f4f4;
+}
+.box-header {
+    color: #444;
+    display: block;
+    padding: 10px;
+    position: relative;
+}
+
+.box-header > .fa, .box-header > .glyphicon, .box-header > .ion, .box-header .box-title {
+    display: inline-block;
+    font-size: 18px;
+    margin: 0;
+    line-height: 1;
+}
+
+.box-header > .box-tools {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+.pull-right {
+    float: right;
+}
+.pull-right {
+    float: right !important;
+}
+
+.box-body {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 10px;
+}
+
+.box.box-solid.box-success > .box-header {
+    color: #fff;
+    background: #00a65a;
+        background-color: rgb(0, 166, 90);
+    background-color: #00a65a;
 }

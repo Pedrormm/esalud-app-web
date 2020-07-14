@@ -18,6 +18,8 @@ class CreateProtocols extends Migration
             $table->bigInteger('user_id_creator')->unsigned();
             $table->bigInteger('user_id_user')->unsigned();
             $table->longText('name')->nullable();
+            $table->timestamp('starting_date')->useCurrent()->comment('Fecha de comienzo del protocolo');
+            $table->timestamp('ending_date')->useCurrent()->comment('Fecha de finalización del protocolo');
             $table->softDeletes();
             $table->timestamps();
         });
