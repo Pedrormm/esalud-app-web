@@ -166,11 +166,12 @@ else {
                 msjs.forEach(function(msj) {
                     if ((msj.user_id_from == contact.id) && (msj.user_id_to == authUser.id)){
                         str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-                        str += '<div class="dropdown-content"><a href="">Ocultar mensaje</a><a href="">Eliminar mensaje</a><a href="">Ver información</a></div></div></li>'
+                        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a><a href="">Eliminar mensaje</a></div></div></li>'
                     }
                     else if ((msj.user_id_from == authUser.id) && (msj.user_id_to == contact.id)){
                         str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-                        str += '<div class="dropdown-content"><a href="">Ocultar mensaje</a><a href="">Eliminar mensaje</a><a href="">Ver información</a></div></div></li>'
+                        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>Eliminar mensaje</a></div></div></li>'
+                                                
                         // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
                         // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';
                     }
@@ -178,14 +179,35 @@ else {
                     //Error
                     console.error("User message id not found or incorrect");
                     }
-
                 }); 
+
 
                 str += '</ul>';
                 // document.getElementById("cMessagesFeed").innerHTML = str;
                 $(".cMessagesFeed").html(str);
-            }
 
+                $("a[data-delete-message-id]").click(function(e){
+                    console.log(e);
+                    e.preventDefault();
+                    let id = $(this).data("delete-message-id");
+                    $.ajax(PublicURL + 'comm/deleteMessageChat', {
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }, 
+                        dataType: 'json',
+                        data: {id: id, _method:'delete'},
+                        method:'post',
+                    }).done(function(res){
+                        
+                    })
+                    .fail(function(xhr, st, err) {
+                        // this.url
+                        console.error("error in comm/deleteMessageChat " + xhr, st, err);
+                    }); 
+                }
+                );
+            }
+            
 
             $(".cMessageComposer textarea").prop( "disabled", false );
             $(".cMessageComposer textarea").css("display", "block");

@@ -16,7 +16,7 @@ class CreateSpecialityStaff extends Migration
         Schema::create('specialities_staff', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('staff_id')->unsigned()->comment('Relación con el staff');
-            $table->bigInteger('speciality_id')->unsigned()->comment('Relación con el tipo de especialidad');
+            $table->bigInteger('branches_id')->unsigned()->comment('Relación con el tipo de especialidad');
             $table->softDeletes();
             $table->timestamps();
         });

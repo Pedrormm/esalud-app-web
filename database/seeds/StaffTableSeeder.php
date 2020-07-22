@@ -21,7 +21,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 2,
                 'historic' => '1000000002',
-                'branch' => 13,
+                'branch_id' => 13,
                 'shift' => 'EN',
                 'office' => '41',
                 'room' => '666',
@@ -33,7 +33,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 15,
                 'historic' => '100000005645I',
-                'branch' => 14,
+                'branch_id' => 14,
                 'shift' => 'E',
                 'office' => '',
                 'room' => '25',
@@ -45,7 +45,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 18,
                 'historic' => '11111111555555',
-                'branch' => -1,
+                'branch_id' => 42,
                 'shift' => 'ME',
                 'office' => NULL,
                 'room' => NULL,
@@ -57,7 +57,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 3,
                 'historic' => '153200087',
-                'branch' => -1,
+                'branch_id' => 42,
                 'shift' => 'ME',
                 'office' => '125',
                 'room' => '112',
@@ -69,7 +69,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 24,
                 'historic' => '153451331',
-                'branch' => -4,
+                'branch_id' => 46,
                 'shift' => 'ME',
                 'office' => '',
                 'room' => '',
@@ -81,7 +81,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 11,
                 'historic' => '2147483647',
-                'branch' => 25,
+                'branch_id' => 25,
                 'shift' => 'MN',
                 'office' => '444',
                 'room' => '201',
@@ -93,7 +93,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 14,
                 'historic' => '4488845454',
-                'branch' => 13,
+                'branch_id' => 13,
                 'shift' => 'ME',
                 'office' => NULL,
                 'room' => NULL,
@@ -105,7 +105,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 12,
                 'historic' => '5224751210',
-                'branch' => 30,
+                'branch_id' => 30,
                 'shift' => 'M',
                 'office' => '55P',
                 'room' => '',
@@ -117,7 +117,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 25,
                 'historic' => '597453250',
-                'branch' => 20,
+                'branch_id' => 20,
                 'shift' => 'ME',
                 'office' => '',
                 'room' => 'Urgencias',
@@ -129,7 +129,7 @@ class StaffTableSeeder extends Seeder
             array (
                 'user_id' => 16,
                 'historic' => '8888852O',
-                'branch' => 33,
+                'branch_id' => 33,
                 'shift' => 'ME',
                 'office' => '005',
                 'room' => '55L',

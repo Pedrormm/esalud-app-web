@@ -6,87 +6,61 @@
 
 @section('content')
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+  <div class="container-fluid">
 
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Listado de pacientes</h4>
-            </div>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h4 class="m-0 font-weight-bold text-primary text-center">Comprobar Usuario</h4>
+      </div>
 
-            <div class="card-body">
-              <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead >
-                    <tr class="text-center">
-                        <th class="bg-primary">Apellidos, Nombre</th>
-                        <th class="bg-primary">Rol</th>
-                        <th class="bg-primary">Dni</th>
-                        <th class="bg-primary">Grupo sanguíneo</th>
-                        <th class="bg-primary">Fecha de nacimiento</th>
-                        <th class="bg-primary">Teléfono</th>
-                        <th class="bg-primary">Sexo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  @foreach($users as $singleUser) 
-                  
-                    <tr class="text_left">
-                        <td class="text_left">
-                            @if ($singleUser['sex']=="male")
-                                <img class="avatar" src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
-                            @endif
-                            @if ($singleUser['sex']=="female")
-                                <img class="avatar" src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
-                            @endif
-                            <span>{{ urldecode($singleUser['lastname']).", ".urldecode($singleUser['name']) }}</span>
-                        </td>
-                        <td>                        
-                            <span>{{ $singleUser['role_id'] }}</span>          
-                        </td>
-                        <td>
-                            <span>{{ $singleUser['dni'] }}</span>          
-                        </td>
-                        <td>
-                            <span>{{ $singleUser['blood'] }}</span>                    
-                        </td>
-                        <td>
-                            <span>{{ $singleUser['birthdate'] }}</span>                    
-                        </td>
-                        <td>
-                            <span>{{ $singleUser['phone'] }}</span>                    
-                        </td>
-                        <td>
-                            <span>{{ $singleUser['sex'] }}</span>                   
-                        </td>
-                    </tr>
-
-                    @endforeach
-
-
-                  </tbody>
-                </table>
+      <div class="card-body">
+        <form action="/user/create" method="POST">        
+          <div class="row">
+              @csrf
+              <div class="col-lg-4">
+                <input required type="text" class="form-control" name="dni" />
               </div>
+              <div class="col-lg-4">
+                <input required type="email" class="form-control" name="email" />
+              </div>
+              <div class="col-lg-4">
+                <select required style="height: calc(1.5em + 0.75rem + 2px) !important;" class="form-control" name="rol_id">
+                  @foreach ($roles as $rol)
+                    <option value="{{ $rol->id }}">{{ $rol->name }}</option>    
+                  @endforeach
+                </select>
+              </div>       
+          </div>
+          <div class="row mb-4">          
+            <div class="col-lg-12 text-center">
+              <button class="btn btn-primary btn-lg" type="submit">Crear</button>
             </div>
           </div>
-
+      </form>
+      
+      @if(isset($info))
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-info">
+              {{ $info }}
+            </div>
+          </div>
         </div>
-        <!-- /.container-fluid -->
+      @endif
+      
+      @if(isset($danger))
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-danger">
+              {{ $danger }}
+            </div>
+          </div>
+        </div>
+      @endif
 
-      {{-- </div>
-      <!-- End of Main Content -->
-
+      </div>
     </div>
-    <!-- End of Content Wrapper -->
 
   </div>
-  <!-- End of Page Wrapper -->
-
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a> --}}
 
 @endsection

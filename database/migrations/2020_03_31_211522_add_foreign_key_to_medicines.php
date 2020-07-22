@@ -18,6 +18,8 @@ class AddForeignKeyToMedicines extends Migration
             ->onDelete('cascade')->onUpdate('cascade'); 
             $table->foreign('user_id_doctor')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade'); 
+            $table->foreign('type_medicine_id')->references('id')->on('type_medicines')
+            ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -31,6 +33,7 @@ class AddForeignKeyToMedicines extends Migration
         Schema::table('medicines', function (Blueprint $table) {
             $table->dropForeign(['user_id_patient']);
             $table->dropForeign(['user_id_doctor']);
+            $table->dropForeign(['type_medicine_id']);            
         });
     }
 }

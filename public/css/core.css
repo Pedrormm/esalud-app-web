@@ -181,7 +181,6 @@ input[type=datetime],
 input[type=datetime-local],
 input[type=password]{
     padding: 13px 10px;
-    height: 50px;
     display: block;
     width: 100%;
     border: 1px solid #d8d8d8;

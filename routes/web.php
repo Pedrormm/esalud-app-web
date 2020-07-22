@@ -44,6 +44,7 @@ Route::get('comm/updateReadMessages', 'MessageController@updateReadMessages')->m
 Route::get('comm/getUserFromId', 'MessageController@getUserFromId')->middleware('checkUserAuth');
 Route::get('comm/viewMessagesFromMobile/{id}', 'MessageController@viewMessagesFromMobile')->middleware('checkUserAuth');
 Route::post('comm/send', 'MessageController@send')->middleware('checkUserAuth');
+Route::delete('comm/deleteMessageChat', 'MessageController@delete')->middleware('checkUserAuth');
 
 
 
@@ -68,8 +69,10 @@ Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')
 Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('checkUserAuth');
 Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('checkUserAuth');
 
-Route::get('user/create', 'UsersManagementController@create')->middleware('checkUserAuth');
+Route::post('user/create', 'UsersManagementController@create')->middleware('checkUserAuth');
+Route::get('user/createUserFromMail/{token?}/{rol_id?}/{email?}/{dni?}', 'UsersManagementController@createUserFromMail')->middleware('checkUserAuth');
 
+Route::post('user/createUserNew', 'UsersManagementController@createUserNew')->middleware('checkUserAuth');
 
 Route::post('user/logout', 'LoginController@logout');
 Route::get('user/settings', 'RecordsController@settings')->middleware('checkUserAuth');

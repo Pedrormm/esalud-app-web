@@ -21,6 +21,10 @@ class CreateMedicines extends Migration
             $table->string('interval', 200)->nullable();
             $table->longText('stop')->nullable();
             $table->bigInteger('stop_user')->default('0');
+            // $table->smallInteger('treatment_status')->default('0')->comment('Estado del tratamiento - 0:Activo - 1:Finalizado');
+            $table->enum('treatment_status',['active','ended'])->default('active')->comment('Estado del tratamiento');
+            $table->date('treatment_date')->nullable()->comment('Fecha de finalización del tratamiento');
+            $table->unsignedSmallInteger('type_medicine_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +32,7 @@ class CreateMedicines extends Migration
         Artisan::call('db:seed', [
             '--class' => MedicinesTableSeeder::class
         ]);
+
     }
 
     /**

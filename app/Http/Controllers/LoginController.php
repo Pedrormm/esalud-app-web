@@ -62,7 +62,7 @@ class LoginController extends Controller
         $try = 0;
         do {            
             $token = Str::random(32);
-            var_dump($token);
+            // var_dump($token);
             $user->remember_token = $token;
             if($try >= $maxSteps) {
                 // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
@@ -100,10 +100,14 @@ class LoginController extends Controller
     }
 
     public function changePassword(Request $request){
-        $validatedData = Validator::make($request->all(), [
-            'password' => 'required|confirmed|min:6',
-        ]); // Tiene que haber un campo 'password_confirmation' para que se pueda dar la validación confirmed
+        // $validatedData = Validator::make($request->all(), [
+        //     'password' => 'required|confirmed|min:6',
+        // ]); // Tiene que haber un campo 'password_confirmation' para que se pueda dar la validación confirmed
         
+        $validatedData = checkValidation([
+            'password' => 'required|confirmed|min:6',
+        ]);
+
         if ($validatedData->fails()){
             return redirect()->back()->withError($validatedData->messages()->first());
         }

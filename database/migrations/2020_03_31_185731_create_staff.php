@@ -19,7 +19,7 @@ class CreateStaff extends Migration
             $table->bigIncrements('id');
             $table->string('historic', 150)->nullable();
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('branch')->unsigned();
+            $table->bigInteger('branch_id')->unsigned();
             $table->string('shift', 100)->nullable();
             $table->string('office', 100)->nullable();
             $table->string('room', 100)->nullable();

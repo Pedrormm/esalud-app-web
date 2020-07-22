@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class SpecialitiesTableSeeder extends Seeder
+class BranchesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,8 +11,7 @@ class SpecialitiesTableSeeder extends Seeder
      */
     public function run()
     {
-
-        DB::table('specialities')->insert(
+        DB::table('branches')->insert(
             [
                 [
                     'name'=>'Alergologia',

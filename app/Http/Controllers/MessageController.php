@@ -134,6 +134,37 @@ class MessageController extends Controller
         return view('communication/my_messages', ['userMessages' => $auxMessages,'user' => $authUser]);
     }
 
+    public function delete(Request $request){
+        if ($request->ajax()){
+            // dd($request->all());
+            $message = Message::find($request->id);
+            if ($message){
+                if (($message->user_id_from == Auth::user()->id) || ($message->user_id_to == Auth::user()->id)){
+                    // dd($message);
+                    
+
+                    if ($message->delete()){
+                        $response = [
+                            'status' => 0
+                        ];
+            
+                        return response()->json($response);
+                    }
+
+                }
+                else{
+                    jsonResponse("1","The message cannot be deleted");
+                }
+            }
+  
+
+        }
+        else{
+            // Error
+            jsonResponse("1","The message cannot be deleted");
+        }
+    }
+
 
     public function showMessagesFromUser($id){
         $authUser = Auth::user();

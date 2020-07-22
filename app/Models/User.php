@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Facades\DB;
 /**
  * Class User
  * @package App\Models
@@ -343,5 +343,10 @@ class User extends Model
     
     public function scopeActiveUsers($query) {
         return $query->whereNotNull('role_id');
+    }
+
+    public static function exist_user_by_dni($dni_user){
+        $user = DB::select('SELECT * FROM users WHERE dni = "'.$dni_user.'"');
+        return count($user);
     }
 }
