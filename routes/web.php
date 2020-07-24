@@ -126,6 +126,10 @@ Route::match(array('GET', 'POST'), 'pusher/auth', 'VideoCallController@authentic
 Route::get('test', function() {
     phpinfo();
 });
+
+Route::get('/sms/send', 'SmsController@sendSms');
+Route::post('/sms/send', 'SmsController@postSendSms');
+
 /*
 
 Route::resource('roles', 'RoleController');
@@ -139,3 +143,4 @@ Route::resource('notes', 'NoteController');
 
 Route::resource('patients', 'PatientController');
 */
+

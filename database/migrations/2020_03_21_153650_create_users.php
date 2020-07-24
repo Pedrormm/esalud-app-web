@@ -23,7 +23,7 @@ class CreateUsers extends Migration
             $table->string('city', 200)->nullable()->comment('Dirección del usuario');
             $table->string('country', 20)->nullable()->comment('Dirección del usuario');
             $table->integer('zipcode')->nullable()->comment('Dirección del usuario');
-            $table->string('email', 100)->unique()->index()->nullable()->comment('Dirección del usuario');
+            $table->string('email', 100)->index()->nullable()->comment('Dirección del usuario');
             $table->string('phone', 15)->nullable()->comment('Dirección del usuario');
             $table->date('birthdate')->comment('Fecha de nacimiento del usuario');
             $table->string('avatar', 250)->nullable()->comment('Avatar del usuario');

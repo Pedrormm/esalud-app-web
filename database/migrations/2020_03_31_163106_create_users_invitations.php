@@ -16,7 +16,7 @@ class CreateUsersInvitations extends Migration
         Schema::create('users_invitations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('dni', 20)->unique()->index()->comment('DNI');
-            $table->string('email', 100)->unique()->nullable()->index()->comment('Dirección del usuario');
+            $table->string('email', 100)->nullable()->index()->comment('Dirección del usuario');
             $table->string('verification_token', 250)->nullable()->index()->comment('Token de verificación del email');
             $table->date('expiration_date')->nullable()->comment('Fecha de expiración del email');
             $table->integer('times_sent')->default('0')->comment('Número de veces que fue enviada la solicitud');

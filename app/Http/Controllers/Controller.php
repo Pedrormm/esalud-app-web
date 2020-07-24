@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -22,13 +23,12 @@ class Controller extends BaseController
         return request()->validate($rules);     
     }
 
-    protected function generateUniqueToken(string $tableName, string $field, int $lenght=32){
+    protected function generateUniqueToken(string $tableName, string $field, int $length=32){
         $maxSteps = HV_MAX_ITERATION_TOKEN; //Por seguridad, no vamos a permitir esto
         $try = 0;
         do {            
             $token = Str::random($length);
 
-            
             if($try >= $maxSteps) {
                 // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
                 return response()->back()->withErrors("Internal error");

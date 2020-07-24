@@ -119,6 +119,9 @@
                 {{-- Js  attrchange --}}
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/attrchange/2.0.1/attrchange.min.js"></script>
 
+                {{-- International Telephone Input --}}
+                <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/intl-tel-input-master/css/intlTelInput.css') }}">
+                <script src="{{ asset('vendor/intl-tel-input-master/js/intlTelInput.js')}}"></script>
 
 
         <script>

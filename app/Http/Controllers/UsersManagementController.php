@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Patient;
 use App\Models\Staff;
+use App\Models\UserInvitation;
 use DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -39,32 +40,38 @@ class UsersManagementController extends Controller
         $roles = Role::all();
         if($existUser == 0){
 
-            $token = Str::random(32);
+            // $token = Str::random(32);
+            $token = $this->generateUniqueToken("users_invitations", "verification_token");
 
-            DB::beginTransaction();
+            // DB::beginTransaction();
             $userInvitation = UserInvitation::whereDni($dni)->first();
             if(is_null($userInvitation)) {
                 $userInvitation = new UserInvitation();
                 $userInvitation->dni = $dni;
                 $userInvitation->email = $email;
                 $userInvitation->role_id = $rol_id;
+                $userInvitation->times_sent = 0;
+            }
+            else{
+                $userInvitation->times_sent = $userInvitation->times_sent +1;
             }
             $userInvitation->verification_token = $token;
-           
+            $userInvitation->expiration_date = date("Y-m-d", time() + 172800);
+            
             $res = $userInvitation->save();
+           
             if(!$res) {
                 return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
-
             } 
-            $res = Mail::send('mail.createUser', ['token' => $token, 'dni' =>$dni, 'rol_id' =>$rol_id, 'email' =>$email], function ($m) use ($email) {
+            $res = Mail::send('mail.createUser', ['token' => $token, 'dni' =>$dni, 'rol_id' =>$rol_id, 'email' =>$email], function ($m) use ($email, $dni) {
                 $m->to($email);
-                $m->subject("Prueba envío email");
+                $m->subject("Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni);
             });
-            if(!$res) {
-                DB::rollBack();
-            }
-            else
-                DB::commit();
+            // if(!$res) {
+            //     DB::rollBack();
+            // }
+            // else
+            //     DB::commit();
             return view('user.newUser')->with('roles',$roles)->with('info','Se ha enviado un correo con las instrucciones para crear el usuario');
             
         }else{                        

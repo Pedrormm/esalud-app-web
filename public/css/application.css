@@ -1126,3 +1126,20 @@ caption {
         background-color: rgb(0, 166, 90);
     background-color: #00a65a;
 }
+
+/* ========================================================================
+  SMS
+========================================================================== */
+
+.smsPhoneContainer{
+  padding:20px;
+}
+
+#error-msg{
+  color:#EA4335;
+}
+
+#valid-msg{
+  color:#4EBCDF;
+}
+
