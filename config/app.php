@@ -14,6 +14,9 @@ return [
     | any other location as required by the application or its packages.
     |
     */
+    'twilio_sid' => env('TWILIO_ACCOUNT_SID', 'sid'),
+    'twilio_token' => env('TWILIO_AUTH_TOKEN', 'token'),
+    'twilio_number' => env('TWILIO_NUMBER', 'number'),
 
     'name' => env('APP_NAME', 'Laravel'),
 

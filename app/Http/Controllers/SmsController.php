@@ -22,23 +22,22 @@ class SmsController extends Controller
         $body = request('messages');
 
         // Using the REST API Client to make requests to the Twilio REST API
-        $sid = 'AC1cbae40a187c162d519807048dc08aba';
-        $token = '7e26293da3c48f976461c05bbc755be6';
-        
+        $sid = config('app.twilio_sid');
+        $token = config('app.twilio_token');
+        $number = config('app.twilio_number');
+
+        dd($to);
         $client = new Client($sid, $token);
 
-        // Using the client to do fun stuff like send text messages!
         // $response = $client->messages->create(
         //     $to ,
         //     [
-        //         'from' => '+13392300029', 
+        //         'from' => $number, 
         //         'body' => $body
         //     ]
         // );
 
-        dump($to);
-        dump($body);
-        die();
+        // $response ="";
 
         if(!$response) {
             return back()->withErrors("Error interno");

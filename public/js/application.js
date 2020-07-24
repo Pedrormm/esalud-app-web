@@ -115,9 +115,7 @@ function showInlineError(status,message, timeout=0) {
  */
 function showInlineMessage(message, timeout=0) {
     $('#message-container').show().html(message);
-    // $('#message-container').show().text('this\n has\\n <br> new\r\n lines');
-    // $('#message-container').show().html("<strong>Leave blanco if there is already a Record<br>for today!&#13;&#10;This will auto-calculate based on the previous Record.</strong>");
-
+  
     if(timeout>0) {
         setTimeout(function() {
             $('#message-container').hide(500);
