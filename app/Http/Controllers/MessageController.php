@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Message;
+use App\Models\Message;
 use App\Models\User;
 use DB;
 use Carbon\Carbon;
@@ -140,24 +140,18 @@ class MessageController extends Controller
             $message = Message::find($request->id);
             if ($message){
                 if (($message->user_id_from == Auth::user()->id) || ($message->user_id_to == Auth::user()->id)){
-                    // dd($message);
-                    
-
+                    // dd($message);             
                     if ($message->delete()){
                         $response = [
                             'status' => 0
-                        ];
-            
+                        ];          
                         return response()->json($response);
                     }
-
                 }
                 else{
                     jsonResponse("1","The message cannot be deleted");
                 }
             }
-  
-
         }
         else{
             // Error

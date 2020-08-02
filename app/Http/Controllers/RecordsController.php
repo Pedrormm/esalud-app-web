@@ -134,7 +134,7 @@ class RecordsController extends Controller
                 ]);
             }
             else{
-                return redirect()->back()->withErrors(['There is no file', 'No file']);
+                return back()->withErrors(['There is no file', 'No file']);
             }
         }
 

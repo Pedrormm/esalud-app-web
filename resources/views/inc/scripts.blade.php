@@ -4,8 +4,15 @@
      $('#messagesDropdown').click();
     asyncCall('message/summary', '#top-navigator-messages', true, false);
     @if($errors->any())
-        showInlineError(0, "{{$errors->first()}}", 10);
+        showInlineError(0, "{{ implode(', ', $errors->all()) }}", 10);
     @endif
+
+    @if(session('js_code'))
+        {!! session('js_code') !!}
+    @endif
+    @isset ($js_code))
+        {!! $js_code !!}
+    @endisset
 
     {{-- Code for nav-main.blade.php --}}
     @if((Request::is('user/create') || (Request::is('user/user')) || Request::is('user/patient') 

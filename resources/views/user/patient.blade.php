@@ -53,6 +53,7 @@ Me pongo en contacto contigo porque tu profe Danny nos ha comen...</p>
                     <th class="bg-primary">Grupo sanguíneo</th>
                     <th class="bg-primary">Fecha de nacimiento</th>
                     <th class="bg-primary">Sexo</th>
+                    <th class="bg-primary">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,6 +89,9 @@ Me pongo en contacto contigo porque tu profe Danny nos ha comen...</p>
                     </td>
                     <td>
                         <span>{{ $patient->sex }}</span>                   
+                    </td>
+                    <td>
+                        <span><a href="/user/edit/{{ $patient->user_id }}"><i class="fa fa-edit"></i></a></span>                   
                     </td>
                 </tr>
 

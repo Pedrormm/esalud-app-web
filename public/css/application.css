@@ -1143,3 +1143,25 @@ caption {
   color:#4EBCDF;
 }
 
+/* ========================================================================
+  New User Mail
+========================================================================== */
+
+
+.errorShown{
+  list-style-type:none;
+  margin-bottom: 0;
+}
+
+#bDate::before { 
+  content: attr(data-placeholder);
+  width: 100%;
+  height: auto;
+}
+
+/* hide our custom/fake placeholder text when in focus to show the default
+ * 'mm/dd/yyyy' value and when valid to show the users' date of birth value.
+ */
+ #bDate:focus::before,
+ #bDate:valid::before { display: none }
+

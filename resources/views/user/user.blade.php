@@ -34,6 +34,7 @@
                         <th class="bg-primary">Fecha de nacimiento</th>
                         <th class="bg-primary">Teléfono</th>
                         <th class="bg-primary">Sexo</th>
+                        <th class="bg-primary">Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -51,7 +52,7 @@
                             <span>{{ urldecode($singleUser['lastname']).", ".urldecode($singleUser['name']) }}</span>
                         </td>
                         <td>                        
-                            <span>{{ $singleUser['role_id'] }}</span>          
+                            <span>{{ App\Models\Role::find($singleUser['role_id'])->name }}</span>          
                         </td>
                         <td>
                             <span>{{ $singleUser['dni'] }}</span>          
@@ -60,13 +61,16 @@
                             <span>{{ $singleUser['blood'] }}</span>                    
                         </td>
                         <td>
-                            <span>{{ $singleUser['birthdate'] }}</span>                    
+                            <span>{{ date('d/m/Y', strtotime($singleUser['birthdate'])) }}</span>                    
                         </td>
                         <td>
                             <span>{{ $singleUser['phone'] }}</span>                    
                         </td>
                         <td>
                             <span>{{ $singleUser['sex'] }}</span>                   
+                        </td>
+                        <td>
+                            <span><a href="/user/edit/{{ $singleUser['id'] }}"><i class="fa fa-edit"></i></a></span>                   
                         </td>
                     </tr>
 

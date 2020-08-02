@@ -26,7 +26,6 @@ class SmsController extends Controller
         $token = config('app.twilio_token');
         $number = config('app.twilio_number');
 
-        dd($to);
         $client = new Client($sid, $token);
 
         // $response = $client->messages->create(
@@ -37,13 +36,13 @@ class SmsController extends Controller
         //     ]
         // );
 
-        // $response ="";
+        $response ="a";
 
         if(!$response) {
             return back()->withErrors("Error interno");
         }
         else{
-            return back()->with('success', 'Messages has been queued and ready to be sent.');
+            return back()->with('js_code', 'showInlineMessage("Messages has been queued and ready to be sent",8)');
         }
     }
 }

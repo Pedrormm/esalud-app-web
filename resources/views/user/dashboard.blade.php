@@ -23,7 +23,22 @@
 
 
     <div id="main-container" class="container-fluid">
+  
     </div>
+
+    <div class="container-fluid mt-3">
+      
+      @if(isset($sucess))
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-info">
+              {{ $sucess }}     
+            </div>
+          </div>
+        </div>
+      @endif
+
+  </div>
 
 
     <script>
@@ -42,6 +57,13 @@
         });
         asyncCall('user/messages', '#home', true);
 */
+
+        // @if(session('sucess'))
+        //   <div class="alert alert-success">
+        //       {{ session('sucess') }}
+        //   </div>
+        // @endif
+
             $('#home-tab').click(function(e){
                 // asyncCall('user/messages', '#main-container', true);
                 asyncCall('user/index', '#main-container', true);

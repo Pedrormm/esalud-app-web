@@ -52,7 +52,6 @@ $(document).ready(function() {
 });
 
     let input = document.querySelector("#smsPhone");
-
     let errorMsg = document.querySelector("#error-msg");
     let validMsg = document.querySelector("#valid-msg");
 

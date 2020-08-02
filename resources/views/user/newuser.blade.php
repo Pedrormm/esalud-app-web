@@ -10,7 +10,7 @@
 
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">Comprobar Usuario</h4>
+        <h4 class="m-0 font-weight-bold text-primary text-center">Creación de Usuario</h4>
       </div>
 
       <div class="card-body">
@@ -18,14 +18,14 @@
           <div class="row">
               @csrf
               <div class="col-lg-4">
-                <input required type="text" class="form-control" name="dni" />
+                <input required type="text" class="form-control" name="dni" placeholder="DNI"/>
               </div>
               <div class="col-lg-4">
-                <input required type="email" class="form-control" name="email" />
+                <input required type="email" class="form-control" name="email" placeholder="e-mail"/>
               </div>
               <div class="col-lg-4">
                 <select required style="height: calc(1.5em + 0.75rem + 2px) !important;" class="form-control" name="rol_id">
-                  @foreach ($roles as $rol)
+                  @foreach ($roles as $rol)                   
                     <option value="{{ $rol->id }}">{{ $rol->name }}</option>    
                   @endforeach
                 </select>
@@ -33,7 +33,7 @@
           </div>
           <div class="row mb-4">          
             <div class="col-lg-12 text-center">
-              <button class="btn btn-primary btn-lg" type="submit">Crear</button>
+              <button class="btn btn-primary btn-lg" type="submit">Enviar email de creación</button>
             </div>
           </div>
       </form>

@@ -31,7 +31,7 @@ class Controller extends BaseController
 
             if($try >= $maxSteps) {
                 // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
-                return response()->back()->withErrors("Internal error");
+                return back()->withErrors("Internal error");
             }
             $try++;
         } while (!is_null(DB::table($tableName)->where($field, $token)->first()));

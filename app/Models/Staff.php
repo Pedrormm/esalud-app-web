@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Staff
@@ -84,5 +85,12 @@ class Staff extends Model
     public function specialitiesStaffs()
     {
         return $this->hasMany(\App\Models\SpecialitiesStaff::class, 'staff_id');
+    }
+
+    public static function getUserStaffById($user_id){
+        	
+		$staff = DB::select('SELECT * FROM staff WHERE user_id = '.$user_id.'');
+        return $staff[0];
+        
     }
 }

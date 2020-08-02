@@ -635,7 +635,7 @@ export default class App extends Component {
                                     ref={(ref) => {this.myVideo = ref;}}></video>
                                     <video className="user_video" id="userVideo"
                                     ref={(ref) => {this.userVideo = ref;}}></video>
-                    
+                  
                                 </div>
 
                             </div>

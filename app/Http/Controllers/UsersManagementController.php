@@ -4,13 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Patient;
 use App\Models\Staff;
 use App\Models\UserInvitation;
-use DB;
+use App\Models\Branch;
+use App\Mail\InvitationNewUserMail;
+use App\Mail\WelcomeNewUserMail;
+
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 use App\Models\Message;
 use App\Mail\EnviarMail;
@@ -21,7 +28,12 @@ class UsersManagementController extends Controller
 {
     public function newUser(){
         
-        $roles = Role::all();
+        if ((auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR) || (auth()->user()->role_id == \HV_ROLES::PERM_HELPER))
+            $roles = Role::whereNotIn('id', [\HV_ROLES::PERM_ADMIN])->get();
+        else if (auth()->user()->role_id == \HV_ROLES::PERM_ADMIN)
+            $roles = Role::all();
+        else
+            return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
         return view('user.newUser')->with('roles',$roles);    
     }
 
@@ -31,11 +43,12 @@ class UsersManagementController extends Controller
             'email' => 'required|email:rfc,dns',
             'rol_id' => 'required|numeric|min:1',
         ]);
-
+        
         $dni = $request->input('dni');
         $email = $request->input('email');
         $rol_id = $request->input('rol_id');
-
+        if ((auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR || auth()->user()->role_id == \HV_ROLES::PERM_HELPER) && $rol_id == \HV_ROLES::PERM_ADMIN)
+            return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
         $existUser = User::exist_user_by_dni($dni);
         $roles = Role::all();
         if($existUser == 0){
@@ -55,6 +68,9 @@ class UsersManagementController extends Controller
             else{
                 $userInvitation->times_sent = $userInvitation->times_sent +1;
             }
+
+            // TODO: if (maxTimes > 3(constante)) google Verification Bot. Captcha plugin.
+
             $userInvitation->verification_token = $token;
             $userInvitation->expiration_date = date("Y-m-d", time() + 172800);
             
@@ -63,10 +79,13 @@ class UsersManagementController extends Controller
             if(!$res) {
                 return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
             } 
-            $res = Mail::send('mail.createUser', ['token' => $token, 'dni' =>$dni, 'rol_id' =>$rol_id, 'email' =>$email], function ($m) use ($email, $dni) {
-                $m->to($email);
-                $m->subject("Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni);
-            });
+            $subject = "Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni;
+
+            $res = Mail::to($email)->send(new InvitationNewUserMail($token, $dni));
+            // $res = Mail::send('mail.createUser', ['token' => $token, 'dni' =>$dni, 'rol_id' =>$rol_id, 'email' =>$email], function ($m) use ($email, $dni) {
+            //     $m->to($email);
+            //     $m->subject("Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni);
+            // });
             // if(!$res) {
             //     DB::rollBack();
             // }
@@ -80,12 +99,99 @@ class UsersManagementController extends Controller
         }
     }
 
-    public function createUserFromMail($token, $rol_id,$email, $dni){
-        $rol = Role::find($rol_id);
-        return view('user.newUserMail')->with('rol',$rol)->with('email',$email)->with('dni',$dni);    
+    // public function createUserFromMail($token, $rol_id,$email, $dni){
+    /**
+     * Process a invitation link from email
+     * @author Pedro
+     * @param string $token The unique token in users_invitations table
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function createUserFromMail(string $token){
+        // $rol = Role::find($rol_id);
+        $verify = UserInvitation::whereVerificationToken($token)->first();
+        if ($verify){
+            $currentDate = Carbon::now();
+            $expirationDate = Carbon::parse($verify->expiration_date);
+   
+            if ($expirationDate->gt($currentDate)){
+                $rol = Role::find($verify->role_id);
+                $email = $verify->email;
+                $dni = $verify->dni;
+
+                if ($verify->role_id == \HV_ROLES::PERM_DOCTOR) 
+                    $branches = Branch::where('role_id', $verify->role_id)->get();
+                else if ($verify->role_id == \HV_ROLES::PERM_HELPER)
+                    $branches = Branch::where('role_id', $verify->role_id)->get();
+                else if ($verify->role_id == \HV_ROLES::PERM_ADMIN)
+                    $branches = Branch::all();
+                else
+                    $branches = "";
+
+                
+                // No null y expiration date < hoy (volver a enviar mail?)
+                // Pasarle el token a la vista para ponerlo como hidden
+                // Con ese token se vuelve a verificar al crear. Una vez creado, borro fila de token de user created.
+                return view('user.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
+            }
+            else
+                return view('user.newUserMail')->with('showError',true)->withErrors("Token has been expired. Contact an admin to resend an email.");     
+        }
+        else{
+            return view('user.newUserMail')->with('showError',true)->withErrors("Internal error");        
+        }
     }
 
     public function createUserNew(Request $request){
+
+
+        // TODO: Validate
+        $validatedData = parent::checkValidation([
+            'token' => 'required|exists:App\Models\UserInvitation,verification_token',
+            'dni' => 'required|min:5|max:10',
+            'email' => 'required|email:rfc,dns',
+            'rol_id' => 'required|numeric|min:1',
+            'name' => 'required',
+            'lastname' => 'required',
+            'zipcode' => 'numeric',
+            'phone' => 'required',
+            'birthdate' => 'required',
+            'sex' => 'required',
+            'blood' => 'required',
+            
+        ]);
+        $token = $request->input('token');
+        if ($request->input('rol_id')==\HV_ROLES::PERM_PATIENT){
+            $validatedData = parent::checkValidation([
+                'historic' => 'required',
+                'height' => 'required|numeric',
+                'weight' => 'required|numeric',
+            ]);
+        }
+        if (($request->input('rol_id')==\HV_ROLES::PERM_DOCTOR) || ($request->input('rol_id')==\HV_ROLES::PERM_HELPER))  {
+            $validatedData = parent::checkValidation([
+                'historic' => 'required',
+                'branch' => 'required|exists:App\Models\Branch,id',
+                // 'shift' => 'required|min:1|max:3|in:M,ME,MN,MEN,E,EN,N',
+                'shift' => Rule::in(\SHIFTS::$types),
+                'shift' => 'required|min:1|max:3',
+                'office' => 'required|numeric',
+                'room' => 'required|numeric',
+                'h_phone' => 'required|numeric',
+            ]); 
+        }
+
+        $historic = $request->input('historic');
+        $branch = $request->input('branch');
+        $shift = $request->input('shift');
+        $office = $request->input('office');
+        $room = $request->input('room');
+        $h_phone = $request->input('h_phone');
+        
+        $verify = UserInvitation::whereVerificationToken($token)->first();
+        if (!$verify){
+            return back()->withErrors("Mismatch error");        
+        }
+        //dd($request->all());
 
         $dni = $request->input('dni');
         $email = $request->input('email');
@@ -104,6 +210,17 @@ class UsersManagementController extends Controller
 
         $password =  Hash::make($request->input('password'));
 
+        DB::beginTransaction();
+        // $verify->deleted_at = Carbon::now();
+        // $verify->save();
+        
+        $res = $verify->delete();
+        if (!$res){
+            DB::rollBack();
+            return back()->withErrors("Internal error");        
+        }
+
+
         $user = new User();
         $user->dni = $dni;
         $user->email = $email;
@@ -119,9 +236,13 @@ class UsersManagementController extends Controller
         $user->sex = $sex;
         $user->blood = $blood;
         $user->password = $password;
-        $user->save();
-
-        if($rol_id == 1){
+        $res = $user->save();
+        if(!$res) {
+            DB::rollBack();
+            return back()->withErrors("Internal error");  
+        }
+       
+        if($rol_id == \HV_ROLES::PERM_PATIENT){
             $historic = $request->input('historic');
             $height = $request->input('height');
             $weight = $request->input('weight');
@@ -131,30 +252,140 @@ class UsersManagementController extends Controller
             $patient->historic = $historic;
             $patient->height = $height;
             $patient->weight = $weight;
+            $res = $patient->save();
+            if(!$res) {
+                DB::rollBack();
+                return back()->withErrors("Internal error");
+            }
+        }
+       
+        if(($rol_id == \HV_ROLES::PERM_DOCTOR) || ($rol_id == \HV_ROLES::PERM_HELPER)){
+            $historic = $request->input('historic');
+            $branch = $request->input('branch');
+            $shift = $request->input('shift');
+            $office = $request->input('office');
+            $room = $request->input('room');
+            $h_phone = $request->input('h_phone');
+
+            $staff = new Staff();
+            $staff->historic = $historic;
+            $staff->branch_id = $branch;
+            $staff->shift = $shift;
+            $staff->office = $office;
+            $staff->h_phone = $h_phone;
+            $staff->room = $room;
+            $staff->user_id = $user->id;
+            $res = $staff->save();
+            
+            if(!$res) {
+                DB::rollBack();
+                return back()->withErrors("Internal error");
+            }
+        }
+        
+        DB::commit();
+        
+        $roles = Role::all();
+        //TODO: Enviar un mail al usuario con "Cuenta creada, bienvenido" y que mande el link al login
+        $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
+
+        if (Auth::user())
+            return view('user.dashboard')->with('sucess', "An user the dni ".$dni." has been properly created");
+        else
+            return redirect('/')->with('sucess', "An user the dni ".$dni." has been properly created. Please log in.");
+    }
+
+    public function edit($id){
+        $usuario = User::find($id);
+        $rol_usuario_info = "";
+
+        if($usuario->role_id == \HV_ROLES::PERM_PATIENT){
+            $rol_usuario_info = DB::select('SELECT * FROM patients WHERE user_id ='.$id.' LIMIT 1');
+        }elseif($usuario->role_id == \HV_ROLES::PERM_DOCTOR){
+            $rol_usuario_info = DB::select('SELECT * FROM staff WHERE user_id ='.$id.' LIMIT 1');
+        }
+        return view('user.edit')->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info[0]);
+    }
+
+    public function editUser(Request $request){
+
+        $user_id = $request->input('user_id');
+        $usuario_rol = User::find($user_id);
+        $role_id = $usuario_rol->role_id;
+        
+        $email = $request->input('email');
+        $dni = $request->input('dni');
+
+        $name = $request->input('name');
+        $lastname = $request->input('lastname');
+        $address = $request->input('address');
+
+        $country = $request->input('country');
+        $city = $request->input('city');
+        $zipcode = $request->input('zipcode');
+
+        $phone = $request->input('phone');
+        $birthdate = $request->input('birthdate');
+        $sex = $request->input('sex');
+        $blood = $request->input('blood');
+
+        $usuario = User::find($user_id);
+        $usuario->dni = $dni;
+        $usuario->email = $email;
+        $usuario->name = $name;
+        $usuario->lastname = $lastname;
+        $usuario->address = $address;
+        $usuario->country = $country;
+        $usuario->city = $city;
+        $usuario->zipcode = $zipcode;
+        $usuario->phone = $phone;
+        $usuario->birthdate = $birthdate;
+        $usuario->sex = $sex;
+        $usuario->blood = $blood;
+        $usuario->save();
+
+        if($role_id == \HV_ROLES::PERM_PATIENT){
+
+            $historic = $request->input('historic');
+            $height = $request->input('height');
+            $weight = $request->input('weight');
+
+            $patient_actual = Patient::getPatientByUser($user_id);
+            $patient = Patient::find($patient_actual->id);
+
+            $patient->historic = $historic;
+            $patient->height = $height;
+            $patient->weight = $weight;
             $patient->save();
+
+        }elseif($role_id == \HV_ROLES::PERM_DOCTOR){
+
+            $historic = $request->input('historic');
+            $branch_id = $request->input('branch');
+            $shift = $request->input('shift');            
+            $office = $request->input('office');
+            $room = $request->input('room');
+            $h_phone = $request->input('h_phone');
+
+            $staff_usuario = Staff::getUserStaffById($user_id);
+            $staff = Staff::find($staff_usuario->id);
+
+            $staff->historic = $historic;
+            $staff->branch_id = $branch_id;
+            $staff->shift = $shift;
+            $staff->office = $office;
+            $staff->h_phone = $h_phone;
+            $staff->room = $room;
+            $staff->save();
         }
 
-        echo "Usuario creado correctamente";
-
+        return view('user.dashboard')->with('sucess', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
     }
 
     public function showStaff(string $search=null, string $ord=null){
         $user = Auth::user();
 
-        if (is_null($ord)){
-            $ord = 'users.id';
-        }
-
-        $staff = Staff::join('users', 'staff.user_id', 'users.id')->get()->toArray();
-
-        if (!is_null($search) && !empty($search) && isset($search)){
-            $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)        
-            ->where('name', 'LIKE', '%'.$search.'%')
-            ->orWhere('lastname', 'LIKE', '%'.$search.'%')
-            ->orWhere('historic', 'LIKE', '%'.$search.'%')
-            ->orWhere('dni', 'LIKE', '%'.$search.'%')
-            ->get()->toArray();
-        }
+        $staff = DB::select('SELECT * FROM users INNER JOIN staff ON users.id = staff.user_id WHERE role_id = 2 or role_id = 3');
         
         return view('user/staff', ['staff' => $staff,'user' => $user]);    
     }

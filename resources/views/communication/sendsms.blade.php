@@ -19,16 +19,16 @@
 
         </div>
         <form method='POST' id="smsForm">
-            @if($errors->any())
+            {{-- @if($errors->any())
             <ul>
             @foreach($errors->all() as $error)
             <li><strong>{{ $error }}</strong></li>
             @endforeach
             <ul>
-            @endif
-        @if(session('success'))
+            @endif --}}
+        {{-- @if(session('success'))
             <strong>{{ session('success') }}</strong>
-        @endif
+        @endif --}}
             <label for="to">Enter Telephone Number:</label>
             <input type='tel' name='to' id='smsPhone' maxlength="12" required/>
             <span id="valid-msg" class="hide"></span>
@@ -69,6 +69,7 @@
     </div>
 
   </div>
+
 
   <script type="text/javascript" src="{{ asset('js/sendsms.js')}}"></script>
 

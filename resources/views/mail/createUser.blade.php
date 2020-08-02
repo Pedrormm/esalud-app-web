@@ -1,4 +1,22 @@
-<!DOCTYPE html>
+@component('mail::message')
+# Nuevo usuario
+
+Hola, se ha solicitado un nuevo usuario a este email con el dni {{ $dni }}
+
+Haga click para registrarse en la aplicación:
+@component('mail::button', ['url' => URL::asset('user/createUserFromMail/' . $token)])
+Nuevo usuario
+@endcomponent
+
+<small>
+NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de navegación:<br>
+{{ URL::asset('user/createUserFromMail/' . $token) }}
+</small>
+
+Gracias,<br>
+{{ config('app.name') }}
+@endcomponent
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -10,20 +28,12 @@
 <body>
     <h1>Hola, se ha solicitado un nuevo usuario a este email con el dni {{ $dni }}</h1>
     <p> Haga click para registrarse en la aplicación: </p>
-    <a class="btn btn-primary" href="{{ URL::asset('user/createUserFromMail/' . $token . '/'. $rol_id. '/'. $email. '/'. $dni)}}" role="button">Nuevo usuario</a>
-
+    <a class="btn btn-primary" href="{{ URL::asset('user/createUserFromMail/' . $token)}}" role="button">Nuevo usuario</a>
+    
 </body>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<!-- Popper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> 
-
-</html>
+</html> --}}

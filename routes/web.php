@@ -34,7 +34,7 @@ Route::get('message/icon', 'MessageController@showIconMessage')->middleware('che
 
 Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');
 
-Route::get('user/index', 'LoginController@indexDashboard')->middleware('checkUserAuth');
+Route::get('user/index', 'LoginController@indexDashboard')->middleware('checkUserAuth')->name('indexDashboard');
 
 Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
 
@@ -70,10 +70,14 @@ Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')-
 Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('checkUserAuth');
 
 Route::post('user/create', 'UsersManagementController@create')->middleware('checkUserAuth');
-Route::get('user/createUserFromMail/{token?}/{rol_id?}/{email?}/{dni?}', 'UsersManagementController@createUserFromMail')->middleware('checkUserAuth');
+Route::get('user/edit/{id}', 'UsersManagementController@edit')->middleware('checkUserAuth');
+Route::post('user/edit-user', 'UsersManagementController@editUser')->middleware('checkUserAuth');
+Route::get('user/createUserFromMail/{token?}', 'UsersManagementController@createUserFromMail');
 
-Route::post('user/createUserNew', 'UsersManagementController@createUserNew')->middleware('checkUserAuth');
 
+Route::post('user/createUserNew', 'UsersManagementController@createUserNew');
+
+Route::get('user/logout', 'LoginController@logout');
 Route::post('user/logout', 'LoginController@logout');
 Route::get('user/settings', 'RecordsController@settings')->middleware('checkUserAuth');
 
@@ -120,15 +124,15 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () 
 });
 
 // Route::post('pusher/auth', 'VideoCallController@authenticatePusher');
-Route::match(array('GET', 'POST'), 'pusher/auth', 'VideoCallController@authenticatePusher');
+Route::match(array('GET', 'POST'), 'pusher/auth', 'VideoCallController@authenticatePusher')->middleware('checkUserAuth');;
 
 
 Route::get('test', function() {
     phpinfo();
 });
 
-Route::get('/sms/send', 'SmsController@sendSms');
-Route::post('/sms/send', 'SmsController@postSendSms');
+Route::get('/sms/send', 'SmsController@sendSms')->middleware('checkUserAuth');;
+Route::post('/sms/send', 'SmsController@postSendSms')->middleware('checkUserAuth');;
 
 /*
 
@@ -144,3 +148,10 @@ Route::resource('notes', 'NoteController');
 Route::resource('patients', 'PatientController');
 */
 
+
+/*
+ * TEST purposes
+ */
+Route::get('test/mailInvitation', function() {
+    return new App\Mail\InvitationNewUserMail('aogyuaogahg', '111111b');
+});

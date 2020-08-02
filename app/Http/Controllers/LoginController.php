@@ -55,7 +55,7 @@ class LoginController extends Controller
         $login = $request->rem_password;
         $user = User::where('dni', $login)->first();
         if(is_null($user)) {
-            return response()->back()->withErrors("Invalid login");
+            return back()->withErrors("Invalid login");
         }
         
         $maxSteps = 1000; //Por seguridad, no vamos a permitir esto
@@ -66,7 +66,7 @@ class LoginController extends Controller
             $user->remember_token = $token;
             if($try >= $maxSteps) {
                 // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
-                return response()->back()->withErrors("Internal error");
+                return back()->withErrors("Internal error");
             }
             $try++;
         } while (User::where('remember_token', $token)->first() instanceof User);
@@ -99,6 +99,9 @@ class LoginController extends Controller
         return view('mail.resetpassword', ['token' => $token]);        
     }
 
+    //TODO: Whenever the pass is swifted in the option menu, an optional mail has to be sent for security reasons, like "Tu contraseña ha sido cambiada desde la IP x"
+    //TODO: The email can also be changed (Meanwhile, the email state would be a 'pending to be verified'). If the email is not changed, the email would be the previous one
+
     public function changePassword(Request $request){
         // $validatedData = Validator::make($request->all(), [
         //     'password' => 'required|confirmed|min:6',
@@ -115,7 +118,6 @@ class LoginController extends Controller
         $pass = Hash::make($request->password);
 
         User::where('remember_token', $request->token)->update(['password'=>$pass]);
-
         return redirect('/')->with(['sucess' => 'The password has been changed']);
     }
 

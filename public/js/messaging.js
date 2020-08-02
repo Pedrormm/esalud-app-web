@@ -181,7 +181,6 @@ else {
                     }
                 }); 
 
-
                 str += '</ul>';
                 // document.getElementById("cMessagesFeed").innerHTML = str;
                 $(".cMessagesFeed").html(str);
@@ -198,7 +197,9 @@ else {
                         data: {id: id, _method:'delete'},
                         method:'post',
                     }).done(function(res){
-                        
+                        if (res.status == 0){
+                            console.log(res);
+                        }
                     })
                     .fail(function(xhr, st, err) {
                         // this.url
