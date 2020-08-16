@@ -164,9 +164,11 @@ else {
                 let str = '<ul>';
 
                 msjs.forEach(function(msj) {
+                    str += generateMessageLine(msj, authUser.id, contact.id);
+                    return;
                     if ((msj.user_id_from == contact.id) && (msj.user_id_to == authUser.id)){
                         str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-                        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a><a href="">Eliminar mensaje</a></div></div></li>'
+                        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a></div></div></li>'
                     }
                     else if ((msj.user_id_from == authUser.id) && (msj.user_id_to == contact.id)){
                         str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
@@ -189,6 +191,7 @@ else {
                     console.log(e);
                     e.preventDefault();
                     let id = $(this).data("delete-message-id");
+                    let that = $(this);
                     $.ajax(PublicURL + 'comm/deleteMessageChat', {
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -197,8 +200,9 @@ else {
                         data: {id: id, _method:'delete'},
                         method:'post',
                     }).done(function(res){
-                        if (res.status == 0){
-                            console.log(res);
+                        if (res.status == 0){ 
+                            console.log("respuesta",res);
+                            that.closest('li').remove();
                         }
                     })
                     .fail(function(xhr, st, err) {
@@ -283,4 +287,24 @@ else {
         }
     }
 
+}
+
+
+function generateMessageLine(msj, authUserId, otherUserId) {
+    let str = '';
+    if ((msj.user_id_from == otherUserId) && (msj.user_id_to == authUserId)){
+        str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
+        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a></div></div></li>'
+    }
+    else if ((msj.user_id_from == authUserId) && (msj.user_id_to == otherUserId)){
+        str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
+        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>Eliminar mensaje</a></div></div></li>'
+                                
+        // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
+        // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';
+    }
+    else {
+        console.error("Bad response message");
+    }
+    return str;
 }

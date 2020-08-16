@@ -59,11 +59,11 @@ $(document).ready(function() {
 
     let intl = window.intlTelInput(input, {
         initialCountry: "auto",
-        geoIpLookup: function(sucess, failure){
+        geoIpLookup: function(successful, failure){
             $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp){
                 let countryCode = (resp && resp.country) ? resp.country : "";
                 console.log("codigo", countryCode);
-                sucess(countryCode);
+                successful(countryCode);
             });
         },
         utilsScript: PublicURL + "vendor/intl-tel-input-master/js/utils.js"

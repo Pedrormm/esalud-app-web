@@ -31,11 +31,10 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * Display a listing of the Role.
-     *
-     * @param Request $request
-     *
-     * @return Response
+     * Displays a listing of the current Roles.
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function index(Request $request)
     {
@@ -53,11 +52,14 @@ class RoleController extends AppBaseController
         return view('adjustments/roleManagement', ['roles' => $roles]);
     }
 
+
     /**
-     * Show the form for creating a new Role.
-     *
+     * Shows the form for creating a new Role.
+     * Endpoint: role/create
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
      * @return Response
-     */
+     */ 
     public function create(Request $request)
     {
         $user = Auth::user();
@@ -103,7 +105,7 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * Store a newly created Role in storage.
+     * Stores a newly created Role in storage.
      *
      * @param CreateRoleRequest $request
      *
@@ -141,11 +143,10 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified Role.
-     *
+     * Shows the form for editing the specified Role.
+     * @author Pedro
      * @param int $id
-     *
-     * @return Response
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit(int $id)
     {
@@ -162,11 +163,9 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * Update the specified Role in storage.
-     *
-     * @param int $id
-     * @param UpdateRoleRequest $request
-     *
+     * Updates the specified Role and Permissions in storage if they have permissions.
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
      * @return Response
      */
     public function update(Request $request)

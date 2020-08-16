@@ -429,12 +429,17 @@ class MessageController extends Controller
             $text = $request->msj;
             $contact_id = (int)$request->contact_id;
 
-            $message = Message::create([
+            $messageData = [
                 'user_id_from' => auth()->id(),
                 'user_id_to' => $contact_id,
-                'message' => $text
-            ]);
-
+                'message' => $text,
+            ];
+            $message = Message::create($messageData);
+            $message->message = \htmlentities($message->message);
+            $message->date_spa = Carbon::now()->format('d-m-Y H:i:s');
+            $message->date_eng = Carbon::now()->format('m-d-Y h:i:s A');
+            
+    
             // $message->log = PusherFactory::make()->trigger('chat', 'send', ['data' => $message]);
             
             return response()->json($message);

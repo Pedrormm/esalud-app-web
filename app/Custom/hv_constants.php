@@ -4,6 +4,9 @@ defined("HV_LAST_CHANGE") or define("HV_LAST_CHANGE", '20200225_0000');
 defined("HV_USE_BOOTSTRAP3") or define("HV_USE_BOOTSTRAP3", false);
 defined("HV_MAX_INVITATION_DAYS") or define("HV_MAX_INVITATION_DAYS", 30);
 defined("HV_MAX_ITERATION_TOKEN") or define("HV_MAX_ITERATION_TOKEN", 1000);
+defined("HV_DNI_LETTERS") or define("HV_DNI_LETTERS",  "trwagmyfpdxbnjzsqvhlcke");
+defined("HV_DNI_CHECK") or define("HV_DNI_CHECK", true);
+defined("HV_MAX_TIMES_CREATE_USER_SENT") or define("HV_MAX_TIMES_CREATE_USER_SENT", 2);
 
 
 class HV_ROLES{

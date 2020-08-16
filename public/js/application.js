@@ -420,11 +420,7 @@ function isInVideoCallView() {
 function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channel=null ) {
     let msj = writtenMessage.val();
     if (msj && (msj != "")){
-        channel.trigger(`client-send`, { 
-            idSender: idSender,
-            idReceiver: userToMessageId,
-            message: msj
-        });
+        
 
         $.ajax(PublicURL + 'comm/send', {
             headers: {
@@ -434,6 +430,16 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
             data: {contact_id: userToMessageId, msj: msj},
             method:'post',
         }).done(function(res){
+
+            channel.trigger(`client-send`, { 
+                idSender: idSender,
+                idReceiver: userToMessageId,
+                user_id_from: idSender,
+                user_id_to: userToMessageId,
+                message: msj,
+                date_spa: res.date_spa,
+                date_eng: res.date_eng,
+            });
             // We push the new message into the messages array cause we already have the other messages locally
             // We add the msj to the parent
             console.log("res: ",res);
@@ -453,20 +459,18 @@ function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
     let currentDate = new Date().today() + " " + new Date().timeNow();
 
     console.log("messageSave",messageObj.message, currentDate);
+    console.log("Yo soy", authUser.id, "message es ", messageObj, " alien es ", alienUser);
     // We just have to append the message after the last li, with the proper class
-    if (alienUser){
-        $(".cMessagesFeed ul").append(
-            $('<li />').addClass("alienUser").append($('<div />').addClass("text").append($('<span />').text(messageObj.message)).append($('<p />').addClass("dateFeed").text(currentDate)) )
-        );  
+    let idFrom = authUser.id;
+    let idTo = messageObj.user_id_from;
+    if(alienUser) {
+        idFrom = authUser.id;
+        idTo = messageObj.user_id_to;
     }
-    else{
-        if (($('.contactsList .selectedContact').attr("value") == contactToWriteId) 
-        || ($(".conversationMobile").attr("data-selectedUserId") ==  contactToWriteId) ){
-            $(".cMessagesFeed ul").append(
-                $('<li />').addClass("ownUser").append($('<div />').addClass("text").append($('<span />').text(messageObj.message)).append($('<p />').addClass("dateFeed").text(currentDate)) )
-            );
-        }
-    }
+   
+    let str = generateMessageLine(messageObj, idFrom, idTo);
+
+    $('.cMessagesFeed ul').append(str);
     if($(".cMessagesFeed li").length > oldLength)
         appended = true;
 
@@ -622,11 +626,11 @@ function settingUpPhone(){
 
     let intl = window.intlTelInput(input, {
         initialCountry: "auto",
-        geoIpLookup: function(sucess, failure){
+        geoIpLookup: function(successful, failure){
             $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp){
                 let countryCode = (resp && resp.country) ? resp.country : "";
                 console.log("codigo", countryCode);
-                sucess(countryCode);
+                successful(countryCode);
             });
         },
         utilsScript: PublicURL + "vendor/intl-tel-input-master/js/utils.js"

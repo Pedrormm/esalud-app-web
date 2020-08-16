@@ -28,11 +28,11 @@
 
     <div class="container-fluid mt-3">
       
-      @if(isset($sucess))
+      @if(isset($successful))
         <div class="row">
           <div class="col-lg-12">
             <div class="alert alert-info">
-              {{ $sucess }}     
+              {{ $successful }}     
             </div>
           </div>
         </div>
@@ -58,9 +58,9 @@
         asyncCall('user/messages', '#home', true);
 */
 
-        // @if(session('sucess'))
+        // @if(session('successful'))
         //   <div class="alert alert-success">
-        //       {{ session('sucess') }}
+        //       {{ session('successful') }}
         //   </div>
         // @endif
 

@@ -84,4 +84,19 @@
         return $newToken;
     }
 
-    
+    function checkDni(string $dni):bool {
+        if(!HV_DNI_CHECK)
+            return true;
+        if(!preg_match("/^[\dx-z]\d{7}[a-z]$/i", $dni)) {
+            return false;
+        }
+        $dniCheck = strtolower($dni);
+        if(!is_numeric($dni[0])) {
+            $str = "xyz";
+            $dniCheck[0] = strpos($str, $dni[0]);
+        }
+        $dniNum = (int)substr($dniCheck, 0, -1);
+        $dniLetter = substr($dniCheck, -1);
+        $letter = HV_DNI_LETTERS[$dniNum%23];
+        return $letter == $dniLetter;
+    }

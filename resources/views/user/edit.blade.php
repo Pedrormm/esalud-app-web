@@ -32,7 +32,7 @@
             <div id="error-container" class="alert alert-danger dNone"></div>
             <div id="message-container" class="alert alert-success dNone"></div>
 
-            <form action="/user/edit-user" method="POST" id="newUserMailForm">
+            <form action="/user/editUser" method="POST" id="newUserMailForm">
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">

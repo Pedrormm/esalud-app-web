@@ -93,9 +93,9 @@
             </div>
         @endif
 
-        @if(session('sucess'))
+        @if(session('successful'))
             <div class="alert alert-success">
-                {{ session('sucess') }}
+                {{ session('successful') }}
             </div>
         @endif
 

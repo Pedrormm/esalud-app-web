@@ -38,7 +38,7 @@
                     </tr>
                   </thead>
                   <tbody>
-
+                    {{-- TODO: This Datatable to Ajax --}}
                   @foreach($users as $singleUser) 
                   
                     <tr class="text_left">
@@ -70,7 +70,15 @@
                             <span>{{ $singleUser['sex'] }}</span>                   
                         </td>
                         <td>
-                            <span><a href="/user/edit/{{ $singleUser['id'] }}"><i class="fa fa-edit"></i></a></span>                   
+                            @if ($singleUser['role_id'] !== \HV_ROLES::PERM_ADMIN)
+                              <span>
+                                <a href="/user/edit/{{ $singleUser['id'] }}"><i class="fa fa-edit"></i></a>
+                              </span>   
+                            @else
+                              <span>
+                                <i class="fa fa-edit" style="color:gray"></i>
+                              </span> 
+                            @endif                
                         </td>
                     </tr>
 

@@ -41,7 +41,14 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             // Autenticacion realizada...
+           
             $user = auth()->user();
+            
+            if(Hash::needsRehash($user->password)) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+            }
+            
             return redirect()->action('LoginController@index');
         }
         return back()->withErrors("Authentication failed");
@@ -87,7 +94,7 @@ class LoginController extends Controller
             $m->subject(urldecode($contact[0]->name)." ". urldecode($contact[0]->lastname).", it has been requested to reset your password");
         });
         
-        return redirect()->back()->with(['sucess' => 'A reset email was sent to the email']);
+        return redirect()->back()->with(['successful' => 'A reset email was sent to the email']);
 
     }
 
@@ -118,7 +125,7 @@ class LoginController extends Controller
         $pass = Hash::make($request->password);
 
         User::where('remember_token', $request->token)->update(['password'=>$pass]);
-        return redirect('/')->with(['sucess' => 'The password has been changed']);
+        return redirect('/')->with(['successful' => 'The password has been changed']);
     }
 
     const MAX_MESSAGE_LENGTH = 15;

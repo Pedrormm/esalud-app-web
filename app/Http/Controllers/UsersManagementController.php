@@ -37,9 +37,20 @@ class UsersManagementController extends Controller
         return view('user.newUser')->with('roles',$roles);    
     }
 
+    /**
+     * 
+     
+     */
+    /**
+     * This is the main processing controller for users invitations 
+     * Endpoint: user/create
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
     public function create(Request $request){
         $validatedData = parent::checkValidation([
-            'dni' => 'required|min:5|max:10',
+            'dni' => 'required|min:9|max:9',
             'email' => 'required|email:rfc,dns',
             'rol_id' => 'required|numeric|min:1',
         ]);
@@ -47,6 +58,11 @@ class UsersManagementController extends Controller
         $dni = $request->input('dni');
         $email = $request->input('email');
         $rol_id = $request->input('rol_id');
+
+        //Check valid dni letter
+        if(!checkDni($dni)) {
+            return $this->backWithErrors("UsMaCoCr001: Invalid dni format");
+        }
         if ((auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR || auth()->user()->role_id == \HV_ROLES::PERM_HELPER) && $rol_id == \HV_ROLES::PERM_ADMIN)
             return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
         $existUser = User::exist_user_by_dni($dni);
@@ -56,7 +72,7 @@ class UsersManagementController extends Controller
             // $token = Str::random(32);
             $token = $this->generateUniqueToken("users_invitations", "verification_token");
 
-            // DB::beginTransaction();
+            DB::beginTransaction();
             $userInvitation = UserInvitation::whereDni($dni)->first();
             if(is_null($userInvitation)) {
                 $userInvitation = new UserInvitation();
@@ -71,6 +87,10 @@ class UsersManagementController extends Controller
 
             // TODO: if (maxTimes > 3(constante)) google Verification Bot. Captcha plugin.
 
+            if ($userInvitation->times_sent == HV_MAX_TIMES_CREATE_USER_SENT){
+                dd(1);
+            }
+
             $userInvitation->verification_token = $token;
             $userInvitation->expiration_date = date("Y-m-d", time() + 172800);
             
@@ -82,15 +102,12 @@ class UsersManagementController extends Controller
             $subject = "Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni;
 
             $res = Mail::to($email)->send(new InvitationNewUserMail($token, $dni));
-            // $res = Mail::send('mail.createUser', ['token' => $token, 'dni' =>$dni, 'rol_id' =>$rol_id, 'email' =>$email], function ($m) use ($email, $dni) {
-            //     $m->to($email);
-            //     $m->subject("Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni);
-            // });
-            // if(!$res) {
-            //     DB::rollBack();
-            // }
-            // else
-            //     DB::commit();
+      
+            if(!$res) {
+                DB::rollBack();
+            }
+            else
+                DB::commit();
             return view('user.newUser')->with('roles',$roles)->with('info','Se ha enviado un correo con las instrucciones para crear el usuario');
             
         }else{                        
@@ -99,9 +116,9 @@ class UsersManagementController extends Controller
         }
     }
 
-    // public function createUserFromMail($token, $rol_id,$email, $dni){
     /**
      * Process a invitation link from email
+     * Endpoint: user/createUserFromMail/{token?}
      * @author Pedro
      * @param string $token The unique token in users_invitations table
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
@@ -127,10 +144,6 @@ class UsersManagementController extends Controller
                 else
                     $branches = "";
 
-                
-                // No null y expiration date < hoy (volver a enviar mail?)
-                // Pasarle el token a la vista para ponerlo como hidden
-                // Con ese token se vuelve a verificar al crear. Una vez creado, borro fila de token de user created.
                 return view('user.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
             }
             else
@@ -141,13 +154,18 @@ class UsersManagementController extends Controller
         }
     }
 
-    public function createUserNew(Request $request){
+    /**
+     * Creates the user given in the User Table
+     * Endpoint: user/createNewUser
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function createNewUser(Request $request){
 
-
-        // TODO: Validate
         $validatedData = parent::checkValidation([
             'token' => 'required|exists:App\Models\UserInvitation,verification_token',
-            'dni' => 'required|min:5|max:10',
+            'dni' => 'required|min:9|max:9',
             'email' => 'required|email:rfc,dns',
             'rol_id' => 'required|numeric|min:1',
             'name' => 'required',
@@ -286,27 +304,52 @@ class UsersManagementController extends Controller
         DB::commit();
         
         $roles = Role::all();
-        //TODO: Enviar un mail al usuario con "Cuenta creada, bienvenido" y que mande el link al login
         $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
 
         if (Auth::user())
-            return view('user.dashboard')->with('sucess', "An user the dni ".$dni." has been properly created");
+            return view('user.dashboard')->with('successful', "An user the dni ".$dni." has been properly created");
         else
-            return redirect('/')->with('sucess', "An user the dni ".$dni." has been properly created. Please log in.");
+            return redirect('/')->with('successful', "An user the dni ".$dni." has been properly created. Please log in.");
     }
 
+    /**
+     * Shows the edit user view, given an userId
+     * Endpoint: user/edit/{id}
+     * @author Pedro
+     * @param  $id The userId to be edited
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */    
     public function edit($id){
         $usuario = User::find($id);
         $rol_usuario_info = "";
 
-        if($usuario->role_id == \HV_ROLES::PERM_PATIENT){
-            $rol_usuario_info = DB::select('SELECT * FROM patients WHERE user_id ='.$id.' LIMIT 1');
-        }elseif($usuario->role_id == \HV_ROLES::PERM_DOCTOR){
-            $rol_usuario_info = DB::select('SELECT * FROM staff WHERE user_id ='.$id.' LIMIT 1');
+        if($usuario->role_id == \HV_ROLES::PERM_ADMIN){
+            return $this->backWithErrors("Not enough permissions");
+        }
+        elseif($usuario->role_id == \HV_ROLES::PERM_PATIENT){
+            // DB::table('patients')->whereUserId($id)->limit(1)->first();
+            $rol_usuario_info = Patient::whereUserId($id)->first();
+            // $rol_usuario_info = DB::select('SELECT * FROM patients WHERE user_id ='.$id.' LIMIT 1');
+        }elseif(($usuario->role_id == \HV_ROLES::PERM_DOCTOR) || $usuario->role_id == \HV_ROLES::PERM_HELPER){
+            // $rol_usuario_info = DB::select('SELECT * FROM staff WHERE user_id ='.$id.' LIMIT 1');
+            $rol_usuario_info = Staff::whereUserId($id)->first();
+        }
+        else{
+            $rol_usuario_info = User::whereUserId($id)->first();
+        }
+        if(!$rol_usuario_info) {
+            return $this->backWithErrors("UsMaCoEd001: Invalid id");
         }
         return view('user.edit')->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info[0]);
     }
 
+    /**
+     * Edits the selected user in the Database
+     * Endpoint: user/editUser
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */      
     public function editUser(Request $request){
 
         $user_id = $request->input('user_id');
@@ -379,9 +422,17 @@ class UsersManagementController extends Controller
             $staff->save();
         }
 
-        return view('user.dashboard')->with('sucess', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
+        return view('user.dashboard')->with('successful', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
     }
 
+    /**
+     * Shows the users that are Staff
+     * Endpoint: user/staff/{search?}/{ord?}
+     * @author Pedro
+     * @param string $search The searching sentence
+     * @param string $order The given order
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */      
     public function showStaff(string $search=null, string $ord=null){
         $user = Auth::user();
 
@@ -390,6 +441,15 @@ class UsersManagementController extends Controller
         return view('user/staff', ['staff' => $staff,'user' => $user]);    
     }
 
+
+    /**
+     * Shows the users that are Patients
+     * Endpoint: user/patient/{search?}/{ord?}
+     * @author Pedro
+     * @param string $search The searching sentence
+     * @param string $order The given order
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */  
     public function showPatients(string $search=null, string $ord=null){
         $user = Auth::user();
 
@@ -411,6 +471,15 @@ class UsersManagementController extends Controller
         return view('user/patient', ['patients' => $patients,'user' => $user]);
     }
 
+    /**
+     * Shows all users
+     * Endpoint: user/user/{search?}/{ord?} 
+     -* Endpoint: usersManagement/show/users/{search?}/{ord?}-
+     * @author Pedro
+     * @param string $search The searching sentence
+     * @param string $order The given order
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */ 
     public function showUsers(string $search=null, string $ord=null){
         $user = Auth::user();
 

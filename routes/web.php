@@ -64,18 +64,18 @@ Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 
 
 
-Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
 Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');
+Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
 Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('checkUserAuth');
 Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('checkUserAuth');
 
 Route::post('user/create', 'UsersManagementController@create')->middleware('checkUserAuth');
 Route::get('user/edit/{id}', 'UsersManagementController@edit')->middleware('checkUserAuth');
-Route::post('user/edit-user', 'UsersManagementController@editUser')->middleware('checkUserAuth');
+Route::post('user/editUser', 'UsersManagementController@editUser')->middleware('checkUserAuth');
 Route::get('user/createUserFromMail/{token?}', 'UsersManagementController@createUserFromMail');
 
 
-Route::post('user/createUserNew', 'UsersManagementController@createUserNew');
+Route::post('user/createNewUser', 'UsersManagementController@createNewUser');
 
 Route::get('user/logout', 'LoginController@logout');
 Route::post('user/logout', 'LoginController@logout');

@@ -38,6 +38,7 @@ class CreateUsers extends Migration
         Artisan::call('db:seed', [
             '--class' => UsersTableSeeder::class
         ]);
+        // $this->call(UsersTableSeeder::class);
     }
 
     /**
