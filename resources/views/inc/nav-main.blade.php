@@ -44,9 +44,9 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User administration:</h6>
                 <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/newUser') }}">Create new user</a>
-                <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/user/user') }}">Show all users</a>
-                <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/user/patient') }}">Patient management</a>
-                <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/user/staff') }}">Staff management</a>
+                <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/users') }}">Show all users</a>
+                <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/users/patient') }}">Patient management</a>
+                <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/users/staff') }}">Staff management</a>
             </div>
             </div>
         </li>

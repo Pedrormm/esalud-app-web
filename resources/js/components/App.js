@@ -563,7 +563,6 @@ export default class App extends Component {
                     })*/} 
 
 
-
                     {/* Video for the caller and the reciever */}
                     <div id="video_container">
                         <video muted className="my_video" id="myVideo"

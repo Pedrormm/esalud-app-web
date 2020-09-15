@@ -74,7 +74,10 @@ class Patient extends Model
 	public static function getPatientByUser($user_id){
 		
 		$patient = DB::select('SELECT * FROM patients WHERE user_id = '.$user_id.'');
-		return $patient[0];
-		
-	}
+		return $patient[0];	
+    }
+    
+    public function scopeUserParent($query) {
+        return $query->join('users', 'users.id', 'patients.user_id');
+    }
 }

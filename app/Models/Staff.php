@@ -91,6 +91,10 @@ class Staff extends Model
         	
 		$staff = DB::select('SELECT * FROM staff WHERE user_id = '.$user_id.'');
         return $staff[0];
-        
+ 
+    }
+
+    public function scopeUserParent($query) {
+        return $query->join('users', 'users.id', 'staff.user_id');
     }
 }

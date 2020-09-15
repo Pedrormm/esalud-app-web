@@ -72,7 +72,7 @@
                         <td>
                             @if ($singleUser['role_id'] !== \HV_ROLES::PERM_ADMIN)
                               <span>
-                                <a href="/user/edit/{{ $singleUser['id'] }}"><i class="fa fa-edit"></i></a>
+                                <a href="/users/edit/{{ $singleUser['id'] }}"><i class="fa fa-edit"></i></a>
                               </span>   
                             @else
                               <span>

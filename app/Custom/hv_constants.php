@@ -34,6 +34,11 @@ class SHIFTS{
     public static $types = [self::M, self::ME, self::MN, self::MEN, self::E, self::EN, self::N];
 }
 
+class HV_USER_TYPES {
+    const PATIENT = 'patient';
+    const STAFF = 'staff';
+}
+
 class IPS{
     const PUBLIC_IP_SITE = 'http://checkip.dyndns.com/';
     public static function getPrivateIp (){

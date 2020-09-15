@@ -62,6 +62,14 @@ Route::post('/passwordchanged', 'LoginController@changePassword');
 Route::post('/user/login', 'LoginController@login');
 Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 
+// User routes
+Route::get('users/edit/{id}', 'UserController@edit')->middleware('checkUserAuth')->name('users.edit');//->where('id', '\d+');;
+
+Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('checkUserAuth')->where('userType', 'staff|patient');
+// TODO: How to route without a word (edit). Possible solution->Routing without the search and ord parameters
+Route::put('users/{id}', 'UserController@update')->middleware('checkUserAuth');
+// TODO: Preguntar: Para qué le tengo que pasar el id al update, si ya se obtienen los argumentos con Request
+// route('users.edit', ['id'=>25])
 
 
 Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');

@@ -15,8 +15,8 @@
     @endisset
 
     {{-- Code for nav-main.blade.php --}}
-    @if((Request::is('user/create') || (Request::is('user/user')) || Request::is('user/patient') 
-    || Request::is('user/staff') ))
+    @if((Request::is('user/create') || (Request::is('users')) || Request::is('users/patient') 
+    || Request::is('users/staff') ))
         $('#collapseUserManagement').collapse('show');
     @elseif((Request::is('user/my-messages') || (Request::is('user/send-message')) || 
     Request::is('user/chat') || Request::is('user/videocall') ))
@@ -30,13 +30,13 @@
     @if(Request::is('user/create'))
         $('#navSubitemCreateNewUser').css('background-color', '#eaecf4');
         $('#navSubitemCreateNewUser').addClass('active');
-    @elseif(Request::is('user/user'))
+    @elseif(Request::is('users'))
         $('#navSubitemShowUsers').css('background-color', '#eaecf4');
         $('#navSubitemShowUsers').addClass('active');
-    @elseif(Request::is('user/patient'))
+    @elseif(Request::is('users/patient'))
         $('#navSubitemPatientManagement').css('background-color', '#eaecf4');
         $('#navSubitemPatientManagement').addClass('active');
-    @elseif(Request::is('user/staff'))
+    @elseif(Request::is('users/staff'))
         $('#navSubitemStaffManagement').css('background-color', '#eaecf4');
         $('#navSubitemStaffManagement').addClass('active');
     @endif

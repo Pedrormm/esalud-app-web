@@ -38,10 +38,6 @@ class UsersManagementController extends Controller
     }
 
     /**
-     * 
-     
-     */
-    /**
      * This is the main processing controller for users invitations 
      * Endpoint: user/create
      * @author Pedro
@@ -344,7 +340,7 @@ class UsersManagementController extends Controller
     }
 
     /**
-     * Edits the selected user in the Database
+     * Update the selected user in the Database
      * Endpoint: user/editUser
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request

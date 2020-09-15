@@ -32,7 +32,8 @@
             <div id="error-container" class="alert alert-danger dNone"></div>
             <div id="message-container" class="alert alert-success dNone"></div>
 
-            <form action="/user/editUser" method="POST" id="newUserMailForm">
+            {{-- <form action="/user/editUser" method="POST" id="newUserMailForm"> --}}
+            {{ Form::open(array('url' => '/users/'.$usuario->id, 'method' => 'PUT', 'id'=>'newUserMailForm')) }}
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
@@ -43,7 +44,7 @@
                 <div class="row mb-3">
                     <input type="hidden" value="{{ $usuario->id }}" name="user_id" />
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" value="{{ $usuario->email }}" name="email" />
+                        <input type="text" class="form-control" value="{{ $usuario->email }}" name="email" placeholder="Email" />
                         
                     </div>
                     <div class="col-lg-4">
@@ -51,8 +52,13 @@
                         
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" value="{{ App\Models\Role::find($usuario->role_id)->name }}" name="role_id" />
-                        
+                        {{-- <input type="text" class="form-control" value="{{ App\Models\Role::find($usuario->role_id)->id }}" name="role_id" /> --}}
+                            <select name="role_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
+                                data-live-search="true" title="Rol">
+                                @foreach ($roles as $rol)
+                                    <option value={{ $rol->id }} {{ $usuario->role_id == $rol->id ? 'selected' : "" }}>{{ $rol->name }}</option>
+                                @endforeach
+                            </select> 
                     </div>
                 </div>
 
@@ -72,7 +78,7 @@
                     <div class="col-lg-4">
                         <input type="text" class="form-control" value="{{ $usuario->country }}" placeholder="País" name="country" />
                     </div>
-                    <div class="col-lg-4">
+                    <div clas s="col-lg-4">
                         <input type="text" class="form-control" value="{{ $usuario->city }}" placeholder="Ciudad" name="city" />
                     </div>
                     <div class="col-lg-4">
@@ -152,9 +158,9 @@
                             <input type="text" value="{{ $rol_usuario_info->historic }}" class="form-control" placeholder="Histórico" name="historic" />
                         </div>
                         <div class="col-lg-4">
-                            <select class="form-control" name="branch">
+                            <select class="form-control" name="branch_id">
                                 <option>Seleccione especialidad</option>
-                                @foreach( App\Models\Branch::all() as $branch)
+                                @foreach( $branches as $branch)
                                     <option {{ $rol_usuario_info->branch_id == $branch->id ? 'selected' : "" }} value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
@@ -191,7 +197,9 @@
                     </div>
                 </div>
 
-            </form>
+            
+            {{ Form::close() }}
+            {{-- </form> --}}
             
 
         @endif
@@ -200,7 +208,7 @@
 
   </div>
 
-  <script type="text/javascript" src="{{ asset('js/newUserMail.js')}}"></script>
+  {{-- <script type="text/javascript" src="{{ asset('js/newUserMail.js')}}"></script> --}}
 
   @endsection
 

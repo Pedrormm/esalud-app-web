@@ -325,6 +325,7 @@ class User extends Model
         return $this->hasMany(\App\Models\WarningsRead::class, 'user_id');
     }
 
+
     public static function getPermissions(int $userId, int $valuePermission = null) {
         //\DB::enableQueryLog();
         $results = self::select('roles_permissions.permission_id')->join('roles_permissions', 'roles_permissions.role_id', 'users.role_id')
@@ -348,5 +349,27 @@ class User extends Model
     public static function exist_user_by_dni($dni_user){
         $user = DB::select('SELECT * FROM users WHERE dni = "'.$dni_user.'"');
         return count($user);
+    }
+
+    public function scopeFindByString($query, string $search, string $ord){
+        
+        return $query->orderBy($ord)        
+        ->where('name', 'LIKE', '%'.$search.'%')
+        ->orWhere('lastname', 'LIKE', '%'.$search.'%')
+        //->orWhere('historic', 'LIKE', '%'.$search.'%')
+        ->orWhere('dni', 'LIKE', '%'.$search.'%');
+        //->get()->toArray();
+    }
+
+    public function scopeSpanish($query) {
+        return $query->whereCountry('España');
+    }
+
+    public function scopeJoinOthers($query) {
+        return $query->with(['patients', 'staff']);
+    }
+
+    public function scopeOnlyPatients($query) {
+        return $query->with(['patients']);
     }
 }

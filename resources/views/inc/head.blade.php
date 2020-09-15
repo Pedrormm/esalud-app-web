@@ -85,6 +85,11 @@
 
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/core.css') }}">
 
+                @if (strpos(url()->current(), 'user/edit') > 0)
+                        <!-- add to document <head> -->
+                        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+                @endif
+
 
                 <!-- =============== CUSTOM SCRIPTS ===============-->
                 <script type="text/javascript" src="{{ asset('js/application.js') }}"></script>
