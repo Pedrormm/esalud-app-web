@@ -47,9 +47,6 @@ Route::post('comm/send', 'MessageController@send')->middleware('checkUserAuth');
 Route::delete('comm/deleteMessageChat', 'MessageController@delete')->middleware('checkUserAuth');
 
 
-
-
-
 /*Route::get('message/summary', function() {
     return view('ajax.messages_summary');
 });*/
@@ -94,6 +91,20 @@ Route::post('user/avatarupdate/{id?}', [
     'as' => 'avatar.update'
 ]);
 
+//Rutas para las citas médicas (Appointments)
+// Route::get('/appointments', 'AppointmentController@index')->name('index');
+// Route::get('appointment/{id}', 'AppointmentController@edit');
+
+Route::get('/appointment/listPending', 'AppointmentController@listPending')->middleware('checkUserAuth');
+Route::get('/appointment/listAccepted', 'AppointmentController@listAccepted')->middleware('checkUserAuth');
+
+Route::get('/appointment/calendar', 'AppointmentController@calendar')->middleware('checkUserAuth');
+Route::get('/appointment/showCalendar/{id}', 'AppointmentController@showCalendar')->middleware('checkUserAuth');
+
+Route::resource('appointment', 'AppointmentController')->middleware('checkUserAuth');
+
+// TODO: Enviar mail información de cita pendiente con doctor x. Entrar en link para validar.
+// Si el paciente rechaza cita el doctor y admin reciben email de paciente ha rechazado cita con motivo
 
 // Communication purposes routes
 Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
@@ -102,6 +113,7 @@ Route::get('comm/messaging/{id?}', 'MessageController@showMessaging')->middlewar
 Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
 Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
 
+Route::get('communication/video-room/{sessionRoom}', 'VideoCallController@showVideoRoom')->middleware('checkUserAuth');
 
 /*
 Route::get( 'user/recorddisplay/{id}', function ( $id) {
@@ -151,7 +163,6 @@ Route::resource('staff', 'StaffController');
 Route::resource('calls', 'CallController');
 
 Route::resource('notes', 'NoteController');
-
 
 Route::resource('patients', 'PatientController');
 */

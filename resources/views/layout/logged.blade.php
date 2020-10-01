@@ -132,7 +132,8 @@ aria-hidden="true">
   @endif
 @endif
 
-@include('inc.scripts')
 
+@include('inc.scripts')
+@yield('scriptsPropios')
 </body>
 </html>

@@ -11,6 +11,15 @@ use App\Models\User;
 
 class VideoCallController extends Controller
 {
+
+    public function showVideoRoom($sessionRoom){
+
+        $loggedUser = auth()->user();
+
+        return view('communication/video_room', ['loggedUser' => $loggedUser,
+        'sessionRoom' => $sessionRoom]);
+    }
+
     public function showVideoCall(Request $request){
         $allUsers = User::select('users.id','users.name','lastname','dni','role_id','roles.name as role_name')
         ->join('roles', 'roles.id', 'users.role_id')->orderBy('users.id')->get()->groupBy('role_name')->toArray();

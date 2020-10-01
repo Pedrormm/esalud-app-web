@@ -11,7 +11,7 @@
 
                 <!-- Latest compiled and minified bootstrap CSS -->
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css" />
                 <!-- jQuery library -->
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -21,7 +21,7 @@
                 <!-- Latest compiled bootstrap JavaScript -->
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
 
-
+                <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
                 {{-- <!-- Jquery & Bootstrap core JavaScript-->
                 <!-- <script src="{{ asset('vendor/jquery/dist/jquery.js') }}"></script> -->
                 <script type="text/javascript" src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>

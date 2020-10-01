@@ -1,3 +1,4 @@
+let _avoidAllSendings = false;
 $(function() {
 
     if ($('#dataTable').length > 0 ){
@@ -123,11 +124,23 @@ function showInlineMessage(message, timeout=0) {
     }
 }
 function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
-     removeApp=false, secondstoCancel=null) {
+     removeApp=false, secondstoCancel=null, callbackOkButton = null) {
     $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
     if (size){
         $('.modal-dialog').addClass(size);
+    }
+
+    if(typeof callbackOkButton == 'function') {
+        callbackOkButton = (function() {
+            let cachedFunction = callbackOkButton;
+            return function() {
+                cachedFunction.apply(this, arguments);
+                if(!_avoidAllSendings)
+                    $('#generic-modal').modal('hide');
+            }
+        })();
+        $('#generic-modal #saveModal').click(callbackOkButton);
     }
 
     if (drageable){
@@ -157,7 +170,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         //$('#generic-modal .modal-body').html(url);
         // $('#generic-modal').modal('show');
 
-    } 
+    }
     else{
         $('#generic-modal .modal-body').text(body);
     }

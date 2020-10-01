@@ -90,16 +90,21 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Appointments Heading -->
-        <div class="sidebar-heading">
-            Appointments
-        </div>
-
-        <!-- Nav Item - Make an appointment -->
-        <li class="nav-item{{ (Request::is('user/appointments'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/user/appointments') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Make an appointment</span></a>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAppoinment" aria-expanded="true" 
+            aria-controls="collapseAppoinment">
+            <i class="fa fa-users"></i>
+            <span>Appointments</span>
+            </a>
+            <div id="collapseAppoinment" class="collapse" aria-labelledby="headingCommunication" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Messages:</h6>
+                <a id="navSubitemMessaging" class="collapse-item" href="{{ URL::asset('/appointment/list/pending') }}">Ver Citas pendientes</a>
+                <a id="navSubitemMessaging" class="collapse-item" href="{{ URL::asset('/appointment/list/accepted') }}">Ver Citas aceptadas</a>
+                <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/create') }}">Crear</a>
+                <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/calendar') }}">Calendario</a    
+            </div>
+            </div>
         </li>
 
         <!-- Divider -->

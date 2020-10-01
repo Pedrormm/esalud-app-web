@@ -224,6 +224,31 @@ class User extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
+    public function appointmentsPatient()
+    {
+        return $this->hasMany(\App\Models\Appointment::class, 'user_id_patient');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function appointmentsCreator()
+    {
+        return $this->hasMany(\App\Models\Appointment::class, 'user_id_creator');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function appointmentsDoctor()
+    {
+        return $this->hasMany(\App\Models\Appointment::class, 'user_id_doctor');
+    }
+    
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
     public function messages()
     {
         return $this->hasMany(\App\Models\Message::class, 'user_id_from');
