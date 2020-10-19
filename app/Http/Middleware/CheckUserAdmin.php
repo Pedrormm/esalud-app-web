@@ -22,7 +22,7 @@ class CheckUserAdmin
         $user = Auth::user();
        
         // if ($user->role_id == \HV_ROLES::PERM_ADMIN)
-        if (in_array(\HV_ROLES::PERM_ADMIN, User::getPermissions($user->id, \HV_PERMISSIONS::READ_WRITE)))
+        if ($user->role_id == \HV_ROLES::ADMIN)
             return $next($request);
         else{
             // delivering an error

@@ -397,4 +397,10 @@ class User extends Model
     public function scopeOnlyPatients($query) {
         return $query->with(['patients']);
     }
+
+    // public static function getPerms($query) {
+    //     return $query->join('roles', 'users.role_id', '=', 'roles.id')
+    // }
 }
+// $persm = $user->getPerms(); ['CREATE_USER', 'ADMIN']
+// if(in_array(HV_PERMISSIN::CR, $perms))

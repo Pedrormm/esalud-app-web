@@ -14,7 +14,16 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
+    
+    public function __construct() {
+        
+        view()->composer('*',function($view) {
+            $view->with('perms', fillPermissionClass());
+        });
+    }
+    public function getPerms() {
+        return $this->perms;
+    }
     protected function jsonResponse(string $status, string $message) {
         return response()->json(['status' => $status, 'message' => $message]);
     }

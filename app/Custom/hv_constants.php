@@ -10,17 +10,19 @@ defined("HV_MAX_TIMES_CREATE_USER_SENT") or define("HV_MAX_TIMES_CREATE_USER_SEN
 
 
 class HV_ROLES{
-    const PERM_PATIENT = 1;
-    const PERM_DOCTOR = 2;
-    const PERM_HELPER = 3;
-    const PERM_ADMIN = 4;
-    const PERM_GUEST = 5;
+    const PATIENT = 1;
+    const DOCTOR = 2;
+    const HELPER = 3;
+    const ADMIN = 4;
+    const GUEST = 5;
 }
 
-class HV_PERMISSIONS{
+class HV_PERMISSIONS_ACTIVATED{
     const NONE = 0;
-    const READ = 1;
-    const READ_WRITE = 2;
+    const ACTIVE = 1;
+    // const READ = 1;
+    // const READ_WRITE = 2;
+    // Call to helper fillPermissionClass() to fill it
 }
 
 class SHIFTS{

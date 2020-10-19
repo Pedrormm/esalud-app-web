@@ -22,8 +22,8 @@
         </li>
 
 
-        @if ( in_array($user->role_id, [HV_ROLES::PERM_DOCTOR,HV_ROLES::PERM_HELPER,HV_ROLES::PERM_ADMIN],
-         true ) ) 
+        {{-- @if ( in_array($user->role_id, [HV_ROLES::PERM_DOCTOR,HV_ROLES::PERM_HELPER,HV_ROLES::PERM_ADMIN],
+         true ) )  --}}
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -50,7 +50,7 @@
             </div>
             </div>
         </li>
-        @endif
+        {{-- @endif --}}
 
         <!-- Nav Item - Medical record -->
         <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">
@@ -97,20 +97,24 @@
             <span>Appointments</span>
             </a>
             <div id="collapseAppoinment" class="collapse" aria-labelledby="headingCommunication" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Messages:</h6>
-                <a id="navSubitemMessaging" class="collapse-item" href="{{ URL::asset('/appointment/list/pending') }}">Ver Citas pendientes</a>
-                <a id="navSubitemMessaging" class="collapse-item" href="{{ URL::asset('/appointment/list/accepted') }}">Ver Citas aceptadas</a>
-                <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/create') }}">Crear</a>
-                <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/calendar') }}">Calendario</a    
-            </div>
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Custom Messages:</h6>
+                    {{-- @if(auth()->user()->role_id == \HV_ROLES::PERM_PATIENT) --}}
+                        <a id="navSubitemMessaging" class="collapse-item d-none-doctor d-none-admin" href="{{ URL::asset('/appointment/list/pending') }}">Ver Citas pendientes</a>
+                        <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment/list/accepted') }}">Ver Citas aceptadas</a>
+                    {{-- @elseif(in_array(auth()->user()->role_id, [\HV_ROLES::PERM_DOCTOR, \HV_ROLES::PERM_ADMIN])) --}}
+                        <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment') }}">Ver Citas</a>
+                    {{-- @endif --}}
+                        <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/create') }}">Crear</a>
+                        <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/calendar') }}">Calendario</a    
+                </div>
             </div>
         </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        @if ($user->role_id == HV_ROLES::PERM_ADMIN)
+        {{-- @if (auth()->user()->role_id == HV_ROLES::PERM_ADMIN) --}}
             <!-- Adjustments Heading -->
             <div class="sidebar-heading">
                 Adjustments
@@ -126,7 +130,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
     
-        @endif
+        {{-- @endif --}}
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
@@ -136,3 +140,15 @@
         </ul>
     </nav>
     <!-- End of Sidebar -->
+
+@section('scriptsPropios')
+
+{{-- <script>
+    $(function() {
+        @if(auth()->user()->role_id == \HV_ROLES::PERM_ADMIN)
+        $('.d-none-patient,.d-none-doctor').hide();
+        
+    });
+</script> --}}
+
+@endsection

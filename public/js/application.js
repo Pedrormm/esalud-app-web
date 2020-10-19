@@ -1,3 +1,4 @@
+
 let _avoidAllSendings = false;
 $(function() {
 
@@ -9,6 +10,28 @@ $(function() {
         });
     }
 
+    
+let pusher = videoPusherInit();
+let videoChannel = pusher[1];
+
+videoChannel.bind(`client-video-channel-send`, (data) => {
+    console.log("Recibido datos video channel", data);
+    if (data.userReceiverId == authUser.id){
+
+            showModalConfirm("Llamada entrante de "+data.userReceiverFullName,"¿Desea aceptar la llamada?",()=>{
+            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
+            hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
+            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: data.session}));
+            $('body').append(hiddenForm);
+    
+            window.open('', 'videoWindow');
+            $('#videoFormData').submit(); 
+        },()=>{
+            
+        });
+    }
+
+});
 
 
 
@@ -423,7 +446,8 @@ function sleep(milliseconds) {
   }
 
 function isABootstrapModalOpen() {
-    return $('.modal.show').length >0;
+    // return $('.modal.show').length >0;
+    return true;
 }
 
 function isInVideoCallView() {
@@ -541,6 +565,29 @@ function chatPusherInit() {
     
     let chatChannel = chatPusher.subscribe('presence-chat-channel');
     return [chatPusher, chatChannel];
+}
+
+function videoPusherInit() {
+    Pusher.logToConsole = false;
+
+    let videoPusher = new Pusher("9e2cbb3bb69dab826cef", {
+        authEndpoint: PublicURL+'pusher/auth',
+        cluster: 'ap2',
+        encrypted: true,
+        auth: { 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, 
+            // params: authUser.id,
+        }
+    });
+    
+    videoPusher.connection.bind( 'error', function( err ) {
+        console.log("Pusher video session error: ",err);
+    });
+    
+    let videoChannel = videoPusher.subscribe('presence-video-session-channel');
+    return [videoPusher, videoChannel];
 }
 
 function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {

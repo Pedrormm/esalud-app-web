@@ -70,15 +70,15 @@
                             <span>{{ $singleUser['sex'] }}</span>                   
                         </td>
                         <td>
-                            @if ($singleUser['role_id'] !== \HV_ROLES::PERM_ADMIN)
+                            {{-- @if ($singleUser['role_id'] !== \HV_ROLES::PERM_ADMIN) --}}
                               <span>
                                 <a href="/users/edit/{{ $singleUser['id'] }}"><i class="fa fa-edit"></i></a>
                               </span>   
-                            @else
+                            {{-- @else
                               <span>
                                 <i class="fa fa-edit" style="color:gray"></i>
                               </span> 
-                            @endif                
+                            @endif                 --}}
                         </td>
                     </tr>
 

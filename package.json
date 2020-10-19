@@ -26,10 +26,11 @@
     "dependencies": {
         "@material-ui/core": "4.9.10",
         "@material-ui/icons": "4.9.1",
+        "ajax-bootstrap-select": "^1.4.5",
         "axios": "0.19.2",
         "jquery": "3.5.0",
+        "object-hash": "^2.0.3",
         "openvidu-browser": "2.15.0",
-        "ajax-bootstrap-select": "^1.4.5",
         "pusher-js": "^5.1.1",
         "simple-peer": "^9.7.2",
         "typo-js": "^1.1.0"

@@ -16,8 +16,12 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        // dd(fillPermissionClass()["1"]);
+        // dd(array_search('LOGIN', fillPermissionClass()->toArray()));
         // $appointments = Appointment::all();
+        // dd(getAuthValueFromPermission(config('permissions')["LOGIN"]));
+        dd(getAuthValueFromPermission("NEWS"));
+
         $usuario_login = auth()->user();
         $rol_user = $usuario_login->role_id;
 
@@ -183,6 +187,24 @@ class AppointmentController extends Controller
         $especialidad = DB::select('SELECT branches.name FROM appointments INNER JOIN staff ON appointments.user_id_doctor = staff.user_id INNER JOIN branches ON staff.branch_id = branches.id WHERE appointments.user_id_doctor = '.$appointment->user_id_doctor.'');
         
         return view('appointments.showCalendar')->with('appointment',$appointment)->with('especialidad',$especialidad);
+    }
+
+    public function listPending()
+    {
+        $usuarioLogin = auth()->user();
+        
+        $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
+
+        return view('appointments.listPending')->with('appointments',$appointments->toArray());
+    }
+
+    public function listAccepted()
+    {
+        $usuarioLogin = auth()->user();
+
+        $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
+        
+        return view('appointments.listAccepted')->with('appointments',$appointments->toArray());
     }
 
 }

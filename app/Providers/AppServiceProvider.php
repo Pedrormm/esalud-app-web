@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Config;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
         // Using view composer to set the following variables globally
         view()->composer('*',function($view) {
             $view->with('user', Auth::user());
+            
         });
+        // Config::set(['permissions' => fillPermissionClass()]);
+        // Config::set(['roles' => fillRolesClass()]);
+        // Blade::include('inc.react', 'react');
+
     }
 }

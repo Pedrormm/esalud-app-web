@@ -7,6 +7,8 @@
     <input type="hidden" name="idRole" value="{{ $roles['id'] }}">
     {{-- <input type="hidden" name="urlRole" id="urlRole" value="{{ URL::asset('/user/roleManagement/update')  }}"> --}}
   
+    {{-- TODO: Change the way permissions are showed --}}
+
     <div class="row">
         <div class="col-md-12">
             <div class="card">

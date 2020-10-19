@@ -17,8 +17,8 @@ class CreateRolesPermissions extends Migration
             $table->bigIncrements('id');
             $table->smallInteger('role_id')->unsigned()->comment('Rol asociado');
             $table->bigInteger('permission_id')->unsigned()->comment('Permiso asociado');
-            $table->integer('value')->unsigned()->comment('Tipo de permiso');
-            $table->string('value_name', 100)->comment('Nombre del tipo de permiso');
+            $table->integer('activated')->unsigned()->comment('Tipo de permiso.0:No activado/1:Activado');
+            // $table->string('value_name', 100)->comment('Nombre del tipo de permiso');
             $table->softDeletes();
             $table->timestamps();      
         });

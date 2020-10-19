@@ -42,7 +42,7 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php",
+            "app/Custom/helpers.php",
             "app/Custom/hv_constants.php"
             
         ],

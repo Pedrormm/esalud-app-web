@@ -1,5 +1,5 @@
 <?php
-
+$uno = 1;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -94,7 +94,6 @@ Route::post('user/avatarupdate/{id?}', [
 //Rutas para las citas médicas (Appointments)
 // Route::get('/appointments', 'AppointmentController@index')->name('index');
 // Route::get('appointment/{id}', 'AppointmentController@edit');
-
 Route::get('/appointment/listPending', 'AppointmentController@listPending')->middleware('checkUserAuth');
 Route::get('/appointment/listAccepted', 'AppointmentController@listAccepted')->middleware('checkUserAuth');
 
@@ -112,6 +111,10 @@ Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->m
 Route::get('comm/messaging/{id?}', 'MessageController@showMessaging')->middleware('checkUserAuth');
 Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
 Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
+
+// Route::post('user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('checkUserAuth');
+Route::match(array('GET', 'POST'), 'user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('checkUserAuth');;
+
 
 Route::get('communication/video-room/{sessionRoom}', 'VideoCallController@showVideoRoom')->middleware('checkUserAuth');
 
