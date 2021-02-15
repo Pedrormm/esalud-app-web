@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            UsersTableSeeder::class,
             AnalyticsTableSeeder::class,
             AnalyticsResultsTableSeeder::class,
             CallsTableSeeder::class,
@@ -29,27 +30,11 @@ class DatabaseSeeder extends Seeder
             ReportsTableSeeder::class,
             RolesTableSeeder::class,
             RolesPermissionsTableSeeder::class,
-            SpecialitiesTableSeeder::class,
+            BranchesTableSeeder::class,
             SpecialitiesStaffTableSeeder::class,
             StaffTableSeeder::class,
-            UsersTableSeeder::class,
             WarningsTableSeeder::class,
             WarningsReadsTableSeeder::class
             ]);
-        $this->call(LogsTableSeeder::class);
-        $this->call(MedicinesTableSeeder::class);
-        $this->call(MessagesTableSeeder::class);
-        $this->call(NotesTableSeeder::class);
-        $this->call(PatientsTableSeeder::class);
-        $this->call(RelationsTableSeeder::class);
-        $this->call(PermissionsTableSeeder::class);
-        $this->call(PiecenewsTableSeeder::class);
-        $this->call(ProtocolsTableSeeder::class);
-        $this->call(ReportsTableSeeder::class);
-        $this->call(RolesPermissionsTableSeeder::class);
-        $this->call(BranchesTableSeeder::class);
-        $this->call(StaffTableSeeder::class);
-        $this->call(WarningsTableSeeder::class);
-        $this->call(WarningReadsTableSeeder::class);
     }
 }

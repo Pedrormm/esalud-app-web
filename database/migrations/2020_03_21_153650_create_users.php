@@ -35,10 +35,12 @@ class CreateUsers extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => UsersTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => UsersTableSeeder::class
+        // ]);
         // $this->call(UsersTableSeeder::class);
+    //DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
     }
 
     /**

@@ -56781,8 +56781,7 @@ function (_Component) {
       //console.log('selectUser',e);
       this.selectedUserId = e.target.value; //console.log('selectedUserId',this.selectedUserId);
 
-      $("#callButton").css("display", "inline");
-      $("#destroyButton").css("display", "none");
+      $("#callButton").css("display", "inline"); // $("#destroyButton").css("display", "none");
     }
   }, {
     key: "setupVideoPusher",
@@ -56794,6 +56793,7 @@ function (_Component) {
       var session = hash(new Date().getTime(), {
         algorithm: 'md5'
       });
+      $('#content').data('session-video-call', session);
       var pusher = videoPusherInit();
       var videoChannel = pusher[1];
       console.log(videoChannel);
@@ -56839,6 +56839,59 @@ function (_Component) {
         console.log(session);
         window.open('', 'videoWindow');
         $('#videoFormData').submit(); // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
+
+        $("#joinButton").css("display", "inline");
+      });
+    }
+  }, {
+    key: "joinTo",
+    value: function joinTo(userId) {
+      var session = $('#content').data('session-video-call');
+      var pusher = videoPusherInit();
+      var videoChannel = pusher[1];
+      console.log(videoChannel);
+      videoChannel.bind('pusher:subscription_succeeded', function () {
+        var userReceiverFullName = "";
+        $.ajax(PublicURL + 'video/getUserInfo', {
+          dataType: "text",
+          data: {
+            id: userId
+          },
+          method: 'get',
+          async: false
+        }).done(function (res) {
+          userReceiverFullName = res;
+        }).fail(function (xhr, st, err) {
+          console.error("error in video/getUserInfo " + xhr, st, err);
+        });
+        videoChannel.trigger("client-video-channel-send", {
+          session: session,
+          userReceiverId: Number(userId),
+          userReceiverFullName: userReceiverFullName,
+          userCallerId: Number(authUser.id),
+          userCallerFullName: authUser.name + " " + authUser.lastname
+        });
+        console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
+        var hiddenForm = $('<form>', {
+          id: 'videoFormData',
+          method: 'post',
+          action: PublicURL + 'user/video-call-container',
+          target: 'videoWindow'
+        });
+        hiddenForm.append($('<input>', {
+          type: 'hidden',
+          name: 'userFullName',
+          value: authUser.name + " " + authUser.lastname
+        }));
+        hiddenForm.append($('<input>', {
+          type: 'hidden',
+          name: 'sessionName',
+          value: session
+        }));
+        $('body').append(hiddenForm);
+        console.log(session);
+        window.open('', 'videoWindow');
+        $('#videoFormData').submit();
       });
     }
   }, {
@@ -56893,7 +56946,19 @@ function (_Component) {
           /*#__PURE__*/
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fa fa-phone"
-          }), "\u2002Call"))
+          }), "\u2002Call"),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "joinButton",
+            className: "btn btn-primary",
+            onClick: function onClick() {
+              return _this3.joinTo(_this3.selectedUserId);
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fa fa-share-alt"
+          }), "\u2002Join"))
         );
       }
     }

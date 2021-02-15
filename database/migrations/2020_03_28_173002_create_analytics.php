@@ -24,9 +24,9 @@ class CreateAnalytics extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => AnalyticsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => AnalyticsTableSeeder::class
+        // ]);
     }
 
     /**

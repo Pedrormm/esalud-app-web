@@ -1,7 +1,6 @@
 @extends('layout.logged-without-layout')
 
 @section('content')
-
     <div id="app" data-userfullname="{{ $userFullName }}" data-sessionname="{{ $sessionName }}" >
       
     </div>

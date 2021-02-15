@@ -6,7 +6,7 @@
 <body id="page-top">
 @yield('content')
 
-@include('inc.scripts')
+{{-- @include('inc.scripts') --}}
 
 </body>
 </html>

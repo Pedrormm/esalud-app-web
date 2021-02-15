@@ -22,9 +22,9 @@ class CreateCalls extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => CallsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => CallsTableSeeder::class
+        // ]);
     }
 
     /**

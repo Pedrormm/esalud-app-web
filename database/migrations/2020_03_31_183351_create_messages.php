@@ -23,9 +23,9 @@ class CreateMessages extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => MessagesTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => MessagesTableSeeder::class
+        // ]);
     }
 
     /**

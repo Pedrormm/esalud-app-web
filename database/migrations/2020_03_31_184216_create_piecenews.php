@@ -22,9 +22,9 @@ class CreatePiecenews extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => PiecenewsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => PiecenewsTableSeeder::class
+        // ]);
     }
 
     /**

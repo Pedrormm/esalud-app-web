@@ -22,9 +22,9 @@ class CreatePermissions extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => PermissionsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => PermissionsTableSeeder::class
+        // ]);
     }
 
     /**

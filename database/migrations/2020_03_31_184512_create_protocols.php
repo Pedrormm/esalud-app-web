@@ -24,9 +24,9 @@ class CreateProtocols extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => ProtocolsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => ProtocolsTableSeeder::class
+        // ]);
     }
 
     /**

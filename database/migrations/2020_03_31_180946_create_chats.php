@@ -21,9 +21,9 @@ class CreateChats extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => ChatsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => ChatsTableSeeder::class
+        // ]);
     }
 
     /**

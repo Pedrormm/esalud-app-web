@@ -692,7 +692,7 @@
   z-index: 1;
 }
 
-#callButton, #destroyButton{
+#callButton, #destroyButton, #joinButton{
   display: none;
   border-radius: 0.75em 0.75em 0.75em 0.75em;
   margin-top: -2em;

@@ -23,9 +23,9 @@ class CreateBranches extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
 
-        Artisan::call('db:seed', [
-            '--class' => BranchesTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => BranchesTableSeeder::class
+        // ]);
     }
 
     /**

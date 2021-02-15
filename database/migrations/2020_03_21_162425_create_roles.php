@@ -22,9 +22,11 @@ class CreateRoles extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => RolesTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => RolesTableSeeder::class
+        // ]);
+    //DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
     }
 
     /**

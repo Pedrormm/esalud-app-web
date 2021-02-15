@@ -66,14 +66,14 @@
 
             $('#home-tab').click(function(e){
                 // asyncCall('user/messages', '#main-container', true);
-                asyncCall('user/index', '#main-container', true);
+                asyncCall(PublicURL+'user/index', '#main-container', true);
 
             });
 
             $('#news-tab').click(function(e){
                 asyncCall('user/news', '#main-container', true);
             });
-            asyncCall('user/index', '#main-container', true);
+            // asyncCall(PublicURL+'user/index', '#main-container', true);
             // asyncCall('user/messages', '#main-container', true);
 
 

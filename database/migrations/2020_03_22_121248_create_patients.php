@@ -23,9 +23,9 @@ class CreatePatients extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => PatientsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => PatientsTableSeeder::class
+        // ]);
     }
 
     /**

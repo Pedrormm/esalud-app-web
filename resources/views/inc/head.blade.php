@@ -130,7 +130,7 @@
 
 
         <script>
-                const _PUBLIC_URL = "{{ asset('') }}";
+                const _PUBLIC_URL = "{{ url('') }}";
         </script>
 
     </head>

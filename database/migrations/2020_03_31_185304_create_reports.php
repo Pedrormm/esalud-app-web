@@ -22,9 +22,9 @@ class CreateReports extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => ReportsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => ReportsTableSeeder::class
+        // ]);
     }
 
     /**

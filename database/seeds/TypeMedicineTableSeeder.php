@@ -12,9 +12,7 @@ class TypeMedicineTableSeeder extends Seeder
     public function run()
     {
 
-        //   ', 'created_at' => date("Y-m-d H:i:s"), 'updated_at' => date("Y-m-d H:i:s"),),
-
-        \DB::table('type_medicines')->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
         \DB::table('type_medicines')->insert(array (
             '0' => array('id' => 1, 'name' => 'Abacavir'),
@@ -172,5 +170,8 @@ class TypeMedicineTableSeeder extends Seeder
             '152' => array('id' => 153, 'name' => 'Ziagen'),
             '153' => array('id' => 154, 'name' => 'Zidovudina')
         ));
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
     }
 }

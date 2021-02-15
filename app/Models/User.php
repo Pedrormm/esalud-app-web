@@ -5,6 +5,8 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
 /**
  * Class User
  * @package App\Models
@@ -52,7 +54,7 @@ use Illuminate\Support\Facades\DB;
  * @property integer role_id
  * @property string remember_token
  */
-class User extends Model
+class User extends Authenticatable
 {
     use SoftDeletes;
 

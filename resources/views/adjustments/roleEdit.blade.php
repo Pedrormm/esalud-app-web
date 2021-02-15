@@ -27,7 +27,7 @@
                             </div>
                         </div>
                     </div>
-                    @if ($roles['id'] != HV_ROLES::PERM_ADMIN)
+                    @if ($roles['id'] != \HV_ROLES::ADMIN)
                       <div class="row">
                         <div class="col-12">
                           <div class="bulgy-radios" role="radiogroup" aria-labelledby="bulgy-radios-label">

@@ -60,7 +60,7 @@ export default class App extends Component {
         this.selectedUserId=e.target.value;
         //console.log('selectedUserId',this.selectedUserId);
         $("#callButton").css("display", "inline");
-        $("#destroyButton").css("display", "none");
+        // $("#destroyButton").css("display", "none");
         
     }
 
@@ -71,6 +71,7 @@ export default class App extends Component {
     // Function to call other users
     callTo(userId) {
         let session = hash(new Date().getTime(), {algorithm: 'md5'});
+            $('#content').data('session-video-call', session);
 
         let pusher = videoPusherInit();
         let videoChannel = pusher[1];
@@ -111,10 +112,55 @@ export default class App extends Component {
             $('#videoFormData').submit();
     
             // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
+            $("#joinButton").css("display", "inline");
         });
         
     }
 
+    joinTo(userId) {
+        let session = $('#content').data('session-video-call');
+
+        let pusher = videoPusherInit();
+        let videoChannel = pusher[1];
+        console.log(videoChannel);
+
+        videoChannel.bind('pusher:subscription_succeeded', function() {
+            let userReceiverFullName ="";
+            $.ajax(PublicURL + 'video/getUserInfo', {
+                dataType: "text",
+                data: {id: userId},
+                method:'get',
+                async: false,
+            }).done(function(res){
+                userReceiverFullName = res;
+            })
+            .fail(function(xhr, st, err) {
+                console.error("error in video/getUserInfo " + xhr, st, err);
+            });
+
+            videoChannel.trigger(`client-video-channel-send`, { 
+                session:session,
+                userReceiverId: Number(userId),
+                userReceiverFullName: userReceiverFullName,
+                userCallerId: Number(authUser.id),
+                userCallerFullName: authUser.name + " " + authUser.lastname
+            });
+
+            console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
+
+            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
+            hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
+            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: session}));
+            $('body').append(hiddenForm);
+    
+            console.log(session);
+    
+            window.open('', 'videoWindow');
+            $('#videoFormData').submit();
+    
+        });
+        
+    }
 
  
     render() {
@@ -144,6 +190,10 @@ export default class App extends Component {
 
                     <button id="callButton" className="btn btn-primary" 
                     onClick={ () => this.callTo(this.selectedUserId)}><i className="fa fa-phone"></i>&ensp;Call</button>
+
+                    <button id="joinButton" className="btn btn-primary" 
+                    onClick={ () => this.joinTo(this.selectedUserId)}><i className="fa fa-share-alt"></i>&ensp;Join</button>
+
 
                 </div>
             );

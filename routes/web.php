@@ -1,5 +1,5 @@
 <?php
-$uno = 1;
+//use \App\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -106,6 +106,7 @@ Route::resource('appointment', 'AppointmentController')->middleware('checkUserAu
 // Si el paciente rechaza cita el doctor y admin reciben email de paciente ha rechazado cita con motivo
 
 // Communication purposes routes
+Route::get('user/my-messages', [MessageController::class, "showMyMessages"])->middleware('checkUserAuth');
 Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
 Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
 Route::get('comm/messaging/{id?}', 'MessageController@showMessaging')->middleware('checkUserAuth');

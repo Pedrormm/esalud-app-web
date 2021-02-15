@@ -24,6 +24,7 @@
 
         {{-- @if ( in_array($user->role_id, [HV_ROLES::PERM_DOCTOR,HV_ROLES::PERM_HELPER,HV_ROLES::PERM_ADMIN],
          true ) )  --}}
+         
 
         <!-- Divider -->
         <hr class="sidebar-divider">

@@ -21,9 +21,9 @@ class CreateSpecialityStaff extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => SpecialitiesStaffTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => SpecialitiesStaffTableSeeder::class
+        // ]);
     }
 
     /**

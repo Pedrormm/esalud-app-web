@@ -26,9 +26,9 @@ class CreateEvents extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => EventsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => EventsTableSeeder::class
+        // ]);
     }
 
     /**

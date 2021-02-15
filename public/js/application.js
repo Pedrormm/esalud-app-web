@@ -37,8 +37,32 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
 
 });//#TAG: #onload-jquery
 
-let PublicURL= location.href.substring(0, location.href.includes('.test')? location.href.indexOf('.test')+6 : 
- location.href.includes('public') ? location.href.indexOf('public')+7:console.log("Url not found"));
+// let PublicURL= location.href.substring(0, location.href.includes('.test')? location.href.indexOf('.test')+6 : 
+//  location.href.includes('public') ? location.href.indexOf('public')+7:console.log("Url not found"));
+
+// let PublicURL = location.href.includes('public') ? location.href.indexOf('public')+7:
+// location.href.match(/^http(s)?:\/\/([^\/\$]+)/);
+
+// if (!location.href.includes('public')){
+//     PublicURL = PublicURL[0] + "/";
+// }
+
+let PublicURL = location.href.includes('public') ? location.href.substring(0, location.href.indexOf('public')+7):
+location.href.match(/^(http(s)?:\/\/([^\/$]+))/);
+
+if (!location.href.includes('public')){
+    // PublicURL = PublicURL[0].replace(/(.+)[^\/]$/, "$1/");
+    PublicURL = PublicURL[0].lastIndexOf("/") !== PublicURL[0].length - 1 ? (PublicURL[0] + "/") : PublicURL[0] ;
+}
+
+// "http://asoghaoggaho/".replace(/(.+)[^\/]$/, "$1/") 
+
+// "https://1.1.1.1/hospital/".match(/^(http(s)?:\/\/([^\/$]+))/)
+
+//
+
+
+console.log("**PUBLICURL ", PublicURL);
 
 Date.prototype.today = function () { 
     return ((this.getDate() < 10)?"0":"") + this.getDate() +"-"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"-"+ this.getFullYear();
@@ -57,7 +81,7 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
         displayErrorOnLayer = false;
     if(typeof forceDisplay != 'boolean')
         forceDisplay = true;
-    $.ajax(_PUBLIC_URL + endpoint, {
+    $.ajax(PublicURL + endpoint, {
         method:'get',
         dataType:'html',
         async:true,
@@ -547,6 +571,8 @@ function getDocHeight() {
 function chatPusherInit() {
     Pusher.logToConsole = false;
 
+    console.log("antes", PublicURL);
+
     let chatPusher = new Pusher("9e2cbb3bb69dab826cef", {
         authEndpoint: PublicURL+'pusher/auth',
         cluster: 'ap2',
@@ -558,6 +584,7 @@ function chatPusherInit() {
             params: authUser.id,
         }
     });
+    console.log("despues: ", PublicURL+'pusher/auth');
     
     chatPusher.connection.bind( 'error', function( err ) {
         console.log("Pusher chat error: ",err);

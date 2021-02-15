@@ -18,6 +18,7 @@ class VideoRoomComponent extends Component {
         this.OPENVIDU_SERVER_URL = this.props.openviduServerUrl
             ? this.props.openviduServerUrl
             : 'https://' + window.location.hostname + ':4443';
+        console.log(this.props.openviduServerUrl);
         this.OPENVIDU_SERVER_SECRET = this.props.openviduSecret ? this.props.openviduSecret : 'MY_SECRET';
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
@@ -515,9 +516,15 @@ class VideoRoomComponent extends Component {
                 .then((response) => {
                     console.log('CREATE SESION', response);
                     resolve(response.data.id);
+                    console.log("Cual es el status?", response.status);
+                    if(response.status === 200) {
+                        console.log("Todo ok!");
+                        localStorage.setItem('pedro', 'established!');
+                    }
                 })
                 .catch((response) => {
                     var error = Object.assign({}, response);
+                    
                     if (error.response && error.response.status === 409) {
                         resolve(sessionId);
                     } else {

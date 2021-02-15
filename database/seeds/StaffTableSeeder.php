@@ -13,8 +13,7 @@ class StaffTableSeeder extends Seeder
     public function run()
     {
         
-
-        \DB::table('staff')->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
         \DB::table('staff')->insert(array (
             0 => 
@@ -139,6 +138,8 @@ class StaffTableSeeder extends Seeder
             ),
         ));
         
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         
     }
 }

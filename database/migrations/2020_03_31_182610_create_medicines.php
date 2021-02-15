@@ -29,9 +29,9 @@ class CreateMedicines extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => MedicinesTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => MedicinesTableSeeder::class
+        // ]);
 
     }
 

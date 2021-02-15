@@ -23,9 +23,9 @@ class CreateRolesPermissions extends Migration
             $table->timestamps();      
         });
 
-        Artisan::call('db:seed', [
-            '--class' => RolesPermissionsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => RolesPermissionsTableSeeder::class
+        // ]);
     }
 
     /**

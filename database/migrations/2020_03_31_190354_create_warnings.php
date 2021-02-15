@@ -23,9 +23,9 @@ class CreateWarnings extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => WarningsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => WarningsTableSeeder::class
+        // ]);
     }
 
     /**

@@ -12,9 +12,7 @@ class MedicinesTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
-        \DB::table('medicines')->delete();
+         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
         \DB::table('medicines')->insert(array (
             0 => 
@@ -223,6 +221,8 @@ class MedicinesTableSeeder extends Seeder
             ),
         ));
         
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         
     }
 }

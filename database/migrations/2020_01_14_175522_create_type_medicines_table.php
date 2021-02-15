@@ -21,9 +21,9 @@ class CreateTypeMedicinesTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
 
-        Artisan::call('db:seed', [
-            '--class' => TypeMedicineTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => TypeMedicineTableSeeder::class
+        // ]);
     }
 
     /**

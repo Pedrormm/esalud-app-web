@@ -21,9 +21,9 @@ class CreateWarningsReads extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => WarningsReadsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => WarningsReadsTableSeeder::class
+        // ]);
     }
 
     /**

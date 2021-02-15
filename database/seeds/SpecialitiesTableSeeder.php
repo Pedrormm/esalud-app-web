@@ -12,6 +12,8 @@ class SpecialitiesTableSeeder extends Seeder
     public function run()
     {
 
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         DB::table('specialities')->insert(
             [
                 [
@@ -292,5 +294,8 @@ class SpecialitiesTableSeeder extends Seeder
                 ],              
             ]
         );
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
     }
 }

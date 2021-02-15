@@ -23,9 +23,9 @@ class CreateNotes extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => NotesTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => NotesTableSeeder::class
+        // ]);
     }
 
     /**

@@ -28,9 +28,9 @@ class CreateStaff extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => StaffTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => StaffTableSeeder::class
+        // ]);
     }
 
     /**

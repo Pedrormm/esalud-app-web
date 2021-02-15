@@ -23,9 +23,9 @@ class CreateLogs extends Migration
             $table->timestamps();
         });
 
-        Artisan::call('db:seed', [
-            '--class' => LogsTableSeeder::class
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => LogsTableSeeder::class
+        // ]);
     }
 
     /**
