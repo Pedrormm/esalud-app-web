@@ -18,13 +18,23 @@
         <li class="nav-item{{ (Request::is('user/dashboard'))? " active":'' }}">
             <a class="nav-link" href="{{ URL::asset('/user/dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span style="font-size:1.15rem">Dashboard</span></a>
+            <span>Dashboard</span></a>
         </li>
 
+        @if(isset($flagsMenuEnabled['CREATE_USER']) && $flagsMenuEnabled['CREATE_USER'])
+
+        {{-- User Management --}}
+        {{-- @if ( isset(in_array($flagsMenuEnabled, ['CREATE_USER','SHOW_ALL_USERS','SHOW_PATIENTS','SHOW_STAFF'],
+         true )) && $flagsMenuEnabled(in_array($flagsMenuEnabled, 
+         ['CREATE_USER','SHOW_ALL_USERS','SHOW_PATIENTS','SHOW_STAFF'], true )) )  --}}
+
+        {{-- @if ( in_array($flagsMenuEnabled, ['CREATE_USER','SHOW_ALL_USERS','SHOW_PATIENTS','SHOW_STAFF'],
+         1 ) )   
+            {{ dd($flagsMenuEnabled) }} --}}
 
         {{-- @if ( in_array($user->role_id, [HV_ROLES::PERM_DOCTOR,HV_ROLES::PERM_HELPER,HV_ROLES::PERM_ADMIN],
-         true ) )  --}}
-         
+         true ) )  --}} 
+
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -51,7 +61,7 @@
             </div>
             </div>
         </li>
-        {{-- @endif --}}
+        @endif
 
         <!-- Nav Item - Medical record -->
         <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">

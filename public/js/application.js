@@ -99,10 +99,10 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
     }).fail(function(xhr, status, error) {
         console.error("fail arguments", arguments);
        
-        if(displayErrorOnLayer) {
+        // if(displayErrorOnLayer) {
            
-            $(jQselector).html('<div class="alert alert-danger">ERROR: No se pudo cargar contenido en destino</div>');
-        }
+        //     $(jQselector).html('<div class="alert alert-danger">ERROR: No se pudo cargar contenido en destino</div>');
+        // }
     });
 }
 

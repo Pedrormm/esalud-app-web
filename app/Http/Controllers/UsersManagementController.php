@@ -28,9 +28,10 @@ class UsersManagementController extends Controller
 {
     public function newUser(){
         
-        if ((auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR) || (auth()->user()->role_id == \HV_ROLES::PERM_HELPER))
-            $roles = Role::whereNotIn('id', [\HV_ROLES::PERM_ADMIN])->get();
-        else if (auth()->user()->role_id == \HV_ROLES::PERM_ADMIN)
+        if ((auth()->user()->role_id == \HV_ROLES::DOCTOR) 
+        || (auth()->user()->role_id == \HV_ROLES::HELPER))
+            $roles = Role::whereNotIn('id', [\HV_ROLES::ADMIN])->get();
+        else if (auth()->user()->role_id == \HV_ROLES::ADMIN)
             $roles = Role::all();
         else
             return redirect()->back()->withErrors(['Permission denied', 'No permissions']);

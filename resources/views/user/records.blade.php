@@ -1,4 +1,5 @@
-@extends('layout.logged')
+{{-- @extends('layout.logged', ['flagsMenuEnabled' =>  $flagsMenuEnabled]); --}}
+@extends('layout.logged');
 
 @section('nav-bar-top')
     <!-- <nav class="top">

@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         // Using view composer to set the following variables globally
         view()->composer('*',function($view) {
             $view->with('user', Auth::user());
-            
+            $view->with('flagsMenuEnabled', getAuthValueFromPermission());
         });
         // Config::set(['permissions' => fillPermissionClass()]);
         // Config::set(['roles' => fillRolesClass()]);

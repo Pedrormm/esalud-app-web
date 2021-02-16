@@ -111,8 +111,8 @@ aria-hidden="true">
   @if (auth()->user()) 
   <script>
     window.user = {
-      id: {{ ($user->id) }},
-      dni: "{{ ($user->dni) }}"
+      id: {{ (auth()->user()->id) }},
+      dni: "{{ (auth()->user()->dni) }}"
     }
 
     window.csrfToken = "{{ csrf_token() }}";   

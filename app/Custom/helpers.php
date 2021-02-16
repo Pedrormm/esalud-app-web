@@ -133,21 +133,38 @@
     }
 
     /**
-     * @author PEDRING
+     * @author PEDRO
      * @param int permissionId (Db field: permission.id)
      */
-    function getAuthValueFromPermission(string $permissionMeaning, int $userId = null){
-        $permissionMeaning = strtoupper($permissionMeaning);
+    function getAuthValueFromPermission(string $permissionMeaning = null, int $userId = null){
+
         $authUserRole = (is_null($userId)) ? optional(Auth::user())->role_id : $userId;
         if(is_null($authUserRole)) {
             return null;
         }
-        $perm = Permissions::select('id')->whereFlagMeaning($permissionMeaning)->value("id");
+        
+        if(!is_null($permissionMeaning)) {
+            $permissionMeaning = strtoupper($permissionMeaning);
+            $perm = Permissions::select('id')->whereFlagMeaning($permissionMeaning)->value("id");
+            $rolePermissions = RolePermission::select('activated')->where([
+                ['role_id', '=', $authUserRole],
+                ['permission_id', '=', $perm],            
+            ])->value("activated");
+    
+            return ($rolePermissions);
+        }
 
-        $rolePermissions = RolePermission::select('activated')->where([
-            ['role_id', '=', $authUserRole],
-            ['permission_id', '=', $perm],            
-        ])->value("activated");
+        $rolePermissions = 
+        RolePermission::join('permissions', 'roles_permissions.permission_id', 'permissions.id')
+        ->select('permissions.flag_meaning','roles_permissions.activated')
+        ->where([
+            ['role_id', '=', $authUserRole],          
+        ])
+        ->get();
 
-        return ($rolePermissions);
+        return $rolePermissions->mapWithKeys(function ($item) {
+            return [$item['flag_meaning'] => $item['activated']];
+        })->toArray();
+
+
     }

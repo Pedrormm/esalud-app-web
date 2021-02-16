@@ -25,7 +25,9 @@ class RecordsController extends Controller
     {
         // Se puede llamar al middleware desde el constructor
     }
-
+    /**
+     * @tag #render_menu
+     */
     public function index(string $ord=null, string $sex_fil=null, string $age_fil=null, string $n_search=null) {
 
         if (is_null($ord)){
@@ -62,8 +64,10 @@ class RecordsController extends Controller
                 ->get()->toArray();
             }
        // }
-       //dd($patients[0]['name']);
-        return view('user/records', ['patients' => $patients]);
+       
+    $flagsMenuEnabled = getAuthValueFromPermission();
+
+        return view('user/records', ['patients' => $patients, 'flagsMenuEnabled' => $flagsMenuEnabled]);
     }
 
     public function showRecord($id) {
