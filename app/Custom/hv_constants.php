@@ -7,6 +7,8 @@ defined("HV_MAX_ITERATION_TOKEN") or define("HV_MAX_ITERATION_TOKEN", 1000);
 defined("HV_DNI_LETTERS") or define("HV_DNI_LETTERS",  "trwagmyfpdxbnjzsqvhlcke");
 defined("HV_DNI_CHECK") or define("HV_DNI_CHECK", true);
 defined("HV_MAX_TIMES_CREATE_USER_SENT") or define("HV_MAX_TIMES_CREATE_USER_SENT", 2);
+defined("HV_ROLE_ASSIGNED_WHEN_DELETED") or define("HV_ROLE_ASSIGNED_WHEN_DELETED",  "Guest");
+
 
 
 class HV_ROLES{

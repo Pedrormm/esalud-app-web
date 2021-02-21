@@ -24,7 +24,7 @@
         </div> -->
         <div class="card-body">
           <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <table class="table table-responsive table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead >
                 <tr class="text-center">
                     <th class="bg-primary">Apellidos, Nombre</th>

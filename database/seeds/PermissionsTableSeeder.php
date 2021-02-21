@@ -18,43 +18,55 @@ class PermissionsTableSeeder extends Seeder
         
         \DB::table('permissions')->insert(array (
             [
-                'flag_meaning' => 'CREATE_USER',
+                'flag_meaning' => 'DASHBOARD',
                 'default_permission' => 0,               
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'SHOW_ALL_USERS',
+                'flag_meaning' => 'USER_MANAGEMENT',
+                'default_permission' => 0,               
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ],
+            [
+                'flag_meaning' => 'SHOW_PATIENTS_MEDICAL_RECORD',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'SHOW_PATIENTS',
+                'flag_meaning' => 'SHOW_OWN_MEDICAL_RECORD',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'SHOW_STAFF',
+                'flag_meaning' => 'CREATE_ANY_APPOINTMENT',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'SHOW_MEDICAL_RECORD',
+                'flag_meaning' => 'CREATE_APPOINTMENT_WITH_MEDIC',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'CREATE_APPOINTMENT',
+                'flag_meaning' => 'CREATE_APPOINTMENT_WITH_PATIENT',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
                 'flag_meaning' => 'SHOW_ALL_APPOINTMENTS',
+                'default_permission' => 0,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ],
+            [
+                'flag_meaning' => 'SHOW_ALL_MEDIC_APPOINTMENTS',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
@@ -90,6 +102,12 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
+                'flag_meaning' => 'SHOW_GROUP_CHAT',
+                'default_permission' => 0,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ],
+            [
                 'flag_meaning' => 'ROLE_MANAGEMENT',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
@@ -102,19 +120,13 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'CREATE_NOTES',
+                'flag_meaning' => 'SETTINGS',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'flag_meaning' => 'SHOW_NOTES',
-                'default_permission' => 0,
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ],
-            [
-                'flag_meaning' => 'EDIT_NOTES',
+                'flag_meaning' => 'NOTES',
                 'default_permission' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),

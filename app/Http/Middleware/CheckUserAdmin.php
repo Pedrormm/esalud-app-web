@@ -21,7 +21,7 @@ class CheckUserAdmin
     {
         $user = Auth::user();
        
-        // if ($user->role_id == \HV_ROLES::PERM_ADMIN)
+        // if ($user->role_id == \HV_ROLES::ADMIN)
         if ($user->role_id == \HV_ROLES::ADMIN)
             return $next($request);
         else{

@@ -20,7 +20,9 @@ class CreateRolesPermissions extends Migration
             $table->integer('activated')->unsigned()->comment('Tipo de permiso.0:No activado/1:Activado');
             // $table->string('value_name', 100)->comment('Nombre del tipo de permiso');
             $table->softDeletes();
-            $table->timestamps();      
+            // $table->timestamps();     
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')); 
         });
 
         // Artisan::call('db:seed', [

@@ -60,10 +60,8 @@ class RoleController extends AppBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return Response
      */ 
-    public function create(Request $request)
-    {
+    public function create(Request $request){
         $user = Auth::user();
-
         $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
@@ -81,6 +79,7 @@ class RoleController extends AppBaseController
             return $this->jsonResponse(1, $errors);
         }
 
+        $requestData = $request->all();
         $role = new Role;
         $role->name = $request->name;
         $role->user_id_creator = $user->id;
@@ -88,19 +87,22 @@ class RoleController extends AppBaseController
 
         $numberPermissions = Permissions::get()->count();
         $maxRoleId = RolePermission::max('role_id');
-
         $data = array();
-        for ($i = 1; $i <= $numberPermissions; $i++) {
-            $radio="optradio".$i;
-            $data[] =[
-                        'role_id' => $maxRoleId+1,
-                        'permission_id' => $i,
-                        'value' => $request->$radio,
-                        'value_name' => getValueName($request->$radio),
-                    ];                 
-        }
-        RolePermission::insert($data);
 
+        for ($i = 1; $i <= $numberPermissions; $i++) {
+            $data[] =[
+                'role_id' => $maxRoleId+1,
+                'permission_id' => $i,
+                'activated' => 0,
+            ];               
+        }
+        foreach($requestData as $key => $value){
+            if(strpos($key,'check-')!==false){
+                $role_permission_id = str_replace('check-','',$key);
+                $data[$role_permission_id - 1]["activated"]= 1;
+            }
+        }
+        RolePermission::insert($data);     
         return $this->jsonResponse(0, "El rol ".$request->name." ha sido creado");
     }
 
@@ -171,10 +173,9 @@ class RoleController extends AppBaseController
     public function update(Request $request)
     {
         if($request->ajax()) {
-            if ($request->idRole != \HV_ROLES::PERM_ADMIN){
+            if ($request->idRole != \HV_ROLES::ADMIN){
                 $requestdata = $request->all();
                 $role = Role::find($request->idRole);
-               
                 $validator = Validator::make($request->all(), [
                     'name' => [
                         'required',
@@ -194,13 +195,24 @@ class RoleController extends AppBaseController
     
                 $role->name = $request->name;
                 $role->save();
-    
+
+                RolePermission::where('role_id', $request->idRole)
+                ->update(['activated' => 0]);
+
                 foreach($requestdata as $key => $value){
-                    if(strpos($key,'optradio')!==false){
-                        $role_permission_id = str_replace('optradio','',$key);
+                    if(strpos($key,'check-')!==false){
+                        $role_permission_id = str_replace('check-','',$key);
                         $role_permission = RolePermission::find($role_permission_id);
-                        $role_permission->value = $value;
-                        $role_permission->value_name = getValueName($value);
+                        $actiValue= 0;
+                        if (strtolower($value) == "on"){
+                            $actiValue = 1;
+                        }
+                        else{
+                            $actiValue = 0;
+                        }
+                        $role_permission->activated = $actiValue;
+                        // $role_permission->value = $value;
+                        // $role_permission->value_name = getValueName($value);
                         $role_permission->save();
                     }
                 }
@@ -227,19 +239,21 @@ class RoleController extends AppBaseController
      */
     public function destroy($id)
     {
-        $role = $this->roleRepository->find($id);
-
-        if (empty($role)) {
-            Flash::error('Role not found');
-
-            return redirect(route('roles.index'));
+        $roleToDelete = Role::find($id);
+        $roleName = $roleToDelete->name;
+        if (empty($roleToDelete)) {
+            return $this->jsonResponse(1, "Role not found"); 
         }
 
-        $this->roleRepository->delete($id);
+        $idRoleNameGuest = Role::select('id')->where('name', HV_ROLE_ASSIGNED_WHEN_DELETED)->first()->id;
+        User::where('role_id', $id)->update(['role_id' => $idRoleNameGuest]);
 
-        Flash::success('Role deleted successfully.');
+        $roleToDelete->delete($id);
 
-        return redirect(route('roles.index'));
+        RolePermission::where('role_id', $id)->delete();
+        
+        return $this->jsonResponse(0, "Role ".$roleName." deleted successfully.");
+
     }
 
     public function usersRolesView($id, string $searchPhrase=null){
@@ -307,16 +321,13 @@ class RoleController extends AppBaseController
 
     public function newRole(){
         $permissions = Permissions::get()->toArray();
-
         return view('adjustments.newRole',['permissions' => $permissions]);
     }
 
-    public function confirmDeleteRole(){
-        $roles = Role::find($id);
-
-        return view('adjustments.confirmDeleteRole',['roles' => $roles]);
+    public function confirmDeleteRole($role_name){
+        $role = Role::find($role_name);
+        return view('adjustments.confirmDeleteRole',['role' => $role]);
     }
-    
 
     public function ajaxUserRolesDatatable($id){
         $uRoles = Role::with('user1s')->where('id',$id)->get()->toArray();
@@ -337,6 +348,26 @@ class RoleController extends AppBaseController
         }
 
         return response()->json(['data' => $mRoles]);
+
+    }
+
+    /**
+     * Check whether RolesPermissions ids are right or not
+     *
+     * @param int $id
+     *
+     * @throws \Exception
+     *
+     * @return Response
+     */
+    private function checkProperRolesPermissions($idRole){
+        RolePermission::where('role_id', $request->idRole)
+                ->update(['activated' => 0]);
+
+        $rolesPermissions = RolePermissions::all()->where('role_id', $idRole)->get();
+        if (!$rolesPermissions){
+            dd($rolesPermissions);            
+        }
 
     }
 }

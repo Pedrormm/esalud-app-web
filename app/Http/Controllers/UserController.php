@@ -67,9 +67,9 @@ class UserController extends Controller
      */   
     public function createInvitation(){
         
-        if ((auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR) || (auth()->user()->role_id == \HV_ROLES::PERM_HELPER))
-            $roles = Role::whereNotIn('id', [\HV_ROLES::PERM_ADMIN])->get();
-        else if (auth()->user()->role_id == \HV_ROLES::PERM_ADMIN)
+        if ((auth()->user()->role_id == \HV_ROLES::DOCTOR) || (auth()->user()->role_id == \HV_ROLES::HELPER))
+            $roles = Role::whereNotIn('id', [\HV_ROLES::ADMIN])->get();
+        else if (auth()->user()->role_id == \HV_ROLES::ADMIN)
             $roles = Role::all();
         else
             return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
@@ -100,7 +100,7 @@ class UserController extends Controller
         if(!checkDni($dni)) {
             return $this->backWithErrors("UsMaCoCr001: Invalid dni format");
         }
-        if ((auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR || auth()->user()->role_id == \HV_ROLES::PERM_HELPER) && $rol_id == \HV_ROLES::PERM_ADMIN)
+        if ((auth()->user()->role_id == \HV_ROLES::DOCTOR || auth()->user()->role_id == \HV_ROLES::HELPER) && $rol_id == \HV_ROLES::ADMIN)
             return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
         $existUser = User::exist_user_by_dni($dni);
         $roles = Role::all();
@@ -167,11 +167,11 @@ class UserController extends Controller
                 $email = $verify->email;
                 $dni = $verify->dni;
 
-                if ($verify->role_id == \HV_ROLES::PERM_DOCTOR) 
+                if ($verify->role_id == \HV_ROLES::DOCTOR) 
                     $branches = Branch::where('role_id', $verify->role_id)->get();
-                else if ($verify->role_id == \HV_ROLES::PERM_HELPER)
+                else if ($verify->role_id == \HV_ROLES::HELPER)
                     $branches = Branch::where('role_id', $verify->role_id)->get();
-                else if ($verify->role_id == \HV_ROLES::PERM_ADMIN)
+                else if ($verify->role_id == \HV_ROLES::ADMIN)
                     $branches = Branch::all();
                 else
                     $branches = "";
@@ -210,14 +210,14 @@ class UserController extends Controller
             
         ]);
         $token = $request->input('token');
-        if ($request->input('rol_id')==\HV_ROLES::PERM_PATIENT){
+        if ($request->input('rol_id')==\HV_ROLES::PATIENT){
             $validatedData = parent::checkValidation([
                 'historic' => 'required',
                 'height' => 'required|numeric',
                 'weight' => 'required|numeric',
             ]);
         }
-        if (($request->input('rol_id')==\HV_ROLES::PERM_DOCTOR) || ($request->input('rol_id')==\HV_ROLES::PERM_HELPER))  {
+        if (($request->input('rol_id')==\HV_ROLES::DOCTOR) || ($request->input('rol_id')==\HV_ROLES::HELPER))  {
             $validatedData = parent::checkValidation([
                 'historic' => 'required',
                 'branch' => 'required|exists:App\Models\Branch,id',
@@ -292,7 +292,7 @@ class UserController extends Controller
             return back()->withErrors("Internal error");  
         }
        
-        if($rol_id == \HV_ROLES::PERM_PATIENT){
+        if($rol_id == \HV_ROLES::PATIENT){
             $historic = $request->input('historic');
             $height = $request->input('height');
             $weight = $request->input('weight');
@@ -309,7 +309,7 @@ class UserController extends Controller
             }
         }
        
-        if(($rol_id == \HV_ROLES::PERM_DOCTOR) || ($rol_id == \HV_ROLES::PERM_HELPER)){
+        if(($rol_id == \HV_ROLES::DOCTOR) || ($rol_id == \HV_ROLES::HELPER)){
             $historic = $request->input('historic');
             $branch = $request->input('branch');
             $shift = $request->input('shift');
@@ -390,16 +390,16 @@ class UserController extends Controller
         }
         $rol_usuario_info = "";
 
-        if ($userLogged->id != $usuario->id && $userLogged->role_id != \HV_ROLES::PERM_ADMIN) {
+        if ($userLogged->id != $usuario->id && $userLogged->role_id != \HV_ROLES::ADMIN) {
             return $this->backWithErrors("UsCoEd002: Unauthorized call");
         }
 
-        if($usuario->role_id == \HV_ROLES::PERM_ADMIN){
+        if($usuario->role_id == \HV_ROLES::ADMIN){
             return $this->backWithErrors("Not enough permissions");
         }
-        elseif($usuario->role_id == \HV_ROLES::PERM_PATIENT){
+        elseif($usuario->role_id == \HV_ROLES::PATIENT){
             $rol_usuario_info = Patient::whereUserId($id)->first();
-        }elseif(($usuario->role_id == \HV_ROLES::PERM_DOCTOR) || $usuario->role_id == \HV_ROLES::PERM_HELPER){
+        }elseif(($usuario->role_id == \HV_ROLES::DOCTOR) || $usuario->role_id == \HV_ROLES::HELPER){
             $rol_usuario_info = Staff::whereUserId($id)->first();
         }
         else{
@@ -461,7 +461,7 @@ class UserController extends Controller
         ]);
         $token = $request->input('token');
         
-        if ($request->input('role_id')==\HV_ROLES::PERM_PATIENT){
+        if ($request->input('role_id')==\HV_ROLES::PATIENT){
             $validatedData = parent::checkValidation([
                 'historic' => 'required',
                 'height' => 'required|numeric',
@@ -469,7 +469,7 @@ class UserController extends Controller
             ]);
             $res = Patient::whereUserId($id)->update($validatedData);
         }
-        if (($request->input('role_id')==\HV_ROLES::PERM_DOCTOR) || ($request->input('role_id')==\HV_ROLES::PERM_HELPER))  {
+        if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
             $validatedData = parent::checkValidation([
                 'historic' => 'required',
                 'branch_id' => 'required|exists:App\Models\Branch,id',

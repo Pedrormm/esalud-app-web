@@ -42,7 +42,7 @@
                       <td>{{ date("d/m/Y H:i:s", strtotime($appointment['dt_appointment'])) }}</td>
                       <td>{{ App\Models\Appointment::getChecked($appointment['checked']) }}</td>                      
                       <td>
-                        @if(auth()->user()->role_id == \HV_ROLES::PERM_PATIENT)
+                        @if(auth()->user()->role_id == \HV_ROLES::PATIENT)
                           <a class="btn btn-primary text-white btnAcceptAppointment" data-id="{{ $appointment['id'] }}"><i class="fa fa-eye"></i> Aceptar cita</a>
                           <a class="btn btn-danger text-white"><i class="fa fa-trash"></i> Rechazar cita</a>
                           @isset($appointment['comment']))

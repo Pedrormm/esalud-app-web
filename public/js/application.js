@@ -1,5 +1,22 @@
 
-let _avoidAllSendings = false;
+var _avoidAllSendings = false;
+
+document.addEventListener("click", function(){
+    assignHeadersToRowsResponsive();
+    $("#mediaTableCss").attr('href', PublicURL + "css/media-table.css");
+
+    $(document).ajaxComplete(function(){
+        $("#mediaTableCss").attr("href", PublicURL + "css/roleEdit.css");
+    });
+
+    if (isABootstrapModalOpen()){
+        // $("#mediaTableCss").remove();
+        $("#mediaTableCss").attr("href", PublicURL + "css/roleEdit.css");
+    }
+
+  });
+
+  
 $(function() {
 
     if ($('#dataTable').length > 0 ){
@@ -9,17 +26,18 @@ $(function() {
             },
         });
     }
+    assignHeadersToRowsResponsive();
 
     
-let pusher = videoPusherInit();
-let videoChannel = pusher[1];
+var pusher = videoPusherInit();
+var videoChannel = pusher[1];
 
 videoChannel.bind(`client-video-channel-send`, (data) => {
     console.log("Recibido datos video channel", data);
     if (data.userReceiverId == authUser.id){
 
             showModalConfirm("Llamada entrante de "+data.userReceiverFullName,"¿Desea aceptar la llamada?",()=>{
-            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
+            var hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
             hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: data.session}));
             $('body').append(hiddenForm);
@@ -47,7 +65,7 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
 //     PublicURL = PublicURL[0] + "/";
 // }
 
-let PublicURL = location.href.includes('public') ? location.href.substring(0, location.href.indexOf('public')+7):
+var PublicURL = location.href.includes('public') ? location.href.substring(0, location.href.indexOf('public')+7):
 location.href.match(/^(http(s)?:\/\/([^\/$]+))/);
 
 if (!location.href.includes('public')){
@@ -72,7 +90,7 @@ Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
  
-let roleId;
+var roleId;
 
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
     
@@ -108,7 +126,7 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
 
 function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOkFunction=function(){}, closeModal=true) {
 
-    let funcName = "saveModalActionAjax";
+    var funcName = "saveModalActionAjax";
     // console.log("datos: ",data);
 
         if(closeModal) {
@@ -146,11 +164,15 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
  * @param string message 
  * @param int timeout 0 for no disappear, >0 seconds to disappear
  */
-function showInlineError(status,message, timeout=0) {
-    $('#error-container').show().text(message);
+function showInlineError(status,message, timeout=0, modal=false) {
+    let containerNameError = '#error-container';
+    if (modal){
+        containerNameError = '#error-container-modal';
+    }
+    $(containerNameError).show().text(message);
     if(timeout>0) {
         setTimeout(function() {
-            $('#error-container').hide(500);
+            $(containerNameError).hide(500);
         }, timeout*1000);
     }
 
@@ -171,11 +193,19 @@ function showInlineMessage(message, timeout=0) {
     }
 }
 function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
-     removeApp=false, secondstoCancel=null, callbackOkButton = null) {
+     removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal="Close", nameSaveModal="Save changes") {
     $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
     if (size){
         $('.modal-dialog').addClass(size);
+    }
+
+    if (nameCancelModal){
+        $('#generic-modal #closeModal').text(nameCancelModal);
+    }
+
+    if (nameSaveModal){
+        $('#generic-modal #saveModal').text(nameSaveModal);
     }
 
     if(typeof callbackOkButton == 'function') {
@@ -470,8 +500,8 @@ function sleep(milliseconds) {
   }
 
 function isABootstrapModalOpen() {
-    // return $('.modal.show').length >0;
-    return true;
+    return $('.modal.show').length >0;
+    // return true;
 }
 
 function isInVideoCallView() {
@@ -766,6 +796,19 @@ function settingUpPhone(){
 
 }
 
+function assignHeadersToRowsResponsive(){
+    if (screen.width <= 1024){
 
+        //Assign class to each header
+        $('th').each(function() {
+            $(this).addClass('header-' + $(this).index());
+        });
+        //Assign a data-header attribute with the text from the corresponding header
+        $('td').each(function() {
+            $(this).attr('data-header', $('.header-' + $(this).index()).text());
+        });
+
+    }
+}
 
 

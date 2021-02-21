@@ -19,7 +19,7 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::group(['middleware' => ['checkUserAuth', 'checkUserRole']], function () {
+Route::group(['middleware' => ['isLogged', 'checkUserRole']], function () {
 
     Route::get('user/dashboard', 'LoginController@index');
     
@@ -27,24 +27,24 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserRole']], function () {
     
 
 // Ajax view routes
-Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('checkUserAuth');
-Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('checkUserAuth');
-Route::get('message/summary', 'MessageController@showMessagesSummary')->middleware('checkUserAuth');
-Route::get('message/icon', 'MessageController@showIconMessage')->middleware('checkUserAuth');
+Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('isLogged');
+Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('isLogged');
+Route::get('message/summary', 'MessageController@showMessagesSummary')->middleware('isLogged');
+Route::get('message/icon', 'MessageController@showIconMessage')->middleware('isLogged');
 
-Route::get('user/messages', 'MessageController@get')->middleware('checkUserAuth');
+Route::get('user/messages', 'MessageController@get')->middleware('isLogged');
 
-Route::get('user/index', 'LoginController@indexDashboard')->middleware('checkUserAuth')->name('indexDashboard');
+Route::get('user/index', 'LoginController@indexDashboard')->middleware('isLogged')->name('indexDashboard');
 
-Route::get('user/news', 'NewsController@get')->middleware('checkUserAuth');
+Route::get('user/news', 'NewsController@get')->middleware('isLogged');
 
-Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('checkUserAuth');
-Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('checkUserAuth');
-Route::get('comm/updateReadMessages', 'MessageController@updateReadMessages')->middleware('checkUserAuth');
-Route::get('comm/getUserFromId', 'MessageController@getUserFromId')->middleware('checkUserAuth');
-Route::get('comm/viewMessagesFromMobile/{id}', 'MessageController@viewMessagesFromMobile')->middleware('checkUserAuth');
-Route::post('comm/send', 'MessageController@send')->middleware('checkUserAuth');
-Route::delete('comm/deleteMessageChat', 'MessageController@delete')->middleware('checkUserAuth');
+Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('isLogged');
+Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('isLogged');
+Route::get('comm/updateReadMessages', 'MessageController@updateReadMessages')->middleware('isLogged');
+Route::get('comm/getUserFromId', 'MessageController@getUserFromId')->middleware('isLogged');
+Route::get('comm/viewMessagesFromMobile/{id}', 'MessageController@viewMessagesFromMobile')->middleware('isLogged');
+Route::post('comm/send', 'MessageController@send')->middleware('isLogged');
+Route::delete('comm/deleteMessageChat', 'MessageController@delete')->middleware('isLogged');
 
 
 /*Route::get('message/summary', function() {
@@ -60,23 +60,23 @@ Route::post('/user/login', 'LoginController@login');
 Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 
 // User routes
-Route::get('users/edit/{id}', 'UserController@edit')->middleware('checkUserAuth')->name('users.edit');//->where('id', '\d+');;
+Route::get('users/edit/{id}', 'UserController@edit')->middleware('isLogged')->name('users.edit');//->where('id', '\d+');;
 
-Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('checkUserAuth')->where('userType', 'staff|patient');
+Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('isLogged')->where('userType', 'staff|patient');
 // TODO: How to route without a word (edit). Possible solution->Routing without the search and ord parameters
-Route::put('users/{id}', 'UserController@update')->middleware('checkUserAuth');
+Route::put('users/{id}', 'UserController@update')->middleware('isLogged');
 // TODO: Preguntar: Para qué le tengo que pasar el id al update, si ya se obtienen los argumentos con Request
 // route('users.edit', ['id'=>25])
 
 
-Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('checkUserAuth');
-Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('checkUserAuth');
-Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('checkUserAuth');
-Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('checkUserAuth');
+Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('isLogged');
+Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('isLogged');
+Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('isLogged');
+Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('isLogged');
 
-Route::post('user/create', 'UsersManagementController@create')->middleware('checkUserAuth');
-Route::get('user/edit/{id}', 'UsersManagementController@edit')->middleware('checkUserAuth');
-Route::post('user/editUser', 'UsersManagementController@editUser')->middleware('checkUserAuth');
+Route::post('user/create', 'UsersManagementController@create')->middleware('isLogged');
+Route::get('user/edit/{id}', 'UsersManagementController@edit')->middleware('isLogged');
+Route::post('user/editUser', 'UsersManagementController@editUser')->middleware('isLogged');
 Route::get('user/createUserFromMail/{token?}', 'UsersManagementController@createUserFromMail');
 
 
@@ -84,7 +84,7 @@ Route::post('user/createNewUser', 'UsersManagementController@createNewUser');
 
 Route::get('user/logout', 'LoginController@logout');
 Route::post('user/logout', 'LoginController@logout');
-Route::get('user/settings', 'RecordsController@settings')->middleware('checkUserAuth');
+Route::get('user/settings', 'RecordsController@settings')->middleware('isLogged');
 
 Route::post('user/avatarupdate/{id?}', [
     'uses' => 'RecordsController@updateAvatar',
@@ -94,30 +94,30 @@ Route::post('user/avatarupdate/{id?}', [
 //Rutas para las citas médicas (Appointments)
 // Route::get('/appointments', 'AppointmentController@index')->name('index');
 // Route::get('appointment/{id}', 'AppointmentController@edit');
-Route::get('/appointment/listPending', 'AppointmentController@listPending')->middleware('checkUserAuth');
-Route::get('/appointment/listAccepted', 'AppointmentController@listAccepted')->middleware('checkUserAuth');
+Route::get('/appointment/listPending', 'AppointmentController@listPending')->middleware('isLogged');
+Route::get('/appointment/listAccepted', 'AppointmentController@listAccepted')->middleware('isLogged');
 
-Route::get('/appointment/calendar', 'AppointmentController@calendar')->middleware('checkUserAuth');
-Route::get('/appointment/showCalendar/{id}', 'AppointmentController@showCalendar')->middleware('checkUserAuth');
+Route::get('/appointment/calendar', 'AppointmentController@calendar')->middleware('isLogged');
+Route::get('/appointment/showCalendar/{id}', 'AppointmentController@showCalendar')->middleware('isLogged');
 
-Route::resource('appointment', 'AppointmentController')->middleware('checkUserAuth');
+Route::resource('appointment', 'AppointmentController')->middleware('isLogged');
 
 // TODO: Enviar mail información de cita pendiente con doctor x. Entrar en link para validar.
 // Si el paciente rechaza cita el doctor y admin reciben email de paciente ha rechazado cita con motivo
 
 // Communication purposes routes
-Route::get('user/my-messages', [MessageController::class, "showMyMessages"])->middleware('checkUserAuth');
-Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('checkUserAuth');
-Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('checkUserAuth');
-Route::get('comm/messaging/{id?}', 'MessageController@showMessaging')->middleware('checkUserAuth');
-Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
-Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('checkUserAuth');
+Route::get('user/my-messages', [MessageController::class, "showMyMessages"])->middleware('isLogged');
+Route::get('user/my-messages', 'MessageController@showMyMessages')->middleware('isLogged');
+Route::get('user/my-messages/{id}', 'MessageController@showMessagesFromUser')->middleware('isLogged');
+Route::get('comm/messaging/{id?}', 'MessageController@showMessaging')->middleware('isLogged');
+Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('isLogged');
+Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('isLogged');
 
-// Route::post('user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('checkUserAuth');
-Route::match(array('GET', 'POST'), 'user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('checkUserAuth');;
+// Route::post('user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('isLogged');
+Route::match(array('GET', 'POST'), 'user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('isLogged');;
 
 
-Route::get('communication/video-room/{sessionRoom}', 'VideoCallController@showVideoRoom')->middleware('checkUserAuth');
+Route::get('communication/video-room/{sessionRoom}', 'VideoCallController@showVideoRoom')->middleware('isLogged');
 
 /*
 Route::get( 'user/recorddisplay/{id}', function ( $id) {
@@ -127,14 +127,14 @@ Route::get( 'user/recorddisplay/{id}', function ( $id) {
 */
 
 // Admin routes
-Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () {
+Route::group(['middleware' => ['isLogged']], function () {
 
     Route::get('user/roleManagement', 'RoleController@index');
-    Route::get('user/roleManagement/edit/{id}', 'RoleController@edit');
+    Route::get('user/roleManagement/edit/{id}', 'RoleController@edit')->middleware('isAdmin');
     Route::put('user/roleManagement/update', 'RoleController@update');
     Route::get('user/roleManagement/update', 'RoleController@update');
 
-    Route::delete('role/delete/{id}', 'RoleController@destroy');
+    Route::delete('role/destroy/{id}', 'RoleController@destroy');
     Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
     Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
@@ -144,19 +144,20 @@ Route::group(['middleware' => ['checkUserAuth', 'checkUserAdmin']], function () 
     Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
     Route::get('role/newRole', 'RoleController@newRole');
     Route::post('role/create', 'RoleController@create');
+
     
 });
 
 // Route::post('pusher/auth', 'VideoCallController@authenticatePusher');
-Route::match(array('GET', 'POST'), 'pusher/auth', 'VideoCallController@authenticatePusher')->middleware('checkUserAuth');;
+Route::match(array('GET', 'POST'), 'pusher/auth', 'VideoCallController@authenticatePusher')->middleware('isLogged');;
 
 
 Route::get('test', function() {
     phpinfo();
 });
 
-Route::get('/sms/send', 'SmsController@sendSms')->middleware('checkUserAuth');;
-Route::post('/sms/send', 'SmsController@postSendSms')->middleware('checkUserAuth');;
+Route::get('/sms/send', 'SmsController@sendSms')->middleware('isLogged');;
+Route::post('/sms/send', 'SmsController@postSendSms')->middleware('isLogged');;
 
 /*
 

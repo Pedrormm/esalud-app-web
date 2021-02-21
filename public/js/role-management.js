@@ -78,28 +78,11 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         $('.roleDelete').on('click', function(e){
             e.preventDefault();
 
+            // showModal('¿Borrar rol '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
+            // $(this).attr('href'), 'modal-xl', true, true); 
 
-
-            showModalConfirm("", "", function() {
-                $.ajax(PublicURL + "role/delete/34",{// + $(this).data('id'), {
-                    dataType: 'json',
-                    method: 'delete',
-                    data: {
-                        //_method: 'delete',
-                    }
-                }).done(function(res) {
-                    if(res.status != 0) {
-                        showInlineError("Error interno" + res.message);
-                    }
-                    else {
-                        showInlineMessage("Se ha borrado correctamente");
-                        $('#rolesDataTable').ajax.refresh();
-                    }
-                }).error(function(xrh, st, err) {
-                    showInlineError("Error en ajax" + err);
-                });
-            });
-            // showModal('Borrar rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), '', true, true); 
+            showModal('¿Borrar rol '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
+            $(this).attr('href'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
         });
     }
 });

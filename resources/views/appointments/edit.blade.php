@@ -3,7 +3,7 @@
     {{ csrf_field() }}
 
     @php
-    if(auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR) {
+    if(auth()->user()->role_id == \HV_ROLES::DOCTOR) {
         $gridCols = 6;
     }
     else
@@ -15,7 +15,7 @@
                 <input name="user_id_patient" type="text" class="form-control" value="{{ $patient->name }} {{ $patient->lastname }}" />
             </div>
             
-            @if(auth()->user()->role_id == \HV_ROLES::PERM_ADMIN)
+            @if(auth()->user()->role_id == \HV_ROLES::ADMIN)
                 <div class="col-lg-{{ $gridCols }}">                      
                     <label>Listado de doctores (*)</label>
                     <select required class="form-control" name="user_id_doctor">
@@ -35,7 +35,7 @@
         </div>
 
         <div class="row">
-            @if(auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR)
+            @if(auth()->user()->role_id == \HV_ROLES::DOCTOR)
                 <div class="col-lg-6">                      
                     <label>Cumplido (*)</label>
                     <select required class="form-control" name="accomplished">

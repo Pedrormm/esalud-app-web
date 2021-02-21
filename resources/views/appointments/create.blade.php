@@ -26,7 +26,7 @@
               <form action="{{ URL::asset('/appointment') }}" method="POST">
                 @csrf
                 @php
-                if(auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR) {
+                if(auth()->user()->role_id == \HV_ROLES::DOCTOR) {
                     $gridCols = 6;
                 }
                 else
@@ -42,7 +42,7 @@
                             </select>
                         </div>
                         
-                        @if(auth()->user()->role_id == \HV_ROLES::PERM_ADMIN)
+                        @if(auth()->user()->role_id == \HV_ROLES::ADMIN)
                             <div class="col-lg-{{ $gridCols }}">                      
                                 <label>Listado de doctores (*)</label>
                                 <select required class="form-control" name="user_id_doctor">
@@ -61,7 +61,7 @@
 
                     </div>
                     <div class="row">
-                        @if(auth()->user()->role_id == \HV_ROLES::PERM_DOCTOR)
+                        @if(auth()->user()->role_id == \HV_ROLES::DOCTOR)
                             <div class="col-lg-12">                      
                                 <label for="txtComments">Comentarios del doctor</label>
                                 <textarea id="txtComments" class="form-control" name="comments" aria-describedby="commentHelpBlock"></textarea>
