@@ -30,7 +30,8 @@ $('#saveModal').click(function() {
         var data = serializedReturn + "&" + checks;
         console.log(data);
         let that = this;
-        saveModalActionAjax(PublicURL+"role/create", data, 'POST', 'json', function(res) {
+        // saveModalActionAjax(PublicURL+"role/create", data, 'POST', 'json', function(res) {
+        saveModalActionAjax(PublicURL+"roles", data, 'POST', 'json', function(res) {
             if(res.status == 0) {
                 $('#mainTableRoles').DataTable().ajax.reload();
                 showInlineMessage(res.message, 5);

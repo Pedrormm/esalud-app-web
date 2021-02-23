@@ -114,7 +114,8 @@ Route::get('user/video-call', 'VideoCallController@showVideoCall')->middleware('
 Route::post('user/video-call', 'VideoCallController@showVideoCall')->middleware('isLogged');
 
 // Route::post('user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('isLogged');
-Route::match(array('GET', 'POST'), 'user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('isLogged');;
+// TODO: only post
+Route::match(array('GET', 'POST'), 'user/video-call-container', 'VideoCallController@showVideoCallContainer')->middleware('isLogged');
 
 
 Route::get('communication/video-room/{sessionRoom}', 'VideoCallController@showVideoRoom')->middleware('isLogged');
@@ -129,21 +130,28 @@ Route::get( 'user/recorddisplay/{id}', function ( $id) {
 // Admin routes
 Route::group(['middleware' => ['isLogged']], function () {
 
-    Route::get('user/roleManagement', 'RoleController@index');
-    Route::get('user/roleManagement/edit/{id}', 'RoleController@edit')->middleware('isAdmin');
-    Route::put('user/roleManagement/update', 'RoleController@update');
-    Route::get('user/roleManagement/update', 'RoleController@update');
+    // Route::get('user/roleManagement', 'RoleController@index');
+    // Route::get('user/roleManagement/edit/{id}', 'RoleController@edit')->middleware('isAdmin');
+    // Route::put('user/roleManagement/update', 'RoleController@update');
+    // Route::get('user/roleManagement/update', 'RoleController@update');
 
     Route::delete('role/destroy/{id}', 'RoleController@destroy');
-    Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
+    // Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
     Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
     Route::post('roles/view', 'RoleController@ajaxViewMainRolesDatatable');
 
     Route::get('role/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
     Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
-    Route::get('role/newRole', 'RoleController@newRole');
-    Route::post('role/create', 'RoleController@create');
+    // Route::get('role/newRole', 'RoleController@newRole');
+    // Route::post('role/create', 'RoleController@create');
+
+    // Route::get('role/create', 'RoleController@create');
+
+    Route::get('roles/{id}/confirmDelete', 'RoleController@confirmDelete')->name('roles.confirmDelete');
+
+    // Route::apiResource('roles', 'RoleController');
+    Route::resource('roles', 'RoleController');
 
     
 });

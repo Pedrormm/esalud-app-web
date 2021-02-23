@@ -36,6 +36,10 @@
           id="usersDistRole" data-name-role=""><i class="fa fa-plus-circle"></i>&ensp;
           Crear nuevo rol
           </a>   --}}
+          {{-- <a href="{{ route('roles.create')  }}" class="btn btn-primary borderShadow" 
+          id="usersDistRole" data-name-role=""><i class="fa fa-plus-circle"></i>&ensp;
+          Crear nuevo rol
+          </a>   --}}
           <a href="{{ URL::asset('roles/create')  }}" class="btn btn-primary borderShadow" 
           id="usersDistRole" data-name-role=""><i class="fa fa-plus-circle"></i>&ensp;
           Crear nuevo rol

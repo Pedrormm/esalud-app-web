@@ -14,8 +14,10 @@ $('#saveModal').click(function() {
     var serializedReturn = $('#editRole').find("input:not([name*='check'])").serialize(); 
     var checks = _tablaRolPermisos.$('input, select').serialize();
     var data = serializedReturn + "&" + checks;
+    var idRole = $('#idRole').val();
 
-    saveModalActionAjax(PublicURL+"user/roleManagement/update", data, 'GET', 'json', function(res) {
+    // saveModalActionAjax(PublicURL+"user/roleManagement/update", data, 'GET', 'json', function(res) {
+    saveModalActionAjax(PublicURL+"roles/"+editRole, data, 'PUT', 'json', function(res) {
         if(res.status == 0) {
             showInlineMessage(res.message, 5);
             $('#mainTableRoles').DataTable().ajax.reload();

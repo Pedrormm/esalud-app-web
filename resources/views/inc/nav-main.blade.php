@@ -178,7 +178,8 @@
 
             <!-- Nav Item - Role management -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ URL::asset('/user/roleManagement') }}"
+                {{-- <a class="nav-link" href="{{ URL::asset('/user/roleManagement') }}" --}}
+                <a class="nav-link" href="{{ URL::asset('/roles') }}"
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Role management</span></a>
             </li>

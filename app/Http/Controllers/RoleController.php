@@ -49,18 +49,33 @@ class RoleController extends AppBaseController
             $rol->count = $count;
         }
 
-        return view('adjustments/roleManagement', ['roles' => $roles]);
+        // return view('adjustments/roleManagement', ['roles' => $roles]);
+        return view('roles/index', ['roles' => $roles]);
     }
 
 
     /**
      * Shows the form for creating a new Role.
-     * Endpoint: role/create
+     * Endpoint: roles/create
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
      * @return Response
      */ 
-    public function create(Request $request){
+    public function create(){
+        $permissions = Permissions::get()->toArray();
+        // return view('adjustments.newRole',['permissions' => $permissions]);
+        return view('roles.create',['permissions' => $permissions]);
+    }
+
+    /**
+     * Stores a newly created Role in storage.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function store(Request $request)
+    {
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'name' => [
@@ -86,7 +101,8 @@ class RoleController extends AppBaseController
         $role->save();
 
         $numberPermissions = Permissions::get()->count();
-        $maxRoleId = RolePermission::max('role_id');
+        // $maxRoleId = RolePermission::max('role_id');
+        $maxRoleId = Role::max('id')-1;
         $data = array();
 
         for ($i = 1; $i <= $numberPermissions; $i++) {
@@ -102,26 +118,8 @@ class RoleController extends AppBaseController
                 $data[$role_permission_id - 1]["activated"]= 1;
             }
         }
-        RolePermission::insert($data);     
+        RolePermission::insert($data); 
         return $this->jsonResponse(0, "El rol ".$request->name." ha sido creado");
-    }
-
-    /**
-     * Stores a newly created Role in storage.
-     *
-     * @param CreateRoleRequest $request
-     *
-     * @return Response
-     */
-    public function store(CreateRoleRequest $request)
-    {
-        $input = $request->all();
-
-        $role = $this->roleRepository->create($input);
-
-        Flash::success('Role saved successfully.');
-
-        return redirect(route('roles.index'));
     }
 
     /**
@@ -161,7 +159,9 @@ class RoleController extends AppBaseController
             return redirect(route('roles.index'));
         }
 
-        return view('adjustments.roleEdit',['roles' => $roles,'permissions' => $permissions]);
+        // return view('adjustments.roleEdit',['roles' => $roles,'permissions' => $permissions]);
+        return view('roles.edit',['roles' => $roles,'permissions' => $permissions]);
+
     }
 
     /**
@@ -329,6 +329,11 @@ class RoleController extends AppBaseController
         return view('adjustments.confirmDeleteRole',['role' => $role]);
     }
 
+    public function confirmDelete($id){
+        $role = Role::find($id);
+        return view('adjustments.confirmDeleteRole',['role' => $role]);
+    }
+
     public function ajaxUserRolesDatatable($id){
         $uRoles = Role::with('user1s')->where('id',$id)->get()->toArray();
         $uRoles=$uRoles[0]["user1s"];
@@ -351,23 +356,4 @@ class RoleController extends AppBaseController
 
     }
 
-    /**
-     * Check whether RolesPermissions ids are right or not
-     *
-     * @param int $id
-     *
-     * @throws \Exception
-     *
-     * @return Response
-     */
-    private function checkProperRolesPermissions($idRole){
-        RolePermission::where('role_id', $request->idRole)
-                ->update(['activated' => 0]);
-
-        $rolesPermissions = RolePermissions::all()->where('role_id', $idRole)->get();
-        if (!$rolesPermissions){
-            dd($rolesPermissions);            
-        }
-
-    }
 }
