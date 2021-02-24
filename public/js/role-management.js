@@ -11,7 +11,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, 
-        url: PublicURL + 'roles/view',
+        url: PublicURL + 'roles/viewDT',
         method: "POST",
         dataSrc: "data",
         xhrFields: {
@@ -61,8 +61,10 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         {
             "render": function ( data, type, row ) {
                 // return     '<a href="'+PublicURL+'role/confirmDelete/'+row.idRole+'"' + 'id="roleDelete"'+
+                var isDisabled = row.delible == 1 ? " isDisabled" : "";
                 return     '<a href="'+PublicURL+'roles/'+row.idRole+'/confirmDelete/'+'"' + 
-                            ' class="btn btn-danger roleDelete" data-name-role="' + row.nameRole + 
+                            ' class=\"btn btn-danger roleDelete' +isDisabled+'\"'+
+                            ' data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             '<i class="fa fa-trash"></i>&ensp;Borrar' +
                             '</a>'
@@ -70,8 +72,6 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
             "targets": 5
         },
     ],
-
-    // role/{roleName}/confirmDelete
 
     "fnDrawCallback": function( oSettings ) {
         $('.role-modal').on('click', function(e){
@@ -81,7 +81,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
 
         $('.roleDelete').on('click', function(e){
             e.preventDefault();
-
+            
             // showModal('¿Borrar rol '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
             // $(this).attr('href'), 'modal-xl', true, true); 
 

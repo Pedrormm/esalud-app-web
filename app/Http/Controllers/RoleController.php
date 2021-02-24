@@ -241,6 +241,10 @@ class RoleController extends AppBaseController
     {
         $roleToDelete = Role::find($id);
         $roleName = $roleToDelete->name;
+        if($roleToDelete->delible == 1 ) {
+            return $this->jsonResponse(1, "The role ".$roleName." cannot be deleted"); 
+        }
+
         if (empty($roleToDelete)) {
             return $this->jsonResponse(1, "Role not found"); 
         }
@@ -253,6 +257,7 @@ class RoleController extends AppBaseController
         RolePermission::where('role_id', $id)->delete();
         
         return $this->jsonResponse(0, "Role ".$roleName." deleted successfully.");
+    
 
     }
 
@@ -324,14 +329,9 @@ class RoleController extends AppBaseController
         return view('adjustments.newRole',['permissions' => $permissions]);
     }
 
-    public function confirmDeleteRole($role_name){
-        $role = Role::find($role_name);
-        return view('adjustments.confirmDeleteRole',['role' => $role]);
-    }
-
     public function confirmDelete($id){
         $role = Role::find($id);
-        return view('adjustments.confirmDeleteRole',['role' => $role]);
+        return view('roles.confirmDelete',['role' => $role]);
     }
 
     public function ajaxUserRolesDatatable($id){
@@ -343,8 +343,8 @@ class RoleController extends AppBaseController
 
     public function ajaxViewMainRolesDatatable(){
         $mRoles = Role::join('users', 'roles.user_id_creator', 'users.id')
-        ->select(DB::raw('roles.id as idRole, roles.name as nameRole, user_id_creator, users.id as idUser,
-        users.name as nameUser, lastname, dni, role_id'))
+        ->select(DB::raw('roles.id as idRole, roles.name as nameRole, roles.delible, user_id_creator,
+         users.id as idUser, users.name as nameUser, lastname, dni, role_id'))
         ->orderBy('roles.id')->get();
 
         foreach($mRoles as $rol){
@@ -355,5 +355,57 @@ class RoleController extends AppBaseController
         return response()->json(['data' => $mRoles]);
 
     }
+
+
+    public function isDelible(Request $request){
+        if ($request->ajax()){
+            $role = Role::find($request->id);
+            // dd($role->toArray());
+            if ($role){
+                if ($role->delible == 1){
+                    $response = [
+                        'delible' => true
+                    ];          
+                    return response()->json($response);                }
+                else{
+                    $response = [
+                        'delible' => false
+                    ];          
+                    return response()->json($response);  
+                }
+            }
+            return $delible;
+        }
+        else{
+            jsonResponse("1","Not enough permissions");
+        }
+    }
+
+
+    public function delete2(Request $request){
+        if ($request->ajax()){
+            // dd($request->all());
+            $message = Message::find($request->id);
+            if ($message){
+                if (($message->user_id_from == Auth::user()->id) || ($message->user_id_to == Auth::user()->id)){
+                    // dd($message);             
+                    if ($message->delete()){
+                        $response = [
+                            'status' => 0
+                        ];          
+                        return response()->json($response);
+                    }
+                }
+                else{
+                    jsonResponse("1","The message cannot be deleted");
+                }
+            }
+        }
+        else{
+            // Error
+            jsonResponse("1","The message cannot be deleted");
+        }
+    }
+
 
 }

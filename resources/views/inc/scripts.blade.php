@@ -23,9 +23,9 @@
         $('#collapseCommunication').collapse('show');
     @endif
     
-    var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
-
-    
+    @if (!Request::is('user/video-call-container*'))
+        var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+    @endif  
 
     @if(Request::is('user/create'))
         $('#navSubitemCreateNewUser').css('background-color', '#eaecf4');

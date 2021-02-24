@@ -139,7 +139,9 @@ Route::group(['middleware' => ['isLogged']], function () {
     // Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
     Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
     Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
-    Route::post('roles/view', 'RoleController@ajaxViewMainRolesDatatable');
+    Route::post('roles/viewDT', 'RoleController@ajaxViewMainRolesDatatable');
+    Route::get('roles/viewDT', 'RoleController@ajaxViewMainRolesDatatable');
+
 
     Route::get('role/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
     Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
@@ -148,10 +150,13 @@ Route::group(['middleware' => ['isLogged']], function () {
 
     // Route::get('role/create', 'RoleController@create');
 
+    Route::get('roles/isDelible', 'RoleController@isDelible');
+
     Route::get('roles/{id}/confirmDelete', 'RoleController@confirmDelete')->name('roles.confirmDelete');
 
-    // Route::apiResource('roles', 'RoleController');
     Route::resource('roles', 'RoleController');
+    // Route::apiResource('roles', 'RoleController');
+
 
     
 });
