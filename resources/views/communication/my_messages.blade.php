@@ -21,7 +21,7 @@
                 
                 <div class="center_elements">  
                     <div class="col-lg-10 ">
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mb-4" id="mainCardShadow">
 
                             <div class="msj-whole-card {{ ($userMessage['read']==0 )? " new-message":'' }} div-link" 
                             data-link="{{ URL::asset('/user/my-messages').'/'. $userMessage['id'] }}">
@@ -51,7 +51,7 @@
 
                                         </div> <!-- card-header -->
                                         <!-- Card Body -->
-                                        <div class="card-body">
+                                        <div class="card-body" id="mainCardBody">
                                             {{ $userMessage['messageCorrected'] }}
                                         </div> <!-- card-body -->
                                     </div> <!-- msj-content -->

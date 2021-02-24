@@ -89,6 +89,8 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
             $(this).attr('href'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
         });
     }
+}).on('draw', () => {
+    assignHeadersToRowsResponsive();
 });
 
 

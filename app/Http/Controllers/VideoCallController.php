@@ -74,6 +74,7 @@ class VideoCallController extends Controller
 
     public function authenticatePusher(Request $request){
         // Initialize the pusher object. Get the socket ID from the request
+        dd($request->all());
         $socketId = $request->socket_id;
         $channelName = $request->channel_name;
 

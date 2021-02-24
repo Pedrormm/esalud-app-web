@@ -58,7 +58,7 @@ export default class AppVideoRoom extends Component {
 
 
         this.mediaHandler = new MediaHandler();
-        this.setupPusher();
+        // this.setupPusher();
 
 
         this.callTo = this.callTo.bind(this);
@@ -223,10 +223,10 @@ export default class AppVideoRoom extends Component {
             cluster: 'ap2',
             auth: { 
                 // Auth object that will have to authorized
-                params: this.user.id,
                 headers: {
                     'X-CSRF-Token': window.csrfToken
-                }
+                },
+                params: this.user.id,
             }
         });
 

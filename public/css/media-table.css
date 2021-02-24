@@ -18,6 +18,11 @@
     and (max-width: 760px), (min-device-width: 768px) 
     and (max-device-width: 1024px)  {
 
+
+		#mainTableRoles thead th{
+			/* display: block; */
+		}
+
 		/* Force table to not be like tables anymore */
 		table, thead, tbody, th, td, tr {
 			display: block;

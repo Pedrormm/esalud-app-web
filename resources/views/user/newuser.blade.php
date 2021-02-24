@@ -8,12 +8,12 @@
 
   <div class="container-fluid">
 
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
         <h4 class="m-0 font-weight-bold text-primary text-center">Creación de Usuario</h4>
       </div>
 
-      <div class="card-body">
+      <div class="card-body" id="mainCardBody">
         <form action="/user/create" method="POST">        
           <div class="row">
               @csrf

@@ -612,6 +612,10 @@ function chatPusherInit() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }, 
             params: authUser.id,
+            // params: {
+            //     socket_id: authUser.id,
+            //     channel_name: 'name1'
+            // },
         }
     });
     console.log("despues: ", PublicURL+'pusher/auth');
@@ -807,7 +811,21 @@ function assignHeadersToRowsResponsive(){
         $('td').each(function() {
             $(this).attr('data-header', $('.header-' + $(this).index()).text());
         });
+        $('#mainCardShadow').removeClass(['card','shadow']);
 
+        $('#sidebarToggleTop').addClass('toggled');
+        // $('#sidebarToggleTop').trigger('click');
+        // $(".sidebar").toggleClass("toggled");
+
+        // $("body").toggleClass("sidebar-toggled"); 
+        // $(".sidebar").toggleClass("toggled");
+        // if ($(".sidebar").hasClass("toggled")) {
+        //     console.log("expansion 1024");
+        //     $('.sidebar .collapse').collapse('hide');
+        // };
+
+    
+        
     }
 }
 

@@ -53,7 +53,7 @@
 				<div class="row">       
 					@foreach(array_chunk($patients, 2) as $chunk)
 					<!-- Solo obtener pacientes relacionados con usuarios -->
-						<!-- <div class="card shadow mb-4"> -->
+						<!-- <div class="card shadow mb-4" id="mainCardShadow"> -->
 						<div class="col-lg-6">
 							@foreach($chunk as $patient)								
 									<!-- START card-->
@@ -74,7 +74,7 @@
 											</a>
 										</div><!-- .card-wrapper is the element to be collapsed-->
 										<div class="card-wrapper">
-											<div class="card-body">
+											<div class="card-body" id="mainCardBody">
 												<div class="record_item" name="{{ $patient['id'] }}">
 													<a name="records" href="{{ URL::asset('/user/singlerecord/'.$patient['id']) }}"/>                        
 													<div class="box">
