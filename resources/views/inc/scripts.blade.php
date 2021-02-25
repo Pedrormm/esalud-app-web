@@ -15,13 +15,20 @@
     @endisset
 
     {{-- Code for nav-main.blade.php --}}
-    @if((Request::is('user/create') || (Request::is('users')) || Request::is('users/patient') 
-    || Request::is('users/staff') ))
-        $('#collapseUserManagement').collapse('show');
-    @elseif((Request::is('user/my-messages') || (Request::is('user/send-message')) || 
-    Request::is('user/chat') || Request::is('user/videocall') ))
-        $('#collapseCommunication').collapse('show');
-    @endif
+    if (screen.width >= 1024){
+        @if((Request::is('user/create') || (Request::is('users')) || Request::is('users/patient') 
+        || Request::is('users/staff') ))
+            $('#collapseUserManagement').collapse('show');
+        
+        @elseif((Request::is('user/my-messages') || (Request::is('user/send-message')) || 
+        Request::is('user/chat') || Request::is('user/videocall') ))
+            $('#collapseCommunication').collapse('show');
+        @endif
+    }
+    else{
+        $(".sidebar").toggleClass("toggled");
+        $('#mainCardShadow').removeClass(['card','shadow']);
+    }
     
     @if (!Request::is('user/video-call-container*'))
         var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });

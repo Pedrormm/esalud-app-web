@@ -71,6 +71,19 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
             },
             "targets": 5
         },
+        {
+            "render": function ( data, type, row ) {
+                console.log("fila es",row);
+                console.log("data es",data);
+                console.log("type es",type);
+               
+                var parseWithHeaderColumnHidden = (data) => {
+                    return '<table><tr><td class="header-toggle-hidden">'+ row.parent.child(0).innerText +'</td><td>'+data+'</td></tr></table>';
+                };
+                return  parseWithHeaderColumnHidden(row.nameRole);
+            },
+            "targets": 1
+        }
     ],
 
     "fnDrawCallback": function( oSettings ) {
@@ -90,6 +103,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         });
     }
 }).on('draw', () => {
+    console.log("entra draw");
     assignHeadersToRowsResponsive();
 });
 

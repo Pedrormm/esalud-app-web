@@ -16,6 +16,10 @@ document.addEventListener("click", function(){
 
   });
 
+$(document).on( 'draw.dt', function ( e, settings ) {
+    assignHeadersToRowsResponsive();
+} );
+
   
 $(function() {
 
@@ -26,7 +30,11 @@ $(function() {
             },
         });
     }
-    assignHeadersToRowsResponsive();
+    // assignHeadersToRowsResponsive();
+    // $(".sidebar").toggleClass("toggled");
+    /*console.log("click on sidebartoggletop");
+    $('#sidebarToggleTop').click();
+    console.log("clicked");*/
 
     
 var pusher = videoPusherInit();
@@ -811,9 +819,9 @@ function assignHeadersToRowsResponsive(){
         $('td').each(function() {
             $(this).attr('data-header', $('.header-' + $(this).index()).text());
         });
-        $('#mainCardShadow').removeClass(['card','shadow']);
+        // $('#mainCardShadow').removeClass(['card','shadow']);
 
-        $('#sidebarToggleTop').addClass('toggled');
+        // $('#sidebarToggleTop').addClass('toggled');
         // $('#sidebarToggleTop').trigger('click');
         // $(".sidebar").toggleClass("toggled");
 
