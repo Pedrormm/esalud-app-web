@@ -36,7 +36,7 @@ Route::get('user/messages', 'MessageController@get')->middleware('isLogged');
 
 Route::get('user/index', 'LoginController@indexDashboard')->middleware('isLogged')->name('indexDashboard');
 
-Route::get('user/news', 'NewsController@get')->middleware('isLogged');
+// Route::get('user/news', 'NewsController@get')->middleware('isLogged');
 
 Route::get('video/getUserInfo', 'VideoCallController@getUserInfo')->middleware('isLogged');
 Route::get('comm/getContactInfo', 'MessageController@getContactInfo')->middleware('isLogged');
