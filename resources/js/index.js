@@ -25,6 +25,7 @@ let props = Object.assign({}, appElement.dataset);
 // https://82.223.128.221
 //  
 
+console.log("111");
 
 let dynamicProps = {
     sessionName: props.sessionname,

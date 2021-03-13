@@ -101,6 +101,7 @@ export default class App extends Component {
 
             console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
 
+            console.log("hiddenform");
             let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
             hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: session}));
