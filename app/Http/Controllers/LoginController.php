@@ -24,7 +24,6 @@ class LoginController extends Controller
 
     public function login(Request $request) {
         $remember = $request->has('remember') ? true : false;    
-
         $validatedData = $request->validate([
             'dni' => 'required|min:4|max:10|exists:users,dni',
             'password' => 'required|min:6',
@@ -145,6 +144,12 @@ class LoginController extends Controller
     public function logout(Request $request) {
         Auth::logout();
         return redirect('/')->withError("Session closed");
+    }
+
+    public function remember(){
+        // if ($request->ajax()){
+            return view('login-remember');
+        // }
     }
 }
 

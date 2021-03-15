@@ -1,4 +1,7 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 //use \App\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +15,6 @@
 */
 // Full view routes
 Route::get('/', function () {
-    //session()->flash('info', 'pepe');
     $user = Auth::user(); //Check for session stablished
     if($user)
         return redirect()->action('LoginController@index');
@@ -35,6 +37,8 @@ Route::get('message/icon', 'MessageController@showIconMessage')->middleware('isL
 Route::get('user/messages', 'MessageController@get')->middleware('isLogged');
 
 Route::get('user/index', 'LoginController@indexDashboard')->middleware('isLogged')->name('indexDashboard');
+Route::get('user/remember', 'LoginController@remember');
+
 
 // Route::get('user/news', 'NewsController@get')->middleware('isLogged');
 
@@ -185,6 +189,23 @@ Route::resource('notes', 'NoteController');
 Route::resource('patients', 'PatientController');
 */
 
+Route::get('storage/{filename}', function ($filename)
+{
+    $path = storage_path('public/' . $filename);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+});
+
 
 /*
  * TEST purposes
@@ -192,3 +213,4 @@ Route::resource('patients', 'PatientController');
 Route::get('test/mailInvitation', function() {
     return new App\Mail\InvitationNewUserMail('aogyuaogahg', '111111b');
 });
+
