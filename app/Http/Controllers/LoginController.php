@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Redirect;
 use Session;
 
 
+use App\Mail\InvitationNewUserMail;
+use App\Mail\WelcomeNewUserMail;
+
+
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
@@ -54,14 +58,20 @@ class LoginController extends Controller
     }
 
     public function loginForgotten(Request $request) {
-        $validatedData = $request->validate([
-            'rem_password' => 'required|min:4|max:10|exists:users,dni',
-        ]);
+        // return redirect()->back()->with(['error' => 'The email or dni provided does not exist']);
+        // $request->session()->flash('info', 'The email or dni provided does not exist!');
+        // return response()->json(['status' => 1, 'message' => 'The email or dni provided does not exist']);
+
+        // $validatedData = $request->validate([
+        //     'rem_password' => 'required|min:4|max:10|exists:users,dni',
+        // ]);
        
         $login = $request->rem_password;
         $user = User::where('dni', $login)->first();
+        // dd($login);
         if(is_null($user)) {
-            return back()->withErrors("Invalid login");
+            // return back()->withErrors("Invalid login");
+            return response()->json(['status' => 1, 'message' => 'The email or dni provided does not exist']);
         }
         
         $maxSteps = 1000; //Por seguridad, no vamos a permitir esto
@@ -72,28 +82,32 @@ class LoginController extends Controller
             $user->remember_token = $token;
             if($try >= $maxSteps) {
                 // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
-                return back()->withErrors("Internal error");
+                // return back()->withErrors("Internal error");
+                return response()->json(['status' => 1, 'message' => 'Internal error']);
+
             }
             $try++;
         } while (User::where('remember_token', $token)->first() instanceof User);
 
         $contact = User::where('email', $login)->orwhere('dni', $login)->get();
-
         if (count($contact) == 0){ // Si el usuario no existe
-            return redirect()->back()->with(['error' => 'The email or dni provided does not exist']);
+            // return redirect()->back()->with(['error' => 'The email or dni provided does not exist']);
+            return response()->json(['status' => 1, 'message' => 'The email or dni provided does not exist']);
         }
 
         $email = $contact[0]->email;
-
         User::where('id',$contact[0]->id)->update(['remember_token'=>$token]);
         // Guardar en BD el token
-        
-        Mail::send('mail.forgot', ['token' => $token, 'name' => $contact[0]->name], function ($m) use ($contact) {
+
+        \Mail::send('mail.forgot', ['token' => $token, 'name' => $contact[0]->name], function ($m) use ($contact) {
             $m->to($contact[0]->email);
             $m->subject(urldecode($contact[0]->name)." ". urldecode($contact[0]->lastname).", it has been requested to reset your password");
         });
         
-        return redirect()->back()->with(['successful' => 'A reset email was sent to the email']);
+        // $res = Mail::to($contact[0]->email)->send(new InvitationNewUserMail($token, $contact[0]->name));
+        
+        // return redirect()->back()->with(['successful' => 'A reset email was sent to the email']);
+        return response()->json(['status' => 0, 'message' => 'A reset email was sent to your email']);
 
     }
 
@@ -146,10 +160,10 @@ class LoginController extends Controller
         return redirect('/')->withError("Session closed");
     }
 
-    public function remember(){
-        // if ($request->ajax()){
+    public function remember(Request $request){
+        if ($request->ajax()){
             return view('login-remember');
-        // }
+        }
     }
 }
 

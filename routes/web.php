@@ -210,7 +210,7 @@ Route::get('storage/{filename}', function ($filename)
 /*
  * TEST purposes
  */
-Route::get('test/mailInvitation', function() {
+Route::get('    ', function() {
     return new App\Mail\InvitationNewUserMail('aogyuaogahg', '111111b');
 });
 

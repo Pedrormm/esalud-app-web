@@ -219,10 +219,11 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
     if(typeof callbackOkButton == 'function') {
         callbackOkButton = (function() {
             let cachedFunction = callbackOkButton;
-            return function() {
+            return function(e) {
                 cachedFunction.apply(this, arguments);
                 if(!_avoidAllSendings)
                     $('#generic-modal').modal('hide');
+                $( this ).off( e ); 
             }
         })();
         $('#generic-modal #saveModal').click(callbackOkButton);

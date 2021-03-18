@@ -1,7 +1,8 @@
 <?php
 /*
 return [
-    "driver" => "smtp",
+    // "driver" => "smtp",
+    "driver" => "mail",
     "host" => "smtp.mailtrap.io",
     "port" => 2525,
     "from" => array(
@@ -30,7 +31,9 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    // 'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'sendmail'),
+
 
     /*
     |--------------------------------------------------------------------------
@@ -146,5 +149,13 @@ return [
     */
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
+
+    'stream' => [
+        'ssl' => [
+            'allow_self_signed' => true,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ],
+    ],
 
 ];

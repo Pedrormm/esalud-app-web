@@ -25,10 +25,9 @@
             </div>
         </div>
         <div class="bottom">
-            {{-- <i class="fas fa-hand-pointer"></i> --}}
         </div>
         <div class="icon-center">
-            <i class="fas    fa-hand-pointer fa-lg"></i>
+            <i class="fas fa-hand-pointer fa-lg"></i>
         </div>
         <div class="center">
 
@@ -43,7 +42,7 @@
                 </div>
 
                 @if (session()->has('info'))
-                <div class="alert alert-success">{{ session()->get('info') }}</div>
+                    <div class="alert alert-success" id="infoSession">{{ session()->get('info') }}</div>
                 @endif
                 <div>
                 @if ($errors->any())
@@ -67,6 +66,9 @@
                         {{ session('successful') }}
                     </div>
                 @endif
+                
+                {{-- <div id="error-container" class="alert alert-danger dNone"></div>
+                <div id="message-container" class="alert alert-success dNone"></div> --}}
 
                 <button type="submit" class="btn btn-primary btn-lg form-control form-control-lg" >Entrar</button>
             </form>
