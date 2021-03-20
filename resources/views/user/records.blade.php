@@ -80,10 +80,10 @@
 													<div class="box">
 														<div class="record_left">
 															@if ($patient['sex']=="male")
-																<img src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
+																<img src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
 															@endif
 															@if ($patient['sex']=="female")
-																<img src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
+																<img src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
 															@endif
 														</div> <!-- record_left  -->
 														<div class="record_right">

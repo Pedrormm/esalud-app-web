@@ -32,10 +32,10 @@
                                                 <img class="avatar big" src="{{ asset('images/avatars/'.$user->avatar) }}">                                                               
                                             @else
                                                 @if ($userMessage['sex']=="male")
-                                                    <img class="avatar big" src="{{ asset('images/avatars/user_man.PNG') }}">                                                               
+                                                    <img class="avatar big" src="{{ asset('images/avatars/user_man.png') }}">                                                               
                                                 @endif
                                                 @if ($userMessage['sex']=="female")
-                                                    <img class="avatar big" src="{{ asset('images/avatars/user_woman.PNG') }}">                                                               
+                                                    <img class="avatar big" src="{{ asset('images/avatars/user_woman.png') }}">                                                               
                                                 @endif
                                             @endif                            
                                         </figure>                

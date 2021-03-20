@@ -1,8 +1,5 @@
-
 $('#saveModal').click(function() {
-    
     let roleDeleteId = $('#sureDeleteRole').data("role-delete-id")
-    // saveModalActionAjax(PublicURL+"role/destroy/"+roleDeleteId, roleDeleteId, 'DELETE', 'json', function(res) {
     saveModalActionAjax(PublicURL+"roles/"+roleDeleteId, roleDeleteId, 'DELETE', 'json', function(res) {
         if(res.status == 0) {
             $('#mainTableRoles').DataTable().ajax.reload();
@@ -14,5 +11,3 @@ $('#saveModal').click(function() {
         $('#saveModal').off("click");
     });
 });
-
-

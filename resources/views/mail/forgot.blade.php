@@ -1,29 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Forgot</title>
-</head>
-<body>
-    <h1>Hello {{ urldecode($name) }}</h1>
-    <p>It has been requested to reset your password. Please click the password reset button to reset your password
-    </p>
-    <a class="btn btn-primary" href="{{ URL::asset('password/reset/' . $token) }}" role="button">Reset password</a>
-</body>
+@component('mail::message')
+# Cambio de contraseña
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+Hola {{ $name }}, se ha solicitado un cambio de contraseña. 
+Por favor, haga click en el siguiente enlace si desea cambiar su contraseña
 
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+@component('mail::button', ['url' => URL::asset('password/reset/' . $token)])
+Nueva contraseña
+@endcomponent
 
-<!-- Popper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> 
+<small>
+NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de navegación:<br>
+{{ URL::asset('password/reset/' . $token) }}
+</small>
 
-</html>
+Gracias,<br>
+{{ config('app.name') }}
+@endcomponent

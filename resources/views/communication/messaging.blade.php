@@ -52,10 +52,10 @@
                                 alt={{ $contact->name. " ".$contact->lastname }}  class="avatar big">                                                               
                               @else
                                   @if ($contact->sex=="male")
-                                      <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_man.PNG') }}">                                                               
+                                      <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_man.png') }}">                                                               
                                   @endif
                                   @if ($contact->sex=="female")
-                                      <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_woman.PNG') }}">                                                               
+                                      <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_woman.png') }}">                                                               
                                   @endif
                               @endif
                             </div>

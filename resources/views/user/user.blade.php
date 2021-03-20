@@ -44,10 +44,10 @@
                     <tr class="text_left">
                         <td class="text_left">
                             @if ($singleUser['sex']=="male")
-                                <img class="avatar" src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
+                                <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
                             @endif
                             @if ($singleUser['sex']=="female")
-                                <img class="avatar" src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
+                                <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
                             @endif
                             <span>{{ urldecode($singleUser['lastname']).", ".urldecode($singleUser['name']) }}</span>
                         </td>

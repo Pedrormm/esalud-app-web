@@ -1,9 +1,9 @@
 
 
 
-  <form action="{{ URL::asset('/role/userManagementNotInRole/update')  }}" method="POST" id="editNotInRole">
+  <form action="{{ URL::asset('/roles/userManagementNotInRole/update')  }}" method="POST" id="editNotInRole">
     {{ csrf_field() }}
-    <input type="hidden" name="urlNotInRole" id="urlNotInRole" value="{{ URL::asset('/role/userManagementNotInRole/update')  }}"> 
+    <input type="hidden" name="urlNotInRole" id="urlNotInRole" value="{{ URL::asset('/roles/userManagementNotInRole/update')  }}"> 
   
     <div class="row">
         <div class="col-md-12">

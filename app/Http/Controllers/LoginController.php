@@ -19,6 +19,8 @@ use Session;
 
 use App\Mail\InvitationNewUserMail;
 use App\Mail\WelcomeNewUserMail;
+use App\Mail\ForgotPasswordMail;
+
 
 
 use Illuminate\Support\Str;
@@ -96,13 +98,17 @@ class LoginController extends Controller
         }
 
         $email = $contact[0]->email;
+        $name = $contact[0]->name;
         User::where('id',$contact[0]->id)->update(['remember_token'=>$token]);
         // Guardar en BD el token
 
-        \Mail::send('mail.forgot', ['token' => $token, 'name' => $contact[0]->name], function ($m) use ($contact) {
-            $m->to($contact[0]->email);
-            $m->subject(urldecode($contact[0]->name)." ". urldecode($contact[0]->lastname).", it has been requested to reset your password");
-        });
+        // \Mail::send('mail.forgot', ['token' => $token, 'name' => $contact[0]->name], function ($m) use ($contact) {
+        //     $m->to($contact[0]->email);
+        //     $m->subject(urldecode($contact[0]->name)." ". urldecode($contact[0]->lastname).", it has been requested to reset your password");
+        // });
+
+        $res = \Mail::to($email)->send(new ForgotPasswordMail($token, $name));
+
         
         // $res = Mail::to($contact[0]->email)->send(new InvitationNewUserMail($token, $contact[0]->name));
         

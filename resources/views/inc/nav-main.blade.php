@@ -6,7 +6,10 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
             <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+            {{-- <i class="fas fa-laugh-wink"></i> --}}
+            <div class="d-flex justify-content-center logo-nav">
+                <img src="{{ url('/images/logo.png') }}" alt="Logo">
+            </div>
             </div>
             <div class="sidebar-brand-text mx-3">{{ env('APP_NAME') }}</div>
         </a>

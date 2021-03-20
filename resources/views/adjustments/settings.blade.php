@@ -85,10 +85,10 @@
                         <img class="avatar" src="{{ asset('images/avatars/'.$user->avatar) }}" class="avatar big">                                                               
                     @else
                         @if ($user->sex=="male")
-                            <img class="avatar" src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
+                            <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
                         @endif
                         @if ($user->sex=="female")
-                            <img class="avatar" src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
+                            <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
                         @endif
                     @endif
                 </div> 

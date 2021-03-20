@@ -861,6 +861,13 @@ video::-webkit-media-controls-timeline{
   align-items: center;
 }
 
+.logo-nav img{
+  width: 6vh;
+  height: auto;
+}
+.logo-nav{
+  margin-top:0.5vh;
+}
 /* ========================================================================
   Modal
 ========================================================================== */

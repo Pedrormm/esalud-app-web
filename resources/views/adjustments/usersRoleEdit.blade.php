@@ -10,8 +10,18 @@
 
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
+              <div class="row">
+                <div class="cHeader col-2">
+                  <button type="button" class="btn btn-primary">
+                      <i class="fas fa-arrow-left"></i>
+                  </button>
+                </div>
+                <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
+
+              </div>
             </div>
+
+
 
             <div class="card-body" id="mainCardBody">
               <div class="table-responsive">
@@ -31,7 +41,7 @@
               </div>
             </div>
 
-              <a href="{{ URL::asset('/role/userManagementNotInRole/edit/'.$id)  }}" class="btn btn-primary borderShadow" 
+              <a href="{{ URL::asset('/roles/userManagementNotInRole/edit/'.$id)  }}" class="btn btn-primary borderShadow" 
                 id="usersDistRole" data-name-role="{{ $usersRole[0]["name"] }}"><i class="fa fa-search"></i>
                 Buscar usuarios asociados a un rol distinto de {{ $usersRole[0]["name"] }}
               </a>   

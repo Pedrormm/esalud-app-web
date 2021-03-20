@@ -701,7 +701,7 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
                 let whatToInsert =
                 ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${PublicURL}comm/messaging' >`+
                  "<div class='dropdown-list-image mr-3'>"+
-                    `<img class='rounded-circle' src='${(res.avatar) ? PublicURL+"images/avatars/"+res.avatar : ((res.sex == "male") ? PublicURL+"images/avatars/user_man.PNG": (res.sex == "female")? PublicURL+"images/avatars/user_woman.PNG":null) }' alt='Foto de perfil'>`+  
+                    `<img class='rounded-circle' src='${(res.avatar) ? PublicURL+"images/avatars/"+res.avatar : ((res.sex == "male") ? PublicURL+"images/avatars/user_man.png": (res.sex == "female")? PublicURL+"images/avatars/user_woman.png":null) }' alt='Foto de perfil'>`+  
                          "<div class='status-indicator bg-success'></div>"+
                  "</div>"+
                  "<div class='mr-3 font-weight-bold'>"+

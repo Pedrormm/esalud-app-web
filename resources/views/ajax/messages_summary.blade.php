@@ -10,10 +10,10 @@
           {{-- Opcionalmente pasarle el id de un mensaje, para que entre en ese usuario directamente --}}
           <div class="dropdown-list-image mr-3">
             @if ($userMessage['sex']=="male")
-                <img class="rounded-circle" src="{{ asset('images/avatars/user_man.PNG') }}" alt="Foto de perfil">                                                               
+                <img class="rounded-circle" src="{{ asset('images/avatars/user_man.png') }}" alt="Foto de perfil">                                                               
             @endif
             @if ($userMessage['sex']=="female")
-                <img class="rounded-circle" src="{{ asset('images/avatars/user_woman.PNG') }}" alt="Foto de perfil">                                                               
+                <img class="rounded-circle" src="{{ asset('images/avatars/user_woman.png') }}" alt="Foto de perfil">                                                               
             @endif
             <div class="status-indicator bg-success"></div>
           </div>

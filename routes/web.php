@@ -26,6 +26,8 @@ Route::group(['middleware' => ['isLogged', 'checkUserRole']], function () {
     Route::get('user/dashboard', 'LoginController@index');
     
 });
+
+
     
 
 // Ajax view routes
@@ -64,11 +66,14 @@ Route::post('/user/login', 'LoginController@login');
 Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 
 // User routes
-Route::get('users/edit/{id}', 'UserController@edit')->middleware('isLogged')->name('users.edit');//->where('id', '\d+');;
+// Route::get('users/edit/{id}', 'UserController@edit')->middleware('isLogged')->name('users.edit');//->where('id', '\d+');;
+// Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('isLogged')->where('userType', 'staff|patient');
+// Route::put('users/{id}', 'UserController@update')->middleware('isLogged');
 
-Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('isLogged')->where('userType', 'staff|patient');
+Route::resource('users', 'UserController');
+
+
 // TODO: How to route without a word (edit). Possible solution->Routing without the search and ord parameters
-Route::put('users/{id}', 'UserController@update')->middleware('isLogged');
 // TODO: Preguntar: Para qué le tengo que pasar el id al update, si ya se obtienen los argumentos con Request
 // route('users.edit', ['id'=>25])
 
@@ -131,38 +136,23 @@ Route::get( 'user/recorddisplay/{id}', function ( $id) {
 });
 */
 
-// Admin routes
+// Roles routes
 Route::group(['middleware' => ['isLogged']], function () {
 
-    // Route::get('user/roleManagement', 'RoleController@index');
-    // Route::get('user/roleManagement/edit/{id}', 'RoleController@edit')->middleware('isAdmin');
-    // Route::put('user/roleManagement/update', 'RoleController@update');
-    // Route::get('user/roleManagement/update', 'RoleController@update');
+    Route::get('roles/userManagement/edit/{id}', 'RoleController@usersRolesView');
+    Route::post('roles/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
 
-    Route::delete('role/destroy/{id}', 'RoleController@destroy');
-    // Route::get('role/confirmDelete/{id}', 'RoleController@confirmDeleteRole');
-    Route::get('role/userManagement/edit/{id}', 'RoleController@usersRolesView');
-    Route::post('role/userManagementInRole/edit/{id}', 'RoleController@ajaxUserRolesDatatable');
-    Route::post('roles/viewDT', 'RoleController@ajaxViewMainRolesDatatable');
-    Route::get('roles/viewDT', 'RoleController@ajaxViewMainRolesDatatable');
+    Route::get('roles/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
+    Route::post('roles/userManagementNotInRole/update', 'RoleController@updateNotInRole');
 
-
-    Route::get('role/userManagementNotInRole/edit/{id}', 'RoleController@editNotInRole');
-    Route::post('role/userManagementNotInRole/update', 'RoleController@updateNotInRole');
-    // Route::get('role/newRole', 'RoleController@newRole');
-    // Route::post('role/create', 'RoleController@create');
-
-    // Route::get('role/create', 'RoleController@create');
+    Route::match(array('GET', 'POST'), 'roles/viewDT', 'RoleController@ajaxViewMainRolesDatatable');
 
     Route::get('roles/isDelible', 'RoleController@isDelible');
 
     Route::get('roles/{id}/confirmDelete', 'RoleController@confirmDelete')->name('roles.confirmDelete');
 
     Route::resource('roles', 'RoleController');
-    // Route::apiResource('roles', 'RoleController');
 
-
-    
 });
 
 // Route::post('pusher/auth', 'VideoCallController@authenticatePusher');
@@ -173,21 +163,10 @@ Route::get('test', function() {
     phpinfo();
 });
 
+// SMS routes
 Route::get('/sms/send', 'SmsController@sendSms')->middleware('isLogged');;
 Route::post('/sms/send', 'SmsController@postSendSms')->middleware('isLogged');;
 
-/*
-
-Route::resource('roles', 'RoleController');
-
-Route::resource('staff', 'StaffController');
-
-Route::resource('calls', 'CallController');
-
-Route::resource('notes', 'NoteController');
-
-Route::resource('patients', 'PatientController');
-*/
 
 Route::get('storage/{filename}', function ($filename)
 {
@@ -210,7 +189,7 @@ Route::get('storage/{filename}', function ($filename)
 /*
  * TEST purposes
  */
-Route::get('    ', function() {
+Route::get('mail/test', function() {
     return new App\Mail\InvitationNewUserMail('aogyuaogahg', '111111b');
 });
 

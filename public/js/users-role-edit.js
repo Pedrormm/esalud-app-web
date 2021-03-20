@@ -11,7 +11,7 @@ let _dataTableRoles = $('#tableRoles').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }, 
-            url: PublicURL + 'role/userManagementInRole/edit/' + currentIdRole,
+            url: PublicURL + 'roles/userManagementInRole/edit/' + currentIdRole,
             method: "POST",
             dataSrc: "data",
             xhrFields: {
@@ -70,14 +70,14 @@ let _dataTableRoles = $('#tableRoles').DataTable({
         "fnDrawCallback": function( oSettings ) {
 
           let allUsers;
-          let _rolesForChange = {}
-          let _currentRolesForChange = {}
+          let _rolesForChange = {};
+          let _currentRolesForChange = {};
 
           $(".selectCurrentRole").on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
               let roleId = this.options[clickedIndex].value;
               let userId = $(this).data('user-id');
               _currentRolesForChange[userId] = parseInt(roleId);
-              saveModalActionAjax(PublicURL+"role/userManagementNotInRole/update", _currentRolesForChange, 'POST', 'json', function(res) {
+              saveModalActionAjax(PublicURL+"roles/userManagementNotInRole/update", _currentRolesForChange, 'POST', 'json', function(res) {
               if(res.status == 0) {
                   $('#tableRoles').DataTable().ajax.reload();
                   showInlineMessage(res.message, 20);
@@ -98,6 +98,11 @@ $('#usersDistRole').on('click', function(e){
     e.preventDefault();
     showModal('Buscar usuarios con rol distinto a '+ $(this).data('name-role'), '', false, $(this).attr('href'), 
     'modal-xl', true, true); 
+});
+
+$('.cHeader button').on('click', function(e){
+  e.preventDefault();
+  window.location.href = PublicURL+"roles/";
 });
 
 

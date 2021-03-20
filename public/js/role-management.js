@@ -39,7 +39,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                return     '<a href="'+PublicURL+'role/userManagement/edit/'+row.idRole+'"' + 
+                return     '<a href="'+PublicURL+'roles/userManagement/edit/'+row.idRole+'"' + 
                             ' class="btn btn-primary role-users-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             'Usuarios asociados' +

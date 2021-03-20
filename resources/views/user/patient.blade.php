@@ -67,10 +67,10 @@ Me pongo en contacto contigo porque tu profe Danny nos ha comen...</p>
                         <img class="avatar" src="{{ asset('images/avatars/'.$patient->avatar) }}" class="avatar big">                                                               
                       @else
                         @if ($patient->sex=="male")
-                            <img class="avatar" src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
+                            <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
                         @endif
                         @if ($patient->sex=="female")
-                            <img class="avatar" src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
+                            <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
                         @endif
                       @endif
                         <span>{{ urldecode($patient->lastname).", ".urldecode($patient->name) }}</span>

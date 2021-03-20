@@ -47,10 +47,10 @@
                         <img class="avatar" src="{{ asset('images/avatars/'.$staff->avatar) }}" class="avatar big">                                                               
                       @else
                         @if ($staff->sex=="male")
-                            <img class="avatar" src="{{ asset('images/avatars/user_man.PNG') }}" class="avatar big">                                                               
+                            <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
                         @endif
                         @if ($staff->sex=="female")
-                            <img class="avatar" src="{{ asset('images/avatars/user_woman.PNG') }}" class="avatar big">                                                               
+                            <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
                         @endif
                       @endif
                         <span>{{ urldecode($staff->lastname).", ".urldecode($staff->name) }}</span>
