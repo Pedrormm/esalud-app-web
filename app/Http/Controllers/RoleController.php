@@ -331,7 +331,7 @@ class RoleController extends AppBaseController
 
     public function confirmDelete($id){
         $role = Role::find($id);
-        return view('roles.confirmDelete',['role' => $role]);
+        return view('roles.confirm-delete',['role' => $role]);
     }
 
     public function ajaxUserRolesDatatable($id){

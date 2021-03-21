@@ -56782,6 +56782,7 @@ function (_Component) {
     _this.state = {
       hasMedia: false,
       otherUserId: null,
+      latestSession: null,
       // mode: props.mode ? props.mode :'hold'
       mode: _VideoUtils__WEBPACK_IMPORTED_MODULE_4__["isInVideoCallView"]() || isABootstrapModalOpen() ? props.mode : 'receive'
     };
@@ -56841,6 +56842,7 @@ function (_Component) {
         algorithm: 'md5'
       });
       $('#content').data('session-video-call', session);
+      this.state.latestSession = session;
       var pusher = videoPusherInit();
       var videoChannel = pusher[1];
       console.log(videoChannel);
@@ -56885,19 +56887,25 @@ function (_Component) {
         }));
         $('body').append(hiddenForm);
         console.log(session);
-        window.open('', 'videoWindow');
-        $('#videoFormData').submit(); // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
+        var openviduWindow = window.open('', 'videoWindow'); // let that = this;
+        // openviduWindow.onunload= function() { 
+        //     console.log("Cerró la llamada");
+        //     that.state.latestSession = null;
+        // };
 
-        $("#joinButton").css("display", "inline");
+        $('#videoFormData').submit(); // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
+        // if (this.state.latestSession !== null ){
+
+        $("#joinButton").css("display", "inline"); // }
       });
     }
   }, {
-    key: "joinTo",
-    value: function joinTo(userId) {
-      var session = $('#content').data('session-video-call');
+    key: "inviteTo",
+    value: function inviteTo(userId) {
       var pusher = videoPusherInit();
       var videoChannel = pusher[1];
-      console.log(videoChannel);
+      console.log("invite ", videoChannel);
+      var that = this;
       videoChannel.bind('pusher:subscription_succeeded', function () {
         var userReceiverFullName = "";
         $.ajax(PublicURL + 'video/getUserInfo', {
@@ -56909,43 +56917,45 @@ function (_Component) {
           async: false
         }).done(function (res) {
           userReceiverFullName = res;
+          console.log("name ", userReceiverFullName);
         }).fail(function (xhr, st, err) {
           console.error("error in video/getUserInfo " + xhr, st, err);
         });
         videoChannel.trigger("client-video-channel-send", {
-          session: session,
+          session: that.state.latestSession,
           userReceiverId: Number(userId),
           userReceiverFullName: userReceiverFullName,
           userCallerId: Number(authUser.id),
           userCallerFullName: authUser.name + " " + authUser.lastname
         });
-        console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
-        var hiddenForm = $('<form>', {
-          id: 'videoFormData',
-          method: 'post',
-          action: PublicURL + 'user/video-call-container',
-          target: 'videoWindow'
-        });
-        hiddenForm.append($('<input>', {
-          type: 'hidden',
-          name: 'userFullName',
-          value: authUser.name + " " + authUser.lastname
-        }));
-        hiddenForm.append($('<input>', {
-          type: 'hidden',
-          name: 'sessionName',
-          value: session
-        }));
-        $('body').append(hiddenForm);
-        console.log(session);
-        window.open('', 'videoWindow');
-        $('#videoFormData').submit();
       });
+    }
+  }, {
+    key: "inviteToButton",
+    value: function inviteToButton(lastSession) {
+      var _this3 = this;
+
+      if (lastSession !== null) {
+        return (
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            id: "joinButton",
+            className: "btn btn-primary",
+            onClick: function onClick() {
+              return _this3.inviteTo(_this3.selectedUserId);
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fa fa-share-alt"
+          }), "\u2002Invite")
+        );
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var mode = this.state.mode;
 
@@ -56964,7 +56974,7 @@ function (_Component) {
             "data-width": "35%",
             "data-header": "Busque usuario por nombre, apellidos o dni",
             onChange: function onChange(e) {
-              return _this3.selectUser(e);
+              return _this4.selectUser(e);
             }
           }, Object.keys(this.users).map(function (role, roleId) {
             return (
@@ -56972,14 +56982,14 @@ function (_Component) {
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("optgroup", {
                 key: roleId,
                 label: role
-              }, Object.keys(_this3.users[role]).map(function (u) {
-                return _this3.users[role][u].id !== user.id ?
+              }, Object.keys(_this4.users[role]).map(function (u) {
+                return _this4.users[role][u].id !== user.id ?
                 /*#__PURE__*/
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-                  "data-subtext": _this3.users[role][u].dni,
+                  "data-subtext": _this4.users[role][u].dni,
                   key: "".concat(u, "-").concat(role, ".id"),
-                  value: _this3.users[role][u].id
-                }, _this3.users[role][u].name, " ", _this3.users[role][u].lastname) : null;
+                  value: _this4.users[role][u].id
+                }, _this4.users[role][u].name, " ", _this4.users[role][u].lastname) : null;
               }))
             );
           })),
@@ -56988,25 +56998,13 @@ function (_Component) {
             id: "callButton",
             className: "btn btn-primary",
             onClick: function onClick() {
-              return _this3.callTo(_this3.selectedUserId);
+              return _this4.callTo(_this4.selectedUserId);
             }
           },
           /*#__PURE__*/
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
             className: "fa fa-phone"
-          }), "\u2002Call"),
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            id: "joinButton",
-            className: "btn btn-primary",
-            onClick: function onClick() {
-              return _this3.joinTo(_this3.selectedUserId);
-            }
-          },
-          /*#__PURE__*/
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fa fa-share-alt"
-          }), "\u2002Join"))
+          }), "\u2002Call"), this.inviteToButton(this.state.lastSession))
         );
       }
     }

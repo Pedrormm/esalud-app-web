@@ -24,7 +24,7 @@ class UserController extends Controller
     /**
      * Display a listing of all users.
      * 
-     * Endpoint: users/{userType?}/{search?}/{ord?}
+     * Endpoint: users/
      *  
      * @author Pedro    * 
      * 
@@ -34,25 +34,12 @@ class UserController extends Controller
      * 
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */ 
-    public function index(string $userType=null, string $search=null, string $ord=null){
+    public function index(){
         $user = Auth::user();
-        if (is_null($ord)){
-            $ord = 'users.id';
-        }
-        if(is_null($userType))
-            $users = User::joinOthers();
-        elseif($userType == \HV_USER_TYPES::PATIENT) {
-            $users = Patient::userParent();
-        }
-        elseif($userType == \HV_USER_TYPES::STAFF) {
-            $users = Staff::userParent();
-        }
-        
-        if (!is_null($search) && !empty($search) && isset($search)){
-            $users = $users->findByString($search, $ord);
-        }
+        $users = User::joinOthers();
+
         $users = $users->get()->toArray();
-        return view('user/user', ['users' => $users,'user' => $user]);
+        return view('users/index', ['users' => $users,'user' => $user]);
     }
 
 
@@ -369,7 +356,7 @@ class UserController extends Controller
       /**
        * Show the form for editing the specified user.
        *
-       * Endpoint: users/edit/{id}
+       * Endpoint: users/{id}/edit
        * 
        * @author Pedro
        * 
@@ -516,4 +503,9 @@ class UserController extends Controller
   
           return redirect(route('users.index'));
       }
+
+    public function confirmDelete($id){
+        $singleUser = User::find($id);
+        return view('users.confirm-delete',['singleUser' => $singleUser]);
+    }
 }

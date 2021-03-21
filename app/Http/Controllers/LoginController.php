@@ -70,7 +70,6 @@ class LoginController extends Controller
        
         $login = $request->rem_password;
         $user = User::where('dni', $login)->first();
-        // dd($login);
         if(is_null($user)) {
             // return back()->withErrors("Invalid login");
             return response()->json(['status' => 1, 'message' => 'The email or dni provided does not exist']);

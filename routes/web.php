@@ -70,6 +70,8 @@ Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 // Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('isLogged')->where('userType', 'staff|patient');
 // Route::put('users/{id}', 'UserController@update')->middleware('isLogged');
 
+Route::get('users/{id}/confirmDelete', 'UserController@confirmDelete')->name('roles.confirmDelete');
+
 Route::resource('users', 'UserController');
 
 

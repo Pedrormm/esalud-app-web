@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswat ch/4.5.2/cosmo/bootstrap.min.css"> --}}
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 
 </head>
 

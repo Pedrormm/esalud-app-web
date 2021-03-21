@@ -6,12 +6,14 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
             <div class="sidebar-brand-icon rotate-n-15">
-            {{-- <i class="fas fa-laugh-wink"></i> --}}
-            <div class="d-flex justify-content-center logo-nav">
-                <img src="{{ url('/images/logo.png') }}" alt="Logo">
+                <div class="d-flex justify-content-center logo-nav">
+                    <img src="{{ url('/images/logo.png') }}" alt="Logo">
+                </div>
             </div>
-            </div>
-            <div class="sidebar-brand-text mx-3">{{ env('APP_NAME') }}</div>
+        </a>
+
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
+            <div class="sidebar-brand-text nav-tittle">MI HOSPITAL V.</div>
         </a>
 
         @if(isset($flagsMenuEnabled['DASHBOARD']) && $flagsMenuEnabled['DASHBOARD'])
@@ -26,9 +28,9 @@
         </li>
         @endif
 
-        @if((isset($flagsMenuEnabled['USER_MANAGEMENT']) && $flagsMenuEnabled['USER_MANAGEMENT']) ||
-         (isset($flagsMenuEnabled['SHOW_PATIENTS_MEDICAL_RECORD']) && $flagsMenuEnabled['SHOW_PATIENTS_MEDICAL_RECORD']) ||
-         (isset($flagsMenuEnabled['SHOW_OWN_MEDICAL_RECORD']) && $flagsMenuEnabled['SHOW_OWN_MEDICAL_RECORD']))
+        @if((isset($flagsMenuEnabled['USER_MANAGEMENT_SHOW']) && $flagsMenuEnabled['USER_MANAGEMENT_SHOW']) ||
+         (isset($flagsMenuEnabled['PATIENTS_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['PATIENTS_MEDICAL_RECORD_SHOW']) ||
+         (isset($flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW']))
         {{-- @if ( in_array($user->role_id, [HV_ROLES::DOCTOR,HV_ROLES::HELPER,HV_ROLES::ADMIN],
          true ) )  --}} 
 
@@ -41,7 +43,10 @@
         </div>
         @endif
 
-        @if(isset($flagsMenuEnabled['USER_MANAGEMENT']) && $flagsMenuEnabled['USER_MANAGEMENT'])
+        @if((isset($flagsMenuEnabled['USER_MANAGEMENT_CREATE']) && $flagsMenuEnabled['USER_MANAGEMENT_CREATE']) ||
+        (isset($flagsMenuEnabled['ALL_USERS_SHOW']) && $flagsMenuEnabled['ALL_USERS_SHOW']) ||
+        (isset($flagsMenuEnabled['PATIENT_USER_SHOW']) && $flagsMenuEnabled['PATIENT_USER_SHOW']) ||
+        (isset($flagsMenuEnabled['STAFF_USER_SHOW']) && $flagsMenuEnabled['STAFF_USER_SHOW']))
 
         <!-- Nav Item - Users User management Menu -->
         <li class="nav-item">
@@ -53,16 +58,25 @@
             <div id="collapseUserManagement" class="collapse" aria-labelledby="headingUserManagement" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User administration:</h6>
-                <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/newUser') }}">Create new user</a>
-                <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/users') }}">Show all users</a>
-                <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/users/patient') }}">Patient management</a>
-                <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/users/staff') }}">Staff management</a>
+                @if(isset($flagsMenuEnabled['USER_MANAGEMENT_CREATE']) && $flagsMenuEnabled['USER_MANAGEMENT_CREATE'])
+                    <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/newUser') }}">Create new user</a>
+                @endif
+                @if(isset($flagsMenuEnabled['ALL_USERS_SHOW']) && $flagsMenuEnabled['ALL_USERS_SHOW'])
+                    <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/users') }}">Show all users</a>
+                @endif   
+                @if(isset($flagsMenuEnabled['PATIENT_USER_SHOW']) && $flagsMenuEnabled['PATIENT_USER_SHOW']) 
+                    <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/users/patient') }}">Patient management</a>
+                @endif    
+                @if(isset($flagsMenuEnabled['STAFF_USER_SHOW']) && $flagsMenuEnabled['STAFF_USER_SHOW'])
+                    <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/users/staff') }}">Staff management</a>
+                @endif
+
             </div>
             </div>
         </li>
         @endif
 
-        @if(isset($flagsMenuEnabled['SHOW_PATIENTS_MEDICAL_RECORD']) && $flagsMenuEnabled['SHOW_PATIENTS_MEDICAL_RECORD'])
+        @if(isset($flagsMenuEnabled['PATIENTS_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['PATIENTS_MEDICAL_RECORD_SHOW'])
 
         <!-- Nav Item - Medical record -->
         <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">
@@ -72,7 +86,7 @@
         </li>
         @endif
 
-        @if(isset($flagsMenuEnabled['SHOW_OWN_MEDICAL_RECORD']) && $flagsMenuEnabled['SHOW_OWN_MEDICAL_RECORD'])
+        @if(isset($flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW'])
 
         <!-- Nav Item - Medical record -->
         <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">
@@ -82,9 +96,9 @@
         </li>
         @endif
 
-        @if((isset($flagsMenuEnabled['SHOW_MESSAGING_CHAT']) && $flagsMenuEnabled['SHOW_MESSAGING_CHAT']) ||
-        (isset($flagsMenuEnabled['SHOW_VIDEO_CALL']) && $flagsMenuEnabled['SHOW_VIDEO_CALL']) ||
-        (isset($flagsMenuEnabled['SHOW_GROUP_CHAT']) && $flagsMenuEnabled['SHOW_GROUP_CHAT']))
+        @if((isset($flagsMenuEnabled['MESSAGING_CHAT_SHOW']) && $flagsMenuEnabled['MESSAGING_CHAT_SHOW']) ||
+        (isset($flagsMenuEnabled['VIDEO_CALL_SHOW']) && $flagsMenuEnabled['VIDEO_CALL_SHOW']) ||
+        (isset($flagsMenuEnabled['GROUP_CHAT_SHOW']) && $flagsMenuEnabled['GROUP_CHAT_SHOW']))
         
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -104,14 +118,14 @@
             <div id="collapseCommunication" class="collapse" aria-labelledby="headingCommunication" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Messages:</h6>
-                @if(isset($flagsMenuEnabled['SHOW_MESSAGING_CHAT']) && $flagsMenuEnabled['SHOW_MESSAGING_CHAT'])
+                @if(isset($flagsMenuEnabled['MESSAGING_CHAT_SHOW']) && $flagsMenuEnabled['MESSAGING_CHAT_SHOW'])
                     <a id="navSubitemMessaging" class="collapse-item" href="{{ URL::asset('/comm/messaging') }}">Messaging</a>
                 @endif
                 <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/user/my-messages') }}">My messages</a>
-                @if(isset($flagsMenuEnabled['SHOW_GROUP_CHAT']) && $flagsMenuEnabled['SHOW_GROUP_CHAT'])
+                @if(isset($flagsMenuEnabled['GROUP_CHAT_SHOW']) && $flagsMenuEnabled['GROUP_CHAT_SHOW'])
                     <a id="navSubitemChat" class="collapse-item" href="{{ URL::asset('/openvidu/token') }}">Chat</a>
                 @endif
-                @if(isset($flagsMenuEnabled['SHOW_VIDEO_CALL']) && $flagsMenuEnabled['SHOW_VIDEO_CALL'])
+                @if(isset($flagsMenuEnabled['VIDEO_CALL_SHOW']) && $flagsMenuEnabled['VIDEO_CALL_SHOW'])
                     <a id="navSubitemVideocall" class="collapse-item" href="{{ URL::asset('/user/video-call') }}">Video call</a>
                 @endif
             </div>
@@ -119,14 +133,14 @@
         </li>
         @endif
 
-        @if((isset($flagsMenuEnabled['CREATE_ANY_APPOINTMENT']) && $flagsMenuEnabled['CREATE_ANY_APPOINTMENT']) ||
-        (isset($flagsMenuEnabled['CREATE_APPOINTMENT_WITH_MEDIC']) && $flagsMenuEnabled['CREATE_APPOINTMENT_WITH_MEDIC']) ||
-        (isset($flagsMenuEnabled['CREATE_APPOINTMENT_WITH_PATIENT']) && $flagsMenuEnabled['CREATE_APPOINTMENT_WITH_PATIENT']) ||
-        (isset($flagsMenuEnabled['SHOW_ALL_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_ALL_APPOINTMENTS']) ||
-        (isset($flagsMenuEnabled['SHOW_ALL_MEDIC_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_ALL_MEDIC_APPOINTMENTS']) ||
-        (isset($flagsMenuEnabled['SHOW_ACCEPTED_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_ACCEPTED_APPOINTMENTS']) ||
-        (isset($flagsMenuEnabled['SHOW_PENDING_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_PENDING_APPOINTMENTS']) ||
-        (isset($flagsMenuEnabled['SHOW_CALENDAR']) && $flagsMenuEnabled['SHOW_CALENDAR']))
+        @if((isset($flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) && $flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) ||
+        (isset($flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) ||
+        (isset($flagsMenuEnabled['APPOINTMENT_WITH_PATIENT_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_PATIENT_CREATE']) ||
+        (isset($flagsMenuEnabled['ALL_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_APPOINTMENTS_SHOW']) ||
+        (isset($flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW']) ||
+        (isset($flagsMenuEnabled['ACCEPTED_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ACCEPTED_APPOINTMENTS_SHOW']) ||
+        (isset($flagsMenuEnabled['PENDING_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['PENDING_APPOINTMENTS_SHOW']) ||
+        (isset($flagsMenuEnabled['CALENDAR_SHOW']) && $flagsMenuEnabled['CALENDAR_SHOW']))
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -141,26 +155,26 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Messages:</h6>
                         {{-- @if(auth()->user()->role_id == \HV_ROLES::PATIENT) --}}
-                        @if(isset($flagsMenuEnabled['SHOW_PENDING_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_PENDING_APPOINTMENTS'])
+                        @if(isset($flagsMenuEnabled['PENDING_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['PENDING_APPOINTMENTS_SHOW'])
                             <a id="navSubitemMessaging" class="collapse-item d-none-doctor d-none-admin" href="{{ URL::asset('/appointment/list/pending') }}">Ver Citas pendientes</a>
                         @endif
-                        @if(isset($flagsMenuEnabled['SHOW_ACCEPTED_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_ACCEPTED_APPOINTMENTS'])    
+                        @if(isset($flagsMenuEnabled['ACCEPTED_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ACCEPTED_APPOINTMENTS_SHOW'])    
                             <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment/list/accepted') }}">Ver Citas aceptadas</a>
                         @endif
                         {{-- @elseif(in_array(auth()->user()->role_id, [\HV_ROLES::DOCTOR, \HV_ROLES::ADMIN])) --}}
-                        @if(isset($flagsMenuEnabled['SHOW_ALL_MEDIC_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_ALL_MEDIC_APPOINTMENTS'])
+                        @if(isset($flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW'])
                             <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment') }}">Ver Citas</a>
                         @endif
-                        @if(isset($flagsMenuEnabled['SHOW_ALL_APPOINTMENTS']) && $flagsMenuEnabled['SHOW_ALL_APPOINTMENTS'])
+                        @if(isset($flagsMenuEnabled['ALL_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_APPOINTMENTS_SHOW'])
                             <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment') }}">Ver todas las Citas</a>
                         @endif
                             {{-- @endif --}}
-                        @if((isset($flagsMenuEnabled['CREATE_ANY_APPOINTMENT']) && $flagsMenuEnabled['CREATE_ANY_APPOINTMENT']) ||
-                         (isset($flagsMenuEnabled['CREATE_APPOINTMENT_WITH_MEDIC']) && $flagsMenuEnabled['CREATE_APPOINTMENT_WITH_MEDIC']) ||
-                         (isset($flagsMenuEnabled['CREATE_APPOINTMENT_WITH_PATIENT']) && $flagsMenuEnabled['CREATE_APPOINTMENT_WITH_PATIENT']))
+                        @if((isset($flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) && $flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) ||
+                         (isset($flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) ||
+                         (isset($flagsMenuEnabled['APPOINTMENT_WITH_PATIENT_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_PATIENT_CREATE']))
                             <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/create') }}">Crear</a>
                         @endif
-                        @if(isset($flagsMenuEnabled['SHOW_CALENDAR']) && $flagsMenuEnabled['SHOW_CALENDAR'])
+                        @if(isset($flagsMenuEnabled['CALENDAR_SHOW']) && $flagsMenuEnabled['CALENDAR_SHOW'])
                             <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/calendar') }}">Calendario</a>
                         @endif  
                 </div>

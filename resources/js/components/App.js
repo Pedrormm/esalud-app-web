@@ -16,6 +16,7 @@ export default class App extends Component {
         this.state = {
             hasMedia: false,
             otherUserId: null,
+            latestSession: null,
             // mode: props.mode ? props.mode :'hold'
             mode: utils.isInVideoCallView() || isABootstrapModalOpen()  ? props.mode :'receive'
         };  
@@ -70,8 +71,11 @@ export default class App extends Component {
     }
     // Function to call other users
     callTo(userId) {
+        
         let session = hash(new Date().getTime(), {algorithm: 'md5'});
             $('#content').data('session-video-call', session);
+
+        this.state.latestSession = session;    
 
         let pusher = videoPusherInit();
         let videoChannel = pusher[1];
@@ -109,21 +113,30 @@ export default class App extends Component {
     
             console.log(session);
     
-            window.open('', 'videoWindow');
+            let openviduWindow = window.open('', 'videoWindow');
+            // let that = this;
+            // openviduWindow.onunload= function() { 
+            //     console.log("Cerró la llamada");
+            //     that.state.latestSession = null;
+            // };
+
+
             $('#videoFormData').submit();
     
             // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
-            $("#joinButton").css("display", "inline");
+            // if (this.state.latestSession !== null ){
+                $("#joinButton").css("display", "inline");
+            // }
         });
         
     }
 
-    joinTo(userId) {
-        let session = $('#content').data('session-video-call');
+    inviteTo(userId) {
 
         let pusher = videoPusherInit();
         let videoChannel = pusher[1];
-        console.log(videoChannel);
+        console.log("invite ",videoChannel);
+        let that = this;
 
         videoChannel.bind('pusher:subscription_succeeded', function() {
             let userReceiverFullName ="";
@@ -134,35 +147,31 @@ export default class App extends Component {
                 async: false,
             }).done(function(res){
                 userReceiverFullName = res;
+                console.log("name ",userReceiverFullName);
             })
             .fail(function(xhr, st, err) {
                 console.error("error in video/getUserInfo " + xhr, st, err);
             });
 
             videoChannel.trigger(`client-video-channel-send`, { 
-                session:session,
+                session:that.state.latestSession,
                 userReceiverId: Number(userId),
                 userReceiverFullName: userReceiverFullName,
                 userCallerId: Number(authUser.id),
                 userCallerFullName: authUser.name + " " + authUser.lastname
             });
-
-            console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
-
-            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
-            hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
-            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: session}));
-            $('body').append(hiddenForm);
-    
-            console.log(session);
-    
-            window.open('', 'videoWindow');
-            $('#videoFormData').submit();
-    
         });
-        
     }
 
+    inviteToButton(lastSession) {
+
+        if (lastSession!==null){
+            return (
+                <button id="joinButton" className="btn btn-primary" 
+                onClick={ () => this.inviteTo(this.selectedUserId)}><i className="fa fa-share-alt"></i>&ensp;Invite</button>
+            );
+        }
+    }
  
     render() {
         const mode = this.state.mode;
@@ -192,9 +201,7 @@ export default class App extends Component {
                     <button id="callButton" className="btn btn-primary" 
                     onClick={ () => this.callTo(this.selectedUserId)}><i className="fa fa-phone"></i>&ensp;Call</button>
 
-                    <button id="joinButton" className="btn btn-primary" 
-                    onClick={ () => this.joinTo(this.selectedUserId)}><i className="fa fa-share-alt"></i>&ensp;Join</button>
-
+                    { this.inviteToButton(this.state.lastSession) }
 
                 </div>
             );

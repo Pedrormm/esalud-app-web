@@ -69,11 +69,6 @@ export default class ToolbarComponent extends Component {
             <AppBar className="toolbar" id="header">
                 <Toolbar className="toolbar">
                     <div id="navSessionInfo">
-                        <img
-                            id="header_img"
-                            alt="OpenVidu Logo"
-                            src="https://raw.githubusercontent.com/OpenVidu/openvidu-call/master/front/openvidu-call/src/assets/images/openvidu_logo.png"
-                        />
 
                         {this.props.sessionId && <div id="titleContent">
                             <span id="session-title">{mySessionId}</span>

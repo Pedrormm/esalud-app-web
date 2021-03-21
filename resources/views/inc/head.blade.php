@@ -5,7 +5,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>{{ env('APP_NAME') }}</title>
-        <link rel="shortcut icon" href="#" />
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 
 
 
