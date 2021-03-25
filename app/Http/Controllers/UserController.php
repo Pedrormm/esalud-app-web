@@ -10,8 +10,9 @@ use App\Models\Patient;
 use App\Models\Staff;
 use App\Models\Role;
 use App\Models\Branch;
-
-
+use Carbon\Carbon;
+use Active;
+use DB;
 
 class UserController extends Controller
 {
@@ -35,6 +36,9 @@ class UserController extends Controller
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */ 
     public function index(){
+        $activeUsers = Active::users()->get();
+        // dd($activeUsers->toArray());
+
         $user = Auth::user();
         $users = User::joinOthers();
 
@@ -112,7 +116,7 @@ class UserController extends Controller
             // TODO: if (maxTimes > 3(constante)) google Verification Bot. Captcha plugin.
 
             if ($userInvitation->times_sent == HV_MAX_TIMES_CREATE_USER_SENT){
-                dd(1);
+                return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
             }
 
             $userInvitation->verification_token = $token;
@@ -121,7 +125,7 @@ class UserController extends Controller
             $res = $userInvitation->save();
            
             if(!$res) {
-                return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
+                return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr002: Error interno');
             } 
             $subject = "Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni;
 
@@ -489,23 +493,224 @@ class UserController extends Controller
        */
       public function destroy($id)
       {
-          $users = $this->usersRepository->find($id);
-  
-          if (empty($users)) {
-              Flash::error('users not found');
-  
-              return redirect(route('users.index'));
-          }
-  
-          $this->usersRepository->delete($id);
-  
-          Flash::success('users deleted successfully.');
-  
-          return redirect(route('users.index'));
+        $userToDelete = User::find($id);
+        $userName = $userToDelete->name . " " . $userToDelete->lastname;
+
+
+        if (empty($userToDelete)) {
+            return $this->jsonResponse(1, "User not found"); 
+        }
+
+        $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
+        ->leftJoin('staff', 'users.id', 'staff.user_id')
+        ->select('users.id as user_id', 'patients.id as patient_id', 'patients.user_id as patient_user_id',
+         'staff.id as staff_id', 'staff.user_id as staff_user_id')
+        ->where('users.id', $id)->get()->toArray();
+
+        $userToDelete->delete($id);
+        
+        if($patientOrStaffFound[0]['staff_id']){
+            Staff::find($patientOrStaffFound[0]['staff_id'])->delete();
+        }
+        else if($patientOrStaffFound[0]['patient_id']){
+            Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
+        }
+
+        return $this->jsonResponse(0, "User  ".$userName." deleted successfully.");
       }
 
     public function confirmDelete($id){
         $singleUser = User::find($id);
-        return view('users.confirm-delete',['singleUser' => $singleUser]);
+        return view('users.confirm-delete',['singleUser' => $singleUser]);  
     }
+
+    public function _ajaxViewMainUsersDatatable(Request $request){
+        //\DB::enableQueryLog();
+dd($request->input());
+
+        $userInfo = Role::select('*')->leftJoin('users AS u', 'roles.id', 'u.role_id')
+        ->get();
+
+        //dd(\DB::getQueryLog());
+        // dd($userInfo);
+
+        // $mRoles = Role::join('users', 'roles.user_id_creator', 'users.id')
+        // ->select(DB::raw('roles.id as idRole, roles.name as nameRole, roles.delible, user_id_creator,
+        //  users.id as idUser, users.name as nameUser, lastname, dni, role_id'))
+        // ->orderBy('roles.id')->get();
+
+        // foreach($mRoles as $rol){
+        //     $count = DB::table("users")->where('role_id', $rol->idRole)->get()->count();
+        //     $rol->count = $count;
+        // }
+
+        return response()->json(['data' => $userInfo]);
+
+    }
+
+     /**
+     * View to render the full devices section and to return the DataTables pagination server side data based on request variables
+     *
+     * @author Pedro
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ajaxViewMainUsersDatatable(Request $request) {
+
+
+        if(!$request->wantsJson()) {
+            abort(404, 'Bad request');
+        }
+
+        self::checkDataTablesRules();
+        $searchPhrase = $request->search['value'];
+        // Abort query execution if search string is too short
+        if(!empty($searchPhrase)) {
+            // Minimum two digits or 3 letters to allow a search
+            // if(preg_match("/^.{1,2}\$/i", $searchPhrase)) {
+            if(preg_match("/^.{1}\$/i", $searchPhrase)) {
+                return response()->json(['data' => []]);
+            }
+        }
+        $data = Role::select('u.*','roles.name AS role_name')->leftJoin('users AS u', 'roles.id', 'u.role_id');
+        // Role::all()->with('users');
+        $numTotal = $numRecords = $data->count();
+
+        /**
+         * Applying search filters over query result as it is was simple query
+         */
+        if(!empty($request->search['value'])) {
+
+            // Search by numbers only
+            if(preg_match("/\d{3,}/", $searchPhrase, $matches)) {
+
+                $data->where(function($query) use ($searchPhrase) {
+                    $query->orWhere('birthdate', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('phone', 'like', '%' . $searchPhrase . '%');
+                });
+                $numRecords = $data->count();
+                //dd($numRecords);
+            }
+            // Search by name, surname, role, dni or sex
+            // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
+            elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
+               
+                $data->where(function($query) use ($searchPhrase) {
+                    $query->orWhere('u.name', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('u.lastname', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');             
+                });
+                        
+                $numRecords = $data->count();
+            }
+
+            // Search by blood type
+            elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
+               
+                $data->where(function($query) use ($searchPhrase) {
+                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
+                });
+                        
+                $numRecords = $data->count();
+            }
+            
+        }
+       
+        $firstRow = $data->first();
+        
+        if(is_null($firstRow)) {
+            return response()->json(['data' => []]);
+        }
+        $collectionKeys = array_keys($firstRow->toArray());
+        /**
+         * Applying order methods
+         */
+        $orderList = $request->order;
+        foreach($orderList as $orderSetting) {
+            $indexCol = $orderSetting['column'];
+            $dir = $orderSetting['dir'];
+
+            if(isset($request->columns[$indexCol]['data'])) {
+                $colName = $request->columns[$indexCol]['data'];
+                if(in_array($colName, $collectionKeys))
+                    $data->orderBy($colName, $dir);
+                //dd("order by col " . $colName);
+            }
+        }
+        //DB::enableQueryLog();
+
+        if($request->length > 0)
+            $data = $data->offset($request->start)->limit($request->length);
+        $data = $data->get();
+        //dd(DB::getQueryLog());
+        if($data->isEmpty()) {
+            return response()->json(['data'=>[]]);
+        }
+
+        /*
+         * Apply data processing
+         */
+        foreach($data as $row) {
+
+           $originalBD = $row->birthdate;
+           $row->fullName = $row->lastname . ", " . $row->name;
+           $row->birthdate = self::mysqlDt2Spanish($originalBD);
+
+        //    $row->buttonDelete = true;
+        //     $row->buttonUpdate = false;
+        
+        }
+
+        // Apply search string to collection results
+
+       /* if(!empty($request->search['value'])) {
+            //TODO: Implement search function over collection
+            $searchPhrase = $request->search['value'];
+            $data = $data->filter(function($device, $key) use ($searchPhrase) {
+                foreach($device as $keys=>$value) {
+                    if (strpos($searchPhrase, $value) !== false) {
+                        return $value;
+                    }
+                }
+            });
+            $numRecords = $data->count();
+            $data->all();
+        }
+        // Apply order settings
+        $orderIndexes = array();
+        foreach($request->order as $order) {
+            $orderIndexes[] = [
+                (int)$order['column'],
+                $order['dir']
+            ];
+        }
+//dd($collectionKeys);
+        //$data = collect($data->toArray());
+        //dd($data);
+        //dd($orderIndexes);
+        //dd($orderIndexes);
+//dump($data);
+        foreach($orderIndexes as $order) {
+            $columnName = $request->columns[$order[0]]['data'];
+            if($order[1] == 'asc')
+                $sorted = $data->sortBy($columnName);
+            else
+                $sorted = $data->sortByDesc($columnName);
+            //dd($collectionKeys[$order[0]]);
+            //$sorted->values()->all();
+            //dd($sorted);
+            $data = $sorted->values();
+            //dd($data);
+            //$data = $sorted;
+        }*/
+//dd($data->toArray());
+        if(request()->wantsJson()) {
+            return self::responseDataTables($data->toArray(), (int)$request->draw, $numTotal, $numRecords);
+
+        }
+    }
+
 }

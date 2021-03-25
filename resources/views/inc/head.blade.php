@@ -85,7 +85,6 @@
                 <link rel="stylesheet" href="{{ asset('vendor/whirl/dist/whirl.css')}}"> --}}
 
                 <!-- =============== CUSTOM STYLES ===============-->
-                <link rel="stylesheet" href="{{ asset('css/application.css')}}" id="maincss">
                 <link rel="stylesheet" href="{{ asset('css/media-table.css')}}" id="mediaTableCss">
                 <link href="{{ asset('css/sb-admin-2.css')}}" rel="stylesheet">
                 <link rel="stylesheet" href="{{ asset('css/custom-app.css')}}" id="customAppCss">
@@ -134,6 +133,13 @@
                 {{-- International Telephone Input --}}
                 <link rel="stylesheet" type="text/css" href="{{ URL::asset('vendor/intl-tel-input-master/css/intlTelInput.css') }}">
                 <script src="{{ asset('vendor/intl-tel-input-master/js/intlTelInput.js')}}"></script>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+                <link rel="preconnect" href="https://fonts.gstatic.com">
+                <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Lato:wght@300&display=swap" rel="stylesheet">
+
+                <link rel="stylesheet" href="{{ asset('css/application.css')}}" id="maincss">
 
 
         <script>

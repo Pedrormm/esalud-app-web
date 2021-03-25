@@ -1,5 +1,5 @@
-                <!-- <script src="{{ asset('js/custom-application.js')}}"></script> -->
 <script>
+
     asyncCall('message/icon', '#messagesDropdown', true);
      $('#messagesDropdown').click();
     asyncCall('message/summary', '#top-navigator-messages', true, false);

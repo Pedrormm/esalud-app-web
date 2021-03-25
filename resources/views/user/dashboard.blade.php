@@ -21,9 +21,13 @@
 
 @section('content')
 
-
     <div id="main-container" class="container-fluid">
-  
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <canvas id="usersChart"></canvas>
+        </div>
+      </div>
     </div>
 
     <div class="container-fluid mt-3">
@@ -42,42 +46,24 @@
 
 
     <script>
-        /*
-        $('nav .div_2').click(function(e) {
-            let item = $(this).data('item');
-            $('nav .div_2').removeClass('on');
-            $('nav .div_2').eq(item-1).addClass('on');
-            if(item == 1) {            
-                asyncCall('user/messages', '#main-container', true);
-            }
-            else {
-                //document.getElementById("main-container").style.display = "none";
-            asyncCall('user/messages', '#main-container', true);
-            }
-        });
-        asyncCall('user/messages', '#home', true);
-*/
+ 
 
-        // @if(session('successful'))
-        //   <div class="alert alert-success">
-        //       {{ session('successful') }}
-        //   </div>
-        // @endif
+            // $('#home-tab').click(function(e){
+            //     // asyncCall('user/messages', '#main-container', true);
+            //     asyncCall(PublicURL+'user/index', '#main-container', true);
 
-            $('#home-tab').click(function(e){
-                // asyncCall('user/messages', '#main-container', true);
-                asyncCall(PublicURL+'user/index', '#main-container', true);
+            // });
 
-            });
-
-            $('#news-tab').click(function(e){
-                asyncCall('user/news', '#main-container', true);
-            });
-            // asyncCall(PublicURL+'user/index', '#main-container', true);
-            // asyncCall('user/messages', '#main-container', true);
+            // $('#news-tab').click(function(e){
+            //     asyncCall('user/news', '#main-container', true);
+            // });
 
 
 
 
     </script>
+@endsection
+
+@section('scriptsPropios')
+  <script type="text/javascript" src="{{ asset('js/dashboard.js') }}"></script>
 @endsection

@@ -16,7 +16,7 @@
     -ms-text-size-adjust: none;
 }
 *:not(i){
-    font-family: 'Open Sans';
+    /* font-family: 'Open Sans'; */
 }
 *:focus {
     outline: none;
@@ -245,7 +245,7 @@ option {
     color: #ffffff;
     text-transform: uppercase;
     cursor: pointer;
-    font-family: 'Open Sans',sans-serif;
+    /* font-family: 'Open Sans',sans-serif; */
     font-size: 15px;
     margin: 0 auto;
 }

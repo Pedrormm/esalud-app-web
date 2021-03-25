@@ -13,7 +13,7 @@
         </a>
 
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
-            <div class="sidebar-brand-text nav-tittle">MI HOSPITAL V.</div>
+            <div class="sidebar-brand-text nav-tittle">{{ HV_APP_TITLE_NAME }}</div>
         </a>
 
         @if(isset($flagsMenuEnabled['DASHBOARD']) && $flagsMenuEnabled['DASHBOARD'])

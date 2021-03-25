@@ -22,7 +22,7 @@ $(document).on( 'draw.dt', function ( e, settings ) {
 
   
 $(function() {
-
+    $.fn.dataTable.ext.errMode = 'throw';
     if ($('#dataTable').length > 0 ){
         $('#dataTable').DataTable({
             "language": {
@@ -839,3 +839,27 @@ function assignHeadersToRowsResponsive(){
 }
 
 
+function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=null) {
+    $('.dataTables_filter input')
+        .off()
+        .on('keyup', function () {
+            console.log("Search str length", this.value.length);
+            console.log("Search str value", this.value);
+
+            if (bloodOption){
+                if(/^(A|B|AB|0)[+-]$/i.test(this.value)){
+                    console.log("es sangre");
+                    $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
+                    return false;
+                }    
+            }
+            if(!this.value.length) { 
+                $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
+                $(dtSelector).DataTable().ajax.reload();
+                return false;
+            }
+            if (this.value.length < minChars)
+                return false;
+            $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
+        });
+}
