@@ -127,6 +127,6 @@
 
 @section('scriptsPropios')
   {{-- <script type="text/javascript" src="{{ asset('js/users-index.js') }}"></script> --}}
-  @include('users.users-index')
+  @include('users.users-index', ['pagination'=>$pagination])
 
 @endsection

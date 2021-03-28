@@ -70,19 +70,30 @@ Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 // Route::get('users/{userType?}/{search?}/{ord?}', 'UserController@index')->middleware('isLogged')->where('userType', 'staff|patient');
 // Route::put('users/{id}', 'UserController@update')->middleware('isLogged');
 
-Route::get('users/{id}/confirmDelete', 'UserController@confirmDelete')->name('roles.confirmDelete');
-Route::match(array('GET', 'POST'), 'users/viewDT', 'UserController@ajaxViewMainUsersDatatable');
+Route::get('users/{id}/confirmDelete', 'UserController@confirmDelete');
+Route::match(array('GET', 'POST'), 'users/viewDT', 'UserController@ajaxViewDatatable');
 
 Route::resource('users', 'UserController');
 
+// Patient routes
+Route::get('patients/{id}/confirmDelete', 'PatientController@confirmDelete');
+Route::match(array('GET', 'POST'), 'patients/viewDT', 'PatientController@ajaxViewDatatable');
+
+Route::resource('patients', 'PatientController');
+
+// Staff routes
+Route::get('staff/{id}/confirmDelete', 'StaffController@confirmDelete');
+Route::match(array('GET', 'POST'), 'staff/viewDT', 'StaffController@ajaxViewDatatable');
+
+Route::resource('staff', 'StaffController');
 
 // TODO: How to route without a word (edit). Possible solution->Routing without the search and ord parameters
 // TODO: Preguntar: Para qué le tengo que pasar el id al update, si ya se obtienen los argumentos con Request
 // route('users.edit', ['id'=>25])
 
 
-Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('isLogged');
-Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@showPatients')->middleware('isLogged');
+// Route::get('user/staff/{search?}/{ord?}', 'UsersManagementController@showStaff')->middleware('isLogged');
+// Route::get('user/patient/{search?}/{ord?}', 'UsersManagementController@userManagement')->middleware('isLogged');
 Route::get('user/user/{search?}/{ord?}', 'UsersManagementController@showUsers')->middleware('isLogged');
 Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('isLogged');
 

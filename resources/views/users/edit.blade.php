@@ -10,7 +10,17 @@
 
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">Editar Usuario</h4>
+        {{-- <h4 class="m-0 font-weight-bold text-primary text-center">Editar Usuario</h4> --}}
+        <div class="row">
+            <div class="cHeader col-2">
+              <button type="button" class="btn btn-primary">
+                  <i class="fas fa-arrow-left"></i>
+              </button>
+            </div>
+            <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Editar usuario</h4>
+  
+          </div>
+
       </div>
 
       <div class="card-body" id="mainCardBody">
@@ -212,20 +222,14 @@
 
   @endsection
 
+    @section('scriptsPropios')
+        <script>
+            $('.cHeader button').on('click', function(e){
+                e.preventDefault();
+                window.location.href = PublicURL+"users/";
+            });
+        </script>
+    @endsection
 
 
-{{-- 
-  <div class="container-fluid">
 
-    <div class="card shadow mb-4" id="mainCardShadow">
-      <div class="card-header py-3">
-        <div class="row">
-          <div class="cHeader col-2">
-            <button type="button" class="btn btn-primary">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-          </div>
-          <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
-
-        </div>
-      </div> --}}

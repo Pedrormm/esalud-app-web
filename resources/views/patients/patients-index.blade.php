@@ -3,42 +3,11 @@
 
 <script>
 
-$('.confirmDeleteUser').on('click', function(e){
-    e.preventDefault();
-    let userDeleteId = $(this).data('id-user');
-    let userDeleteFullName = $(this).data('name-user');
-    let userDeleteRole = $(this).data('role-user');
-
-    showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-    '¿Seguro que desea borrar el usuario con nombre '+ userDeleteFullName + ' y rol '+ userDeleteRole + '?',
-     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
-
-     $('#saveModal').on('click', function(e){
-        saveModalActionAjax(PublicURL+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
-            if(res.status == 0) {
-                $('#mainTableAllUsers').DataTable().ajax.reload();
-                showInlineMessage(res.message, 5);
-            }
-            else {
-                showInlineError(res.status, res.message, 5);
-            }
-            $('#saveModal').off("click");
-        });
-    });
-
-});
-
-// let isallUsersDelete = $('#isallUsersDelete').val();
-// if (isallUsersDelete == 1){
-@if((isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && ($flagsMenuEnabled['ALL_USERS_DELETE']))
-
-    console.log("isallUsersDelete ",isallUsersDelete);
 
 
-    let _mainTableAllUsersAjax = $('#mainTableAllUsers').DataTable({
+    let _mainTableAllUsersAjax = $('#mainTablePatients').DataTable({
         serverSide : true,
         "responsive": true,
-        paging: {{ $pagination }},
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
         },
@@ -48,7 +17,7 @@ $('.confirmDeleteUser').on('click', function(e){
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }, 
-              url: PublicURL + 'users/viewDT',
+              url: PublicURL + 'patients/viewDT',
               method: "POST",
               dataSrc: "data",
               xhrFields: {
@@ -83,7 +52,37 @@ $('.confirmDeleteUser').on('click', function(e){
               
             },
             {
-                data: 'role_name',
+                data: 'historic',              
+            },
+            {
+                data: 'height',
+                render: function(data, type, row) {
+                    let strHeight = "";
+
+                    if (row.height=="0"){
+                        strHeight += '<span class="align-middle">'+data+'</span>';
+                    }
+                    else{
+                        strHeight += '<span class="align-middle">'+data+' cm</span>';
+                    }
+                    
+                    return strHeight;
+                }
+            },
+            {
+                data: 'weight',
+                render: function(data, type, row) {
+                    let strWeight = "";
+
+                    if (row.weight=="0"){
+                        strWeight += '<span class="align-middle">'+data+'</span>';
+                    }
+                    else{
+                        strWeight += '<span class="align-middle">'+data+' kg</span>';
+                    }
+                    
+                    return strWeight;
+                }
             },
             {
                 data: 'dni'
@@ -107,18 +106,18 @@ $('.confirmDeleteUser').on('click', function(e){
                     console.log(data, type, row);
                     let strButtons = "";
 
-                    @if(isset($flagsMenuEnabled['ALL_USERS_EDIT']) && $flagsMenuEnabled['ALL_USERS_EDIT'])
-                        strButtons += '<span><a href="'+ PublicURL+'users/'+row.id+'/edit' +'"><i class="fa fa-edit"></i></a></span>';                                                                           
+                    @if(isset($flagsMenuEnabled['PATIENT_USER_EDIT']) && $flagsMenuEnabled['PATIENT_USER_EDIT'])
+                        strButtons += '<span><a href="'+ PublicURL+'patients/'+row.users_id+'/edit' +'"><i class="fa fa-edit"></i></a></span>';                                                                           
                     @else
                         strButtons += '<span><i class="fa fa-edit" style="color:gray"></i></span>';                                                                           
                     @endif    
-                    @if(isset($flagsMenuEnabled['ALL_USERS_DELETE']) && $flagsMenuEnabled['ALL_USERS_DELETE'])
+                    @if(isset($flagsMenuEnabled['PATIENT_USER_DELETE']) && $flagsMenuEnabled['PATIENT_USER_DELETE'])
 
                         strButtons += ' <span> <a class="confirmDeleteUser"';
                         strButtons += ' data-name-user="'+row.name + ' '+ row.lastname+'" ';
                         strButtons += ' data-role-user="'+row.role_name+'"';
-                        strButtons += ' data-id-user="'+row.id +'"';
-                        strButtons += ' href="'+ PublicURL+'users/'+row.id+'/confirmDelete' +'">';  
+                        strButtons += ' data-id-user="'+row.users_id +'"';
+                        strButtons += ' href="'+ PublicURL+'patients/'+row.users_id+'/confirmDelete' +'">';  
                         strButtons += ' <i class="fa fa-trash"></i></a></span>';                                                                                                  
  
                     @else
@@ -142,9 +141,9 @@ $('.confirmDeleteUser').on('click', function(e){
                 false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
 
                 $('#saveModal').on('click', function(e){
-                    saveModalActionAjax(PublicURL+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
+                    saveModalActionAjax(PublicURL+"patients/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
                         if(res.status == 0) {
-                            $('#mainTableAllUsers').DataTable().ajax.reload();
+                            $('#mainTablePatients').DataTable().ajax.reload();
                             showInlineMessage(res.message, 5);
                         }
                         else {
@@ -158,7 +157,7 @@ $('.confirmDeleteUser').on('click', function(e){
           }
       }).on('draw', () => {
           console.log("entra draw");
-          disableDataTablesMinCharactersSearch('#mainTableAllUsers', 3, true);
+          disableDataTablesMinCharactersSearch('#mainTablePatients', 3, true);
           assignHeadersToRowsResponsive();
       });
       
@@ -166,20 +165,6 @@ $('.confirmDeleteUser').on('click', function(e){
 
 
 
-// }
-@else(!(isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && !($flagsMenuEnabled['ALL_USERS_DELETE']))
-// else if (isallUsersDelete == 0){
-    if ($('#mainTableAllUsers').length > 0 ){
-        $('#mainTableAllUsers').DataTable({
-            "responsive": true,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
-            },
-        });
-    }
-// }
-
-@endif
 
 
 </script>

@@ -7,6 +7,11 @@ use App\Http\Requests\UpdatePatientRequest;
 use App\Repositories\PatientRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use App\Models\User;
+use App\Models\Patient;
+use App\Models\Role;
 use Flash;
 use Response;
 
@@ -29,10 +34,13 @@ class PatientController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $patients = $this->patientRepository->all();
+        $user = Auth::user();
+        // $patients = Patient::all()->toArray();
+        $patients = Patient::join('users', 'patients.user_id', 'users.id')->get();
 
-        return view('patients.index')
-            ->with('patients', $patients);
+        // return view('user/patient', ['patients' => $patients,'user' => $user]);
+        return view('patients/index', ['patients' => $patients,'user' => $user]);
+
     }
 
     /**
@@ -92,15 +100,31 @@ class PatientController extends AppBaseController
      */
     public function edit($id)
     {
-        $patient = $this->patientRepository->find($id);
-
-        if (empty($patient)) {
-            Flash::error('Patient not found');
-
-            return redirect(route('patients.index'));
+    
+        $userLogged = auth()->user();
+        $usuario = User::find($id);
+        if (empty($usuario)) {
+            // Flash::error('user not found');
+            // return redirect(route('users.index'));
+            return $this->backWithErrors("User not found" );
         }
+        $rol_usuario_info = "";
 
-        return view('patients.edit')->with('patient', $patient);
+        if($usuario->role_id == \HV_ROLES::PATIENT){
+            $rol_usuario_info = Patient::whereUserId($id)->first();
+        }
+        else{
+            return $this->backWithErrors("Not enough permissions");
+        }
+        if(!$rol_usuario_info) {
+            return $this->backWithErrors("UsMaCoEd001: Invalid id");
+        }
+        $roles = Role::all();
+        // dd($usuario->toArray());
+        // dd($rol_usuario_info->toArray());
+
+        return view('patients.edit', compact('usuario', 'rol_usuario_info', 'roles'));//->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info)->with('roles',$roles)->with('branches',$branches);
+
     }
 
     /**
@@ -113,19 +137,41 @@ class PatientController extends AppBaseController
      */
     public function update($id, UpdatePatientRequest $request)
     {
-        $patient = $this->patientRepository->find($id);
+        $validatedData = parent::checkValidation([
+            'role_id' => 'required|exists:App\Models\Role,id',
+            'email' => 'required|email:rfc,dns',
+            'name' => 'required',
+            'lastname' => 'required',
+            'zipcode' => 'numeric',
+            'phone' => 'required',
+            'birthdate' => 'required|date',
+            'sex' => 'required',
+            'blood' => 'required',
+            'country' => 'string',
+            'city' => 'string',
+            'address' => 'string',
+        ]);
+        $token = $request->input('token');
+        
+        if ($request->input('role_id')==\HV_ROLES::PATIENT){
+            $mapValidation = parent::checkValidation([
+                'historic' => 'required',
+                'height' => 'required|numeric',
+                'weight' => 'required|numeric',
+            ]);
 
-        if (empty($patient)) {
-            Flash::error('Patient not found');
-
-            return redirect(route('patients.index'));
+            $res = Patient::whereUserId($id)->update($mapValidation);
         }
 
-        $patient = $this->patientRepository->update($request->all(), $id);
+        $user_id = $request->input('user_id');
+        $usuario = User::find($user_id);
 
-        Flash::success('Patient updated successfully.');
+        $validatedData = array_merge($mapValidation, $validatedData);
 
-        return redirect(route('patients.index'));
+        $usuario->update($validatedData);
+
+        return view('patients.index')->with('okMessage', "El paciente: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
+
     }
 
     /**
@@ -139,18 +185,153 @@ class PatientController extends AppBaseController
      */
     public function destroy($id)
     {
-        $patient = $this->patientRepository->find($id);
+        $userToDelete = User::find($id);
+        $userName = $userToDelete->name . " " . $userToDelete->lastname;
 
-        if (empty($patient)) {
-            Flash::error('Patient not found');
 
-            return redirect(route('patients.index'));
+        if (empty($userToDelete)) {
+            return $this->jsonResponse(1, "User not found"); 
         }
 
-        $this->patientRepository->delete($id);
+        $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
+        ->leftJoin('staff', 'users.id', 'staff.user_id')
+        ->select('users.id as user_id', 'patients.id as patient_id', 'patients.user_id as patient_user_id',
+         'staff.id as staff_id', 'staff.user_id as staff_user_id')
+        ->where('users.id', $id)->get()->toArray();
 
-        Flash::success('Patient deleted successfully.');
+        $userToDelete->delete($id);
+        
+        if($patientOrStaffFound[0]['patient_id']){
+            Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
+        }
+        else{
+            return $this->jsonResponse(1, "The user is not a patient"); 
+        }
 
-        return redirect(route('patients.index'));
+        return $this->jsonResponse(0, "Patient  ".$userName." deleted successfully.");
     }
+
+    public function confirmDelete($id){
+        $singleUser = User::find($id);
+        return view('patients.confirm-delete',['singleUser' => $singleUser]);  
+    }
+
+     /**
+     * View to render the full devices section and to return the DataTables pagination server side data based on request variables
+     *
+     * @author Pedro
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ajaxViewDatatable(Request $request) {
+
+
+        if(!$request->wantsJson()) {
+            abort(404, 'Bad request');
+        }
+
+        self::checkDataTablesRules();
+        $searchPhrase = $request->search['value'];
+        // Abort query execution if search string is too short
+        if(!empty($searchPhrase)) {
+            // Minimum two digits or 3 letters to allow a search
+            // if(preg_match("/^.{1,2}\$/i", $searchPhrase)) {
+            if(preg_match("/^.{1}\$/i", $searchPhrase)) {
+                return response()->json(['data' => []]);
+            }
+        }
+        $data = Patient::select('users.*','patients.*','roles.name AS role_name', 'patients.id AS patients_id', 'users.id AS users_id')->join('users', 'patients.user_id', 'users.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
+        
+        $numTotal = $numRecords = $data->count();
+
+        /**
+         * Applying search filters over query result as it is was simple query
+         */
+        if(!empty($request->search['value'])) {
+
+            // Search by numbers only
+            if(preg_match("/\d{3,}/", $searchPhrase, $matches)) {
+
+                $data->where(function($query) use ($searchPhrase) {
+                    $query->orWhere('birthdate', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('phone', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('historic', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('height', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('weight', 'like', '%' . $searchPhrase . '%');
+                });
+                $numRecords = $data->count();
+            }
+            // Search by name, surname, role, dni or sex
+            // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
+            elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
+               
+                $data->where(function($query) use ($searchPhrase) {
+                    $query->orWhere('users.name', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('users.lastname', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');             
+                });
+                        
+                $numRecords = $data->count();
+            }
+
+            // Search by blood type
+            elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
+               
+                $data->where(function($query) use ($searchPhrase) {
+                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
+                });
+                        
+                $numRecords = $data->count();
+            }
+            
+        }
+        // dd($numRecords);
+
+        $firstRow = $data->first();
+        
+        if(is_null($firstRow)) {
+            return response()->json(['data' => []]);
+        }
+        $collectionKeys = array_keys($firstRow->toArray());
+        /**
+         * Applying order methods
+         */
+        $orderList = $request->order;
+        foreach($orderList as $orderSetting) {
+            $indexCol = $orderSetting['column'];
+            $dir = $orderSetting['dir'];
+
+            if(isset($request->columns[$indexCol]['data'])) {
+                $colName = $request->columns[$indexCol]['data'];
+                if(in_array($colName, $collectionKeys))
+                    $data->orderBy($colName, $dir);
+                //dd("order by col " . $colName);
+            }
+        }
+        //DB::enableQueryLog();
+        if($request->length > 0)
+            $data = $data->offset($request->start)->limit($request->length);
+        $data = $data->get();
+        //dd(DB::getQueryLog());
+        if($data->isEmpty()) {
+            return response()->json(['data'=>[]]);
+        }
+
+        /*
+         * Apply data processing
+         */
+        foreach($data as $row) {
+           $originalBD = $row->birthdate;
+           $row->fullName = $row->lastname . ", " . $row->name;
+           $row->birthdate = self::mysqlDt2Spanish($originalBD);
+        }
+
+        if(request()->wantsJson()) {
+            return self::responseDataTables($data->toArray(), (int)$request->draw, $numTotal, $numRecords);
+        }
+    }
+
 }

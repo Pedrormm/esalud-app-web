@@ -65,10 +65,10 @@
                     <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/users') }}">Show all users</a>
                 @endif   
                 @if(isset($flagsMenuEnabled['PATIENT_USER_SHOW']) && $flagsMenuEnabled['PATIENT_USER_SHOW']) 
-                    <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/users/patient') }}">Patient management</a>
+                    <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/patients') }}">Patient management</a>
                 @endif    
                 @if(isset($flagsMenuEnabled['STAFF_USER_SHOW']) && $flagsMenuEnabled['STAFF_USER_SHOW'])
-                    <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/users/staff') }}">Staff management</a>
+                    <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/staff') }}">Staff management</a>
                 @endif
 
             </div>

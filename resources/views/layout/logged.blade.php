@@ -19,8 +19,18 @@
       @include('inc.header')
 
       @yield('nav-bar-top')
-        <div id="error-container" class="alert alert-danger dNone"></div>
-        <div id="message-container" class="alert alert-success dNone"></div>
+        <div id="error-container" class="alert alert-danger text-center dNone"></div>
+        <div id="message-container" class="alert alert-success text-center dNone"></div>
+        {{-- @if(isset($successful))
+          <div class="row">
+            <div class="col-11 mx-auto">
+              <div class="alert alert-info text-center">
+                {{ $successful }}     
+              </div>
+            </div>
+          </div>
+        @endif --}}
+
       @yield('content')
 
 

@@ -14,10 +14,13 @@
         {!! $js_code !!}
     @endisset
 
+    @if(isset($okMessage))
+        showInlineMessage("{{ $okMessage }}", 10);
+    @endif
+
     {{-- Code for nav-main.blade.php --}}
     if (screen.width >= 1024){
-        @if((Request::is('user/create') || (Request::is('users')) || Request::is('users/patient') 
-        || Request::is('users/staff') ))
+        @if((Request::is('users/create','users*','patients*','staff*')))
             $('#collapseUserManagement').collapse('show');
         
         @elseif((Request::is('user/my-messages') || (Request::is('user/send-message')) || 
@@ -37,13 +40,13 @@
     @if(Request::is('user/create'))
         $('#navSubitemCreateNewUser').css('background-color', '#eaecf4');
         $('#navSubitemCreateNewUser').addClass('active');
-    @elseif(Request::is('users'))
+    @elseif(Request::is('users*'))
         $('#navSubitemShowUsers').css('background-color', '#eaecf4');
         $('#navSubitemShowUsers').addClass('active');
-    @elseif(Request::is('users/patient'))
+    @elseif(Request::is('patients*'))
         $('#navSubitemPatientManagement').css('background-color', '#eaecf4');
         $('#navSubitemPatientManagement').addClass('active');
-    @elseif(Request::is('users/staff'))
+    @elseif(Request::is('staff*'))
         $('#navSubitemStaffManagement').css('background-color', '#eaecf4');
         $('#navSubitemStaffManagement').addClass('active');
     @endif

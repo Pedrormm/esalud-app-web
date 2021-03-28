@@ -41,9 +41,10 @@ class UserController extends Controller
 
         $user = Auth::user();
         $users = User::joinOthers();
+        $pagination = $users->count()>15? "true" : "false";
 
         $users = $users->get()->toArray();
-        return view('users/index', ['users' => $users,'user' => $user]);
+        return view('users/index', ['users' => $users,'user' => $user,'pagination' => $pagination]);
     }
 
 
@@ -371,7 +372,6 @@ class UserController extends Controller
       public function edit(int $id)
       {
           
-        //TODO: Put all models in root app/, not in app/Models!!!!
         $userLogged = auth()->user();
         $usuario = User::find($id);
         if (empty($usuario)) {
@@ -381,9 +381,9 @@ class UserController extends Controller
         }
         $rol_usuario_info = "";
 
-        if ($userLogged->id != $usuario->id && $userLogged->role_id != \HV_ROLES::ADMIN) {
-            return $this->backWithErrors("UsCoEd002: Unauthorized call");
-        }
+        // if ($userLogged->id != $usuario->id && $userLogged->role_id != \HV_ROLES::ADMIN) {
+        //     return $this->backWithErrors("UsCoEd002: Unauthorized call");
+        // }
 
         if($usuario->role_id == \HV_ROLES::ADMIN){
             return $this->backWithErrors("Not enough permissions");
@@ -401,36 +401,10 @@ class UserController extends Controller
         }
         $roles = Role::all();
         $branches = Branch::all();
-        return view('user.edit', compact('usuario', 'rol_usuario_info', 'roles', 'branches'));//->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info)->with('roles',$roles)->with('branches',$branches);
+        return view('users.edit', compact('usuario', 'rol_usuario_info', 'roles', 'branches'));//->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info)->with('roles',$roles)->with('branches',$branches);
       }
   
-      /**
-       * Update the specified users in storage.
-       *
-       * @param int $id
-       * @param UpdateusersRequest $request
-       *
-       * @return Response
-       */
-      public function update_($id, UpdateusersRequest $request)
-      {
-          $users = $this->usersRepository->find($id);
-  
-          if (empty($users)) {
-              Flash::error('users not found');
-  
-              return redirect(route('users.index'));
-          }
-  
-          $users = $this->usersRepository->update($request->all(), $id);
-  
-          Flash::success('users updated successfully.');
-  
-          return redirect(route('users.index'));
-      }
-
-
-          /**
+    /**
      * Update the selected user in the Database
      * Endpoint: users/{id}
      * @author Pedro
@@ -446,22 +420,26 @@ class UserController extends Controller
             'lastname' => 'required',
             'zipcode' => 'numeric',
             'phone' => 'required',
-            'birthdate' => 'required',
+            'birthdate' => 'required|date',
             'sex' => 'required',
             'blood' => 'required',
+            'country' => 'string',
+            'city' => 'string',
+            'address' => 'string',
         ]);
         $token = $request->input('token');
         
         if ($request->input('role_id')==\HV_ROLES::PATIENT){
-            $validatedData = parent::checkValidation([
+            $mapValidation = parent::checkValidation([
                 'historic' => 'required',
                 'height' => 'required|numeric',
                 'weight' => 'required|numeric',
             ]);
-            $res = Patient::whereUserId($id)->update($validatedData);
+
+            $res = Patient::whereUserId($id)->update($mapValidation);
         }
         if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
-            $validatedData = parent::checkValidation([
+            $mapValidation = parent::checkValidation([
                 'historic' => 'required',
                 'branch_id' => 'required|exists:App\Models\Branch,id',
                 'shift' => Rule::in(\SHIFTS::$types),
@@ -469,15 +447,17 @@ class UserController extends Controller
                 'room' => 'required|numeric',
                 'h_phone' => 'required|numeric',
             ]); 
-            $res = Staff::whereUserId($id)->update($validatedData);
+            $res = Staff::whereUserId($id)->update($mapValidation);
         }
 
         $user_id = $request->input('user_id');
         $usuario = User::find($user_id);
-        
+
+        $validatedData = array_merge($mapValidation, $validatedData);
+
         $usuario->update($validatedData);
 
-        return view('user.dashboard')->with('successful', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
+        return view('users.index')->with('okMessage', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
     }
 
 
@@ -524,29 +504,6 @@ class UserController extends Controller
         return view('users.confirm-delete',['singleUser' => $singleUser]);  
     }
 
-    public function _ajaxViewMainUsersDatatable(Request $request){
-        //\DB::enableQueryLog();
-dd($request->input());
-
-        $userInfo = Role::select('*')->leftJoin('users AS u', 'roles.id', 'u.role_id')
-        ->get();
-
-        //dd(\DB::getQueryLog());
-        // dd($userInfo);
-
-        // $mRoles = Role::join('users', 'roles.user_id_creator', 'users.id')
-        // ->select(DB::raw('roles.id as idRole, roles.name as nameRole, roles.delible, user_id_creator,
-        //  users.id as idUser, users.name as nameUser, lastname, dni, role_id'))
-        // ->orderBy('roles.id')->get();
-
-        // foreach($mRoles as $rol){
-        //     $count = DB::table("users")->where('role_id', $rol->idRole)->get()->count();
-        //     $rol->count = $count;
-        // }
-
-        return response()->json(['data' => $userInfo]);
-
-    }
 
      /**
      * View to render the full devices section and to return the DataTables pagination server side data based on request variables
@@ -555,7 +512,7 @@ dd($request->input());
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajaxViewMainUsersDatatable(Request $request) {
+    public function ajaxViewDatatable(Request $request) {
 
 
         if(!$request->wantsJson()) {
@@ -572,7 +529,7 @@ dd($request->input());
                 return response()->json(['data' => []]);
             }
         }
-        $data = Role::select('u.*','roles.name AS role_name')->leftJoin('users AS u', 'roles.id', 'u.role_id');
+        $data = Role::select('u.*','roles.name AS role_name')->join('users AS u', 'roles.id', 'u.role_id')->where("u.deleted_at",null);
         // Role::all()->with('users');
         $numTotal = $numRecords = $data->count();
 
@@ -590,7 +547,6 @@ dd($request->input());
                         ->orWhere('phone', 'like', '%' . $searchPhrase . '%');
                 });
                 $numRecords = $data->count();
-                //dd($numRecords);
             }
             // Search by name, surname, role, dni or sex
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
@@ -618,8 +574,10 @@ dd($request->input());
             }
             
         }
-       
-        $firstRow = $data->first();
+        // dd($numRecords);
+
+        $dataAux = clone $data;
+        $firstRow = $dataAux->first();
         
         if(is_null($firstRow)) {
             return response()->json(['data' => []]);
@@ -641,7 +599,6 @@ dd($request->input());
             }
         }
         //DB::enableQueryLog();
-
         if($request->length > 0)
             $data = $data->offset($request->start)->limit($request->length);
         $data = $data->get();
@@ -654,7 +611,6 @@ dd($request->input());
          * Apply data processing
          */
         foreach($data as $row) {
-
            $originalBD = $row->birthdate;
            $row->fullName = $row->lastname . ", " . $row->name;
            $row->birthdate = self::mysqlDt2Spanish($originalBD);

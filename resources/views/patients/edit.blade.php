@@ -10,7 +10,17 @@
 
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">Editar Usuario</h4>
+        {{-- <h4 class="m-0 font-weight-bold text-primary text-center">Editar Usuario</h4> --}}
+        <div class="row">
+            <div class="cHeader col-2">
+              <button type="button" class="btn btn-primary">
+                  <i class="fas fa-arrow-left"></i>
+              </button>
+            </div>
+            <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Editar usuario</h4>
+  
+          </div>
+
       </div>
 
       <div class="card-body" id="mainCardBody">
@@ -32,8 +42,7 @@
             <div id="error-container" class="alert alert-danger dNone"></div>
             <div id="message-container" class="alert alert-success dNone"></div>
 
-            {{-- <form action="/user/editUser" method="POST" id="newUserMailForm"> --}}
-            {{ Form::open(array('url' => '/users/'.$usuario->id, 'method' => 'PUT', 'id'=>'newUserMailForm')) }}
+            {{ Form::open(array('url' => '/patients/'.$usuario->id, 'method' => 'PUT', 'id'=>'newUserMailForm')) }}
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
@@ -145,51 +154,6 @@
                         </div>
                     </div>
                 @endif
-
-                @if($usuario->role_id == 2)
-                    <div class="row mb-3">
-                        <div class="col-lg-12">
-                            <hr>
-                            <h3>Datos del Doctor</h3>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-lg-4">
-                            <input type="text" value="{{ $rol_usuario_info->historic }}" class="form-control" placeholder="Histórico" name="historic" />
-                        </div>
-                        <div class="col-lg-4">
-                            <select class="form-control" name="branch_id">
-                                <option>Seleccione especialidad</option>
-                                @foreach( $branches as $branch)
-                                    <option {{ $rol_usuario_info->branch_id == $branch->id ? 'selected' : "" }} value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-4">
-                            <select class="form-control selectpicker show-tick" name="shift" data-live-search="true"
-                            title="Seleccione horario">
-                                <option {{ $rol_usuario_info->shift == "M" ? 'selected' : '' }} value="M">Mañana</option>
-                                <option {{ $rol_usuario_info->shift == "ME" ? 'selected' : '' }} value="ME">Mañana y Tarde</option>
-                                <option {{ $rol_usuario_info->shift == "MN" ? 'selected' : '' }}n value="MN">Mañana y Noche</option>
-                                <option {{ $rol_usuario_info->shift == "MEN" ? 'selected' : '' }} value="MEN">Mañana , Tarde y Noche</option>
-                                <option {{ $rol_usuario_info->shift == "E" ? 'selected' : '' }} value="E">Tarde</option>
-                                <option {{ $rol_usuario_info->shift == "EN" ? 'selected' : '' }} value="EN">Tarde y Noche</option>
-                                <option {{ $rol_usuario_info->shift == "N" ? 'selected' : '' }} value="N">Noche</option>
-                            </select> 
-                        </div>
-                    </div>
-                    <div class="row mb-3"> 
-                        <div class="col-lg-4">
-                            <input type="text" value="{{ $rol_usuario_info->office }}" class="form-control" placeholder="Oficina" name="office" />
-                        </div>                   
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ $rol_usuario_info->room }}" placeholder="Puerta" name="room" />
-                        </div>
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ $rol_usuario_info->h_phone }}" placeholder="Teléfono" name="h_phone" />
-                        </div>
-                    </div>
-                @endif
                 
                 <div class="row mb-3">
                     <div class="col-lg-2 offset-5 text-center">
@@ -212,20 +176,14 @@
 
   @endsection
 
+    @section('scriptsPropios')
+        <script>
+            $('.cHeader button').on('click', function(e){
+                e.preventDefault();
+                window.location.href = PublicURL+"patients/";
+            });
+        </script>
+    @endsection
 
 
-{{-- 
-  <div class="container-fluid">
 
-    <div class="card shadow mb-4" id="mainCardShadow">
-      <div class="card-header py-3">
-        <div class="row">
-          <div class="cHeader col-2">
-            <button type="button" class="btn btn-primary">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-          </div>
-          <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
-
-        </div>
-      </div> --}}

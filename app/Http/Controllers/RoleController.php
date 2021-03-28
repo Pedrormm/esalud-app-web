@@ -14,6 +14,8 @@ use DB;
 use Flash;
 use Response;
 use App\Models\User;
+use App\Models\Patient;
+use App\Models\Staff;
 use App\Models\Role;
 use App\Models\RolePermission;
 use App\Models\Permissions;
@@ -307,7 +309,52 @@ class RoleController extends AppBaseController
 
         foreach($requestData as $key => $value){
             $user_to_change = User::find($key);
+            // $user_to_change = User::with('role9s')->where('users.id',$key)->get();
+
+            // $user_to_change = Role::select('u.*','roles.name AS role_name')->join('users AS u', 'roles.id', 'u.role_id')->where("u.deleted_at",null)->where('u.id',$key)->get();
+
+            if ($user_to_change->role_id == \HV_ROLES::PATIENT){
+                $patientFound = Patient::where('user_id',$key)->delete();
+                // $patient = Patient::where('user_id',$key)->restore();
+            }
+            else if (($user_to_change->role_id == \HV_ROLES::DOCTOR)||($user_to_change->role_id == \HV_ROLES::HELPER)){
+                $staffFound = Staff::where('user_id',$key)->delete();
+            }
+
+            // dd($user_to_change->toArray());
             $user_to_change->role_id = $value;
+            if ($user_to_change->role_id == \HV_ROLES::PATIENT){
+                $patientFound = Patient::where('user_id',$key)->restore();
+                if ($patientFound != 1){
+                    $patient = new Patient();
+                    $patient->user_id = $key;
+                    $patient->historic = "";
+                    $patient->height = "";
+                    $patient->weight = "";
+                    $res = $patient->save();
+                    if(!$res) {
+                        return $this->jsonResponse(1, "Internal error");
+                    }
+                }
+            }
+            else if (($user_to_change->role_id == \HV_ROLES::DOCTOR)||($user_to_change->role_id == \HV_ROLES::HELPER)){
+                $staffFound = Staff::where('user_id',$key)->restore();
+                if ($staffFound != 1){
+                    $staff = new Staff();
+                    $staff->user_id = $key;
+                    $staff->historic = "";
+                    ($user_to_change->role_id == \HV_ROLES::DOCTOR) ? $staff->branch_id = 45 : $staff->branch_id = 46;
+                    $staff->shift = "";
+                    $staff->office = "";
+                    $staff->h_phone = "";
+                    $staff->room = "";
+                    $res = $staff->save();
+                    if(!$res) {
+                        return $this->jsonResponse(1, "Internal error");
+                    }
+                }
+            }
+
             $user_to_change->save();
             array_push($retrievedData, $user_to_change->toArray());
         }
