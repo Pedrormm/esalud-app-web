@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Appointment;
 use App\Models\User;
+use Mail;
+use App\Mail\CreateAppointmentMail;
+
+
 
 class AppointmentController extends Controller
 {
@@ -16,12 +20,6 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        // dd(fillPermissionClass()["1"]);
-        // dd(array_search('LOGIN', fillPermissionClass()->toArray()));
-        // $appointments = Appointment::all();
-        // dd(getAuthValueFromPermission(config('permissions')["LOGIN"]));
-        dd(getAuthValueFromPermission("NEWS"));
-
         $usuario_login = auth()->user();
         $rol_user = $usuario_login->role_id;
 
@@ -33,7 +31,8 @@ class AppointmentController extends Controller
             $appointments = Appointment::where('user_id_patient',"=",$usuario_login->id)->with('userPatient')->with('userDoctor')->get();
         }
 
-        //dd($appointments);
+
+        // dd($appointments->toArray());
 
         return view('appointments.index')->with('appointments',$appointments->toArray());
     }
@@ -46,11 +45,11 @@ class AppointmentController extends Controller
     public function create()
     {
         $usuario_login = auth()->user();
-        $rol_user = $usuario_login->role_id();
+        // $rol_user = $usuario_login->role_id();
         $patients = DB::select('SELECT * FROM users WHERE role_id = 1');
         $doctors = DB::select('SELECT * FROM users WHERE role_id = 2');
         return view('appointments.create')->with('user',$usuario_login)
-                                        ->with('role',$rol_user)
+                                        // ->with('role',$rol_user)
                                         ->with('patients',$patients)
                                         ->with('doctors',$doctors);
     }
@@ -63,7 +62,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
         $user_id_patient = $request->input('user_id_patient');
         $user_id_doctor = $request->input('user_id_doctor');
         $dt_appointment = $request->input('dt_appointment');
@@ -77,6 +76,12 @@ class AppointmentController extends Controller
         $appointment->checked = 0;
         $appointment->accomplished = 2;
         $appointment->save();
+
+        // Crear email con fichero calendar adjunto.
+
+        $appointments = Appointment::with(["userPatient","userCreator","userDoctor"])->find($appointment->id);
+
+        $this->sendMailNewAppointment($appointments);
 
         return $this->index();
     }
@@ -205,6 +210,28 @@ class AppointmentController extends Controller
         $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
         
         return view('appointments.listAccepted')->with('appointments',$appointments->toArray());
+    }
+
+    public function sendMailNewAppointment($appointment){
+
+        // $appointment->user_patient->email = "pedroramonmm@gmail.com";
+        // $appointment->user_doctor->email = "pedroramonmm@gmail.com";
+        // dd($appointment->toArray());
+        // dd($appointment);
+
+        // $patientEmail = $appointment['user_patient']['email'];
+        // $doctortEmail = $appointment['user_doctor'];
+
+        $patientEmail = "pedroramonmm@gmail.com";  
+        $doctortEmail = "pedroramonmm@gmail.com";  
+
+        $appointment = $appointment->toArray();
+        if ($appointment['user_patient']['id']){
+            $res = \Mail::to($patientEmail)->send(new CreateAppointmentMail($appointment['dt_appointment'], $appointment['user_patient'], $appointment['user_doctor'], true));
+        }
+        if ($appointment['user_doctor']['id']){
+            $res = \Mail::to($doctortEmail)->send(new CreateAppointmentMail($appointment['dt_appointment'], $appointment['user_patient'], $appointment['user_doctor'], false));
+        }
     }
 
 }

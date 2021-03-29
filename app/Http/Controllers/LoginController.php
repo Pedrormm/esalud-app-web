@@ -151,7 +151,7 @@ class LoginController extends Controller
     public function index() {
         $user = Auth::user();        
 
-        return view('user.dashboard', ['user' => $user]);
+        return view('dashboard.index', ['user' => $user]);
     }
 
     public function indexDashboard() {

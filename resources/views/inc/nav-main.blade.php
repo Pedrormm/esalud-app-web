@@ -4,7 +4,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" >
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/dashboard') }}">
             <div class="sidebar-brand-icon rotate-n-15">
                 <div class="d-flex justify-content-center logo-nav">
                     <img src="{{ url('/images/logo.png') }}" alt="Logo">
@@ -12,7 +12,7 @@
             </div>
         </a>
 
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/user/dashboard') }}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/dashboard') }}">
             <div class="sidebar-brand-text nav-tittle">{{ HV_APP_TITLE_NAME }}</div>
         </a>
 
@@ -21,8 +21,8 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item{{ (Request::is('user/dashboard'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/user/dashboard') }}">
+        <li class="nav-item{{ (Request::is('dashboard'))? " active":'' }}">
+            <a class="nav-link" href="{{ URL::asset('/dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
         </li>
@@ -79,8 +79,8 @@
         @if(isset($flagsMenuEnabled['PATIENTS_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['PATIENTS_MEDICAL_RECORD_SHOW'])
 
         <!-- Nav Item - Medical record -->
-        <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/user/records') }}">
+        <li class="nav-item{{ (Request::is('records'))? " active":'' }}">
+            <a class="nav-link" href="{{ URL::asset('/records') }}">
             <i class="fas fa-fw fa-table"></i>
             <span>Medical record</span></a>
         </li>
@@ -89,8 +89,8 @@
         @if(isset($flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW'])
 
         <!-- Nav Item - Medical record -->
-        <li class="nav-item{{ (Request::is('user/records'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/user/records') }}">
+        <li class="nav-item{{ (Request::is('/ownRecord/'.$user->id))? " active":'' }}">
+            <a class="nav-link" href="{{ URL::asset('/ownRecord/'.$user->id) }}"/> 
             <i class="fas fa-fw fa-table"></i>
             <span>My Medical record</span></a>
         </li>

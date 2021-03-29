@@ -60,7 +60,7 @@
 									<div class="card card-default card-demo records-color" id=""  >
 										<div class="card-header records-color" >
 											<a class="float-left title-style" name="records"
-											href="{{ URL::asset('/singleRecord/'.$patient['id']) }}"
+											 href="/singleRecord/{{$patient['id']}}">
 											{{ urldecode($patient['name'])." ". urldecode($patient['lastname'])}}
 											</a>
 											

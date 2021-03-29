@@ -22,17 +22,20 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['isLogged', 'checkUserRole']], function () {
-
-    Route::get('user/dashboard', 'LoginController@index');
-    
+    Route::get('dashboard', 'LoginController@index');
 });
 
 
     
 
 // Ajax view routes
-Route::get('user/records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('isLogged');
-Route::get('user/singlerecord/{id}', 'RecordsController@showRecord')->middleware('isLogged');
+
+// Records routes
+Route::get('records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('isLogged');
+Route::get('singleRecord/{id}', 'RecordsController@showRecord')->middleware('isLogged');
+Route::get('ownRecord/{id}', 'RecordsController@showOwnRecord')->middleware('isLogged');
+
+
 Route::get('message/summary', 'MessageController@showMessagesSummary')->middleware('isLogged');
 Route::get('message/icon', 'MessageController@showIconMessage')->middleware('isLogged');
 

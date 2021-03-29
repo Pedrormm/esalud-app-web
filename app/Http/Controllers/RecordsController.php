@@ -65,9 +65,8 @@ class RecordsController extends Controller
             }
        // }
        
-    $flagsMenuEnabled = getAuthValueFromPermission();
-
-        return view('user/records', ['patients' => $patients, 'flagsMenuEnabled' => $flagsMenuEnabled]);
+        $flagsMenuEnabled = getAuthValueFromPermission();
+        return view('records/index', ['patients' => $patients, 'flagsMenuEnabled' => $flagsMenuEnabled]);
     }
 
     public function showRecord($id) {
@@ -79,14 +78,21 @@ class RecordsController extends Controller
         $medicines = Medicine::medicine_by_user($user->id);
         $protocols = Protocol::protocol_by_user($user->id);
 
-		/*echo "<pre>";
-		print_r($informes);
-		echo "</pre>";
-        echo die();*/
-        
-        return view('user.singlerecord')->with('usuario',$user)->with('patient',$patient)
+        foreach ($events as $event){
+            $event->doctorFullName = User::find($event->user_id_doctor)->name . " " . User::find($event->user_id_doctor)->lastname;
+        }
+        return view('records.singleRecord')->with('usuario',$user)->with('patient',$patient)
         ->with('events',$events)->with('analytics1',$analytics1)->with('analytics2',$analytics2)
         ->with('medicines',$medicines)->with('protocols',$protocols);
+    }
+
+    public function showOwnRecord($id) {
+		$user = User::find($id);	
+
+        if ($user->role_id == \HV_ROLES::PATIENT){
+            $this->showRecord($id);            
+        }
+        dd($id);
     }
 
     public function settings() {

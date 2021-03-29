@@ -810,7 +810,8 @@ function settingUpPhone(){
 }
 
 function assignHeadersToRowsResponsive(){
-    if (screen.width <= 1024){
+    // if (screen.width <= 1024){
+    if (isMobile()){
 
         //Assign class to each header
         $('th').each(function() {
@@ -863,3 +864,12 @@ function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=
             $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
         });
 }
+
+function isMobile(){
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+        return true
+    }
+    else{
+        return false
+    }
+} 

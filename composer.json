@@ -22,6 +22,7 @@
         "nesbot/carbon": "^2.35",
         "orangehill/iseed": "^2.6",
         "pusher/pusher-php-server": "^4.1",
+        "spatie/icalendar-generator": "^2.1",
         "squareetlabs/laravel-openvidu": "^1.1",
         "twilio/sdk": "^6.9"
     },

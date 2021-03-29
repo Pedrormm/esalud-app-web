@@ -304,7 +304,7 @@ export default class AppVideoRoom extends Component {
                             this.incomingCall(signal);
                         },()=>{
                             //TODO: Reset the call when cancel is pressed
-                            // window.history.pushState('Cancel', 'Cancel', PublicURL + 'user/records');
+                            // window.history.pushState('Cancel', 'Cancel', PublicURL + 'records');
                             // window.history.forward();
                             // location.reload();
                             // this.forceUpdate();

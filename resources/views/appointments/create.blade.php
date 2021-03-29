@@ -14,16 +14,11 @@
             <div class="card-header py-3">
               <h4 class="m-0 font-weight-bold text-primary text-center">Crear Cita Médica</h4>
             </div>
-            <!-- <div class="row center_elements">
-                <div class="col-xs-11 col-md-10">
-                    <input type="text" placeholder="Buscar por nombre, apellidos, historial o dni" name="searcher_patients" id="patient_search_filter">
-                </div>
-                <a class="col-xs-11 col-md-1 btn btn-primary bt-search inp_height color_white" id="patsearch">
-                    <i class="fa fa-search"></i>Buscar
-                </a>
-            </div> -->
+
             <div class="card-body" id="mainCardBody">
-              <form action="{{ URL::asset('/appointment') }}" method="POST">
+              {{-- <form action="{{ URL::asset('/appointment') }}" method="POST"> --}}
+            {{ Form::open(array('url' => '/appointment/', 'method' => 'POST')) }}
+
                 @csrf
                 @php
                 if(auth()->user()->role_id == \HV_ROLES::DOCTOR) {
@@ -75,7 +70,8 @@
                             <button type="submit" class="btn btn-primary btn-lg">Crear</button>
                         </div>
                     </div>
-              </form>
+              {{ Form::close() }}
+              {{-- </form> --}}
             </div>
           </div>
 
