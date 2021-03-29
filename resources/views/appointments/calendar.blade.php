@@ -24,7 +24,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
             @if($rol_user == 4)
-                // editable: true,n
+                // editable: true,
             @endif
           header: {
                 left: 'prev,next today',
@@ -32,6 +32,7 @@
                 right: 'month,agendaWeek,agendaDay'
             },
           events: [
+            //   {title:'prueba', start:'2021-03-03T10:30:00'},
                 @foreach($appointments as $appointment)
                     {
                         @if($rol_user == 1)
@@ -40,6 +41,7 @@
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
+                            // start: "2021-03-03T10:30:00"
                             color: 'red',
                             textColor: '#ffffff',
                             allDay: false
@@ -60,6 +62,7 @@
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
+                            // start: "2021-03-03T10:30:00",
                             color: 'green',
                             textColor: '#ffffff',
                             allDay: false

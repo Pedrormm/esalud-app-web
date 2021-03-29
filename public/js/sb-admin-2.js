@@ -7,7 +7,17 @@ $(function() {
     $(".sidebar").toggleClass("toggled");
     if ($(".sidebar").hasClass("toggled")) {
       console.log("expansion");
+      // $(".logoContainer").css("display", "none");
+      if (isMobile){
+        $(".logoContainer").css("opacity", "0");
+        $(".logoContainer").css("pointer-events", "none");
+      }
       $('.sidebar .collapse').collapse('hide');
+    }
+    else{
+      console.log("no expansion");
+      $(".logoContainer").css("opacity", "1");
+      $(".logoContainer").css("pointer-events", "visible");
     };
   });
 

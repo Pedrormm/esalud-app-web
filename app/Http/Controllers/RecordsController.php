@@ -12,6 +12,7 @@ use DateInterval;
 
 use App\Models\User;
 use App\Models\Patient;
+use App\Models\Staff;
 use App\Models\Event;
 use App\Models\Role;
 use App\Models\Analytic;
@@ -87,12 +88,20 @@ class RecordsController extends Controller
     }
 
     public function showOwnRecord($id) {
-		$user = User::find($id);	
+        $user = Role::select('u.*','roles.name AS role_name')->join('users AS u', 'roles.id', 'u.role_id')->where("u.deleted_at",null)->where("u.id",$id)->get();
+        $user = $user[0];
 
         if ($user->role_id == \HV_ROLES::PATIENT){
-            $this->showRecord($id);            
+            return ($this->showRecord($id));            
         }
-        dd($id);
+        else if (($user->role_id == \HV_ROLES::DOCTOR) || ($user->role_id == \HV_ROLES::HELPER)) {
+            $user = Staff::select('users.*','staff.*','roles.name AS role_name', 'branches.name AS branch_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('branches', 'staff.branch_id', 'branches.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null)->where("users.id",$id)->get();
+            // dd($user->toArray());
+            $user = $user[0];
+        }
+        // dd($user->toArray());
+
+        return view('records.ownRecord')->with('usuario',$user);
     }
 
     public function settings() {

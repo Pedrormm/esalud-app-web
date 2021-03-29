@@ -15,12 +15,11 @@
 @section('content')
 
 	<div class="container-fluid">
-	
-		<div class="row mt-3">
-			<div class="col-lg-4">
+		<div class="row mt-3 d-flex justify-content-center">
+			<div class="col-lg-8 ">
 				<h4 class="header_box"><i class="fa fa-user"></i> Paciente</h4>
 				
-				<table class="user_info">
+				<table class="table table-bordered ">
 					<tbody>
 						<tr>
 							<td>Nombre:</td>
@@ -83,17 +82,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-8">
+        </div>
+        <div class="row mt-3 d-flex justify-content-center">
+			<div class="col-lg-6">
 				<h4 class="header_box"><i class="fa fa-report"></i> Listado de informes evolutivos del paciente</h4>
 				
 				<div class="row">
 				  @foreach($events as $event)
 					<div class="col-lg-6">
 						<div class="box box-success">					
-							<div class="box-header with-border">
+							<div class="box-header with-border boxEvent">
 							  <h3 class="box-title">{{$event->request}} (<?php echo date("d/m/Y",strtotime($event->created_at)); ?>) </h3>
 							  <div class="box-tools pull-right">
-								<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+								<button type="button" class="btn btn-box-tool eventClose" data-bs-dismiss="alert" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
 							  </div>
 							</div>
 							
@@ -106,7 +109,7 @@
 								<div class="row">
 									<div class="col-lg-12">
 										<label><b>Informe:</b></label>
-										<p>{{$event->report}}</p>
+										<p>{{urldecode($event->report)}}</p>
 									</div>
 								</div>
 							</div> 					
@@ -118,7 +121,7 @@
 			</div>
 		</div>
        
-        <div class="row mt-3">
+        {{-- <div class="row mt-3">
             <div class="col-lg-12">
                 <div class="box box-success">					
                     <div class="box-header with-border">
@@ -220,7 +223,7 @@
                     </div> 					
                 </div>
             </div>
-        </div> 
+        </div>  --}}
         
         <div class="row mt-3">
             <div class="col-lg-7">
@@ -229,7 +232,7 @@
                     <div class="box-header with-border">
                       <h3 class="box-title">Tratamientos</h3>
                       <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        <button type="button" class="btn btn-box-tool tratamientos" data-widget="remove"><i class="fa fa-times"></i></button>
                       </div>
                     </div>                    
                     <div class="box-body">
@@ -281,9 +284,9 @@
                 
                 <div class="box box-danger">					
                     <div class="box-header with-border">
-                      <h3 class="box-title">Protocolos</h3>
+                      <h3 class="box-title">Fecha de sesiones</h3>
                       <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        <button type="button" class="btn btn-box-tool sesiones" data-widget="remove"><i class="fa fa-times"></i></button>
                       </div>
                     </div>                    
                     <div class="box-body">
@@ -317,5 +320,23 @@
             </div>
         </div>
 	</div>
+
+@endsection
+
+@section('scriptsPropios')
+<script>
+    $('.eventClose').click(function(){
+       $(this).parent().parent().parent().fadeOut();
+    })
+
+    $('.tratamientos').click(function(){
+       $(this).parent().parent().parent().fadeOut();
+    })
+    
+    $('.sesiones').click(function(){
+       $(this).parent().parent().parent().fadeOut();
+    })
+</script>
+
 
 @endsection
