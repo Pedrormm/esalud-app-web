@@ -15,162 +15,540 @@ class TypeMedicineTableSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
-        \DB::table('type_medicines')->insert(array (
-            '0' => array('id' => 1, 'name' => 'Abacavir'),
-            '1' => array('id' => 2, 'name' => 'Abacavir / Lamivudina'),
-            '2' => array('id' => 3, 'name' => 'Abacavir / Lamivudina / Zidovudina'),
-            '3' => array('id' => 4, 'name' => 'ABC/3TC'),
-            '4' => array('id' => 5, 'name' => 'Aciclovir'),
-            '5' => array('id' => 6, 'name' => 'Albendazol'),
-            '6' => array('id' => 7, 'name' => 'AMD-070'),
-            '7' => array('id' => 8, 'name' => 'Amdoxovir'),
-            '8' => array('id' => 9, 'name' => 'Anfotericina B'),
-            '9' => array('id' => 10, 'name' => 'Aptivus'),
-            '10' => array('id' => 11, 'name' => 'Astodrímero'),
-            '11' => array('id' => 12, 'name' => 'Atazanavir'),
-            '12' => array('id' => 13, 'name' => 'Atripla'),
-            '13' => array('id' => 14, 'name' => 'Azitromicina'),
-            '14' => array('id' => 15, 'name' => 'BMS-663068'),
-            '15' => array('id' => 16, 'name' => 'BMS-986001'),
-            '16' => array('id' => 17, 'name' => 'Boceprevir'),
-            '17' => array('id' => 18, 'name' => 'Carbopol 974P '),
-            '18' => array('id' => 19, 'name' => 'Carragaén'),
-            '19' => array('id' => 20, 'name' => 'Carragenina lambda'),
-            '20' => array('id' => 21, 'name' => 'Cenicriviroc'),
-            '21' => array('id' => 22, 'name' => 'Ciprofloxacina'),
-            '22' => array('id' => 23, 'name' => 'Claritromicina'),
-            '23' => array('id' => 24, 'name' => 'Clindamicina'),
-            '24' => array('id' => 25, 'name' => 'Clorhidrato de etambutol'),
-            '25' => array('id' => 26, 'name' => 'Clorhidrato de moxifloxacina'),
-            '26' => array('id' => 27, 'name' => 'clorhidrato de rilpivirina'),
-            '27' => array('id' => 28, 'name' => 'Clorhidrato de valaciclovir'),
-            '28' => array('id' => 29, 'name' => 'Clorhidrato de valganciclovir'),
-            '29' => array('id' => 30, 'name' => 'Clotrimazol '),
-            '30' => array('id' => 31, 'name' => 'Combivir'),
-            '31' => array('id' => 32, 'name' => 'Complera'),
-            '32' => array('id' => 33, 'name' => 'Crixivan'),
-            '33' => array('id' => 34, 'name' => 'Cytovene IV'),
-            '34' => array('id' => 35, 'name' => 'Dapivirina'),
-            '35' => array('id' => 36, 'name' => 'Darunavir'),
-            '36' => array('id' => 37, 'name' => 'Delavirdina'),
-            '37' => array('id' => 38, 'name' => 'Dexelvucitabina'),
-            '38' => array('id' => 39, 'name' => 'Didanosina'),
-            '39' => array('id' => 40, 'name' => 'Dolutegravir'),
-            '40' => array('id' => 41, 'name' => 'Edurant'),
-            '41' => array('id' => 42, 'name' => 'Efavirenz'),
-            '42' => array('id' => 43, 'name' => 'Efavirenz / Emtricitabina / Fumarato de Disoproxilo de Tenofovir'),
-            '43' => array('id' => 44, 'name' => 'efavirenz/emtricitabina/tenofovir'),
-            '44' => array('id' => 45, 'name' => 'efavirenz/emtricitabina/tenofovir DF'),
-            '45' => array('id' => 46, 'name' => 'EFV/FTC/TDF'),
-            '46' => array('id' => 47, 'name' => 'Elvitegravir'),
-            '47' => array('id' => 48, 'name' => 'Elvitegravir / Cobicistat / Emtricitabina / Fumarato de Disoproxilo de Tenofovir'),
-            '48' => array('id' => 49, 'name' => 'Elvucitabina'),
-            '49' => array('id' => 50, 'name' => 'Emtricitabina'),
-            '50' => array('id' => 51, 'name' => 'emtricitabina/clorhidrato de rilpivirina/fumarato de disoproxilo de tenofovir'),
-            '51' => array('id' => 52, 'name' => 'Emtricitabina / Fumarato de Disoproxilo de Tenofovir'),
-            '52' => array('id' => 53, 'name' => 'Emtricitabina / Rilpivirina / Fumarato de Disoproxilo de Tenofovir'),
-            '53' => array('id' => 54, 'name' => 'Emtricitabina/rilpivirina/tenofovir'),
-            '54' => array('id' => 55, 'name' => 'Emtricitabina/rilpivirina/tenofovir'),
-            '55' => array('id' => 56, 'name' => 'Emtriva'),
-            '56' => array('id' => 57, 'name' => 'Enfuvirtida'),
-            '57' => array('id' => 58, 'name' => 'Engerix-B'),
-            '58' => array('id' => 59, 'name' => 'Epivir'),
-            '59' => array('id' => 60, 'name' => 'Epzicom'),
-            '60' => array('id' => 61, 'name' => 'Estavudina'),
-            '61' => array('id' => 62, 'name' => 'Etravirina'),
-            '62' => array('id' => 63, 'name' => 'EVG/COBI/FTC/TDF'),
-            '63' => array('id' => 64, 'name' => 'Famciclovir'),
-            '64' => array('id' => 65, 'name' => 'Flucitosina'),
-            '65' => array('id' => 66, 'name' => 'Fluconazol'),
-            '66' => array('id' => 67, 'name' => 'Fosamprenavir'),
-            '67' => array('id' => 68, 'name' => 'Foscarnet sódico'),
-            '68' => array('id' => 69, 'name' => 'Fosfato de primaquina'),
-            '69' => array('id' => 70, 'name' => 'FTC/RPV/TDF'),
-            '70' => array('id' => 71, 'name' => 'Fumarato de Disoproxilo de Tenofovir'),
-            '71' => array('id' => 72, 'name' => 'Fuzeon'),
-            '72' => array('id' => 73, 'name' => 'Ganciclovir'),
-            '73' => array('id' => 74, 'name' => 'Ganciclovir sódico'),
-            '74' => array('id' => 75, 'name' => 'Ibalizumab'),
-            '75' => array('id' => 76, 'name' => 'Imiquimod'),
-            '76' => array('id' => 77, 'name' => 'INCB-9471'),
-            '77' => array('id' => 78, 'name' => 'Indinavir'),
-            '78' => array('id' => 79, 'name' => 'Intelence'),
-            '79' => array('id' => 80, 'name' => 'Interferón pegilado alfa-2a'),
-            '80' => array('id' => 81, 'name' => 'Interferón pegilado alfa-2b'),
-            '81' => array('id' => 82, 'name' => 'Invirase'),
-            '82' => array('id' => 83, 'name' => 'Isentress'),
-            '83' => array('id' => 84, 'name' => 'Isoniazida'),
-            '84' => array('id' => 85, 'name' => 'Itraconazol'),
-            '85' => array('id' => 86, 'name' => 'Kaletra'),
-            '86' => array('id' => 87, 'name' => 'Lamivudina'),
-            '87' => array('id' => 88, 'name' => 'Lamivudina / Zidovudina'),
-            '88' => array('id' => 89, 'name' => 'Lersivirina'),
-            '89' => array('id' => 90, 'name' => 'Levofloxacina'),
-            '90' => array('id' => 91, 'name' => 'Lexiva'),
-            '91' => array('id' => 92, 'name' => 'Lopinavir / Ritonavir'),
-            '92' => array('id' => 93, 'name' => 'Maraviroc'),
-            '93' => array('id' => 94, 'name' => 'Miconazol'),
-            '94' => array('id' => 95, 'name' => 'MPC-4326'),
-            '95' => array('id' => 96, 'name' => 'Nelfinavir'),
-            '96' => array('id' => 97, 'name' => 'Nevirapina'),
-            '97' => array('id' => 98, 'name' => 'Nitrato de butoconazol'),
-            '98' => array('id' => 99, 'name' => 'Norvir'),
-            '99' => array('id' => 100, 'name' => 'PC-515'),
-            '100' => array('id' => 101, 'name' => 'Pirazinamida'),
-            '101' => array('id' => 102, 'name' => 'Pirimetamina'),
-            '102' => array('id' => 103, 'name' => 'potasio de raltegravir'),
-            '103' => array('id' => 104, 'name' => 'Prezista'),
-            '104' => array('id' => 105, 'name' => 'PRO-140'),
-            '105' => array('id' => 106, 'name' => 'PRO-2000'),
-            '106' => array('id' => 107, 'name' => 'Profármaco del BMS-626529'),
-            '107' => array('id' => 108, 'name' => 'QUAD'),
-            '108' => array('id' => 109, 'name' => 'Racivir'),
-            '109' => array('id' => 110, 'name' => 'RAL'),
-            '110' => array('id' => 111, 'name' => 'Raltegravir'),
-            '111' => array('id' => 112, 'name' => 'Recombivax HB'),
-            '112' => array('id' => 113, 'name' => 'Rescriptor'),
-            '113' => array('id' => 114, 'name' => 'Retrovir'),
-            '114' => array('id' => 115, 'name' => 'Reyataz'),
-            '115' => array('id' => 116, 'name' => 'Ribarivina'),
-            '116' => array('id' => 117, 'name' => 'Rifabutina'),
-            '117' => array('id' => 118, 'name' => 'Rifampicina'),
-            '118' => array('id' => 119, 'name' => 'Rilpivirina'),
-            '119' => array('id' => 120, 'name' => 'Ritonavir'),
-            '120' => array('id' => 121, 'name' => 'RPV'),
-            '121' => array('id' => 122, 'name' => 'Saquinavir'),
-            '122' => array('id' => 123, 'name' => 'Selzentry'),
-            '123' => array('id' => 124, 'name' => 'S/GSK1265744'),
-            '124' => array('id' => 125, 'name' => 'SPL-7013'),
-            '125' => array('id' => 126, 'name' => 'Stribild'),
-            '126' => array('id' => 127, 'name' => 'Sulfadiazina'),
-            '127' => array('id' => 128, 'name' => 'Sulfametoxazol - Trimetoprima'),
-            '128' => array('id' => 129, 'name' => 'sulfato de abacavir/lamivudina'),
-            '129' => array('id' => 130, 'name' => 'Sustiva'),
-            '130' => array('id' => 131, 'name' => 'Telaprevir'),
-            '131' => array('id' => 132, 'name' => 'Tenofovir/alafenamida'),
-            '132' => array('id' => 133, 'name' => 'Tenofovir (microbicida) '),
-            '133' => array('id' => 134, 'name' => 'Terconazol'),
-            '134' => array('id' => 135, 'name' => 'Tipranavir'),
-            '135' => array('id' => 136, 'name' => 'Tivicay'),
-            '136' => array('id' => 137, 'name' => 'Trizivir'),
-            '137' => array('id' => 138, 'name' => 'Truvada'),
-            '138' => array('id' => 139, 'name' => 'Twinrix'),
-            '139' => array('id' => 140, 'name' => 'Vacuna contra la hepatitis A y la hepatitis B'),
-            '140' => array('id' => 141, 'name' => 'Vacuna contra la hepatitis B'),
-            '141' => array('id' => 142, 'name' => 'Vacuna de virus vivos contra la varicela'),
-            '142' => array('id' => 143, 'name' => 'Varivax'),
-            '143' => array('id' => 144, 'name' => 'Vicriviroc'),
-            '144' => array('id' => 145, 'name' => 'Videx'),
-            '145' => array('id' => 146, 'name' => 'Videx EC'),
-            '146' => array('id' => 147, 'name' => 'Viracept'),
-            '147' => array('id' => 148, 'name' => 'Viramune'),
-            '148' => array('id' => 149, 'name' => 'Viramune XR'),
-            '149' => array('id' => 150, 'name' => 'Viread'),
-            '150' => array('id' => 151, 'name' => 'Voriconazol'),
-            '151' => array('id' => 152, 'name' => 'Zerit'),
-            '152' => array('id' => 153, 'name' => 'Ziagen'),
-            '153' => array('id' => 154, 'name' => 'Zidovudina')
-        ));
+        \DB::table('type_medicines')->insert(
+
+            [
+                [
+                    'name' => 'Abacavir',               
+                ],
+                [
+                    'name' => 'Abacavir / Lamivudina',               
+                ],
+                [
+                    'name' => 'Abacavir / Lamivudina / Zidovudina', 
+                ],
+                [
+                    'name' => 'ABC/3TC',  
+                ],
+                [
+                    'name' => 'Aciclovir', 
+                ],
+                [
+                    'name' => 'Albendazol', 
+                ],
+                [
+                    'name' => 'AMD-070',
+                ],
+                [
+                    'name' => 'Amdoxovir',  
+                ],
+                [
+                    'name' => 'Amlodipina',  
+                ],
+                [
+                    'name' => 'Anfotericina B', 
+                ],
+                [
+                    'name' => 'Aspirina',  
+                ],
+                [
+                    'name' => 'Aptivus',  
+                ],
+                [
+                    'name' => 'Astodrímero',  
+                ],
+                [
+                    'name' => 'Atazanavir',
+                ],
+                [
+                    'name' => 'Atorvastatina',
+                ],
+                [
+                    'name' => 'Atripla', 
+                ],
+                [
+                    'name' => 'Azitromicina',
+                ],
+                [
+                    'name' => 'BMS-663068',
+                ],
+                [
+                    'name' => 'BMS-986001',
+                ],
+                [
+                    'name' => 'Boceprevir',  
+                ],
+                [
+                    'name' => 'Carbopol 974P',
+                ],
+                [
+                    'name' => 'Carragaén', 
+                ],
+                [
+                    'name' => 'Carragenina lambda',
+                ],
+                [
+                    'name' => 'Cenicriviroc',
+                ],
+                [
+                    'name' => 'Ciprofloxacina',
+                ],
+                [
+                    'name' => 'Claritromicina',  
+                ],
+                [
+                    'name' => 'Clindamicina',
+                ],
+                [
+                    'name' => 'Clorhidrato de etambutol', 
+                ],
+                [
+                    'name' => 'Clorhidrato de moxifloxacina',
+                ],
+                [
+                    'name' => 'Clorhidrato de rilpivirina',
+                ],
+                [
+                    'name' => 'Clorhidrato de valaciclovir',
+                ],
+                [
+                    'name' => 'Clorhidrato de valganciclovir',  
+                ],
+                [
+                    'name' => 'Clotrimazol',
+                ],
+                [
+                    'name' => 'Combivir', 
+                ],
+                [
+                    'name' => 'Complera',
+                ],
+                [
+                    'name' => 'Crixivan',
+                ],
+                [
+                    'name' => 'Cytovene IV',
+                ],
+                [
+                    'name' => 'Dapivirina',  
+                ],
+                [
+                    'name' => 'Darunavir',
+                ],
+                [
+                    'name' => 'Delavirdina', 
+                ],
+                [
+                    'name' => 'Dexelvucitabina',
+                ],
+                [
+                    'name' => 'Didanosina',
+                ],
+                [
+                    'name' => 'Dolutegravir',
+                ],
+                [
+                    'name' => 'Doxiciclina',
+                ],
+                [
+                    'name' => 'Edurant',  
+                ],
+                [
+                    'name' => 'Efavirenz',
+                ],
+                [
+                    'name' => 'Efavirenz / Emtricitabina / Fumarato de Disoproxilo de Tenofovir', 
+                ],
+                [
+                    'name' => 'Efavirenz / Emtricitabina/ Tenofovir',
+                ],
+                [
+                    'name' => 'Efavirenz / Emtricitabina/ Tenofovir DF',
+                ],
+                [
+                    'name' => 'EFV / FTC/ TDF',
+                ],
+                [
+                    'name' => 'Elvitegravir',  
+                ],
+                [
+                    'name' => 'Elvitegravir / Cobicistat / Emtricitabina / Fumarato de Disoproxilo de Tenofovir',
+                ],
+                [
+                    'name' => 'Elvucitabina', 
+                ],
+                [
+                    'name' => 'Emtricitabina',
+                ],
+                [
+                    'name' => 'Emtricitabina / Clorhidrato de Rilpivirina / Fumarato de Disoproxilo de Tenofovir',
+                ],
+                [
+                    'name' => 'Emtricitabina / Fumarato de Disoproxilo de Tenofovir',
+                ],
+                [
+                    'name' => 'Emtricitabina / Rilpivirina / Fumarato de Disoproxilo de Tenofovir',  
+                ],
+                [
+                    'name' => 'Emtricitabina / Rilpivirina / Tenofovir',
+                ],
+                [
+                    'name' => 'Emtriva', 
+                ],
+                [
+                    'name' => 'Enfuvirtida',
+                ],
+                [
+                    'name' => 'Engerix-B',
+                ],
+                [
+                    'name' => 'Epivir',
+                ],
+                [
+                    'name' => 'Epzicom',  
+                ],
+                [
+                    'name' => 'Eritromicina',
+                ],
+                [
+                    'name' => 'Espectinomicina',
+                ],
+                [
+                    'name' => 'Estavudina',
+                ],
+                [
+                    'name' => 'Etravirina', 
+                ],
+                [
+                    'name' => 'EVG / COBI / FTC / TDF',
+                ],
+                [
+                    'name' => 'Famciclovir',
+                ],
+                [
+                    'name' => 'Flucitosina',
+                ],
+                [
+                    'name' => 'Fluconazol',  
+                ],
+                [
+                    'name' => 'Fosamprenavir',
+                ],
+                [
+                    'name' => 'Foscarnet sódico', 
+                ],
+                [
+                    'name' => 'Fosfato de primaquina',
+                ],
+                [
+                    'name' => 'FTC / RPV / TDF',
+                ],
+                [
+                    'name' => 'Fumarato de Disoproxilo de Tenofovir',
+                ],
+                [
+                    'name' => 'Fuzeon',
+                ],
+                [
+                    'name' => 'Ganciclovir', 
+                ],
+                [
+                    'name' => 'Ganciclovir sódico',
+                ],
+                [
+                    'name' => 'Gentamicina',
+                ],
+                [
+                    'name' => 'Ibalizumab',
+                ],
+                [
+                    'name' => 'Ibuprofeno',
+                ],
+                [
+                    'name' => 'Imiquimod',
+                ],
+                [
+                    'name' => 'INCB-9471',
+                ],
+                [
+                    'name' => 'Indinavir', 
+                ],
+                [
+                    'name' => 'Intelence',
+                ],
+                [
+                    'name' => 'Interferón pegilado alfa-2a',
+                ],
+                [
+                    'name' => 'Interferón pegilado alfa-2b',
+                ],
+                [
+                    'name' => 'Invirase',
+                ],
+                [
+                    'name' => 'Isentress', 
+                ],
+                [
+                    'name' => 'Isoniazida',
+                ],
+                [
+                    'name' => 'Itraconazol',
+                ],
+                [
+                    'name' => 'Kaletra',
+                ],
+                [
+                    'name' => 'Lamivudina',
+                ],
+                [
+                    'name' => 'Lamivudina / Zidovudina', 
+                ],
+                [
+                    'name' => 'Lansoprazol',
+                ],
+                [
+                    'name' => 'Lersivirina',
+                ],
+                [
+                    'name' => 'Levofloxacina',
+                ],
+                [
+                    'name' => 'Lexiva',
+                ],
+                [
+                    'name' => 'Lexotiroxina sódica',
+                ],
+                [
+                    'name' => 'Lopinavir / Ritonavir',
+                ],
+                [
+                    'name' => 'Maraviroc', 
+                ],
+                [
+                    'name' => 'Metronidazol', 
+                ],
+                [
+                    'name' => 'Miconazol',
+                ],
+                [
+                    'name' => 'MPC-4326',
+                ],
+                [
+                    'name' => 'Nelfinavir',
+                ],
+                [
+                    'name' => 'Nevirapina',
+                ],
+                [
+                    'name' => 'Nitrato de butoconazol', 
+                ],
+                [
+                    'name' => 'Nitrofurantoína', 
+                ],
+                [
+                    'name' => 'Norvir',
+                ],
+                [
+                    'name' => 'Omeprazol',
+                ],
+                [
+                    'name' => 'Paracetamol',
+                ],
+                [
+                    'name' => 'PC-515',
+                ],
+                [
+                    'name' => 'Pirazinamida',
+                ],
+                [
+                    'name' => 'Pirimetamina',
+                ],
+                [
+                    'name' => 'Potasio de Raltegravir', 
+                ],
+                [
+                    'name' => 'Prezista',
+                ],
+                [
+                    'name' => 'PRO-140',
+                ],
+                [
+                    'name' => 'PRO-2000',
+                ],
+                [
+                    'name' => 'Profármaco del BMS-626529',
+                ],
+                [
+                    'name' => 'QUAD', 
+                ],
+                [
+                    'name' => 'Racivir',
+                ],
+                [
+                    'name' => 'RAL',
+                ],
+                [
+                    'name' => 'Raltegravir',
+                ],
+                [
+                    'name' => 'Ramipril',
+                ],
+                [
+                    'name' => 'Recombivax HB',
+                ],
+                [
+                    'name' => 'Rescriptor', 
+                ],
+                [
+                    'name' => 'Retrovir',
+                ],
+                [
+                    'name' => 'Reyataz',
+                ],
+                [
+                    'name' => 'Ribarivina',
+                ],
+                [
+                    'name' => 'Rifabutina',
+                ],
+                [
+                    'name' => 'Rilpivirina', 
+                ],
+                [
+                    'name' => 'Ritonavir',
+                ],
+                [
+                    'name' => 'RPV',
+                ],
+                [
+                    'name' => 'Salbutamol',
+                ],
+                [
+                    'name' => 'Saquinavir',
+                ],
+                [
+                    'name' => 'Selzentry',
+                ],
+                [
+                    'name' => 'Simvastatina',
+                ],
+                [
+                    'name' => 'S/GSK1265744', 
+                ],
+                [
+                    'name' => 'SPL-7013',
+                ],
+                [
+                    'name' => 'Stribild',
+                ],
+                [
+                    'name' => 'Sulfadiazina',
+                ],
+                [
+                    'name' => 'Sulfametoxazol - Trimetoprima',
+                ],
+                [
+                    'name' => 'Sulfato de Abacavir / Lamivudina', 
+                ],
+                [
+                    'name' => 'Sustiva',
+                ],
+                [
+                    'name' => 'Telaprevir',
+                ],
+                [
+                    'name' => 'Tenofovir / Alafenamida',
+                ],
+                [
+                    'name' => 'Tenofovir (microbicida)',
+                ],
+                [
+                    'name' => 'Terconazol', 
+                ],
+                [
+                    'name' => 'Tipranavir',
+                ],
+                [
+                    'name' => 'Tivicay',
+                ],
+                [
+                    'name' => 'Trizivir',
+                ],
+                [
+                    'name' => 'Truvada',
+                ],
+                [
+                    'name' => 'Twinrix', 
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 AstraZen./U.',
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 CureVac',
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 Janssen/J&J',
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 Moderna ARN',
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 Novavax',
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 Pfizer/BioNTech',
+                ],
+                [
+                    'name' => 'Vacuna contra el Covid-19 Sanofi Pasteur/GSK',
+                ],
+                [
+                    'name' => 'Vacuna contra la hepatitis A y la hepatitis B',
+                ],
+                [
+                    'name' => 'Vacuna contra la hepatitis B',
+                ],
+                [
+                    'name' => 'Vacuna de virus vivos contra la varicela',
+                ],
+                [
+                    'name' => 'Varivax',
+                ],
+                [
+                    'name' => 'Vicriviroc', 
+                ],
+                [
+                    'name' => 'Videx',
+                ],
+                [
+                    'name' => 'Videx EC',
+                ],
+                [
+                    'name' => 'Viracept',
+                ],
+                [
+                    'name' => 'Viramune',
+                ],
+                [
+                    'name' => 'Viramune XR', 
+                ],
+                [
+                    'name' => 'Viread',
+                ],
+                [
+                    'name' => 'Voriconazol',
+                ],
+                [
+                    'name' => 'Zerit',
+                ],
+                [
+                    'name' => 'Ziagen',
+                ],
+                [
+                    'name' => 'Zidovudina', 
+                ],
+                
+            ]
+        );
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 

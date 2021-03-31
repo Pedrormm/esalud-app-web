@@ -14,17 +14,17 @@ class CreateUsers extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('dni', 20)->unique()->index()->comment('DNI');
+            $table->bigIncrements('id')->unsigned();
+            $table->string('dni', 100)->unique()->index()->comment('DNI');
             $table->string('password', 250)->comment('Contraseña del usuario');
             $table->string('name', 250)->nullable()->index()->comment('Nombre del usuario');
             $table->string('lastname', 250)->nullable()->index()->comment('Apellido del usuario');
             $table->string('address', 200)->nullable()->comment('Dirección del usuario');
             $table->string('city', 200)->nullable()->comment('Dirección del usuario');
-            $table->string('country', 20)->nullable()->comment('Dirección del usuario');
+            $table->string('country', 100)->nullable()->comment('Dirección del usuario');
             $table->integer('zipcode')->nullable()->comment('Dirección del usuario');
-            $table->string('email', 100)->index()->nullable()->comment('Dirección del usuario');
-            $table->string('phone', 15)->nullable()->comment('Dirección del usuario');
+            $table->string('email', 200)->index()->nullable()->comment('Dirección del usuario');
+            $table->string('phone', 20)->nullable()->comment('Dirección del usuario');
             $table->date('birthdate')->comment('Fecha de nacimiento del usuario');
             $table->string('avatar', 250)->nullable()->comment('Avatar del usuario');
             $table->enum('sex',['male','female'])->index()->comment('Genéro del usuario');

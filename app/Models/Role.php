@@ -72,6 +72,11 @@ class Role extends Model
         return $this->hasMany(\App\Models\RolePermission::class, 'role_id');
     }
 
+    public function rolesPermissionsEnabled()
+    {
+        return $this->hasMany(\App\Models\RolePermission::class, 'role_id')->where('activated',1);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/

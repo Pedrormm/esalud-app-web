@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ChatsTableSeeder::class,
             EventsTableSeeder::class,
             LogsTableSeeder::class,
-            MedicinesTableSeeder::class,
+            TreatmentsTableSeeder::class,
             MessagesTableSeeder::class,
             NotesTableSeeder::class,
             PatientsTableSeeder::class,
@@ -35,7 +35,9 @@ class DatabaseSeeder extends Seeder
             SpecialitiesStaffTableSeeder::class,
             StaffTableSeeder::class,
             WarningsTableSeeder::class,
-            WarningsReadsTableSeeder::class
+            WarningsReadsTableSeeder::class,
+            MedicinesAdministrationTableSeeder::class,
+            TypeMedicineTableSeeder::class
             ]);
     }
 }

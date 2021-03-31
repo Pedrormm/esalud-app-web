@@ -320,6 +320,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Role::class, 'user_id_creator');
     }
 
+    public function rolesPermissionsEnabled()
+    {
+        return $this->hasMany(\App\Models\Role::class, 'user_id_creator');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
@@ -352,6 +357,9 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\WarningsRead::class, 'user_id');
     }
 
+    public function getEnabledPermission() {
+        return $this->hasManyThrough(\App\Models\Role::class, \App\Models\RolePermission::class, 'role_id', '', 'id', '')->where('activated', 1);
+    }
 
     public static function getPermissions(int $userId, int $valuePermission = null) {
         //\DB::enableQueryLog();

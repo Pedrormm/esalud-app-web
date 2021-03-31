@@ -89,8 +89,8 @@
         @if(isset($flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW'])
 
         <!-- Nav Item - Medical record -->
-        <li class="nav-item{{ (Request::is('/ownRecord/'.$user->id))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/ownRecord/'.$user->id) }}"/> 
+        <li class="nav-item{{ (Request::is('/ownRecord/'))? " active":'' }}">
+            <a class="nav-link" href="{{ URL::asset('/ownRecord/') }}"/> 
             <i class="fas fa-fw fa-table"></i>
             <span>My Medical record</span></a>
         </li>

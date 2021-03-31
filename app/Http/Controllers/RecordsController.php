@@ -87,7 +87,9 @@ class RecordsController extends Controller
         ->with('medicines',$medicines)->with('protocols',$protocols);
     }
 
-    public function showOwnRecord($id) {
+    public function showOwnRecord() {
+        $id = Auth::user()->id;
+
         $user = Role::select('u.*','roles.name AS role_name')->join('users AS u', 'roles.id', 'u.role_id')->where("u.deleted_at",null)->where("u.id",$id)->get();
         $user = $user[0];
 

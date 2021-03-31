@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypeMedicinesTable extends Migration
+class CreateRoutesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateTypeMedicinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('type_medicines', function (Blueprint $table) {
-            $table->bigIncrements('id')->unsigned();
-            $table->string('name');
+        Schema::create('routes', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('permission_id')->unsigned()->comment('Permiso asociado');
+            $table->string('name', 200)->nullable()->comment('Nombre de la ruta');
             $table->softDeletes();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
-
-        // Artisan::call('db:seed', [
-        //     '--class' => TypeMedicineTableSeeder::class
-        // ]);
     }
 
     /**
@@ -33,6 +30,6 @@ class CreateTypeMedicinesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('type_medicines');
+        Schema::dropIfExists('routes');
     }
 }

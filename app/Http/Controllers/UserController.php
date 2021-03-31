@@ -331,7 +331,7 @@ class UserController extends Controller
         $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
 
         if (Auth::user())
-            return view('user.dashboard')->with('successful', "An user the dni ".$dni." has been properly created");
+            return view('dashboard.index')->with('successful', "An user the dni ".$dni." has been properly created");
         else
             return redirect('/')->with('successful', "An user the dni ".$dni." has been properly created. Please log in.");
     }

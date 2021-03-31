@@ -22,6 +22,23 @@
 @section('content')
 
     <div id="main-container" class="container-fluid">
+
+      @if((isset($successful)) ||  (session()->has('info')))
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-success">
+              @if(isset($successful))
+                {{ $successful }}  
+              @elseif (session()->has('info'))
+                {{ session()->get('info') }}
+                {{ Session::forget('info') }}
+              @endif   
+            </div>
+          </div>
+        </div>
+      @endif
+
+
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">Card title</h5>
@@ -29,21 +46,6 @@
         </div>
       </div>
     </div>
-
-    <div class="container-fluid mt-3">
-      
-      @if(isset($successful))
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="alert alert-info">
-              {{ $successful }}     
-            </div>
-          </div>
-        </div>
-      @endif
-
-  </div>
-
 
     <script>
  

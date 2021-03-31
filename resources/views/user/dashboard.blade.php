@@ -32,7 +32,7 @@
 
     <div class="container-fluid mt-3">
       
-      @if(isset($successful))
+      @if((isset($successful)) || (session()->has('info'))
         <div class="row">
           <div class="col-lg-12">
             <div class="alert alert-info">

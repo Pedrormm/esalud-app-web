@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['isLogged', 'checkUserRole']], function () {
-    Route::get('dashboard', 'LoginController@index');
+    Route::get('dashboard', 'LoginController@index')->name('dashboard.index');
 });
 
 
@@ -33,7 +33,7 @@ Route::group(['middleware' => ['isLogged', 'checkUserRole']], function () {
 // Records routes
 Route::get('records/{ord?}/{sex_fil?}/{age_fil?}/{n_search?}', 'RecordsController@index')->middleware('isLogged');
 Route::get('singleRecord/{id}', 'RecordsController@showRecord')->middleware('isLogged');
-Route::get('ownRecord/{id}', 'RecordsController@showOwnRecord')->middleware('isLogged');
+Route::get('ownRecord', 'RecordsController@showOwnRecord')->middleware('isLogged')->middleware('checkPermissionRoutes');
 
 
 Route::get('message/summary', 'MessageController@showMessagesSummary')->middleware('isLogged');
@@ -76,7 +76,7 @@ Route::post('/user/loginForgotten', 'LoginController@loginForgotten');
 Route::get('users/{id}/confirmDelete', 'UserController@confirmDelete');
 Route::match(array('GET', 'POST'), 'users/viewDT', 'UserController@ajaxViewDatatable');
 
-Route::resource('users', 'UserController');
+Route::resource('users', 'UserController')->middleware('checkPermissionRoutes');;
 
 // Patient routes
 Route::get('patients/{id}/confirmDelete', 'PatientController@confirmDelete');
