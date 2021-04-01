@@ -16,7 +16,7 @@ use App\Models\Staff;
 use App\Models\Event;
 use App\Models\Role;
 use App\Models\Analytic;
-use App\Models\Medicine;
+use App\Models\Treatment;
 use App\Models\Protocol;
 
 class RecordsController extends Controller
@@ -76,7 +76,7 @@ class RecordsController extends Controller
         $events = Event::eventsForUser($user->id);
         $analytics1 = Analytic::analytics_type1_by_user($user->id);
         $analytics2 = Analytic::analytics_type2_by_user($user->id);
-        $medicines = Medicine::medicine_by_user($user->id);
+        $treatments = Treatment::medicine_by_user($user->id);
         $protocols = Protocol::protocol_by_user($user->id);
 
         foreach ($events as $event){
@@ -84,7 +84,7 @@ class RecordsController extends Controller
         }
         return view('records.singleRecord')->with('usuario',$user)->with('patient',$patient)
         ->with('events',$events)->with('analytics1',$analytics1)->with('analytics2',$analytics2)
-        ->with('medicines',$medicines)->with('protocols',$protocols);
+        ->with('treatments',$treatments)->with('protocols',$protocols);
     }
 
     public function showOwnRecord() {

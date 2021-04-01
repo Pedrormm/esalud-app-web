@@ -7,40 +7,42 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class Medicine
+ * Class Treatment
  * @package App\Models
  * @version April 1, 2020, 8:16 pm UTC
  *
  * @property \App\Models\User userDoctor
  * @property \App\Models\User userPatient
+ * @property \App\Models\TypeMedcine type_medicine
+ * @property \App\Models\MedicineAdministration medicineAdministration
  * @property integer user_id_patient
  * @property integer user_id_doctor
- * @property integer medicine
- * @property string interval
- * @property string stop
- * @property integer stop_user
+ * @property integer type_medicine_id
+ * @property integer medicine_administration_id
+ * @property string description
+ * @property string treatment_starting_date
+ * @property string treatment_end_date
  */
-class Medicine extends Model
+class Treatment extends Model
 {
     use SoftDeletes;
 
-    public $table = 'medicines';
+    public $table = 'treatments';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
     protected $dates = ['deleted_at'];
-
-
 
     public $fillable = [
         'user_id_patient',
         'user_id_doctor',
-        'medicine',
-        'interval',
-        'stop',
-        'stop_user'
+        'type_medicine_id',
+        'medicine_administration_id',
+        'description',
+        'treatment_starting_date',
+        '
+        '
     ];
 
     /**
@@ -52,10 +54,11 @@ class Medicine extends Model
         'id' => 'integer',
         'user_id_patient' => 'integer',
         'user_id_doctor' => 'integer',
-        'medicine' => 'integer',
-        'interval' => 'string',
-        'stop' => 'string',
-        'stop_user' => 'integer'
+        'type_medicine_id' => 'integer',
+        'medicine_administration_id' => 'integer',
+        'description' => 'string',
+        'treatment_starting_date' => 'date',
+        'treatment_end_date' => 'date'
     ];
 
     /**
@@ -66,8 +69,8 @@ class Medicine extends Model
     public static $rules = [
         'user_id_patient' => 'required',
         'user_id_doctor' => 'required',
-        'medicine' => 'required',
-        'stop_user' => 'required'
+        'type_medicine_id' => 'required',
+        'description' => 'required'
     ];
 
     /**
@@ -84,6 +87,22 @@ class Medicine extends Model
     public function userPatient()
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id_patient');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function typeMedicine()
+    {
+        return $this->belongsTo(\App\Models\TypeMedicine::class, 'type_medicine_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function medicineAdministration()
+    {
+        return $this->belongsTo(\App\Models\MedicineAdministration::class, 'medicine_administration_id');
     }
 
     public static function interval($interval1){
@@ -103,7 +122,7 @@ class Medicine extends Model
 
     public static function medicine_by_user($user_id){
 
-        $medicines = DB::select('SELECT medicines.*, type_medicines.name as nameMedicine FROM medicines INNER JOIN type_medicines ON type_medicines.id = medicines.type_medicine_id WHERE medicines.user_id_patient = '.$user_id.'');
-		return $medicines;
+        $treatments = DB::select('SELECT treatments.*, type_medicines.name as nameMedicine FROM treatments INNER JOIN type_medicines ON type_medicines.id = treatments.type_medicine_id WHERE treatments.user_id_patient = '.$user_id.'');
+		return $treatments;
 	}
 }

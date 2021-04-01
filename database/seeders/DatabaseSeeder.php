@@ -37,7 +37,8 @@ class DatabaseSeeder extends Seeder
             WarningsTableSeeder::class,
             WarningsReadsTableSeeder::class,
             MedicinesAdministrationTableSeeder::class,
-            TypeMedicineTableSeeder::class
+            TypeMedicineTableSeeder::class,
+            RoutesTableSeeder::class
             ]);
     }
 }

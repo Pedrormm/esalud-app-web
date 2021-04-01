@@ -6,16 +6,17 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Permissions
+ * Class Permission
  * @package App\Models
  * @version April 1, 2020, 8:18 pm UTC
  *
  * @property \Illuminate\Database\Eloquent\Collection rolesPermissions
+ * @property \Illuminate\Database\Eloquent\Collection routes
  * @property string flag_meaning
  * @property integer default_permission
  * @property string permission_name
  */
-class Permissions extends Model
+class Permission extends Model
 {
     use SoftDeletes;
 
@@ -64,5 +65,13 @@ class Permissions extends Model
     public function rolesPermissions()
     {
         return $this->hasMany(\App\Models\RolesPermission::class, 'permission_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function routes()
+    {
+        return $this->hasMany(\App\Models\Route::class, 'permission_id');
     }
 }

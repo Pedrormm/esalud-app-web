@@ -6,36 +6,28 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class RolePermission
+ * Class Route
  * @package App\Models
- * @version May 3, 2020, 8:22 pm UTC
+ * @version April 1, 2021, 12:30 pm UTC
  *
  * @property \App\Models\Permission permission
- * @property \App\Models\Role role
- * @property integer role_id
  * @property integer permission_id
- * @property integer value
- * @property string value_name
+ * @property string name
  */
-class RolePermission extends Model
+class Route extends Model
 {
     use SoftDeletes;
 
-    public $table = 'roles_permissions';
+    public $table = 'routes';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
     protected $dates = ['deleted_at'];
 
-
-
     public $fillable = [
-        'role_id',
         'permission_id',
-        'value',
-        'value_name'
+        'name'
     ];
 
     /**
@@ -45,10 +37,8 @@ class RolePermission extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'role_id' => 'integer',
         'permission_id' => 'integer',
-        'value' => 'integer',
-        'value_name' => 'string'
+        'name' => 'string'
     ];
 
     /**
@@ -57,10 +47,8 @@ class RolePermission extends Model
      * @var array
      */
     public static $rules = [
-        'role_id' => 'required',
         'permission_id' => 'required',
-        'value' => 'required',
-        'value_name' => 'required'
+        'name' => 'required'
     ];
 
     /**
@@ -69,13 +57,5 @@ class RolePermission extends Model
     public function permission()
     {
         return $this->belongsTo(\App\Models\Permission::class, 'permission_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function role()
-    {
-        return $this->belongsTo(\App\Models\Role::class, 'role_id');
     }
 }

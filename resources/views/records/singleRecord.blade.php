@@ -248,13 +248,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($medicines as $medicine)
+                                            @foreach($treatments as $treatment)
                                             <tr>
-                                                <td>{{ $medicine->nameMedicine }}</td>
-                                                <td><?php echo date("d/m/Y", strtotime($medicine->created_at)); ?></td>
+                                                <td>{{ $treatment->nameMedicine }}</td>
+                                                <td><?php echo date("d/m/Y", strtotime($treatment->created_at)); ?></td>
                                                 <td>
                                                     <?php                                                    
-                                                    $interval = explode('#', $medicine->interval);
+                                                    $interval = explode('#', $treatment->interval);
                                                     $interval_text = $interval[0] . ' cada ' . $interval[1] . ' ';
 
                                                     switch($interval[2]){

@@ -1,7 +1,7 @@
 <?php
   use Carbon\Carbon;
   use Illuminate\Support\Facades\DB;
-  use App\Models\Permissions;
+  use App\Models\Permission;
   use App\Models\Role;
   use App\Models\RolePermission;
     
@@ -119,7 +119,7 @@
 
     function fillPermissionClass() {
 
-        $permissions = Permissions::select('id', 'flag_meaning')->get();
+        $permissions = Permission::select('id', 'flag_meaning')->get();
 
         $data = $permissions->mapWithKeys(function ($item) {
             return [$item['flag_meaning'] => $item['id']];
@@ -145,7 +145,7 @@
         
         if(!is_null($permissionMeaning)) {
             $permissionMeaning = strtoupper($permissionMeaning);
-            $perm = Permissions::select('id')->whereFlagMeaning($permissionMeaning)->value("id");
+            $perm = Permission::select('id')->whereFlagMeaning($permissionMeaning)->value("id");
             $rolePermissions = RolePermission::select('activated')->where([
                 ['role_id', '=', $authUserRole],
                 ['permission_id', '=', $perm],            

@@ -2,24 +2,28 @@
 
 namespace App\Repositories;
 
-use App\Models\Permissions;
+use App\Models\Treatment;
 use App\Repositories\BaseRepository;
 
 /**
- * Class PermissionsRepository
+ * Class TreatmentRepository
  * @package App\Repositories
- * @version April 1, 2020, 8:18 pm UTC
+ * @version April 1, 2020, 8:16 pm UTC
 */
 
-class PermissionsRepository extends BaseRepository
+class TreatmentRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'flag_meaning',
-        'default_permission',
-        'permission_name'
+        'user_id_patient',
+        'user_id_doctor',
+        'type_medicine_id',
+        'medicine_administration_id',
+        'description',
+        'treatment_starting_date',
+        'treatment_end_date'
     ];
 
     /**
@@ -37,6 +41,6 @@ class PermissionsRepository extends BaseRepository
      **/
     public function model()
     {
-        return Permissions::class;
+        return Treatment::class;
     }
 }

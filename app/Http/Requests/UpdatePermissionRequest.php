@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Medicine;
+use App\Models\Permission;
 
-class CreateMedicineRequest extends FormRequest
+class UpdatePermissionRequest extends FormRequest
 {
 
     /**
@@ -25,6 +25,8 @@ class CreateMedicineRequest extends FormRequest
      */
     public function rules()
     {
-        return Medicine::$rules;
+        $rules = Permission::$rules;
+        
+        return $rules;
     }
 }

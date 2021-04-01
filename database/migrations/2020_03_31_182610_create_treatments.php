@@ -16,7 +16,7 @@ class CreateTreatments extends Migration
     public function up()
     {
 
-        Schema::create('Treatments', function (Blueprint $table) {
+        Schema::create('treatments', function (Blueprint $table) {
             $expire_date = Carbon::now()->addDays(7);
             $table->bigIncrements('id');
             $table->bigInteger('user_id_patient')->unsigned()->comment('Paciente asociado');
@@ -31,7 +31,7 @@ class CreateTreatments extends Migration
         });
 
         // Artisan::call('db:seed', [
-        //     '--class' => MedicinesTableSeeder::class
+        //     '--class' => TreatmentsTableSeeder::class
         // ]);
 
     }
@@ -43,6 +43,6 @@ class CreateTreatments extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medicines');
+        Schema::dropIfExists('treatments');
     }
 }

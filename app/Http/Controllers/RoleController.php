@@ -18,7 +18,7 @@ use App\Models\Patient;
 use App\Models\Staff;
 use App\Models\Role;
 use App\Models\RolePermission;
-use App\Models\Permissions;
+use App\Models\Permission;
 
 
 
@@ -64,7 +64,7 @@ class RoleController extends AppBaseController
      * @return Response
      */ 
     public function create(){
-        $permissions = Permissions::get()->toArray();
+        $permissions = Permission::get()->toArray();
         // return view('adjustments.newRole',['permissions' => $permissions]);
         return view('roles.create',['permissions' => $permissions]);
     }
@@ -102,12 +102,12 @@ class RoleController extends AppBaseController
         $role->user_id_creator = $user->id;
         $role->save();
 
-        $numberPermissions = Permissions::get()->count();
+        $numberPermission = Permission::get()->count();
         // $maxRoleId = RolePermission::max('role_id');
         $maxRoleId = Role::max('id')-1;
         $data = array();
 
-        for ($i = 1; $i <= $numberPermissions; $i++) {
+        for ($i = 1; $i <= $numberPermission; $i++) {
             $data[] =[
                 'role_id' => $maxRoleId+1,
                 'permission_id' => $i,
@@ -154,7 +154,7 @@ class RoleController extends AppBaseController
     {
         $roles = Role::with('rolesPermissions.permission')->find($id);
         $roles = $roles->toArray();
-        $permissions = Permissions::all();
+        $permissions = Permission::all();
         if (empty($roles)) {
             Flash::error('Role not found');
 
@@ -167,7 +167,7 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * Updates the specified Role and Permissions in storage if they have permissions.
+     * Updates the specified Role and Permission in storage if they have permissions.
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
      * @return Response
@@ -372,7 +372,7 @@ class RoleController extends AppBaseController
     }
 
     public function newRole(){
-        $permissions = Permissions::get()->toArray();
+        $permissions = Permission::get()->toArray();
         return view('adjustments.newRole',['permissions' => $permissions]);
     }
 

@@ -22,7 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property \Illuminate\Database\Eloquent\Collection events
  * @property \Illuminate\Database\Eloquent\Collection event4s
  * @property \Illuminate\Database\Eloquent\Collection logs
- * @property \Illuminate\Database\Eloquent\Collection medicines
+ * @property \Illuminate\Database\Eloquent\Collection treatments
  * @property \Illuminate\Database\Eloquent\Collection medicine5s
  * @property \Illuminate\Database\Eloquent\Collection messages
  * @property \Illuminate\Database\Eloquent\Collection message6s
@@ -210,9 +210,9 @@ class User extends Authenticatable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function medicines()
+    public function treatments()
     {
-        return $this->hasMany(\App\Models\Medicine::class, 'user_id_doctor');
+        return $this->hasMany(\App\Models\Treatment::class, 'user_id_doctor');
     }
 
     /**
@@ -220,7 +220,7 @@ class User extends Authenticatable
      **/
     public function medicine5s()
     {
-        return $this->hasMany(\App\Models\Medicine::class, 'user_id_patient');
+        return $this->hasMany(\App\Models\Treatment::class, 'user_id_patient');
     }
 
     /**
