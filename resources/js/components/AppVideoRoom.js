@@ -245,7 +245,7 @@ export default class AppVideoRoom extends Component {
                 if(signal.data.type=='offer'){
                     let whoCalls="";
 
-                    $.ajax(PublicURL + 'video/getUserInfo', {
+                    $.ajax(PublicURL + 'videoCall/getUserInfo', {
                         dataType: "text",
                         data: {id: signal.userId},
                         method:'get',
@@ -254,13 +254,13 @@ export default class AppVideoRoom extends Component {
                         whoCalls = res;
                     })
                     .fail(function(xhr, st, err) {
-                        console.error("error in video/getUserInfo " + xhr, st, err);
+                        console.error("error in videoCall/getUserInfo " + xhr, st, err);
                     });
 
                     if (!utils.isInVideoCallView()){
                         
                         showModalConfirm("Llamada de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
-                            // window.location.replace(PublicURL+'user/video-call/'+JSON.stringify(signal));
+                            // window.location.replace(PublicURL+'videoCall/'+JSON.stringify(signal));
                             $('#saveModal').off('click');
                             console.log("NO EN VENTANA VIDEO");
 

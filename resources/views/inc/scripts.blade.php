@@ -1,10 +1,10 @@
 <script>
 
-    asyncCall('message/icon', '#messagesDropdown', true);
+    asyncCall('messaging/icon', '#messagesDropdown', true);
      $('#messagesDropdown').click();
-    asyncCall('message/summary', '#top-navigator-messages', true, false);
+    asyncCall('messaging/summary', '#top-navigator-messages', true, false);
     @if($errors->any())
-        showInlineError(0, "{{ implode(', ', $errors->all()) }}", 10);
+        showInlineError(0, "{{ implode(', ', $errors->all()) }}", 20);
     @endif
 
     @if(session('js_code'))
@@ -15,17 +15,17 @@
     @endisset
 
     @if(isset($okMessage))
-        showInlineMessage("{{ $okMessage }}", 10);
-    @endif
+        showInlineMessage("{{ $okMessage }}", 30);
+    @endif  
 
     {{-- Code for nav-main.blade.php --}}
     if (screen.width >= 1024){
         @if((Request::is('users/create','users*','patients*','staff*')))
             $('#collapseUserManagement').collapse('show');
-        
-        @elseif((Request::is('user/my-messages') || (Request::is('user/send-message')) || 
-        Request::is('user/chat') || Request::is('user/videocall') ))
+        @elseif ((Request::is('messaging*','videoCall*','messaging/myMessages','openvidu/token')))
             $('#collapseCommunication').collapse('show');
+        @elseif ((Request::is('appointment*')))
+            $('#collapseAppoinment').collapse('show');
         @endif
     }
     else{
@@ -33,7 +33,7 @@
         $('#mainCardShadow').removeClass(['card','shadow']);
     }
     
-    @if (!Request::is('user/video-call-container*'))
+    @if (!Request::is('videoCallContainer*'))
         var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
     @endif  
 
@@ -51,20 +51,34 @@
         $('#navSubitemStaffManagement').addClass('active');
     @endif
 
-    @if(Request::is('user/my-messages'))
+    @if(Request::is('messaging/myMessages'))
         $('#navSubitemMyMessages').css('background-color', '#eaecf4');
         $('#navSubitemMyMessages').addClass('active');
-    @elseif(Request::is('comm/messaging'))
+    @elseif(Request::is('messaging'))
         $('#navSubitemMessaging').css('background-color', '#eaecf4');
         $('#navSubitemMessaging').addClass('active');
-    @elseif(Request::is('user/send-message'))
-        $('#navSubitemSendMessage').css('background-color', '#eaecf4');
-        $('#navSubitemSendMessage').addClass('active');
-    @elseif(Request::is('user/chat'))
-        $('#navSubitemChat').css('background-color', '#eaecf4');
-        $('#navSubitemChat').addClass('active');
-    @elseif(Request::is('user/videocall'))
+    @elseif(Request::is('videoCall'))
         $('#navSubitemVideocall').css('background-color', '#eaecf4');
         $('#navSubitemVideocall').addClass('active');
+    @endif
+
+    @if(Request::is('appointment/listPending'))
+        $('#navSubitemPendingAppointments').css('background-color', '#eaecf4');
+        $('#navSubitemPendingAppointments').addClass('active');
+    @elseif(Request::is('appointment/listAccepted'))
+        $('#navSubitemAcceptedAppointments').css('background-color', '#eaecf4');
+        $('#navSubitemAcceptedAppointments').addClass('active');
+    @elseif(Request::is('appointment'))
+        $('#navSubitemShowAppointments').css('background-color', '#eaecf4');
+        $('#navSubitemShowAppointments').addClass('active');
+    @elseif(Request::is('appointment/all'))
+        $('#navSubitemShowAllApointments').css('background-color', '#eaecf4');
+        $('#navSubitemShowAllApointments').addClass('active');
+    @elseif(Request::is('appointment/create'))
+        $('#navSubitemCreateAppointment').css('background-color', '#eaecf4');
+        $('#navSubitemCreateAppointment').addClass('active');
+    @elseif(Request::is('appointment/calendar'))
+        $('#navSubitemAppointmentCalendar').css('background-color', '#eaecf4');
+        $('#navSubitemAppointmentCalendar').addClass('active');
     @endif
 </script>

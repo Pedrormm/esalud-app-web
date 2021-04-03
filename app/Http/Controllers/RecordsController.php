@@ -29,7 +29,11 @@ class RecordsController extends Controller
     /**
      * @tag #render_menu
      */
-    public function index(string $ord=null, string $sex_fil=null, string $age_fil=null, string $n_search=null) {
+    public function index(Request $request) {
+        $ord = $request->record_order_type;
+        $sex_fil = $request->record_sex_filter;
+        $age_fil = $request->record_age_filter;
+        $n_search = $request->record_search_filter;
 
         if (is_null($ord)){
             $ord = 'user_id';

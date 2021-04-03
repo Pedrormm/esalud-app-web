@@ -154,10 +154,10 @@ class LoginController extends Controller
         return view('dashboard.index', ['user' => $user]);
     }
 
-    public function indexDashboard() {
+    public function frontPageDashboard() {
         $authUser = Auth::user();
 
-        return view('ajax/indexDashboard', []);
+        return view('dashboard/ajaxfrontPageDashboard', []);
     }
     
     public function logout(Request $request) {
@@ -165,9 +165,13 @@ class LoginController extends Controller
         return redirect('/')->withError("Session closed");
     }
 
-    public function remember(Request $request){
+    public function isPasswordForgotten(Request $request){
         if ($request->ajax()){
-            return view('login-remember');
+            return view('login-is-password-forgotten');
+        }
+        else{
+            $this->errorNotAjax($request, "Permiso denegado");
+            // return $this->jsonResponse(1, "Permiso denegado");
         }
     }
 }

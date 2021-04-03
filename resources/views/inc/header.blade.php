@@ -131,15 +131,15 @@
         Activity Log
       </a>
       <div class="dropdown-divider"></div>
-      <!-- <a class="dropdown-item" href="{{ URL::asset('/user/logout') }}" data-toggle="modal" data-target="#logoutModal">
+      <!-- <a class="dropdown-item" href="{{ URL::asset('/logout') }}" data-toggle="modal" data-target="#logoutModal">
         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
         Logout
       </a> -->
-      <a href="{{ URL::asset('/user/logout') }}" class="dropdown-item" data-toggle="modal" data-target="#logoutModal" onclick="event.preventDefault();
+      <a href="{{ URL::asset('/logout') }}" class="dropdown-item" data-toggle="modal" data-target="#logoutModal" onclick="event.preventDefault();
        document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
           Logout    
-      <form id="logout-form" action="{{ URL::asset('/user/logout') }}"method="POST" style="display: none;">
+      <form id="logout-form" action="{{ URL::asset('/logout') }}"method="POST" style="display: none;">
           {{ csrf_field() }}
       </form>      
       </a>

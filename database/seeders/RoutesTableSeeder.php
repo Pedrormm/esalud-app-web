@@ -98,13 +98,13 @@ class RoutesTableSeeder extends Seeder
                     'updated_at'=> date("Y-m-d H:i:s")  
                 ],
                 [
-                    'name' => 'comm/messaging',
+                    'name' => 'messaging',
                     'permission_id' => 22,
                     'created_at'=> date("Y-m-d H:i:s"),
                     'updated_at'=> date("Y-m-d H:i:s")  
                 ],
                 [
-                    'name' => 'user/video-call',
+                    'name' => 'videoCall',
                     'permission_id' => 23,
                     'created_at'=> date("Y-m-d H:i:s"),
                     'updated_at'=> date("Y-m-d H:i:s")  
@@ -134,13 +134,13 @@ class RoutesTableSeeder extends Seeder
                     'updated_at'=> date("Y-m-d H:i:s")  
                 ],
                 [
-                    'name' => 'appointment/list/pending',
+                    'name' => 'appointment/listPending',
                     'permission_id' => 20,
                     'created_at'=> date("Y-m-d H:i:s"),
                     'updated_at'=> date("Y-m-d H:i:s")  
                 ],
                 [
-                    'name' => 'appointment/list/accepted',
+                    'name' => 'appointment/listAccepted',
                     'permission_id' => 19,
                     'created_at'=> date("Y-m-d H:i:s"),
                     'updated_at'=> date("Y-m-d H:i:s")  

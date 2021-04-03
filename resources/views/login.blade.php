@@ -33,7 +33,9 @@
         <div class="center">
 
             <h2>Introduzca DNI y contraseña</h2>
-            <form method="post" action="{{ url('user/login') }}">
+            {{-- <form method="post" action="{{ url('login') }}"> --}}
+            {{ Form::open(array('url' => 'login', 'method' => 'POST')) }}
+
                 @csrf
                 <input type="text" name="dni" class="ct" placeholder="DNI o email" value="{{ Cookie::get('credencialesDni') }}" />
                 <input type="password" name="password" class="ct" placeholder="password" />
@@ -41,11 +43,11 @@
                     <input name="remember" type="checkbox" class="form-check-input" id="rememberMe" {{ (Cookie::has('credencialesDni')) ? 'checked' : '' }}>
                     <label class="form-check-label" for="rememberMe">Recordar</label>
                 </div>
-
                 @if (session()->has('info'))
                     <div class="alert alert-success" id="infoSession">{{ session()->get('info') }}</div>
+                    {{ Session::forget('info') }}
                 @endif
-                <div>
+                
                 @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -67,15 +69,13 @@
                         {{ session('successful') }}
                     </div>
                 @endif
-                
-                {{-- <div id="error-container" class="alert alert-danger dNone"></div>
-                <div id="message-container" class="alert alert-success dNone"></div> --}}
-
                 <button type="submit" class="btn btn-primary btn-lg form-control form-control-lg" >Entrar</button>
-            </form>
+            {{-- </form> --}}
+            {{ Form::close() }}
+
             <div class="text-center m-1">
-                <a href="{{ URL::asset('user/remember')  }}" class="remember_password" 
-                id="usersDistRole" data-name-role="">
+                <a href="{{ url('isPasswordForgotten')  }}" class="remember_password" 
+                data-name-role="">
                 ¿Has olvidado tu contraseña?
                 </a>
             </div>
@@ -89,7 +89,15 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
-<script src="https://js.pusher.com/6.0/pusher.min.js"></script>
 <script type="text/javascript" src="{{ asset('js/login.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/application.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/index-needed.functions.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ asset('js/application.js') }}"></script> --}}
+
+{{-- <script>
+    if (isABootstrapModalOpen()){
+        $('#generic-modal').modal('hide');
+    }
+
+</script> --}}
+
 </html>

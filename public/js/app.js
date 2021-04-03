@@ -56658,7 +56658,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isInVideoCallView", function() { return isInVideoCallView; });
 // VideoUtils.js
 function isInVideoCallView() {
-  return window.location.href == PublicURL + 'user/video-call';
+  return window.location.href == PublicURL + 'videoCall';
 }
 
 /***/ }),
@@ -56848,7 +56848,7 @@ function (_Component) {
       console.log(videoChannel);
       videoChannel.bind('pusher:subscription_succeeded', function () {
         var userReceiverFullName = "";
-        $.ajax(PublicURL + 'video/getUserInfo', {
+        $.ajax(PublicURL + 'videoCall/getUserInfo', {
           dataType: "text",
           data: {
             id: userId
@@ -56858,7 +56858,7 @@ function (_Component) {
         }).done(function (res) {
           userReceiverFullName = res;
         }).fail(function (xhr, st, err) {
-          console.error("error in video/getUserInfo " + xhr, st, err);
+          console.error("error in videoCall/getUserInfo " + xhr, st, err);
         });
         videoChannel.trigger("client-video-channel-send", {
           session: session,
@@ -56872,7 +56872,7 @@ function (_Component) {
         var hiddenForm = $('<form>', {
           id: 'videoFormData',
           method: 'post',
-          action: PublicURL + 'user/video-call-container',
+          action: PublicURL + 'videoCallContainer',
           target: 'videoWindow'
         });
         hiddenForm.append($('<input>', {
@@ -56893,7 +56893,7 @@ function (_Component) {
         //     that.state.latestSession = null;
         // };
 
-        $('#videoFormData').submit(); // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
+        $('#videoFormData').submit(); // window.open(PublicURL+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
         // if (this.state.latestSession !== null ){
 
         $("#joinButton").css("display", "inline"); // }
@@ -56908,7 +56908,7 @@ function (_Component) {
       var that = this;
       videoChannel.bind('pusher:subscription_succeeded', function () {
         var userReceiverFullName = "";
-        $.ajax(PublicURL + 'video/getUserInfo', {
+        $.ajax(PublicURL + 'videoCall/getUserInfo', {
           dataType: "text",
           data: {
             id: userId
@@ -56919,7 +56919,7 @@ function (_Component) {
           userReceiverFullName = res;
           console.log("name ", userReceiverFullName);
         }).fail(function (xhr, st, err) {
-          console.error("error in video/getUserInfo " + xhr, st, err);
+          console.error("error in videoCall/getUserInfo " + xhr, st, err);
         });
         videoChannel.trigger("client-video-channel-send", {
           session: that.state.latestSession,

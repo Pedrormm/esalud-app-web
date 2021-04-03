@@ -69,7 +69,7 @@ class UsersManagementController extends Controller
             // $token = Str::random(32);
             $token = $this->generateUniqueToken("users_invitations", "verification_token");
 
-            DB::beginTransaction();
+            // DB::beginTransaction();
             $userInvitation = UserInvitation::whereDni($dni)->first();
             if(is_null($userInvitation)) {
                 $userInvitation = new UserInvitation();
@@ -85,26 +85,31 @@ class UsersManagementController extends Controller
             // TODO: if (maxTimes > 3(constante)) google Verification Bot. Captcha plugin.
 
             if ($userInvitation->times_sent == HV_MAX_TIMES_CREATE_USER_SENT){
-                dd(1);
+                // dd(1);
             }
-
+    /*        $r = UserInvitation::updateOrCreate(
+                ['dni' => $dni],
+                ['email' => $email],
+            );*/
+  //          DB::commit();
+//dd($r);
             $userInvitation->verification_token = $token;
             $userInvitation->expiration_date = date("Y-m-d", time() + 172800);
-            
             $res = $userInvitation->save();
-           
+            //dd($res);
+
             if(!$res) {
                 return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
             } 
             $subject = "Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni;
-
+DB::commit();
             $res = Mail::to($email)->send(new InvitationNewUserMail($token, $dni));
-      
-            if(!$res) {
+            // dd($res);
+            /*if(!$res) {
                 DB::rollBack();
             }
             else
-                DB::commit();
+                DB::commit();*/
             return view('user.newUser')->with('roles',$roles)->with('info','Se ha enviado un correo con las instrucciones para crear el usuario');
             
         }else{                        
@@ -123,6 +128,9 @@ class UsersManagementController extends Controller
     public function createUserFromMail(string $token){
         // $rol = Role::find($rol_id);
         $verify = UserInvitation::whereVerificationToken($token)->first();
+        // $verify = UserInvitation::where("verification_token", $token)->first();
+        // $verify = UserInvitation::all();
+        // dd($verify);
         if ($verify){
             $currentDate = Carbon::now();
             $expirationDate = Carbon::parse($verify->expiration_date);
@@ -147,13 +155,13 @@ class UsersManagementController extends Controller
                 return view('user.newUserMail')->with('showError',true)->withErrors("Token has been expired. Contact an admin to resend an email.");     
         }
         else{
-            return view('user.newUserMail')->with('showError',true)->withErrors("Internal error");        
+            return view('user.newUserMail')->with('showError',true)->withErrors("UsMaCoCrUsFrMa001: Internal error");        
         }
     }
 
     /**
      * Creates the user given in the User Table
-     * Endpoint: user/createNewUser
+     * Endpoint: user/  NewUser
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
@@ -201,7 +209,14 @@ class UsersManagementController extends Controller
         $office = $request->input('office');
         $room = $request->input('room');
         $h_phone = $request->input('h_phone');
-        
+        $verifyDni = User::whereDni($request->dni)->first();
+
+        // dd($verifyDni);
+        // Si ya existe dni
+        if ($verifyDni){ 
+            return back()->withErrors("Mismatch error UsMaCoCrNeUs002");        
+        }
+
         $verify = UserInvitation::whereVerificationToken($token)->first();
         if (!$verify){
             return back()->withErrors("Mismatch error");        
@@ -304,7 +319,7 @@ class UsersManagementController extends Controller
         $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
 
         if (Auth::user())
-            return view('user.dashboard')->with('successful', "An user the dni ".$dni." has been properly created");
+            return view('dashboard.index')->with('successful', "An user the dni ".$dni." has been properly created");
         else
             return redirect('/')->with('successful', "An user the dni ".$dni." has been properly created. Please log in.");
     }

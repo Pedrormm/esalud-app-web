@@ -16,7 +16,7 @@
         $('#numMessagesHeader').addClass("badge");
     }
 
-    if (!(window.location.href.startsWith(PublicURL+'comm/messaging')) && !(window.location.href.startsWith(PublicURL+'comm/viewMessagesFromMobile')) ){
+    if (!(window.location.href.startsWith(PublicURL+'messaging')) && !(window.location.href.startsWith(PublicURL+'messaging/viewMessagesFromMobile')) ){
         window.pusher = chatPusherInit();
         window.chatPusher = pusher[0];
         window.chatChannel = pusher[1];

@@ -5,6 +5,7 @@ namespace App\Exceptions;
 // use Exception;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Session;
 
 class Handler extends ExceptionHandler
 {
@@ -51,6 +52,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // if ($request->getStatus(419))
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            // return redirect()->route('login');
+            if($request->wantsJson()) {
+                return response()->json([]);
+            }
+
+            Session::put('info', 'Bad request');
+
+            return redirect('/');
+
+        }
         return parent::render($request, $exception);
     }
 }

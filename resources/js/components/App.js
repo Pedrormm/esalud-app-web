@@ -83,7 +83,7 @@ export default class App extends Component {
 
         videoChannel.bind('pusher:subscription_succeeded', function() {
             let userReceiverFullName ="";
-            $.ajax(PublicURL + 'video/getUserInfo', {
+            $.ajax(PublicURL + 'videoCall/getUserInfo', {
                 dataType: "text",
                 data: {id: userId},
                 method:'get',
@@ -92,7 +92,7 @@ export default class App extends Component {
                 userReceiverFullName = res;
             })
             .fail(function(xhr, st, err) {
-                console.error("error in video/getUserInfo " + xhr, st, err);
+                console.error("error in videoCall/getUserInfo " + xhr, st, err);
             });
 
             videoChannel.trigger(`client-video-channel-send`, { 
@@ -106,7 +106,7 @@ export default class App extends Component {
             console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
 
             console.log("hiddenform");
-            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
+            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'videoCallContainer', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
             hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: session}));
             $('body').append(hiddenForm);
@@ -123,7 +123,7 @@ export default class App extends Component {
 
             $('#videoFormData').submit();
     
-            // window.open(PublicURL+"user/video-call-container?userId="+userId+"&sessionName="+session,"blank");    
+            // window.open(PublicURL+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
             // if (this.state.latestSession !== null ){
                 $("#joinButton").css("display", "inline");
             // }
@@ -140,7 +140,7 @@ export default class App extends Component {
 
         videoChannel.bind('pusher:subscription_succeeded', function() {
             let userReceiverFullName ="";
-            $.ajax(PublicURL + 'video/getUserInfo', {
+            $.ajax(PublicURL + 'videoCall/getUserInfo', {
                 dataType: "text",
                 data: {id: userId},
                 method:'get',
@@ -150,7 +150,7 @@ export default class App extends Component {
                 console.log("name ",userReceiverFullName);
             })
             .fail(function(xhr, st, err) {
-                console.error("error in video/getUserInfo " + xhr, st, err);
+                console.error("error in videoCall/getUserInfo " + xhr, st, err);
             });
 
             videoChannel.trigger(`client-video-channel-send`, { 

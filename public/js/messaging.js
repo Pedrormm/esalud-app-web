@@ -9,14 +9,14 @@ chatChannel.bind(`client-send`, (data) => {
         let written = saveNewMessage(data,false,data.idSender);
         updateUnread(data.idSender, false, written);
         if (written){
-            $.ajax(PublicURL + 'comm/updateReadMessages', {
+            $.ajax(PublicURL + 'messaging/updateReadMessages', {
                 dataType: 'json',
                 data: {id: data.idSender},
                 method:'get',
             }).done(function(res){
             })
             .fail(function(xhr, st, err) {
-                console.error("error in comm/updateReadMessages " + xhr, st, err);
+                console.error("error in messaging/updateReadMessages " + xhr, st, err);
             }); 
         }
         else{
@@ -75,15 +75,15 @@ if (width < 768) {
         if (selectedContactNotReadMessages)
             updateHeaderMessages(false, parseInt(selectedContactNotReadMessages.innerText.trim()));
         updateUnread(selectedId, true);
-        $.ajax(PublicURL + 'comm/updateReadMessages', {
+        $.ajax(PublicURL + 'messaging/updateReadMessages', {
             dataType: 'json',
             data: {id: selectedId},
             method:'get',
         }).done(function(res){
-            location.assign(PublicURL+"comm/viewMessagesFromMobile"+"/"+selectedId);
+            location.assign(PublicURL+"messaging/viewMessagesFromMobile"+"/"+selectedId);
         })
         .fail(function(xhr, st, err) {
-            console.error("error in comm/updateReadMessages " + xhr, st, err);
+            console.error("error in messaging/updateReadMessages " + xhr, st, err);
         }); 
     });
 } 
@@ -130,7 +130,7 @@ else {
             updateHeaderMessages(false, contactId, null, parseInt(selectedContactNotReadMessages[0].innerText.trim()));
         updateUnread(contactId, true);
 
-        $.ajax(PublicURL + 'comm/getContactInfo', {
+        $.ajax(PublicURL + 'messaging/getContactInfo', {
             dataType: 'json',
             data: {id: contactId},
             method:'get',
@@ -192,7 +192,7 @@ else {
                     e.preventDefault();
                     let id = $(this).data("delete-message-id");
                     let that = $(this);
-                    $.ajax(PublicURL + 'comm/deleteMessageChat', {
+                    $.ajax(PublicURL + 'messaging/deleteMessageChat', {
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }, 
@@ -207,7 +207,7 @@ else {
                     })
                     .fail(function(xhr, st, err) {
                         // this.url
-                        console.error("error in comm/deleteMessageChat " + xhr, st, err);
+                        console.error("error in messaging/deleteMessageChat " + xhr, st, err);
                     }); 
                 }
                 );
@@ -237,7 +237,7 @@ else {
             
         })
         .fail(function(xhr, st, err) {
-            console.error("error in comm/getContactInfo " + xhr, st, err);
+            console.error("error in messaging/getContactInfo " + xhr, st, err);
         }); 
     }
 

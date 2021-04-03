@@ -4,10 +4,10 @@ $('.remember_password').on('click', function(e){
     showModal('Contraseña olvidada ', '', false, $(this).attr('href'), 'modal-xl', true, true, false, null, function() {
 
         // $('#rememberForgotten').submit();
-        // $.post( PublicURL +"user/loginForgotten", $( "#rememberForgotten" ).serialize() );
+        // $.post( PublicURL +"loginForgotten", $( "#rememberForgotten" ).serialize() );
+        
 
-
-        $.post( PublicURL +"user/loginForgotten", $( "#rememberForgotten" ).serialize() , function(res) {
+        $.post( PublicURL +"loginForgotten", $( "#rememberForgotten" ).serialize() , function(res) {
                 // console.log( "success",res );
                 // $("#infoSession").text(res.message);
                 if (res.status == 0){

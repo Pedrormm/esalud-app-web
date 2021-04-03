@@ -7,9 +7,21 @@ use Twilio\Rest\Client;
 
 class SmsController extends Controller
 {
-    public function sendsms()
+    public function sendsms(Request $request)
     {
-        return view('communication/sendsms');
+        switch ($request->method()) {
+            case 'POST':
+                return ($this->postSendSms($request));
+                break;
+    
+            case 'GET':
+                return view('communication/sendsms');
+                break;
+    
+            default:
+                // invalid request
+                break;
+        }
     }
 
     public function postSendSms(Request $request)

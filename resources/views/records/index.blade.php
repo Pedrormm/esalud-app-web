@@ -12,41 +12,48 @@
 	<div class="container-fluid">
 		<div class="tabs">
 			<div class="tab" name="Historiales Médicos">
-				<div class="row">
-					<div class="form-group col-xs-12 col-sm-2 col-md-2 col-lg-2">
-						<select class="custom-select sel_ord filter_height" id="record_order_type">
-							<option value="users.id">Ordenado por:</option>
-							<option value="lastname">Alfbabéticamente por apellidos</option>
-							<option value="name">Alfbabéticamente por Nombre</option>
-							<option value="historic">De menor a mayor por NªHistorial</option>
-							<option value="dni">De menor a mayor por DNI</option>
-						</select>
-					</div>
-					<div class="form-group col-xs-6 col-sm-2 col-md-2 col-lg-2">
-						<select class="custom-select sel_sex filter_height" id="record_sex_filter">
-							<option value="no">Hombres y Mujeres</option>
-							<option value="male">Hombres</option>
-							<option value="female">Mujeres</option>
-						</select>
-					</div>
-					<div class="form-group col-xs-6 col-sm-2 col-md-2 col-lg-2">
-						<select class="custom-select sel_old filter_height" id="record_age_filter">
-							<option value="no">Cualquier edad</option>
-							<option value="0-18">- 18 años</option>
-							<option value="18-24">18 a 24 años</option>
-							<option value="24-40">24 a 40 años</option>
-							<option value="40-65">40 a 65 años</option>
-							<option value="65-140">+ 65 años</option>
-						</select>
-					</div>
-					<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-						<input type="text" placeholder="Nombre, apellidos, historial o dni" class="inp_search filter_height" id="record_search_filter">
-					</div>
-					<div class="col-lg-2">
-					<button type="button" id="hmsearch" class="col-xs-12 btn btn-primary bt-search
-					 filter_height btn-block"><i class="fa fa-search"></i> Buscar</a>
-					</div>
+				<div class="">
+
+					{{ Form::open(array('url' => 'records', 'method' => 'POST','id' => 'recordsSearchForm',
+					'class' => 'd-flex flex-row justify-content-center')) }}
+						@csrf
+						<div class="form-group col-xs-12 col-sm-2 col-md-2 col-lg-2 d-inline-block">
+							<select class="custom-select sel_ord filter_height" name="record_order_type" id="record_order_type">
+								<option value="users.id">Ordenado por:</option>
+								<option value="lastname">Alfbabéticamente por apellidos</option>
+								<option value="name">Alfbabéticamente por Nombre</option>
+								<option value="historic">De menor a mayor por NªHistorial</option>
+								<option value="dni">De menor a mayor por DNI</option>
+							</select>
+						</div>
+						<div class="form-group col-xs-6 col-sm-2 col-md-2 col-lg-2 d-inline-block">
+							<select class="custom-select sel_sex filter_height" name="record_sex_filter" id="record_sex_filter">
+								<option value="no">Hombres y Mujeres</option>
+								<option value="male">Hombres</option>
+								<option value="female">Mujeres</option>
+							</select>
+						</div>
+						<div class="form-group col-xs-6 col-sm-2 col-md-2 col-lg-2 d-inline-block">
+							<select class="custom-select sel_old filter_height" name="record_age_filter" id="record_age_filter">
+								<option value="no">Cualquier edad</option>
+								<option value="0-18">- 18 años</option>
+								<option value="18-24">18 a 24 años</option>
+								<option value="24-40">24 a 40 años</option>
+								<option value="40-65">40 a 65 años</option>
+								<option value="65-140">+ 65 años</option>
+							</select>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 d-inline-block">
+							<input type="text" placeholder="Nombre, apellidos, historial o dni" class="inp_search filter_height" 
+							name="record_search_filter" id="record_search_filter">
+						</div>
+						<div class="col-lg-2 d-inline-block">
+							<button type="submit" id="hmsearch" class="col-xs-12 btn btn-primary bt-search
+							filter_height btn-block"><i class="fa fa-search"></i> Buscar</a>
+						</div>
 					
+					{{ Form::close() }}
+
 				</div>
 
 				
@@ -147,20 +154,21 @@
         }
     });
 
-    $('#hmsearch').click(function(e) {        
-        let ord = $('#record_order_type').val();
-        let sexFilter = $('#record_sex_filter').val();
-        let ageFilter = $('#record_age_filter').val();
-        let nameSearch = $('#record_search_filter').val();
+    $('#hmsearch').click(function(e) { 
+		console.log("sdcsdssdss");    
+        // let ord = $('#record_order_type').val();
+        // let sexFilter = $('#record_sex_filter').val();
+        // let ageFilter = $('#record_age_filter').val();
+        // let nameSearch = $('#record_search_filter').val();
 
-        sessionStorage.setItem('order', ord);
-        sessionStorage.setItem('sex', sexFilter);
-        sessionStorage.setItem('age', ageFilter);
-        sessionStorage.setItem('search', nameSearch);
+        // sessionStorage.setItem('order', ord);
+        // sessionStorage.setItem('sex', sexFilter);
+        // sessionStorage.setItem('age', ageFilter);
+        // sessionStorage.setItem('search', nameSearch);
 
 
-        location.href = "{{url('user/records')}}" + "/" + ord + "/" + sexFilter + "/" 
-        + ageFilter + "/" + nameSearch;
+        // location.href = "{{url('records')}}" + "/" + ord + "/" + sexFilter + "/" 
+        // + ageFilter + "/" + nameSearch;
     });
 
     // if (screen.width <= 1024){

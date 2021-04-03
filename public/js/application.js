@@ -45,7 +45,7 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
     if (data.userReceiverId == authUser.id){
 
             showModalConfirm("Llamada entrante de "+data.userReceiverFullName,"¿Desea aceptar la llamada?",()=>{
-            var hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'user/video-call-container', target: 'videoWindow'});
+            var hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'videoCallContainer', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
             hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: data.session}));
             $('body').append(hiddenForm);
@@ -514,7 +514,7 @@ function isABootstrapModalOpen() {
 }
 
 function isInVideoCallView() {
-    return window.location.href != (URL+'user/video-call');
+    return window.location.href != (URL+'videoCall');
 }
 
 function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channel=null ) {
@@ -522,7 +522,7 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
     if (msj && (msj != "")){
         
 
-        $.ajax(PublicURL + 'comm/send', {
+        $.ajax(PublicURL + 'messaging/send', {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },  
@@ -546,7 +546,7 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
             saveNewMessage(res, true);
         })
         .fail(function(xhr, st, err) {
-            console.error("error in comm/send " + xhr, st, err);
+            console.error("error in messaging/send " + xhr, st, err);
         }); 
 
         writtenMessage.val('');     
@@ -692,14 +692,14 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
             console.log("No se encuentra en el header");
 
             // Ajax call to get the userName and avatar from id
-            $.ajax(PublicURL + 'comm/getUserFromId', {
+            $.ajax(PublicURL + 'messaging/getUserFromId', {
                 dataType: 'json',
                 data: {id: contactToWriteId},
                 method:'get',
             }).done(function(res){
                 console.log("respuesta",res);
                 let whatToInsert =
-                ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${PublicURL}comm/messaging' >`+
+                ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${PublicURL}messaging' >`+
                  "<div class='dropdown-list-image mr-3'>"+
                     `<img class='rounded-circle' src='${(res.avatar) ? PublicURL+"images/avatars/"+res.avatar : ((res.sex == "male") ? PublicURL+"images/avatars/user_man.png": (res.sex == "female")? PublicURL+"images/avatars/user_woman.png":null) }' alt='Foto de perfil'>`+  
                          "<div class='status-indicator bg-success'></div>"+
@@ -718,7 +718,7 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
 
             })
             .fail(function(xhr, st, err) {
-                console.error("error in comm/getUserNameFromId " + xhr, st, err);
+                console.error("error in messaging/getUserFromId " + xhr, st, err);
             }); 
 
         }

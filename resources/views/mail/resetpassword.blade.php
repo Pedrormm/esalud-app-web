@@ -78,7 +78,7 @@
         @endif
         <div class="box access_login">
             <h3>Reseteo de contraseña</h3>
-            <form method="post" action="{{URL::asset('/passwordchanged')}}">
+            <form method="post" action="{{URL::asset('/passwordChanged')}}">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
                 <label>Introduzca la nueva contraseña:

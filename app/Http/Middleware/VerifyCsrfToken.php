@@ -20,7 +20,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        'user/video-call',
-        'user/video-call-container'
+        'videoCall',
+        'videoCallContainer'
     ];
 }

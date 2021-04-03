@@ -1,6 +1,6 @@
 
 <div class="box request_password">
-    <form id="rememberForgotten""method="post" action="{{ url('user/loginForgotten') }}">
+    <form id="rememberForgotten""method="post" action="{{ url('loginForgotten') }}">
         {{ csrf_field() }}
 
         <label>Si has olvidado tu contraseña introduce tu DNI o email para solicitar una nueva</label> 

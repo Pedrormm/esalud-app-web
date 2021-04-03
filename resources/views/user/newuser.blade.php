@@ -14,7 +14,7 @@
       </div>
 
       <div class="card-body" id="mainCardBody">
-        <form action="/user/create" method="POST">        
+        <form action="{{ url("user/create") }}" method="POST">        
           <div class="row">
               @csrf
               <div class="col-lg-4">

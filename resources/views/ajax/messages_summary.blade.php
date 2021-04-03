@@ -4,8 +4,8 @@
       </h6>
 
       @foreach (array_slice($userMessages, 0, 4) as $userMessage)
-        {{-- <a class="dropdown-item d-flex align-items-center" href="{{ URL::asset('/comm/messaging').'/'. $userMessage['users_id'] }}"> --}}
-        <a class="dropdown-item d-flex align-items-center" data-contact-id="{{ $userMessage['users_id'] }}" href="{{ URL::asset('/comm/messaging') }}">
+        {{-- <a class="dropdown-item d-flex align-items-center" href="{{ URL::asset('/messaging').'/'. $userMessage['users_id'] }}"> --}}
+        <a class="dropdown-item d-flex align-items-center" data-contact-id="{{ $userMessage['users_id'] }}" href="{{ URL::asset('/messaging') }}">
 
           {{-- Opcionalmente pasarle el id de un mensaje, para que entre en ese usuario directamente --}}
           <div class="dropdown-list-image mr-3">
@@ -32,7 +32,7 @@
         </a>
       @endforeach
       
-      <a class="dropdown-item text-center small text-gray-500" href="{{ URL::asset('/comm/messaging') }}">Read More Messages</a>
+      <a class="dropdown-item text-center small text-gray-500" href="{{ URL::asset('/messaging') }}">Read More Messages</a>
 
       <script>
 

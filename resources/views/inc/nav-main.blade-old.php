@@ -74,7 +74,7 @@
             </a>
         </li>
         <li>
-            <a name="logout" href="{{ URL::asset('/user/logout') }}">
+            <a name="logout" href="{{ URL::asset('/logout') }}">
                 <span class="fa-stack fa-2x menu_icon">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-power-off fa-stack-1x fa-inverse"></i>

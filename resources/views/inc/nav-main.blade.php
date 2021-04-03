@@ -4,7 +4,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" >
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center logoContainer" href="{{ URL::asset('/dashboard') }}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center logoContainer" href="{{ url('/dashboard') }}">
             <div class="sidebar-brand-icon rotate-n-15">
                 <div class="d-flex justify-content-center logo-nav">
                     <img src="{{ url('/images/logo.png') }}" alt="Logo">
@@ -12,7 +12,7 @@
             </div>
         </a>
 
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ URL::asset('/dashboard') }}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/dashboard') }}">
             <div class="sidebar-brand-text nav-tittle">{{ HV_APP_TITLE_NAME }}</div>
         </a>
 
@@ -22,7 +22,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item{{ (Request::is('dashboard'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/dashboard') }}">
+            <a class="nav-link" href="{{ url('/dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
         </li>
@@ -59,16 +59,16 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">User administration:</h6>
                 @if(isset($flagsMenuEnabled['USER_MANAGEMENT_CREATE']) && $flagsMenuEnabled['USER_MANAGEMENT_CREATE'])
-                    <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ URL::asset('/user/newUser') }}">Create new user</a>
+                    <a id="navSubitemCreateNewUser" class="collapse-item" href="{{ url('/user/newUser') }}">Create new user</a>
                 @endif
                 @if(isset($flagsMenuEnabled['ALL_USERS_SHOW']) && $flagsMenuEnabled['ALL_USERS_SHOW'])
-                    <a id="navSubitemShowUsers" class="collapse-item" href="{{ URL::asset('/users') }}">Show all users</a>
+                    <a id="navSubitemShowUsers" class="collapse-item" href="{{ url('/users') }}">Show all users</a>
                 @endif   
                 @if(isset($flagsMenuEnabled['PATIENT_USER_SHOW']) && $flagsMenuEnabled['PATIENT_USER_SHOW']) 
-                    <a id="navSubitemPatientManagement" class="collapse-item" href="{{ URL::asset('/patients') }}">Patient management</a>
+                    <a id="navSubitemPatientManagement" class="collapse-item" href="{{ url('/patients') }}">Patient management</a>
                 @endif    
                 @if(isset($flagsMenuEnabled['STAFF_USER_SHOW']) && $flagsMenuEnabled['STAFF_USER_SHOW'])
-                    <a id="navSubitemStaffManagement" class="collapse-item" href="{{ URL::asset('/staff') }}">Staff management</a>
+                    <a id="navSubitemStaffManagement" class="collapse-item" href="{{ url('/staff') }}">Staff management</a>
                 @endif
 
             </div>
@@ -80,7 +80,7 @@
 
         <!-- Nav Item - Medical record -->
         <li class="nav-item{{ (Request::is('records'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/records') }}">
+            <a class="nav-link" href="{{ url('records') }}"/>
             <i class="fas fa-fw fa-table"></i>
             <span>Medical record</span></a>
         </li>
@@ -89,8 +89,8 @@
         @if(isset($flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW']) && $flagsMenuEnabled['OWN_MEDICAL_RECORD_SHOW'])
 
         <!-- Nav Item - Medical record -->
-        <li class="nav-item{{ (Request::is('/ownRecord/'))? " active":'' }}">
-            <a class="nav-link" href="{{ URL::asset('/ownRecord/') }}"/> 
+        <li class="nav-item{{ (Request::is('ownRecord'))? " active":'' }}">
+            <a class="nav-link" href="{{ url('ownRecord') }}"/> 
             <i class="fas fa-fw fa-table"></i>
             <span>My Medical record</span></a>
         </li>
@@ -113,20 +113,20 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCommunication" aria-expanded="true" 
             aria-controls="collapseCommunication">
             <i class="fa fa-users"></i>
-            <span>Messaging</span>
+            <span>Communication</span>
             </a>
             <div id="collapseCommunication" class="collapse" aria-labelledby="headingCommunication" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Messages:</h6>
                 @if(isset($flagsMenuEnabled['MESSAGING_CHAT_SHOW']) && $flagsMenuEnabled['MESSAGING_CHAT_SHOW'])
-                    <a id="navSubitemMessaging" class="collapse-item" href="{{ URL::asset('/comm/messaging') }}">Messaging</a>
+                    <a id="navSubitemMessaging" class="collapse-item" href="{{ url('/messaging') }}">Messaging</a>
                 @endif
-                <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/user/my-messages') }}">My messages</a>
+                <a id="navSubitemMyMessages" class="collapse-item" href="{{ url('/messaging/myMessages') }}">My messages</a>
                 @if(isset($flagsMenuEnabled['GROUP_CHAT_SHOW']) && $flagsMenuEnabled['GROUP_CHAT_SHOW'])
-                    <a id="navSubitemChat" class="collapse-item" href="{{ URL::asset('/openvidu/token') }}">Chat</a>
+                    <a id="navSubitemChat" class="collapse-item" href="{{ url('/openvidu/token') }}">Chat</a>
                 @endif
                 @if(isset($flagsMenuEnabled['VIDEO_CALL_SHOW']) && $flagsMenuEnabled['VIDEO_CALL_SHOW'])
-                    <a id="navSubitemVideocall" class="collapse-item" href="{{ URL::asset('/user/video-call') }}">Video call</a>
+                    <a id="navSubitemVideocall" class="collapse-item" href="{{ url('/videoCall') }}">Video call</a>
                 @endif
             </div>
             </div>
@@ -145,6 +145,11 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
+        <!-- Appointments Heading -->
+        <div class="sidebar-heading">
+            Appointments
+        </div>
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAppoinment" aria-expanded="true" 
             aria-controls="collapseAppoinment">
@@ -156,26 +161,26 @@
                     <h6 class="collapse-header">Custom Messages:</h6>
                         {{-- @if(auth()->user()->role_id == \HV_ROLES::PATIENT) --}}
                         @if(isset($flagsMenuEnabled['PENDING_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['PENDING_APPOINTMENTS_SHOW'])
-                            <a id="navSubitemMessaging" class="collapse-item d-none-doctor d-none-admin" href="{{ URL::asset('/appointment/list/pending') }}">Ver Citas pendientes</a>
+                            <a id="navSubitemPendingAppointments" class="collapse-item d-none-doctor d-none-admin" href="{{ url('appointment/listPending') }}">Ver Citas pendientes</a>
                         @endif
                         @if(isset($flagsMenuEnabled['ACCEPTED_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ACCEPTED_APPOINTMENTS_SHOW'])    
-                            <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment/list/accepted') }}">Ver Citas aceptadas</a>
+                            <a id="navSubitemAcceptedAppointments" class="collapse-item d-none-patient" href="{{ url('appointment/listAccepted') }}">Ver Citas aceptadas</a>
                         @endif
                         {{-- @elseif(in_array(auth()->user()->role_id, [\HV_ROLES::DOCTOR, \HV_ROLES::ADMIN])) --}}
                         @if(isset($flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW'])
-                            <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment') }}">Ver Citas</a>
+                            <a id="navSubitemShowAppointments" class="collapse-item d-none-patient" href="{{ url('appointment') }}">Ver Citas</a>
                         @endif
                         @if(isset($flagsMenuEnabled['ALL_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_APPOINTMENTS_SHOW'])
-                            <a id="navSubitemMessaging" class="collapse-item d-none-patient" href="{{ URL::asset('/appointment') }}">Ver todas las Citas</a>
+                            <a id="navSubitemShowAllApointments" class="collapse-item d-none-patient" href="{{ url('appointment/all') }}">Ver todas las Citas</a>
                         @endif
                             {{-- @endif --}}
                         @if((isset($flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) && $flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) ||
                          (isset($flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) ||
                          (isset($flagsMenuEnabled['APPOINTMENT_WITH_PATIENT_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_PATIENT_CREATE']))
-                            <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/create') }}">Crear</a>
+                            <a id="navSubitemCreateAppointment" class="collapse-item" href="{{ url('appointment/create') }}">Crear</a>
                         @endif
                         @if(isset($flagsMenuEnabled['CALENDAR_SHOW']) && $flagsMenuEnabled['CALENDAR_SHOW'])
-                            <a id="navSubitemMyMessages" class="collapse-item" href="{{ URL::asset('/appointment/calendar') }}">Calendario</a>
+                            <a id="navSubitemAppointmentCalendar" class="collapse-item" href="{{ url('appointment/calendar') }}">Calendario</a>
                         @endif  
                 </div>
             </div>
@@ -194,9 +199,8 @@
             </div>
 
             <!-- Nav Item - Role management -->
-            <li class="nav-item">
-                {{-- <a class="nav-link" href="{{ URL::asset('/user/roleManagement') }}" --}}
-                <a class="nav-link" href="{{ URL::asset('/roles') }}"
+            <li class="nav-item{{ (Request::is('roles'))? " active":'' }}">
+                <a class="nav-link" href="{{ url('roles') }}"
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Role management</span></a>
             </li>

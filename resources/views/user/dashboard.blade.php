@@ -49,13 +49,13 @@
  
 
             // $('#home-tab').click(function(e){
-            //     // asyncCall('user/messages', '#main-container', true);
+            //     // asyncCall('messaging/getMessages', '#main-container', true);
             //     asyncCall(PublicURL+'user/index', '#main-container', true);
 
             // });
 
             // $('#news-tab').click(function(e){
-            //     asyncCall('user/news', '#main-container', true);
+            //     asyncCall('dashboard/news', '#main-container', true);
             // });
 
 

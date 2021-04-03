@@ -22,13 +22,13 @@
 
     $('.cHeader button').on('click', function(e){
         e.preventDefault();
-        window.location.href = PublicURL+"comm/messaging";
+        window.location.href = PublicURL+"messaging";
     });
 
     $('.cMessagesFeed').bind('DOMSubtreeModified', function(e) {
         if (e.target.innerHTML.length > 0) {
             scrollToBottom(".cMessagesFeed");
-            $.ajax(PublicURL + 'comm/updateReadMessages', {
+            $.ajax(PublicURL + 'messaging/updateReadMessages', {
                 dataType: 'json',
                 data: {id: $(".conversationMobile").attr("data-selectedUserId")},
                 method:'get',
@@ -36,7 +36,7 @@
                
             })
             .fail(function(xhr, st, err) {
-                console.error("error in comm/updateReadMessages " + xhr, st, err);
+                console.error("error in messaging/updateReadMessages " + xhr, st, err);
             }); 
         }
         

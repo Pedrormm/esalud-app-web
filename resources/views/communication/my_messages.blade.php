@@ -24,7 +24,7 @@
                         <div class="card shadow mb-4" id="mainCardShadow">
 
                             <div class="msj-whole-card {{ ($userMessage['read']==0 )? " new-message":'' }} div-link" 
-                            data-link="{{ URL::asset('/user/my-messages').'/'. $userMessage['id'] }}">
+                            data-link="{{ URL::asset('/messaging/myMessages').'/'. $userMessage['id'] }}">
                                 <!-- Card Header -->
                                 <div class="msj-card">
                                     <div class="msj-image">

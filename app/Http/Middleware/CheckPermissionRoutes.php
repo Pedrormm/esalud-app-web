@@ -37,23 +37,6 @@ class CheckPermissionRoutes
      */
     public function handle(Request $request, Closure $next)
     {
-        // $permissionRoutes = [
-        //     'ownRecord2' => [
-        //         'USER_MANAGEMENT_CREATE__',
-        //         'OWN_MEDICAL_RECORD_SHOW_',
-        //     ],
-        //     'ownRecord' => [
-        //         'USER_MANAGEMENT_EDIT___',
-        //         'OWN_MEDICAL_RECORD_SHOW_',
-        //     ],
-        //     'users/{number}/edit' => [
-        //         'ALL_USERS_SHOW_',
-        //     ],
-            
-        // ];
-
-        // dd($permissionRoutes);
-
         $permissionRoutesBD = Route::with('permission')->get()->toArray();
 
         $permissionsRoutesAux = [];
@@ -91,10 +74,7 @@ class CheckPermissionRoutes
             return redirect('/');
         }
         // dd("2");
-
-
-
-        
+   
         return $next($request);
     }
 }

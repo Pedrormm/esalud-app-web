@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Carbon\Carbon;
+use Session;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,14 +26,27 @@ class Controller extends BaseController
     public function getPerms() {
         return $this->perms;
     }
+
     protected function jsonResponse(string $status, string $message) {
         return response()->json(['status' => $status, 'message' => $message]);
     }
+
+    protected function errorNotAjax(Request $request, string $message) {
+        if($request->wantsJson()) {
+            dd($request);
+            // return response()->json([]);
+            return $this->jsonResponse(1, $message);
+        }
+        Session::put('info', $message);
+        return redirect('/');
+    }
+
     protected function backWithErrors($errors) {
         if(is_string($errors))
             $errors = [$errors];
         return redirect()->back()->withErrors($errors);
     }
+
     protected function checkValidation(array $rules){
         return request()->validate($rules);     
     }
@@ -87,21 +101,39 @@ class Controller extends BaseController
     }
 
     /**
- * Convert a given mysql default datetime into spanish representation with format d/m/Y H:i:m
- *
- * @param string|null $mysqlDt The input datetime that must complain format Y/m/d h:m:s
- * @return string
- */
-function mysqlDt2Spanish($mysqlDt) {
-    
-    try {
-        $dtSpanish = Carbon::parse($mysqlDt)->format('d/m/Y');
+     * Convert a given mysql default date into spanish representation with format d/m/Y
+     *
+     * @param string|null $mysqlDt The input datetime that must complain format Y/m/d
+     * @return string
+     */
+    function mysqlDate2Spanish($mysqlDt) {
+        
+        try {
+            $dtSpanish = Carbon::parse($mysqlDt)->format('d/m/Y');
+        }
+        catch(InvalidFormatException $ex) {
+            $dtSpanish = "1/1/1990";
+        }
+        return $dtSpanish;
     }
-    catch(InvalidFormatException $ex) {
-        $dtSpanish = "1/1/1990 0:0:0";
-    }
-    return $dtSpanish;
-}
 
-    
-}
+
+    /**
+     * Convert a given mysql default datetime into spanish representation with format d/m/Y H:i
+     *
+     * @param string|null $mysqlDt The input datetime that must complain format Y/m/d h:m
+     * @return string
+     */
+    function mysqlDateTime2Spanish($mysqlDt) {
+        
+        try {
+            $dtSpanish = Carbon::parse($mysqlDt)->format('d/m/Y H:i');
+        }
+        catch(InvalidFormatException $ex) {
+            $dtSpanish = "1/1/1990 0:0";
+        }
+        return $dtSpanish;
+    }
+
+        
+    }

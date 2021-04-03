@@ -149,13 +149,13 @@ class MessageController extends Controller
                     }
                 }
                 else{
-                    jsonResponse("1","The message cannot be deleted");
+                    return $this->jsonResponse(1, "The message cannot be deleted");
                 }
             }
         }
         else{
             // Error
-            jsonResponse("1","The message cannot be deleted");
+            return $this->jsonResponse(1, "Not enough permissions");
         }
     }
 
@@ -205,9 +205,8 @@ class MessageController extends Controller
     }
 
 
-    public function showMessaging($id=null){
+    public function showMessaging(){
         // Adding a lastMessageDate field to contact collection
-
         $contacts = DB::table("users_with_messages_view")
         ->select(\DB::raw('id, dni, sex, name, lastname, email, phone, avatar, MAX(`message_date`) as message_date'))
         ->where('id', '!=', auth()->id())
@@ -245,7 +244,7 @@ class MessageController extends Controller
         // dd($contacts->toArray());        
 
 
-        return view('communication/messaging', ['contacts' => $contacts]);
+        return view('communication.messaging', ['contacts' => $contacts]);
     }
 
     public function getContactInfo(Request $request){

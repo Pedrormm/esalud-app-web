@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Appointment;
 use App\Models\User;
+use App\Models\Patient;
+use App\Models\Staff;
 use Mail;
 use App\Mail\CreateAppointmentMail;
 
@@ -62,12 +64,20 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        
         $user_id_patient = $request->input('user_id_patient');
         $user_id_doctor = $request->input('user_id_doctor');
         $dt_appointment = $request->input('dt_appointment');
-       
 
+        $userPatient = User::find($user_id_patient);
+        $userPatient = $userPatient->name . " " . $userPatient->lastname;
+        $userDoctor = User::find($user_id_doctor);
+        $userDoctor = $userDoctor->name . " " . $userDoctor->lastname;
+        $spanishDate = $this->mysqlDateTime2Spanish($dt_appointment);
+
+        if (Appointment::where('dt_appointment', $dt_appointment)->where('user_id_patient', $user_id_patient)
+        ->where('user_id_doctor', $user_id_doctor)->exists()) {
+            return $this->backWithErrors("Ya existe una cita médica igual" );
+        }
         $appointment = new Appointment();
         $appointment->user_id_patient = $user_id_patient;
         $appointment->user_id_doctor = $user_id_doctor;
@@ -83,7 +93,10 @@ class AppointmentController extends Controller
 
         $this->sendMailNewAppointment($appointments);
 
-        return $this->index();
+        // return $this->index();
+        // return back()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente");
+        return $this->create()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente");
+
     }
 
     /**
@@ -182,6 +195,12 @@ class AppointmentController extends Controller
         }else if($rol_user == 1){
             $appointments = Appointment::where('user_id_patient',"=",$usuario_login->id)->with('userPatient')->with('userDoctor')->get();
         }
+        
+        foreach($appointments as $ap) {
+            $ap["fullNameCreator"] = User::find($ap->user_id_creator)->name . " " . User::find($ap->user_id_creator)->lastname;
+            $ap["fullNamePatient"] = User::find($ap->user_id_patient)->name . " " . User::find($ap->user_id_patient)->lastname;
+            $ap["fullNameDoctor"] = User::find($ap->user_id_doctor)->name . " " . User::find($ap->user_id_doctor)->lastname;
+        }
 
         return view('appointments.calendar')->with('appointments',$appointments)->with('rol_user',$rol_user);
     }
@@ -214,16 +233,11 @@ class AppointmentController extends Controller
 
     public function sendMailNewAppointment($appointment){
 
-        // $appointment->user_patient->email = "pedroramonmm@gmail.com";
-        // $appointment->user_doctor->email = "pedroramonmm@gmail.com";
-        // dd($appointment->toArray());
-        // dd($appointment);
+        $patientEmail = $appointment->userPatient->email;
+        $doctortEmail = $appointment->userDoctor->email;
 
-        // $patientEmail = $appointment['user_patient']['email'];
-        // $doctortEmail = $appointment['user_doctor'];
-
-        $patientEmail = "pedroramonmm@gmail.com";  
-        $doctortEmail = "pedroramonmm@gmail.com";  
+        // $patientEmail = "pedroramonmm@gmail.com";  
+        // $doctortEmail = "pedroramonmm@gmail.com";  
 
         $appointment = $appointment->toArray();
         if ($appointment['user_patient']['id']){

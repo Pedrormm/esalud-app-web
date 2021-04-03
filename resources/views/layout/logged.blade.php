@@ -50,7 +50,7 @@
   <source src="{{ asset('sounds/chat.mp3') }}" />
 </audio>
 
-@if(\Route::current()->uri != 'user/video-call') 
+@if(\Route::current()->uri != 'videoCall') 
   @if (auth()->user()) 
   <script>
     window.user = {

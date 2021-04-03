@@ -613,7 +613,7 @@ class UserController extends Controller
         foreach($data as $row) {
            $originalBD = $row->birthdate;
            $row->fullName = $row->lastname . ", " . $row->name;
-           $row->birthdate = self::mysqlDt2Spanish($originalBD);
+           $row->birthdate = self::mysqlDate2Spanish($originalBD);
 
         //    $row->buttonDelete = true;
         //     $row->buttonUpdate = false;
