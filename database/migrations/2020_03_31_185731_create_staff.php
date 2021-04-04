@@ -24,6 +24,7 @@ class CreateStaff extends Migration
             $table->string('office', 100)->nullable();
             $table->string('room', 100)->nullable();
             $table->string('h_phone', 100)->nullable();
+            $table->boolean('available')->default('true');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -13,7 +13,7 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Listado de pacientes</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">Listado de usuarios</h4>
             </div>
 
             <input id="isallUsersDelete" type="hidden" 

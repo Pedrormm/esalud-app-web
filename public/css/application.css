@@ -1230,3 +1230,54 @@ caption {
 }
  */
 
+ /* Schedule */
+
+ .hv-schedule{
+  display: flex;
+  flex-wrap: wrap;
+}
+.hv-schedule .hv-header {
+  
+  display: flex;
+  width: 100%;
+}
+.hv-schedule .hv-header div{
+  background-color: #CCC;
+  width: 12.5%;
+  border-left: 1px solid #CCC;
+  padding: 5px;
+  text-align: center;
+}
+.hv-schedule .hv-header div:last-child{
+  border-right:1px solid #CCC;
+}
+.hv-schedule .hv-hours {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 70vh;
+  overflow-y:scroll;
+}
+.hv-schedule .hv-hours .hv-row {
+  display:flex;
+  width: 100%;
+}
+.hv-schedule .hv-hours .hv-row div{
+  background-color: #FCFCFC;
+  width: 12.5%;
+  border-left: 1px solid #CCC;
+  border-bottom:1px solid #CCC;
+  padding: 5px;
+}
+.hv-schedule .hv-hours .hv-row div:last-child{
+  border-right: 1px solid #CCC;
+}
+.hv-time-caption{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.hv-time-selection-active{
+  background-color: #81c4f9 !important;
+}

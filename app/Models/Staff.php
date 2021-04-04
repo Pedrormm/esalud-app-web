@@ -87,6 +87,14 @@ class Staff extends Model
         return $this->hasMany(\App\Models\SpecialitiesStaff::class, 'staff_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function staffSchedule()
+    {
+        return $this->hasMany(\App\Models\StaffSchedule::class, 'staff_id');
+    }
+
     public static function getUserStaffById($user_id){
         	
 		$staff = DB::select('SELECT * FROM staff WHERE user_id = '.$user_id.'');

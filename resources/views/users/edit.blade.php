@@ -18,9 +18,7 @@
               </button>
             </div>
             <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Editar usuario</h4>
-  
-          </div>
-
+        </div>
       </div>
 
       <div class="card-body" id="mainCardBody">

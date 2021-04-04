@@ -51,12 +51,24 @@ Route::post('user/createNewUser', 'UsersManagementController@createNewUser');
 // User routes
 Route::get('users/{id}/confirmDelete', 'UserController@confirmDelete');
 Route::match(array('GET', 'POST'), 'users/viewDT', 'UserController@ajaxViewDatatable');
-Route::resource('users', 'UserController')->middleware('checkPermissionRoutes');;
+Route::resource('users', 'UserController')->middleware('checkPermissionRoutes');
 
 // Patient routes
 Route::get('patients/{id}/confirmDelete', 'PatientController@confirmDelete');
 Route::match(array('GET', 'POST'), 'patients/viewDT', 'PatientController@ajaxViewDatatable');
 Route::resource('patients', 'PatientController');
+
+// Schedule routes
+Route::match(array('GET', 'POST'), 'schedule/generateSchedule', 'ScheduleController@generateSchedule');
+Route::resource('schedule', 'ScheduleController');
+
+// Medical treatment routes
+Route::get('treatments/{id}/confirmDelete', 'TreatmentController@confirmDelete');
+Route::match(array('GET', 'POST'), 'treatments/viewDT', 'TreatmentController@ajaxViewDatatable');
+Route::match(array('GET', 'POST'), 'treatments/singlePatient/{id}/viewDT', 'TreatmentController@ajaxViewDatatableSP');
+Route::get('treatments/{id}/indexSinglePatient', 'TreatmentController@indexSinglePatient');
+Route::post('treatments/indexSinglePatient', 'TreatmentController@indexSinglePatient');
+Route::resource('treatments', 'TreatmentController')->middleware('checkPermissionRoutes');
 
 // Staff routes
 Route::get('staff/{id}/confirmDelete', 'StaffController@confirmDelete');

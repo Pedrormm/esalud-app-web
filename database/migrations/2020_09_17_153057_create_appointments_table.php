@@ -22,7 +22,8 @@ class CreateAppointmentsTable extends Migration
             $table->foreign('user_id_creator')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('user_id_doctor')->comment('FK(users.id). Doctor asignado de cita');
             $table->foreign('user_id_doctor')->references('id')->on('users')->onDelete('cascade');
-            $table->datetime('dt_appointment')->comment('Fecha de cita');
+            $table->datetime('dt_appointment')->comment('Fecha de inicio de la cita');
+            $table->integer('appointment_minutes_duration')->nullable()->default(20)->comment('Tiempo de cada cita en minutos');
             $table->smallInteger('checked')->comment('0=Pendiente;1=Aceptada;2=Rechazada');
             $table->smallInteger('accomplished')->comment('0=No cumplido;1=Cumplido');
             $table->text('comments')->nullable()->comment('Comentarios del doctor');
