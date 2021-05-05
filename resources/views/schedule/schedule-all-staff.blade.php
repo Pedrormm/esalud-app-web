@@ -4,8 +4,7 @@
 <script>
 
 
-
-    let _mainTableAllUsersAjax = $('#mainTablePatientsTreatments').DataTable({
+    $('#scheduleStaffTable').DataTable({
         serverSide : true,
         "responsive": true,
         "language": {
@@ -17,7 +16,7 @@
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }, 
-              url: PublicURL + 'treatments/viewDT',
+              url: PublicURL + 'schedule/viewDT',
               method: "POST",
               dataSrc: "data",
               xhrFields: {
@@ -55,25 +54,16 @@
                 data: 'dni'
             },
             {
-                data: 'blood',
+                data: 'role_name',            
+            },
+            {
+                data: 'branch_name',
             },
             {
                 data: 'birthdate',
             },
             {
-                data: 'sex'
-            },
-            {
-                data: '_create',
-                orderable: false,
-                render: function(data, type, row) {
-                    // console.log(data, type, row);
-                    let strButtons = "";
-                    strButtons += ' <span> <a class="btn btn-primary createTreatment"';
-                    strButtons += ' href="">';  
-                    strButtons += ' <i class="fa fa-plus-circle"></i>&ensp;Crear</a></span>';                                                                                                  
-                    return strButtons;
-                }
+                data: 'sex',
             },
             {
                 data: '_edit',
@@ -83,8 +73,7 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-info viewTreatments"';
                     strButtons += ' data-id-user="'+row.users_id +'"'; 
-                    // strButtons += ' href="">';  
-                    strButtons += ' href="'+ PublicURL+'treatments/'+row.users_id+'/indexSinglePatient' +'">'; 
+                    strButtons += ' href="'+ PublicURL+'schedule/staff/'+row.users_id+'">'; 
                     strButtons += ' <i class="fa fa-eye"></i>&ensp;Ver</a></span>';                                                                                                  
                     return strButtons;
                 }
@@ -96,25 +85,43 @@
                     // console.log(data, type, row);
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-danger confirmDeleteTreatment"';
-                    strButtons += ' href="">';  
-                    strButtons += ' <i class="fa fa-trash"></i>&ensp;Eliminar todos</a></span>';                                                                                                  
+                    strButtons += ' data-name-user="'+row.name + ' '+ row.lastname+'" ';
+                    strButtons += ' data-id-user="'+row.users_id +'"';
+                    strButtons += ' href="'+ PublicURL+'schedule/staff/'+row.users_id+'/confirmDelete' +'">';  
+                    strButtons += ' <i class="fa fa-trash"></i>&ensp;Eliminar horario</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
           ],
           "fnDrawCallback": function( oSettings ) {
+            $('.confirmDeleteTreatment').on('click', function(e){
+                e.preventDefault();
+                let scheduleDeleteId = $(this).data('id-user');
+                let scheduleDeleteFullName = $(this).data('name-user');
+                
+                showModal('¿Borrar horarios del usuario '+ scheduleDeleteFullName + '?', 
+                '¿Seguro que desea eliminar todos los horarios del usuario '+ scheduleDeleteFullName + '?',
+                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
 
+                $('#saveModal').on('click', function(e){
+                    saveModalActionAjax(PublicURL+"schedule/"+scheduleDeleteId, scheduleDeleteId, 'DELETE', 'json', function(res) {
+                        if(res.status == 0) {
+                            $('#scheduleStaffTable').DataTable().ajax.reload();
+                            showInlineMessage(res.message, 15);
+                        }
+                        else {
+                            showInlineError(res.status, res.message, 15);
+                        }
+                        $('#saveModal').off("click");
+                    });
+                });
+            });
           }
       }).on('draw', () => {
-        disableDataTablesMinCharactersSearch('#mainTablePatientsTreatments', 3, true);
-        assignHeadersToRowsResponsive();
+          disableDataTablesMinCharactersSearch('#scheduleStaffTable', 3, true);
+          assignHeadersToRowsResponsive();
       });
       
-
-
-
-
-
 
 </script>
 @endsection

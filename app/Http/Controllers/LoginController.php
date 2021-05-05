@@ -153,12 +153,6 @@ class LoginController extends Controller
 
         return view('dashboard.index', ['user' => $user]);
     }
-
-    public function frontPageDashboard() {
-        $authUser = Auth::user();
-
-        return view('dashboard/ajaxfrontPageDashboard', []);
-    }
     
     public function logout(Request $request) {
         Auth::logout();

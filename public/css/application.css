@@ -14,6 +14,36 @@ body {
   white-space: nowrap;
 }
 
+.tooltip-primary~.tooltip>.tooltip-inner {
+  background-color: #0b8af0 ;
+}
+
+.tooltip-primary~.tooltip>.tooltip-arrow {
+  border-bottom-color: #0b8af0;
+}
+
+.centered {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  margin-top: -3.25vh;
+}
+
+.smallCanvas{
+  width: 30rem;
+  height: 20rem;
+}
+
+.bigCanvas{
+  width: 50rem;
+}
+
+.progress {
+  border-radius: 0.188rem;
+  height: 0.9rem;
+  margin-top: 0.438rem;
+}
+
 
 /* ========================================================================
   usersRoleEdit
@@ -1267,7 +1297,7 @@ caption {
   width: 12.5%;
   border-left: 1px solid #CCC;
   border-bottom:1px solid #CCC;
-  padding: 5px;
+  /* padding: 5px; */
 }
 .hv-schedule .hv-hours .hv-row div:last-child{
   border-right: 1px solid #CCC;
@@ -1278,6 +1308,59 @@ caption {
   align-items: center;
   align-content: center;
 }
+#appointmentsSchedule .hv-half{
+  width: 100%; 
+  height: 50% ;
+  display: block; 
+  overflow: hidden; 
+  border-style: inset; 
+  /* background-color: red !important; */
+  cursor: not-allowed;
+}
 .hv-time-selection-active{
   background-color: #81c4f9 !important;
+  cursor: pointer !important;
+}
+.hv-time-selection{
+  cursor: pointer;
+} 
+#mainStaffScheduleBody .hv-time-selection:hover{
+  background-color: #e6e6e6 !important;
+}
+/*  */
+#mainStaffScheduleBody .hv-time-selection-active:hover{
+  background-color: #cae6fc !important;
+}
+
+.hv-first-half{
+  border-bottom:1px solid #CCC;
+}
+.hv-time-selection-occupied{
+  background-color: #a6a6a6 !important;
+  cursor: not-allowed !important;
+}
+.hv-time-selection-occupied:hover{
+  background-color: #a6a6a6 !important;
+}
+.hv-time-selected{
+  background-color: #0b8af0 !important;
+}
+.cursorPointer{
+  cursor: pointer !important;
+}
+.cursorNotAllowed{
+  cursor: not-allowed !important;
+}
+.color-selection-active{
+  background-color: #cae6fc !important;
+}
+
+#createButton{
+  display: none;
+}
+.tooltip.top .tooltip-arrow,
+.tooltip-inner {
+    border:none;
+    box-shadow:none;
+    outline:none;
 }

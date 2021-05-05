@@ -171,7 +171,7 @@
                     <a id="" class="collapse-item" href="{{ url('/schedule') }}">My schedule</a>
                 {{-- @endif --}}
                 {{-- @if(isset($flagsMenuEnabled['GROUP_CHAT_SHOW']) && $flagsMenuEnabled['GROUP_CHAT_SHOW']) --}}
-                    <a id="" class="collapse-item" href="{{ url('/openvidu/token') }}">Show all personal schedules</a>
+                    <a id="" class="collapse-item" href="{{ url('schedule/staff') }}">Show all personal schedules</a>
                 {{-- @endif --}}
             </div>
             </div>
@@ -219,9 +219,9 @@
                         @if(isset($flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_MEDIC_APPOINTMENTS_SHOW'])
                             <a id="navSubitemShowAppointments" class="collapse-item d-none-patient" href="{{ url('appointment') }}">Ver Citas</a>
                         @endif
-                        @if(isset($flagsMenuEnabled['ALL_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_APPOINTMENTS_SHOW'])
+                        {{-- @if(isset($flagsMenuEnabled['ALL_APPOINTMENTS_SHOW']) && $flagsMenuEnabled['ALL_APPOINTMENTS_SHOW'])
                             <a id="navSubitemShowAllApointments" class="collapse-item d-none-patient" href="{{ url('appointment/all') }}">Ver todas las Citas</a>
-                        @endif
+                        @endif --}}
                             {{-- @endif --}}
                         @if((isset($flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) && $flagsMenuEnabled['ANY_APPOINTMENT_CREATE']) ||
                          (isset($flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) && $flagsMenuEnabled['APPOINTMENT_WITH_MEDIC_CREATE']) ||

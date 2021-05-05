@@ -17,7 +17,7 @@
 
             <div class="card-body" id="mainCardBody">
               <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-bordered" id="mainTableAllAppointments" width="100%" cellspacing="0">
                   <thead >
                     <tr class="text-center">
                         <th class="bg-primary">Paciente</th>
@@ -27,29 +27,34 @@
                         <th class="bg-primary">Acciones</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  {{-- <tbody>
                    @foreach($appointments as $appointment)
                     <tr data-row-id="{{ $appointment['id'] }}">
                       <td>{{ $appointment['user_patient']['name'] }} {{ $appointment['user_patient']['lastname'] }}</td>
                       <td>{{ $appointment['user_doctor']['name'] }} {{ $appointment['user_doctor']['lastname'] }}</td>
                       <td>{{ date("d/m/Y H:i:s", strtotime($appointment['dt_appointment'])) }}</td>
                       <td>{{ App\Models\Appointment::getChecked($appointment['checked']) }}</td>                      
-                      <td>
-                        @if(auth()->user()->role_id == \HV_ROLES::PATIENT)
+                      <td class="d-flex justify-content-center">
+                        @if((auth()->user()->role_id == \HV_ROLES::PATIENT) || (auth()->user()->role_id == \HV_ROLES::DOCTOR))
                           <a class="btn btn-primary text-white btnAcceptAppointment" data-id="{{ $appointment['id'] }}"><i class="fa fa-eye"></i> Aceptar cita</a>
                           <a class="btn btn-danger text-white"><i class="fa fa-trash"></i> Rechazar cita</a>
-                          @isset($appointment['comment']))
+                        @else
+                          @isset($appointment['comments']))
                             <a class="btn btn-primary text-white"><i class="fa fa-eye"></i> Ver comentario</a>
                           @endisset
-                        @else
-                          <a href="{{ URL::asset('/appointment') }}" data-id="{{ $appointment['id'] }}" class="btn btn-primary text-white editarCita"><i class="fa fa-edit"></i> Editar</a>
-                          <button class="btn btn-danger text-white"><i class="fa fa-trash"></i> Eliminar</button>
+                
+                          <a href="{{ URL::asset('/appointment/'.$appointment['id']) }}" data-id="{{ $appointment['id'] }}" class="ml-1 primary" 
+                          data-toggle="tooltip" data-placement="top" title="Ver"><i class="fa fa-eye"></i></a>
+                          <a href="{{ URL::asset('/appointment/'.$appointment['id']."/edit") }}" data-id="{{ $appointment['id'] }}" class="ml-1 primary" 
+                          data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-edit"></i></a>
+                          <a href="{{ URL::asset('/appointment/'.$appointment['id']."/confirmDelete") }}" data-id="{{ $appointment['id'] }}" class="ml-1 danger" 
+                          data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-trash"></i></a>
                         @endif                      
                       </td>
                     </tr>
                    @endforeach
                    
-                  </tbody>
+                  </tbody> --}}
                 </table>
               </div>
             </div>
@@ -75,5 +80,6 @@
 @endsection
 
 @section('scriptsPropios')
-<script src="{{ asset('js/appointments.js') }}"></script>
+  {{-- <script src="{{ asset('js/appointments.js') }}"></script> --}}
+  @include('appointments.appointments-index')
 @endsection

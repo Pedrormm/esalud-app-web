@@ -320,6 +320,14 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Role::class, 'user_id_creator');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function roles()
+    {
+        return $this->belongsTo(\App\Models\Role::class, 'role_id');
+    }
+
     public function rolesPermissionsEnabled()
     {
         return $this->hasMany(\App\Models\Role::class, 'user_id_creator');

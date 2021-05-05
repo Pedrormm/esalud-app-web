@@ -12,6 +12,7 @@ defined("HV_APP_TITLE_NAME") or define("HV_APP_TITLE_NAME",  "MI HOSPITAL V.");
 
 
 
+
 class HV_ROLES{
     const PATIENT = 1;
     const DOCTOR = 2;
@@ -28,6 +29,20 @@ class HV_PERMISSIONS_ACTIVATED{
     // Call to helper fillPermissionClass() to fill it
 }
 
+class HV_APPOINTMENT_CHECKS{
+    const PENDING = 0;
+    const ACCEPTED = 1;
+    const DENIED = 2;
+}
+class HV_WEEKDAYS{
+    const L = "Lunes";
+    const M = "Martes";
+    const X = "Miércoles";
+    const J = "Jueves";
+    const V = "Viernes";
+    const S = "Sábado";
+    const D = "Domingo";
+}
 class SHIFTS{
     const M = 'M';
     const ME = 'ME';

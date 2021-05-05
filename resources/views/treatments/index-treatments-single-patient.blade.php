@@ -19,7 +19,7 @@
                   <i class="fas fa-arrow-left"></i>
               </button>
             </div>
-            <h4 class="m-0 font-weight-bold text-primary col-8 ml-auto">Listado de tratamientos del paciente {{ $singlePatient->name . " " . $singlePatient->lastname }}</h4>
+            <h4 class="font-weight-bold text-primary centered">Listado de tratamientos del paciente {{ $singlePatient->name . " " . $singlePatient->lastname }}</h4>
           </div>
 
           {{-- <h4 class="m-0 font-weight-bold text-primary text-center">Listado de tratamientos del paciente {{ $singlePatientFullName }}</h4> --}}
@@ -48,8 +48,6 @@
 
     </div>
     <!-- /.container-fluid -->
-
-     
     
 @endsection
 

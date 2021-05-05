@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Api\SomethingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('dani/algo/{something}', [SomethingController::class, 'first'])->name('dani');

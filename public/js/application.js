@@ -22,6 +22,7 @@ $(document).on( 'draw.dt', function ( e, settings ) {
 
   
 $(function() {
+
     $.fn.dataTable.ext.errMode = 'throw';
     if ($('#dataTable').length > 0 ){
         $('#dataTable').DataTable({
@@ -63,18 +64,12 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
 
 });//#TAG: #onload-jquery
 
-// let PublicURL= location.href.substring(0, location.href.includes('.test')? location.href.indexOf('.test')+6 : 
-//  location.href.includes('public') ? location.href.indexOf('public')+7:console.log("Url not found"));
-
-// let PublicURL = location.href.includes('public') ? location.href.indexOf('public')+7:
-// location.href.match(/^http(s)?:\/\/([^\/\$]+)/);
-
-// if (!location.href.includes('public')){
-//     PublicURL = PublicURL[0] + "/";
-// }
 
 var PublicURL = location.href.includes('public') ? location.href.substring(0, location.href.indexOf('public')+7):
 location.href.match(/^(http(s)?:\/\/([^\/$]+))/);
+
+const weekNameDays = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
 
 if (!location.href.includes('public')){
     // PublicURL = PublicURL[0].replace(/(.+)[^\/]$/, "$1/");
@@ -608,6 +603,7 @@ function getDocHeight() {
 }
 
 function chatPusherInit() {
+    console.log("llamada chatPusherInit",chatPusherInit.caller);
     Pusher.logToConsole = false;
 
     console.log("antes", PublicURL);

@@ -25,6 +25,7 @@ class CreateAppointmentsTable extends Migration
             $table->datetime('dt_appointment')->comment('Fecha de inicio de la cita');
             $table->integer('appointment_minutes_duration')->nullable()->default(20)->comment('Tiempo de cada cita en minutos');
             $table->smallInteger('checked')->comment('0=Pendiente;1=Aceptada;2=Rechazada');
+            // TODO: Mejor como enumerado
             $table->smallInteger('accomplished')->comment('0=No cumplido;1=Cumplido');
             $table->text('comments')->nullable()->comment('Comentarios del doctor');
             $table->text('user_comment')->nullable()->comment('Motivo de no asistancia (denegado)');

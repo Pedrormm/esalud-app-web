@@ -43,7 +43,7 @@ Route::post('user/avatarupdate/{id?}', [
 ]);
 
 // User creation routes
-Route::get('user/newUser', 'UsersManagementController@newUser')->middleware('isLogged');
+Route::get('user/newUser', '    @newUser')->middleware('isLogged');
 Route::post('user/create', 'UsersManagementController@create')->middleware('isLogged');
 Route::get('user/createUserFromMail/{token?}', 'UsersManagementController@createUserFromMail');
 Route::post('user/createNewUser', 'UsersManagementController@createNewUser');
@@ -58,9 +58,19 @@ Route::get('patients/{id}/confirmDelete', 'PatientController@confirmDelete');
 Route::match(array('GET', 'POST'), 'patients/viewDT', 'PatientController@ajaxViewDatatable');
 Route::resource('patients', 'PatientController');
 
+// Staff routes
+Route::get('staff/{id}/confirmDelete', 'StaffController@confirmDelete');
+Route::match(array('GET', 'POST'), 'staff/viewDT', 'StaffController@ajaxViewDatatable');
+Route::resource('staff', 'StaffController');
+
 // Schedule routes
-Route::match(array('GET', 'POST'), 'schedule/generateSchedule', 'ScheduleController@generateSchedule');
-Route::resource('schedule', 'ScheduleController');
+Route::match(array('GET', 'POST'), 'schedule/viewDT', 'ScheduleController@ajaxViewDatatable')->middleware('isLogged');
+Route::match(array('GET', 'POST'), 'schedule/generateSchedule', 'ScheduleController@generateSchedule')->middleware('isLogged');
+Route::patch('schedule/saveSchedule/{id?}', 'ScheduleController@saveSchedule')->middleware('isLogged');
+Route::get('schedule', 'ScheduleController@index')->middleware('isLogged');
+Route::get('schedule/staff', 'ScheduleController@getStaff')->middleware('isLogged');
+Route::get('schedule/staff/{id}', 'ScheduleController@showSchedule')->middleware('isLogged');
+Route::delete('schedule/{id}', 'ScheduleController@destroy');
 
 // Medical treatment routes
 Route::get('treatments/{id}/confirmDelete', 'TreatmentController@confirmDelete');
@@ -70,19 +80,16 @@ Route::get('treatments/{id}/indexSinglePatient', 'TreatmentController@indexSingl
 Route::post('treatments/indexSinglePatient', 'TreatmentController@indexSinglePatient');
 Route::resource('treatments', 'TreatmentController')->middleware('checkPermissionRoutes');
 
-// Staff routes
-Route::get('staff/{id}/confirmDelete', 'StaffController@confirmDelete');
-Route::match(array('GET', 'POST'), 'staff/viewDT', 'StaffController@ajaxViewDatatable');
-Route::resource('staff', 'StaffController');
-
 // Records routes
 Route::match(array('GET', 'POST'), 'records', 'RecordsController@index')->middleware('isLogged');
 Route::get('singleRecord/{id}', 'RecordsController@showRecord')->middleware('isLogged');
 Route::get('ownRecord', 'RecordsController@showOwnRecord')->middleware('isLogged')->middleware('checkPermissionRoutes');
 
 // Dashboard ajax tabs routes
-Route::get('dashboard/frontPage', 'LoginController@frontPageDashboard')->middleware('isLogged')->name('frontPageDashboard');
+Route::get('dashboard/frontPage', 'DashboardController@frontPageDashboard')->middleware('isLogged')->name('frontPageDashboard');
 // Route::get('dashboard/news', 'NewsController@get')->middleware('isLogged');
+Route::get('dashboard/fillMsgTable', 'DashboardController@fillMsgTable')->middleware('isLogged');
+
 
 /*
  * Communication purposes routes
@@ -110,13 +117,19 @@ Route::match(array('GET', 'POST'), 'videoCallContainer', 'VideoCallController@sh
 Route::get('videoRoom/{sessionRoom}', 'VideoCallController@showVideoRoom')->middleware('isLogged');
 
 // Appointments routes
-// Route::get('/appointments', 'AppointmentController@index')->name('index');
-// Route::get('appointment/{id}', 'AppointmentController@edit');
+// Route::get('/appointments', 'AppointmentController@index')->name('index')->middleware('isLogged');
+// Route::get('appointment/{id}', 'AppointmentController@edit')->middleware('isLogged');
+Route::match(array('GET', 'POST'), 'appointment/viewDT', 'AppointmentController@ajaxViewDatatable')->middleware('isLogged');
+Route::match(array('GET', 'POST'), 'appointment/{id}/confirmChecked/{checked}', 'AppointmentController@confirmChecked')->middleware('isLogged');
+Route::match(array('GET', 'POST'), 'appointment/{id}/confirmAccomplished/{accomplished}', 'AppointmentController@confirmAccomplished')->middleware('isLogged');
+Route::match(array('GET', 'POST'), 'appointment/{id}/setChecked/{checked}/{mailable?}', 'AppointmentController@setChecked')->middleware('isLogged');
+Route::post('appointment/{id}/setAccomplished/{accomplished}', 'AppointmentController@setChecked')->middleware('isLogged');
+Route::get('appointment/realDoctorSchedule', 'AppointmentController@realDoctorSchedule')->middleware('isLogged');
 Route::get('appointment/listPending', 'AppointmentController@listPending')->middleware('isLogged');
 Route::get('appointment/listAccepted', 'AppointmentController@listAccepted')->middleware('isLogged');
 Route::get('appointment/calendar', 'AppointmentController@calendar')->middleware('isLogged');
 Route::get('appointment/showCalendar/{id}', 'AppointmentController@showCalendar')->middleware('isLogged');
-Route::resource('appointment/all', 'AppointmentController')->middleware('isLogged');
+// Route::resource('appointment/all', 'AppointmentController')->middleware('isLogged');
 Route::resource('appointment', 'AppointmentController')->middleware('isLogged');
 
 // SMS routes

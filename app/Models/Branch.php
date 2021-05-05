@@ -44,4 +44,21 @@ class Branch extends Model
         'branch_type' => 'required'
     ];
 
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function staff()
+    {
+        return $this->hasMany(\App\Models\Staff::class, 'user_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function role()
+    {
+        return $this->belongsTo(\App\Models\Role::class, 'role_id');
+    }
+
 }

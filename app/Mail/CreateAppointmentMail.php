@@ -17,20 +17,26 @@ class CreateAppointmentMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    private $appointmentId;
+    private $dateTimeAppointment;
     private $patient;
     private $doctor;
-    private $appointment;
+    private $role;
+    private $appointmentUserCreatorRole;
     private $isPatient;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $appointment, $patient, $doctor, bool $isPatient)
+    public function __construct($appointmentId, $dateTimeAppointment, $patient, $doctor, $role, int $appointmentUserCreatorRole, bool $isPatient)
     {
-        $this->appointment = $appointment;
+        $this->appointmentId = $appointmentId;
+        $this->dateTimeAppointment = $dateTimeAppointment;
         $this->patient = $patient;
         $this->doctor = $doctor;
+        $this->role = $role;
+        $this->appointmentUserCreatorRole = $appointmentUserCreatorRole;
         $this->isPatient = $isPatient;
     }
 
@@ -41,12 +47,11 @@ class CreateAppointmentMail extends Mailable
      */
     public function build()
     {
-        
         $subject = ($this->patient['name'] .", se ha creado una nueva cita médica con el médico " .$this->doctor['name'] );
         $calendarText = Calendar::create('Citas medicas HV')
         ->event(Event::create($subject)
-            ->startsAt(new DateTime($this->appointment))
-            ->endsAt(new DateTime(Carbon::parse($this->appointment)->addHour(1)->format('d-m-Y H:i:s')))
+            ->startsAt(new DateTime($this->dateTimeAppointment))
+            ->endsAt(new DateTime(Carbon::parse($this->dateTimeAppointment)->addMinutes(30)->format('d-m-Y H:i:s')))
             ->organizer(config('mail.username'),config('app.name'))
             ->attendee($this->patient['email'], $this->patient['name'])
             ->attendee($this->doctor['email'], $this->doctor['name'])
@@ -56,7 +61,8 @@ class CreateAppointmentMail extends Mailable
         if ($this->isPatient){
             return $this->subject($this->patient['name'] .", se ha creado una nueva cita médica con el médico " .$this->doctor['name'] )
             ->markdown('mail.newAppointmentPatient', ['patientName' => $this->patient['name'], 
-            'doctorName' => $this->doctor['name'], 'appointment' => $this->appointment, 'isPatient' => $this->isPatient])
+            'doctorName' => $this->doctor['name'], 'dateTimeAppointment' => $this->dateTimeAppointment, 'isPatient' => $this->isPatient,
+             'role' => $this->role, 'appointmentUserCreatorRole' => $this->appointmentUserCreatorRole, 'appointmentId' => $this->appointmentId])
             ->attachData(
                 $calendarText, 
                 'calendar.ics',
@@ -66,7 +72,8 @@ class CreateAppointmentMail extends Mailable
         else{
             return $this->subject($this->doctor['name'] .", se ha creado una nueva cita médica con el paciente " .$this->patient['name'] )
             ->markdown('mail.newAppointmentDoctor', ['patientName' => $this->patient['name'], 
-            'doctorName' => $this->doctor['name'], 'appointment' => $this->appointment, 'isPatient' => $this->isPatient])
+            'doctorName' => $this->doctor['name'], 'dateTimeAppointment' => $this->dateTimeAppointment, 'isPatient' => $this->isPatient,
+             'role' => $this->role, 'appointmentUserCreatorRole' => $this->appointmentUserCreatorRole,'appointmentId' => $this->appointmentId])
             ->attachData(
                 $calendarText, 
                 'calendar.ics',

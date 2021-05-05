@@ -72,11 +72,11 @@ class Appointment extends Model
         $text = "";
 
         if($value == 0){
-            $text = "No Cumplido";
+            $text = "Cita no cumplida";
         }else if($value == 1){
-            $text = "Cumplido";
+            $text = "Cita cumplida";
         }else if($value == 2){
-            $text = "En Espera";
+            $text = "Cita en Espera";
         }
         return $text;
 

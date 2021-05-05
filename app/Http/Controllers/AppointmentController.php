@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Appointment;
 use App\Models\User;
+use App\Models\StaffSchedule;
 use App\Models\Patient;
 use App\Models\Staff;
+use App\Models\SpecialitiesStaff;
 use Mail;
+use Carbon\Carbon;
 use App\Mail\CreateAppointmentMail;
-
-
+use App\Rules\NotExists;
 
 class AppointmentController extends Controller
 {
@@ -22,17 +24,17 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $usuario_login = auth()->user();
-        $rol_user = $usuario_login->role_id;
+        // dd(2);
+        $userLogin = auth()->user();
+        $rol_user = $userLogin->role_id;
 
-        if($rol_user == 4){
+        if($rol_user == \HV_ROLES::ADMIN){
             $appointments = Appointment::with('userPatient')->with('userDoctor')->get();
-        }else if($rol_user == 2){
-            $appointments = Appointment::where('user_id_doctor',"=",$usuario_login->id)->with('userPatient')->with('userDoctor')->get();
-        }else if($rol_user == 1){
-            $appointments = Appointment::where('user_id_patient',"=",$usuario_login->id)->with('userPatient')->with('userDoctor')->get();
+        }else if($rol_user == \HV_ROLES::DOCTOR){
+            $appointments = Appointment::where('user_id_doctor',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
+        }else if($rol_user == \HV_ROLES::PATIENT){
+            $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
         }
-
 
         // dd($appointments->toArray());
 
@@ -46,11 +48,13 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        $usuario_login = auth()->user();
-        // $rol_user = $usuario_login->role_id();
-        $patients = DB::select('SELECT * FROM users WHERE role_id = 1');
-        $doctors = DB::select('SELECT * FROM users WHERE role_id = 2');
-        return view('appointments.create')->with('user',$usuario_login)
+        $userLogin = auth()->user();
+        // $rol_user = $userLogin->role_id();
+        $patients = User::select('id','name','lastname','dni','role_id')->whereRoleId(\HV_ROLES::PATIENT)->get();
+        $doctors = User::select('id','name','lastname','dni','role_id')->whereRoleId(\HV_ROLES::DOCTOR)->with('staff.branch')->get()->toArray();
+        // dd($doctors[0]["staff"][0]["branch"]["name"]);
+        // dd($doctors);
+        return view('appointments.create')->with('user',$userLogin)
                                         // ->with('role',$rol_user)
                                         ->with('patients',$patients)
                                         ->with('doctors',$doctors);
@@ -64,34 +68,50 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        
+        // dd($request->all());
+        $validatedData = parent::checkValidation([
+            'user_id_patient' => 'required',
+            // 'user_id_creator' => 'required',
+            'doctor_id' => 'required',
+            // 'dt_appointment' => ['required', new NotExists('appointments','dt_appointment')],
+            'dt_appointment' => 'required|unique:App\Models\Appointment,dt_appointment',
+            // 'checked' => 'required|min:0|max:0|numeric',
+            // 'accomplished' => 'required|min:0|max:0|numeric',
+            
+        ]);
+        // TODO: Generacion citas. Crear calendario para ver citas con dia y hora. -
+        // Notificacion de cita en dashboard, para que aparezca nueva cita, al verlas desaparece. Hacer con pusher js
+        
         $user_id_patient = $request->input('user_id_patient');
-        $user_id_doctor = $request->input('user_id_doctor');
-        $dt_appointment = $request->input('dt_appointment');
+        $user_id_doctor = $request->input('doctor_id');
+        $dt_appointment = $request->input('dtime');
 
         $userPatient = User::find($user_id_patient);
         $userPatient = $userPatient->name . " " . $userPatient->lastname;
         $userDoctor = User::find($user_id_doctor);
         $userDoctor = $userDoctor->name . " " . $userDoctor->lastname;
-        $spanishDate = $this->mysqlDateTime2Spanish($dt_appointment);
+        $spanishDate = $this->mysqlDateTime2Spanish($dt_appointment).":00";
 
         if (Appointment::where('dt_appointment', $dt_appointment)->where('user_id_patient', $user_id_patient)
         ->where('user_id_doctor', $user_id_doctor)->exists()) {
             return $this->backWithErrors("Ya existe una cita médica igual" );
         }
+        $userAuthRole = auth()->user()->role_id;
         $appointment = new Appointment();
         $appointment->user_id_patient = $user_id_patient;
         $appointment->user_id_doctor = $user_id_doctor;
         $appointment->dt_appointment = $dt_appointment;
         $appointment->user_id_creator = auth()->user()->id;
         $appointment->checked = 0;
-        $appointment->accomplished = 2;
+        $appointment->accomplished = 0;
         $appointment->save();
 
         // Crear email con fichero calendar adjunto.
 
         $appointments = Appointment::with(["userPatient","userCreator","userDoctor"])->find($appointment->id);
 
-        $this->sendMailNewAppointment($appointments);
+        $this->sendMailNewAppointment($appointments, $userAuthRole);
 
         // return $this->index();
         // return back()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente");
@@ -107,7 +127,8 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-        //
+        $appointment = Appointment::find($id);
+        return view('appointments.show')->with('appointments',$appointment);
     }
 
     /**
@@ -118,29 +139,18 @@ class AppointmentController extends Controller
      */
     public function edit($id)
     {
-        $appointment = Appointment::find($id);
-        $usuario_login = auth()->user();
-        $rol_user = $usuario_login->role_id();
-        $patients = DB::select('SELECT * FROM users WHERE role_id = 1');
-        $doctors = DB::select('SELECT * FROM users WHERE role_id = 2');
-        $patient = User::find($appointment->user_id_patient);
-
-        $fecha = date("Y-m-d", strtotime('now +24 hour'))."T";
-        $hora = date("H:i");
-        $fechaHora = $fecha.$hora;
-
-        $fecha_appointment = date("Y-m-d",strtotime($appointment->dt_appointment))."T";
-        $hora_appointment = date("H:i",strtotime($appointment->dt_appointment));
-        $fechaHoraAppointment = $fecha_appointment.$hora_appointment;
-
-        return view('appointments.edit')->with('user',$usuario_login)
-                                        ->with('role',$rol_user)
-                                        ->with('patient',$patient)
-                                        ->with('doctors',$doctors)
-                                        ->with('appointment',$appointment)
-                                        ->with('fechaHora',$fechaHora)
-                                        ->with('fechaHoraAppointment',$fechaHoraAppointment);
-
+        $appointment = Appointment::whereId($id)->with('userPatient')->with('userCreator')->with('userDoctor')->get()->toArray();
+        $userLogin = auth()->user();
+        // dd($appointment);
+        if ($appointment[0]){
+            $dtAppointment = str_replace(" ", "T", $appointment[0]['dt_appointment']);
+            $dtAppointment = mb_substr($dtAppointment, 0, -3);
+            return view('appointments.edit')->with('userLogin',$userLogin)
+            ->with('appointment',$appointment)->with('dtAppointment',$dtAppointment);
+        }
+        else{
+            return $this->backWithErrors("Cita no válida" );   
+        }
                                     
     }
 
@@ -183,17 +193,112 @@ class AppointmentController extends Controller
         //
     }
 
+    public function realDoctorSchedule(Request $request)
+    {
+        
+        if ($request->ajax()){
+            
+            $dateMonday = Carbon::parse($request->date)->startOfWeek();
+           
+            $dateSunday = Carbon::parse($request->date)->startOfWeek()->addWeek(1);
+
+            // $weekdayRealAppointment = Carbon::parse($request->date)->dayOfWeek;
+
+            $staffId = Staff::where('user_id',$request->doctorId)->get();
+            $id = null;
+            if ($staffId[0]){
+                $id = $staffId[0]->id;
+            }
+            else{
+                return response()->json(false);
+            }
+
+            $staffSchedule = StaffSchedule::
+            where('staff_id',$id)
+            ->orderBy('weekday')
+            ->orderBy('starting_workday_time')
+            ->get()->toArray();
+
+            // dd($staffSchedule);
+            $hoursWeek = [];
+            foreach ($staffSchedule as $key=>$value){
+                $hoursWeek[$value['weekday']][] = [$value['starting_workday_time'],$value['ending_workday_time']];
+            }
+
+            // dd($hoursWeek);
+
+
+// DB::enableQueryLog();
+
+            $realAppointments = Appointment::whereIn('checked',[\HV_APPOINTMENT_CHECKS::PENDING,\HV_APPOINTMENT_CHECKS::ACCEPTED])
+            ->where("user_id_doctor",$request->doctorId)
+            ->whereBetween('dt_appointment', [$dateMonday, $dateSunday])
+            ->orderBy('dt_appointment')
+            ->distinct()
+            ->groupBy('dt_appointment')
+            ->get();
+
+            // dd($realAppointments->toArray());   
+
+            $minutesPerDate = 30;
+            $rpArray = [];
+            foreach ($realAppointments as $key=>$value){
+                // dump(($value["dt_appointment"]));
+                $weekday = Carbon::parse($value["dt_appointment"])->dayOfWeek;
+                $weekday = ($weekday == 0)?7:$weekday;
+                
+                $timeStringIni = Carbon::parse($value["dt_appointment"])->toTimeString();
+                
+                if ($minutesPerDate == 30){  
+                    list($hours,$minutes) = explode(":", $timeStringIni);
+                    if(!in_array((int)$minutes, [0, $minutesPerDate])) {
+                        $iMinutes = (int)$minutes;
+                        $iHours = (int)$hours;
+                    
+                        $corrections = [15, 29, 45, 59];
+                        
+                        if($iMinutes < $corrections[1] && $iMinutes < $corrections[0])
+                            $iMinutes = 0;
+                        elseif(($iMinutes <$corrections[1] && $iMinutes > $corrections[0])||
+                            ($iMinutes > $corrections[1] && $iMinutes < $corrections[2]))
+                            $iMinutes = $minutesPerDate;
+                        else {
+                            $iHours++;
+                            $iMinutes = 0;
+                        }
+                        
+                        $timeStringIni = str_pad($iHours, 2, "0", STR_PAD_LEFT) .":" . str_pad($iMinutes, 2, "0", STR_PAD_LEFT).":00";
+                    }
+                }
+
+                // dd($timeStringIni);
+                $timeStringEnd = Carbon::parse($timeStringIni)->addMinutes($minutesPerDate)->toTimeString();
+                // dd($timeStringEnd);
+                $rpArray[$weekday][] = [$timeStringIni, $timeStringEnd];
+                // dd($weekday);
+                // $hoursWeek[$value['weekday']][] = [$value['starting_workday_time'],$value['ending_workday_time']];
+            }
+
+            if ((empty($staffSchedule))){
+                return response()->json(false);
+            }
+            else{
+                return response()->json([$hoursWeek,$rpArray]);
+            }
+        }
+    }
+
     public function calendar(){
 
-        $usuario_login = auth()->user();
-        $rol_user = $usuario_login->role_id;
+        $userLogin = auth()->user();
+        $rol_user = $userLogin->role_id;
 
         if($rol_user == 4){
             $appointments = Appointment::with('userPatient')->with('userDoctor')->get();
         }else if($rol_user == 2){
-            $appointments = Appointment::where('user_id_doctor',"=",$usuario_login->id)->with('userPatient')->with('userDoctor')->get();
+            $appointments = Appointment::where('user_id_doctor',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
         }else if($rol_user == 1){
-            $appointments = Appointment::where('user_id_patient',"=",$usuario_login->id)->with('userPatient')->with('userDoctor')->get();
+            $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
         }
         
         foreach($appointments as $ap) {
@@ -206,7 +311,7 @@ class AppointmentController extends Controller
     }
 
     public function showCalendar($id){
-        $usuario_login = auth()->user();
+        $userLogin = auth()->user();
         $appointment = Appointment::find($id);
         $especialidad = DB::select('SELECT branches.name FROM appointments INNER JOIN staff ON appointments.user_id_doctor = staff.user_id INNER JOIN branches ON staff.branch_id = branches.id WHERE appointments.user_id_doctor = '.$appointment->user_id_doctor.'');
         
@@ -231,20 +336,224 @@ class AppointmentController extends Controller
         return view('appointments.listAccepted')->with('appointments',$appointments->toArray());
     }
 
-    public function sendMailNewAppointment($appointment){
+    public function sendMailNewAppointment($appointment, $userAuthRole=null){
 
         $patientEmail = $appointment->userPatient->email;
         $doctortEmail = $appointment->userDoctor->email;
+        $appointmentUserCreatorId = $appointment->user_id_creator;
+        $appointmentUserCreator = User::find($appointmentUserCreatorId);
+        $appointmentUserCreatorRole = $appointmentUserCreator->role_id;
 
         // $patientEmail = "pedroramonmm@gmail.com";  
         // $doctortEmail = "pedroramonmm@gmail.com";  
 
         $appointment = $appointment->toArray();
+
         if ($appointment['user_patient']['id']){
-            $res = \Mail::to($patientEmail)->send(new CreateAppointmentMail($appointment['dt_appointment'], $appointment['user_patient'], $appointment['user_doctor'], true));
+            $res = \Mail::to($patientEmail)->send(new CreateAppointmentMail($appointment['id'], $appointment['dt_appointment'],
+             $appointment['user_patient'], $appointment['user_doctor'], $userAuthRole, (int)$appointmentUserCreatorRole, true));
         }
         if ($appointment['user_doctor']['id']){
-            $res = \Mail::to($doctortEmail)->send(new CreateAppointmentMail($appointment['dt_appointment'], $appointment['user_patient'], $appointment['user_doctor'], false));
+            $res = \Mail::to($doctortEmail)->send(new CreateAppointmentMail($appointment['id'], $appointment['dt_appointment'],
+             $appointment['user_patient'], $appointment['user_doctor'], $userAuthRole, (int)$appointmentUserCreatorRole, false));
+        }
+    }
+
+    public function confirmChecked($id, $checked=null){
+        $appointment = Appointment::find($id);
+        $checkedText = ($checked == 1)? "aceptar" : (($checked == 2) ? ("rechazar") : (""));
+        if (!$checkedText){
+            return $this->backWithErrors("Acceso denegado" );
+        }
+        return view('appointments.confirm-checked', compact('appointment','checked','checkedText'));
+    }
+
+    public function confirmAccomplished($id, $accomplished=null){
+        $appointment = Appointment::find($id);
+        $accomplishedText = ($accomplished == 1)? "Cita finalizada" : (($accomplished == 2) ? ("Cita no finalizada") : (""));
+        if (!$accomplishedText){
+            return $this->backWithErrors("Acceso denegado" );
+        }
+        return view('appointments.confirm-accomplished', compact('appointment','accomplished','accomplishedText'));
+    }
+
+    public function setChecked($id, $checked=null, $mailable = false) {
+        if (($checked != 1) &&($checked != 2)){
+            if ($mailable){
+                return view('appointments.index');
+            }
+            return $this->jsonResponse(1, "There was an error on the checked requirements");
+
+            return $this->backWithErrors("Acceso denegado" );
+        }
+
+        $appointment = Appointment::find($id);
+        $appointment->update(['checked' =>$checked]);
+        $messageAcRj = ($checked == 1)? "aceptada" : (($checked == 2) ? ("rechazada") : (""));
+        
+        if ($mailable){
+            return view('appointments.index');
+        }
+
+        return $this->jsonResponse(0,  "La cita: con fecha ".$appointment->dt_appointment." ha sido ".$messageAcRj." correctamente");
+    }
+
+    public function setAccomplished($id, $accomplished=null) {
+        if (($accomplished != 1) &&($accomplished != 2)){
+            return $this->jsonResponse(1, "There was an error on the checked requirements");
+
+            return $this->backWithErrors("Acceso denegado" );
+        }
+
+        $appointment = Appointment::find($id);
+        $appointment->update(['accomplished' =>$accomplished]);
+        $messageAcRj = ($accomplished == 1)? "aceptada" : (($accomplished == 2) ? ("rechazada") : (""));
+            
+        return $this->jsonResponse(0,  "La cita: con fecha ".$appointment->dt_appointment." ha sido ".$messageAcRj." correctamente");
+    }
+
+    public function ajaxViewDatatable(Request $request) {
+
+        if(!$request->wantsJson()) {
+            abort(404, 'Bad request');
+        }
+
+        self::checkDataTablesRules();
+        $searchPhrase = $request->search['value'];
+        // Abort query execution if search string is too short
+        if(!empty($searchPhrase)) {
+            // Minimum two digits or 3 letters to allow a search
+            if(preg_match("/^.{1,2}\$/i", $searchPhrase)) {
+            // if(preg_match("/^.{1}\$/i", $searchPhrase)) {
+                return response()->json(['data' => []]);
+            }
+        }
+        $userLogin = auth()->user();
+        $rol_user = $userLogin->role_id;
+
+        $data = Appointment::select('appointments.*')->distinct();
+        if($rol_user == \HV_ROLES::DOCTOR){
+            $data = $data->where('user_id_doctor',"=",$userLogin->id);
+        }else if($rol_user == \HV_ROLES::PATIENT){
+            $data = $data->where('user_id_patient',"=",$userLogin->id);
+        }
+
+        $data = $data->groupBy('dt_appointment')
+        ->with(array('userPatient' => function($query) {
+            $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS patientFullName"));
+        }))
+        ->with(array('userDoctor' => function($query) {
+            $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS doctorFullName"));
+        }));
+
+        // $data = Patient::select('users.*','patients.*','roles.name AS role_name', 'patients.id AS patients_id', 'users.id AS users_id')->join('users', 'patients.user_id', 'users.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
+        
+        // $numTotal = $numRecords = $data->get()->count();
+
+        /**
+         * Applying search filters over query result as it is was simple query
+         */
+        // if(!empty($request->search['value'])) {
+
+        //     // Search by numbers only
+        //     if(preg_match("/\d{3,}/", $searchPhrase, $matches)) {
+
+        //         $data->where(function($query) use ($searchPhrase) {
+        //             $query->orWhere('dt_appointment', 'like', '%' . $searchPhrase . '%')
+        //                 ->orWhere('patientFullName', 'like', '%' . $searchPhrase . '%')
+        //                 ->orWhere('doctorFullName', 'like', '%' . $searchPhrase . '%');
+        //                 // ->orWhere('checkedStatus', 'like', '%' . $searchPhrase . '%');
+        //         });
+        //         $numRecords = $data->count();
+        //     }
+            
+        // }
+        // $firstRow = $data->first();
+        
+        // if(is_null($firstRow)) {
+        //     return response()->json(['data' => []]);
+        // }
+        // $collectionKeys = array_keys($firstRow->toArray());
+        /**
+         * Applying order methods
+         */
+        // $orderList = $request->order;
+        // foreach($orderList as $orderSetting) {
+        //     $indexCol = $orderSetting['column'];
+        //     $dir = $orderSetting['dir'];
+
+        //     if(isset($request->columns[$indexCol]['data'])) {
+        //         $colName = $request->columns[$indexCol]['data'];
+        //         if(in_array($colName, $collectionKeys))
+        //             $data->orderBy($colName, $dir);
+        //         //dd("order by col " . $colName);
+        //     }
+        // }
+        //DB::enableQueryLog();
+
+        // if($request->length > 0)
+            // $data = $data->offset($request->start)->limit($request->length);
+        $data = $data->get();
+        //dd(DB::getQueryLog());
+        if($data->isEmpty()) {
+            return response()->json(['data'=>[]]);
+        }
+
+        /*
+         * Apply data processing
+         */
+        foreach($data as $row) {
+           $row->patientFullName = $row->userPatient->name . " " . $row->userPatient->lastname;
+           $row->doctorFullName = $row->userDoctor->name . " " . $row->userDoctor->lastname;
+           $row->checkedStatus = Appointment::getChecked($row->checked);
+           $row->accomplishedStatus = Appointment::getAccomplished($row->accomplished);
+        }
+
+        /*
+         * Apply search string to collection results
+         */
+         if(!empty($request->search['value'])) {
+             $searchPhrase = $request->search['value'];
+             $data = $data->filter(function($appointment, $key) use ($searchPhrase) {
+                $ap = $appointment->toArray();
+                 foreach($ap as $keys=>$value) {
+                     if (is_string($value) || is_numeric($value)){
+                        if (strpos(strtolower($value), strtolower($searchPhrase)) !== false) {
+                            return $value;
+                        }
+                     }
+                 }
+             });
+             $data->all();
+         }
+         $numRecords = $data->count();
+
+        /*
+         * Apply order settings
+         */
+         $orderIndexes = array();
+         foreach($request->order as $order) {
+             $orderIndexes[] = [
+                 (int)$order['column'],
+                 $order['dir']
+             ];
+         }
+         foreach($orderIndexes as $order) {
+             $columnName = $request->columns[$order[0]]['data'];
+             if($order[1] == 'asc')
+                 $sorted = $data->sortBy($columnName);
+             else
+                 $sorted = $data->sortByDesc($columnName);
+             $data = $sorted->values();
+         }
+
+        $numTotal = $data->count();
+        $page = $request->start / $request->length + 1;
+        $data = $data->forPage($page, $request->length);
+
+        $dataResult = array_values($data->toArray());
+        if(request()->wantsJson()) {
+            return self::responseDataTables($dataResult, (int)$request->draw, $numTotal, $numRecords);
         }
     }
 

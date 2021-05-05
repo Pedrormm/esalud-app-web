@@ -10,10 +10,20 @@
         <div class="container-fluid">
 
           <!-- DataTales Example -->
-          <div class="card shadow mb-4" id="indexScheduleCard">
+          <div class="card shadow mb-4" id="mainCardShadow">
+
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Mi horario disponible</h4>
+                <div class="row">
+                    <div class="cHeader col-2">
+                      <button type="button" class="btn btn-primary">
+                          <i class="fas fa-arrow-left"></i>
+                      </button>
+                    </div>
+                    <h4 class="font-weight-bold text-primary centered">Horario disponible de 
+                        {{ $userStaff->name . " ".$userStaff->lastname }}</h4>
+                </div>
             </div>
+
 
             <div class="card-body" id="mainStaffScheduleBody">
               <div class="hv-schedule">
@@ -210,5 +220,12 @@
 @endsection
 
 @section('scriptsPropios')
-  <script type="text/javascript" src="{{ asset('js/schedule-index.js') }}"></script>
+
+    <script>
+        staffSchedule = @json($staffSchedule);
+        staffId = {{ $userStaff->id }}
+        console.log(staffSchedule);
+    </script>
+    {{-- {{ dd($staffSchedule) }} --}}
+  <script type="text/javascript" src="{{ asset('js/schedule-show.js') }}"></script>
 @endsection

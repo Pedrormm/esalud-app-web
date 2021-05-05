@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,14 @@ class AppServiceProvider extends ServiceProvider
         // Config::set(['permissions' => fillPermissionClass()]);
         // Config::set(['roles' => fillRolesClass()]);
         // Blade::include('inc.react', 'react');
+
+        // Validator::extend('not_exists', function($attribute, $value, $parameters)
+        // {
+        //     return DB::table($this->tableName)
+        //         ->where($this->column, '<>', $value)
+        //         ->count()<1;
+        // });
+
 
     }
 }

@@ -16,7 +16,7 @@
                       <i class="fas fa-arrow-left"></i>
                   </button>
                 </div>
-                <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
+                <h4 class="font-weight-bold text-primary centered">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
 
               </div>
             </div>

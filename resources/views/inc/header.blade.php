@@ -53,7 +53,7 @@
       <!-- Counter - Alerts -->
       <span class="badge badge-danger badge-counter">3+</span>
     </a>
-    <!-- Dropdown - Alerts -->
+    <!-- Dropdown - Alerts for Appointments -->
     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
       <h6 class="dropdown-header">
         Alerts Center
@@ -97,13 +97,15 @@
 
   <!-- Nav Item - Messages -->
   <li class="nav-item dropdown no-arrow mx-1">
-    <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="messagesDropdown" role="button" data-toggle="dropdown" 
+    aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-envelope fa-fw"></i>
       <!-- Counter - Messages -->
       <!-- <span class="badge badge-danger badge-counter">8</span> -->
     </a>
     <!-- Dropdown - Messages -->
-    <div id="top-navigator-messages" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
+    <div id="top-navigator-messages" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
+    aria-labelledby="messagesDropdown">
  
     </div>
   </li>

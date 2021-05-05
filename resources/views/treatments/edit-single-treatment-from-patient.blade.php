@@ -16,7 +16,7 @@
                   <i class="fas fa-arrow-left"></i>
               </button>
             </div>
-            <h4 class="m-0 font-weight-bold text-primary col-7 ml-auto">Editar tratamiento</h4>
+            <h4 class="font-weight-bold text-primary centered">Editar tratamiento</h4>
   
           </div>
 
