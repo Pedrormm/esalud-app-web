@@ -42,7 +42,7 @@
 							<td><?php echo date("d/m/Y",strtotime($usuario->birthdate)); ?></td>
 						</tr>
 						<tr>
-							<td>Sexo:</td>
+							<td>@lang('messages.gender'):</td>
 							<td>
 							<?php
 								if($usuario->sex == "male"){
@@ -152,7 +152,7 @@
                                                             <tr>
                                                                 <th>Fecha</th>
                                                                 <th>Linf</th>
-                                                                <th>%T4</th>
+                                                                <th>T4</th>
                                                                 <th>T4 Abs</th>
                                                                 <th>%T8</th>
                                                                 <th>T8 Abs</th>
@@ -242,33 +242,22 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Fecha</th>
+                                                <th>Fecha inicio</th>
+                                                <th>Fecha fin</th>
                                                 <th>Nombre</th>
-                                                <th>Dosis</th>
+                                                {{-- <th>Dosis</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($treatments as $treatment)
                                             <tr>
+                                                <td>{{ $treatment->treatment_starting_date ?? "[No hay fecha de inicio]" }}</td>
+                                                <td>{{ $treatment->treatment_end_date ?? "[No hay fecha fin]" }}</td>
+
                                                 <td>{{ $treatment->nameMedicine }}</td>
-                                                <td><?php echo date("d/m/Y", strtotime($treatment->created_at)); ?></td>
-                                                <td>
-                                                    <?php                                                    
-                                                    $interval = explode('#', $treatment->interval);
-                                                    $interval_text = $interval[0] . ' cada ' . $interval[1] . ' ';
-
-                                                    switch($interval[2]){
-                                                        case 'h': $interval_text .= 'hora/s';break;
-                                                        case 'd': $interval_text .= 'dia/s';break;
-                                                        case 'w': $interval_text .= 'semana/s';break;
-                                                        case 'm': $interval_text .= 'mes/es';break;
-                                                        case 'y': $interval_text .= 'año/s';break;
-                                                    }
-
-                                                    echo $interval_text;
-
-                                                    ?>
-                                                </td>
+                                                {{-- <td>
+                                                    {{ $treatment->treatment_end_date }}
+                                                </td> --}}
                                             </tr>                                                        
                                             @endforeach
                                         </tbody>
@@ -323,20 +312,18 @@
 
 @endsection
 
-@section('scriptsPropios')
-<script>
-    $('.eventClose').click(function(){
-       $(this).parent().parent().parent().fadeOut();
-    })
+@section('viewsScripts')
+    <script>
+        $('.eventClose').click(function(){
+        $(this).parent().parent().parent().fadeOut();
+        })
 
-    $('.tratamientos').click(function(){
-       $(this).parent().parent().parent().fadeOut();
-    })
-    
-    $('.sesiones').click(function(){
-       $(this).parent().parent().parent().fadeOut();
-    })
-</script>
-
-
+        $('.tratamientos').click(function(){
+        $(this).parent().parent().parent().fadeOut();
+        })
+        
+        $('.sesiones').click(function(){
+        $(this).parent().parent().parent().fadeOut();
+        })
+    </script>
 @endsection

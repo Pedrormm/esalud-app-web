@@ -2,7 +2,7 @@
 // VideoUtils.js
 
 export function isInVideoCallView() {
-    return window.location.href == (PublicURL+'videoCall');
+    return window.location.href == (_publicUrl+'videoCall');
 }
   
 

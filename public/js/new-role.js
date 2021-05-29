@@ -2,7 +2,7 @@ var _tablaNuevoRolPermisos = $('#tablaNuevoRolPermisos').DataTable({
     responsive: true,
     pageLength : 5,
     language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+        url: _urlDtLang
     },
     "dom": '<"top"i>rt<"bottom"flp><"clear">',
 });
@@ -14,11 +14,11 @@ $('#saveModal').click(function() {
     let messages = [];
 
     if (roleToBeNew.value === '' || roleToBeNew.value == null) {
-        messages.push("The role name is required");
+        messages.push(_messagesLocalization.The_role_name_is_required);
     }
 
     if (roleToBeNew.value.length < 2){
-        messages.push("The role name must be at least 2 characters long");
+        messages.push(_messagesLocalization.The_role_name_must_be_at_least_2_characters_long);
     }
 
     if (messages.length > 0) {
@@ -30,8 +30,8 @@ $('#saveModal').click(function() {
         var data = serializedReturn + "&" + checks;
         console.log(data);
         let that = this;
-        // saveModalActionAjax(PublicURL+"role/create", data, 'POST', 'json', function(res) {
-        saveModalActionAjax(PublicURL+"roles", data, 'POST', 'json', function(res) {
+        // saveModalActionAjax(_publicUrl+"role/create", data, 'POST', 'json', function(res) {
+        saveModalActionAjax(_publicUrl+"roles", data, 'POST', 'json', function(res) {
             if(res.status == 0) {
                 $('#mainTableRoles').DataTable().ajax.reload();
                 showInlineMessage(res.message, 5);
@@ -47,9 +47,12 @@ $('#saveModal').click(function() {
 
     $('#name').focus();
     $('#name').donetyping(function(event){
-        $(this).val(function () {
-            return patternCase(this.value,/(?:-| |_)+/);
-        })
+        if (_dictionary){
+            $(this).val(function () {
+                return patternCase(this.value,/(?:-| |_)+/);
+            })
+        }
+
         $( this ).off( event );
     });
 

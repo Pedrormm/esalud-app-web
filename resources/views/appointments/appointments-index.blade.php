@@ -1,9 +1,9 @@
 
-@section('scriptsPropios')
+@section('viewsScripts')
 
 <script>
-
     
+
     $('.editarCita').click(function(e){
         e.preventDefault();
         let id = $(this).data('id');
@@ -24,7 +24,7 @@
         serverSide : true,
         "responsive": true,
         "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+            "url": _urlDtLang
         },
       
         ajax: {
@@ -32,7 +32,7 @@
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }, 
-              url: PublicURL + 'appointment/viewDT',
+              url: _publicUrl + 'appointment/viewDT/'+'{{ $appointmentType }}',
               method: "POST",
             //   data: {id: contactId},
             //   data: {pgno: page.info().page},
@@ -50,18 +50,24 @@
             ],
       
         columns : [
+            @if (( auth()->user()->role_id) != \HV_ROLES::PATIENT)
             {
                 data: 'patientFullName'
             },
+            @endif
+            @if (( auth()->user()->role_id) != \HV_ROLES::DOCTOR)
             {
                 data: 'doctorFullName',
             },
+            @endif  
             {
                 data: 'dt_appointment',
             },
+            @if (($appointmentType) == "all")
             {
                 data: 'checkedStatus',
             },
+            @endif
             {
                 data: '_buttons',
                 orderable: false,
@@ -72,33 +78,34 @@
                     strButtons += ' <div class="d-flex justify-content-center">';                                          
                     @if((auth()->user()->role_id == \HV_ROLES::PATIENT) || (auth()->user()->role_id == \HV_ROLES::DOCTOR)
                     || (auth()->user()->role_id == \HV_ROLES::ADMIN))
+                        @if (($appointmentType) != "old")
 
-                        strButtons += ' <a href="'+ PublicURL+'appointment/'+row.id+'/confirmChecked/1' +'"'; 
-                        strButtons += ' data-id="'+row.id+'"';
-                        strButtons += ' class="ml-1 primary acceptAppointment" data-toggle="tooltip" data-placement="top" title="Aceptar cita">';
-                        strButtons += ' <i class="fa fa-check"></i></a>'; 
-                        
-                        strButtons += ' <a href="'+ PublicURL+'appointment/'+row.id+'/confirmChecked/2' +'"'; 
-                        strButtons += ' data-id="'+row.id+'"';
-                        strButtons += ' class="ml-1 primary rejectAppointment" data-toggle="tooltip" data-placement="top" title="Rechazar cita">';
-                        strButtons += ' <i class="fa fa-times"></i></a>';  
-                        if (row.comments){
-                            strButtons += ' <a href="'+ PublicURL+'appointment/'+row.id+'/comments' +'"'; 
+                            strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/confirmChecked/1' +'"'; 
                             strButtons += ' data-id="'+row.id+'"';
-                            strButtons += ' class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="Ver comentario">';
+                            strButtons += ` class="ml-1 primary acceptAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.accept appointment')">`;
+                            strButtons += ' <i class="fa fa-check"></i></a>'; 
+                            
+                            strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/confirmChecked/2' +'"'; 
+                            strButtons += ' data-id="'+row.id+'"';
+                            strButtons += ` class="ml-1 primary rejectAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.reject appointment')">`;
+                            strButtons += ' <i class="fa fa-times"></i></a>';  
+                        @endif
+                        if (row.comments){
+                            strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/comments' +'"'; 
+                            strButtons += ' data-id="'+row.id+'"';
+                            strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.view comments')">`;
                             strButtons += ' <i class="fa fa-eye"></i></a>';
                         }
                         
-                        strButtons += ' <a href="'+ PublicURL+'appointment/'+row.id+'/edit' +'"'; 
+                        strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/edit' +'"'; 
                         strButtons += ' data-id="'+row.id+'"';
-                        strButtons += ' class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="Editar">';
+                        strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.edit')">`;
                         strButtons += ' <i class="fa fa-edit"></i></a>'; 
-
-                        strButtons += ' <a href="'+ PublicURL+'appointment/'+row.id+'/confirmDelete' +'"'; 
+                        strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/confirmDelete' +'"'; 
                         strButtons += ' data-id="'+row.id+'"';
-                        strButtons += ' class="ml-1 danger" data-toggle="tooltip" data-placement="top" title="Eliminar">';
+                        strButtons += ` class="ml-1 danger deleteAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.delete')">`;
                         strButtons += ' <i class="fa fa-trash"></i></a>'; 
-                    @endif   
+                        @endif
                     strButtons += ' </div>'; 
 
                     return strButtons;
@@ -107,17 +114,24 @@
             }
           ],
           "fnDrawCallback": function( oSettings ) {
+            
             $('.acceptAppointment').on('click', function(e){
                 e.preventDefault();
 
-                showModal('¿Aceptar cita '+ $(this).data('id') + '?', $(this).data('id'), false, 
-                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+                showModal(_questionMarkSpConcat+"@lang('messages.reject appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no')", "@lang('messages.yes')"); 
             });
             $('.rejectAppointment').on('click', function(e){
                 e.preventDefault();
 
-                showModal('Rechazar cita '+ $(this).data('id') + '?', $(this).data('id'), false, 
-                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+                showModal(_questionMarkSpConcat+"@lang('messages.reject appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no')", "@lang('messages.yes')"); 
+            });
+            $('.deleteAppointment').on('click', function(e){
+                e.preventDefault();
+
+                showModal(_questionMarkSpConcat+"@lang('messages.delete appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no')", "@lang('messages.yes')"); 
             });
           }
       }).on('draw', () => {

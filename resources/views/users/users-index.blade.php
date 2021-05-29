@@ -1,5 +1,5 @@
 
-@section('scriptsPropios')
+@section('viewsScripts')
 
 <script>
 
@@ -10,11 +10,11 @@ $('.confirmDeleteUser').on('click', function(e){
     let userDeleteRole = $(this).data('role-user');
 
     showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-    '¿Seguro que desea borrar el usuario con nombre '+ userDeleteFullName + ' y rol '+ userDeleteRole + '?',
-     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+    '@lang('messages.Are you sure you want to delete the user whose name is')'+ userDeleteFullName + '@lang("messages.and role")' + userDeleteRole + '?',
+     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, @lang('messages.no'), @lang('messages.yes')); 
 
      $('#saveModal').on('click', function(e){
-        saveModalActionAjax(PublicURL+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
+        saveModalActionAjax(_publicUrl+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
             if(res.status == 0) {
                 $('#mainTableAllUsers').DataTable().ajax.reload();
                 showInlineMessage(res.message, 5);
@@ -27,20 +27,20 @@ $('.confirmDeleteUser').on('click', function(e){
     });
 
 });
-
 // let isallUsersDelete = $('#isallUsersDelete').val();
 // if (isallUsersDelete == 1){
 @if((isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && ($flagsMenuEnabled['ALL_USERS_DELETE']))
 
-    console.log("isallUsersDelete ",isallUsersDelete);
-
+    // console.log("isallUsersDelete ",isallUsersDelete);
 
     let _mainTableAllUsersAjax = $('#mainTableAllUsers').DataTable({
         serverSide : true,
         "responsive": true,
-        paging: {{ $pagination }},
+        @isset($pagination)
+            paging: {{ $pagination }},
+        @endisset
         "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+            "url": _urlDtLang
         },
       
         ajax: {
@@ -48,7 +48,7 @@ $('.confirmDeleteUser').on('click', function(e){
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }, 
-              url: PublicURL + 'users/viewDT',
+              url: _publicUrl + 'users/viewDT',
               method: "POST",
               dataSrc: "data",
               xhrFields: {
@@ -67,15 +67,19 @@ $('.confirmDeleteUser').on('click', function(e){
             {
                 data: 'fullName',
                 render: function(data, type, row) {
-                    console.log("DATOS "+ data, type, row);
+                    // console.log("DATOS "+ data, type, row);
                     let strFullName = "";
-                    if (row.sex=="male"){
-                        strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_man.png") }}'+'" class="avatar big">';                                                                           
+                    if (row.avatar){
+                        strFullName += '<img class="avatar clearfix align-middle" src="'+ _publicUrl+'images/avatars/' + row.avatar + '" class="avatar big">';                                                                           
                     }
-                    if (row.sex=="female"){
-                        strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_woman.png") }}'+'" class="avatar big">';                                                                           
+                    else{
+                        if (row.sex=="male"){
+                            strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_man.png") }}'+'" class="avatar big">';                                                                           
+                        }
+                        if (row.sex=="female"){
+                            strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_woman.png") }}'+'" class="avatar big">';                                                                           
+                        }
                     }
-
                     strFullName += '<span class="align-middle">'+data+'</span>';
                     
                     return strFullName;
@@ -104,11 +108,11 @@ $('.confirmDeleteUser').on('click', function(e){
                 data: '_buttons',
                 orderable: false,
                 render: function(data, type, row) {
-                    console.log(data, type, row);
+                    // console.log(data, type, row);
                     let strButtons = "";
 
                     @if(isset($flagsMenuEnabled['ALL_USERS_EDIT']) && $flagsMenuEnabled['ALL_USERS_EDIT'])
-                        strButtons += '<span><a href="'+ PublicURL+'users/'+row.id+'/edit' +'"><i class="fa fa-edit"></i></a></span>';                                                                           
+                        strButtons += '<span><a href="'+ _publicUrl+'users/'+row.id+'/edit' +'"><i class="fa fa-edit"></i></a></span>';                                                                           
                     @else
                         strButtons += '<span><i class="fa fa-edit" style="color:gray"></i></span>';                                                                           
                     @endif    
@@ -118,7 +122,7 @@ $('.confirmDeleteUser').on('click', function(e){
                         strButtons += ' data-name-user="'+row.name + ' '+ row.lastname+'" ';
                         strButtons += ' data-role-user="'+row.role_name+'"';
                         strButtons += ' data-id-user="'+row.id +'"';
-                        strButtons += ' href="'+ PublicURL+'users/'+row.id+'/confirmDelete' +'">';  
+                        strButtons += ' href="'+ _publicUrl+'users/'+row.id+'/confirmDelete' +'">';  
                         strButtons += ' <i class="fa fa-trash"></i></a></span>';                                                                                                  
  
                     @else
@@ -138,11 +142,11 @@ $('.confirmDeleteUser').on('click', function(e){
                 let userDeleteRole = $(this).data('role-user');
 
                 showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-                '¿Seguro que desea borrar el usuario con nombre '+ userDeleteFullName + ' y rol '+ userDeleteRole + '?',
-                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+                '@lang('messages.Are you sure you want to delete the user whose name is')'+ userDeleteFullName + '@lang('messages.and role')'+ userDeleteRole + '?',
+                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, '@lang('messages.no')', '@lang('messages.yes')'); 
 
                 $('#saveModal').on('click', function(e){
-                    saveModalActionAjax(PublicURL+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
+                    saveModalActionAjax(_publicUrl+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
                         if(res.status == 0) {
                             $('#mainTableAllUsers').DataTable().ajax.reload();
                             showInlineMessage(res.message, 5);
@@ -157,12 +161,10 @@ $('.confirmDeleteUser').on('click', function(e){
 
           }
       }).on('draw', () => {
-          console.log("entra draw");
           disableDataTablesMinCharactersSearch('#mainTableAllUsers', 3, true);
           assignHeadersToRowsResponsive();
       });
       
-
 
 
 
@@ -173,7 +175,7 @@ $('.confirmDeleteUser').on('click', function(e){
         $('#mainTableAllUsers').DataTable({
             "responsive": true,
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+                "url": _urlDtLang
             },
         });
     }

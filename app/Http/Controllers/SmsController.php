@@ -51,10 +51,10 @@ class SmsController extends Controller
         $response ="a";
 
         if(!$response) {
-            return back()->withErrors("Error interno");
+            return back()->withErrors(\Lang::get('messages.Internal error'));
         }
         else{
-            return back()->with('js_code', 'showInlineMessage("Messages has been queued and ready to be sent",8)');
+            return back()->with('js_code', 'showInlineMessage("_messagesLocalization.Messages_have_been_queued_and_are_ready_to_be_sent",8)');
         }
     }
 }

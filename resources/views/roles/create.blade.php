@@ -1,6 +1,6 @@
 
   <link rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  {{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/roleEdit.css') }}"> --}}
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/toggle.css') }}">
 
   <div id="error-container-modal" class="alert alert-danger dNone"></div>
   <form id="newRole">
@@ -26,10 +26,7 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-auto">
-                          {{-- <div class="bulgy-radios" role="radiogroup" aria-labelledby="bulgy-radios-label"> --}}
-                          {{-- <table class="table table-stripped table-bordered table-hover table-sm w-auto tabla_permisos_roles text-center"> --}}
                           <table class="table table-responsive" id="tablaNuevoRolPermisos">
-  
                             <caption>Permisos asociados al rol</caption>
                             <thead>
                               <th>Módulo</th>
@@ -40,13 +37,12 @@
                                   @foreach ($permissions as $permission)
                                       <tr>
                                         <td>{{ $permission['flag_meaning'] }}</td>
-                                        <td >
+                                        <td>
                                           <input name="check-{{ $permission['id'] }}" 
                                           id="check-{{ $permission['id'] }}" type="checkbox" >
                                           <label for="check-{{ $permission['id'] }}" class="check-trail">
                                             <span class="check-handler"></span>
-                                          </label>
-                                          
+                                          </label>                                         
                                         </td>
                                       </tr>
                                   @endforeach
@@ -57,7 +53,6 @@
                                 @endif                           
                             </tbody>
                           </table>
-                          {{-- </div> --}}
                         </div>
                     </div>
                 </div>
@@ -65,9 +60,6 @@
         </div>
     </div>
   </form>
-
-  <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/toggle.css') }}">
-  <script type="text/javascript" src="{{ asset('js/application.js') }}"></script>
   
   <script type="text/javascript" src="{{ asset('js/new-role.js') . '?r=' . rand() }}"></script>
   

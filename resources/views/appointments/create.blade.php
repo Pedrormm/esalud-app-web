@@ -9,15 +9,16 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- DataTales Example -->
+          
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Crear Cita Médica</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.create medical appointment')</h4>
             </div>
 
             <div class="card-body" id="mainCardBody">
               {{-- <form action="{{ URL::asset('/appointment') }}" method="POST"> --}}
-            {{ Form::open(array('url' => '/appointment/', 'method' => 'POST','id'=> 'createAppointmentForm')) }}
+            {{-- {{ Form::open(array('url' => '/appointment/', 'method' => 'STORE','id'=> 'createAppointmentForm')) }} --}}
+            {{ Form::open(array('id'=> 'createAppointmentForm')) }}
 
                 @csrf
                 @php
@@ -29,7 +30,7 @@
                 @endphp
                     <div class="row">
                         <div class="col-lg-{{ $gridCols }}">
-                            <label>Listado de pacientes (*)</label>
+                            <label>@lang('messages.patients list') (*)</label>
                             <select required 
                             name="user_id_patient" required data-width="100%" aria-describedby="patientValidity"
                             class="selectpicker show-tick form-control"
@@ -39,20 +40,14 @@
                                 @endforeach
                             </select>
                             <div id="patientValidity" class="invalid-feedback">
-                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> Please provide a valid patient.
+                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please provide a valid patient')
                             </div>
 
                         </div>
                         
                         @if(auth()->user()->role_id == \HV_ROLES::ADMIN)
                             <div class="col-lg-{{ $gridCols }}">                      
-                                <label>Listado de doctores (*)</label>
-                                {{-- <select required class="form-control" name="user_id_doctor" id="doctor">
-                                    @foreach($doctors as $doctor)
-                                        <option value="{{ $doctor->id }}">{{ $doctor->name }} {{ $doctor->lastname }}</option>
-                                    @endforeach
-                                </select> --}}
-
+                                <label>@lang('messages.doctors list') (*)</label>
                                 <select required name="doctor_id" required data-width="100%" aria-describedby="doctorValidity"
                                 class="selectpicker show-tick form-control"
                                 data-live-search="true" title="Doctor" id="doctor">
@@ -61,21 +56,19 @@
                                 @endforeach
                                 </select> 
                                 <div id="doctorValidity" class="invalid-feedback">
-                                    <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> Please provide a valid doctor.
+                                    <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please provide a valid doctor')
                                 </div>
 
                             </div>
                         @endif
                         
                         <div class="col-lg-{{ $gridCols }}">
-                            <label>Fecha de la Cita (*)</label>
+                            <label>@lang('messages.appointment date') (*)</label>
                             {{-- mirar cambio a type week --}}
                             {{-- con libreria jquery ui. https://jqueryui.com/datepicker/ --}}
                             <input required type="date" class="form-control" name="dt_appointment" id="dt_appointment"/>
-                            {{-- <input required type="datetime-local" class="form-control" name="dt_appointment" /> --}}
-                            {{-- Min max atributo --}}
                             <div id="dateValidity" class="invalid-feedback">
-                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> Please provide a valid date.
+                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please provide a valid date')
                             </div>
                         </div>
 
@@ -92,13 +85,13 @@
 
                     <div class="row mt-3" id="showAppointmentsButton">
                         <div class="col-lg-12 text-center">
-                            <button type="button" class="btn btn-primary btn-lg">Mostrar citas</button>
+                            <button type="button" class="btn btn-primary btn-lg">@lang('messages.show appointments')</button>
                         </div>
                     </div>
           
                     <div class="row mt-3" id="createButton">
                         <div class="col-lg-12 text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">Crear</button>
+                            <button type="submit" class="btn btn-primary btn-lg">@lang('messages.create')</button>
                         </div>
                     </div>
 
@@ -331,6 +324,6 @@
 
 @endsection
 
-@section('scriptsPropios')
+@section('viewsScripts')
   <script type="text/javascript" src="{{ asset('js/createAppointment.js')}}"></script>
 @endsection

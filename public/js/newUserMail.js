@@ -14,14 +14,15 @@ $(document).ready(function() {
 
           const newUserMailForm = document.getElementById('newUserMailForm');
   
-          let errorLongMap = [ "Invalid number", "The phone number has an invalid country code", "The phone number is too short", "The phone number is too long", "Invalid number"];
+        //   let errorLongMap = [ "Invalid number", "The phone number has an invalid country code", "The phone number is too short", "The phone number is too long", "Invalid number"];
+        let errorLongMap = [ _messagesLocalization.Invalid_number, _messagesLocalization.The_phone_number_has_an_invalid_country_code, _messagesLocalization.The_phone_number_is_too_short, _messagesLocalization.The_phone_number_is_too_long, _messagesLocalization.Invalid_number];
   
   
           newUserMailForm.addEventListener('submit', (e) => {
             let messages = [];
   
             if (smsPhone.value === '' || smsPhone.value == null) {
-              messages.push("Phone number is required");
+              messages.push(_messagesLocalization.The_phone_number_is_required);
             }
   
             if (input.value.trim()){
@@ -29,18 +30,18 @@ $(document).ready(function() {
                     let errorCode = intl.getValidationError();
                     let code = errorLongMap[errorCode];
                     if (!code){
-                        code = "The phone number is not valid";
+                        code = _messagesLocalization.Invalid_number;
                     }
                     messages.push(code);
                 }
             }
 
             if (password.value !== repeat_password.value){
-              messages.push("Passwords don't match");
+              messages.push(_messagesLocalization.Passwords_do_not_match);
             }
 
             if (password.value.length < 6 || repeat_password.value.length < 6){
-              messages.push("Password needs to have at least 6 characters");
+              messages.push(_messagesLocalization.Password_needs_to_have_at_least_6_characters);
             }
   
             if (messages.length > 0) {
@@ -67,7 +68,10 @@ let input = document.querySelector("#smsPhone");
 let errorMsg = document.querySelector("#error-msg");
 let validMsg = document.querySelector("#valid-msg");
 
-let errorMap = [ "Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+// let errorMap = [ "Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+let errorMap = [ _messagesLocalization.no_valid_number, _messagesLocalization.Invalid_country_code, _messagesLocalization.too_short, _messagesLocalization.too_long, _messagesLocalization.no_valid_number];
+
 
 let intl = window.intlTelInput(input, {
     initialCountry: "auto",
@@ -78,7 +82,7 @@ let intl = window.intlTelInput(input, {
             successful(countryCode);
         });
     },
-    utilsScript: PublicURL + "vendor/intl-tel-input-master/js/utils.js"
+    utilsScript: _publicUrl + "vendor/intl-tel-input-master/js/utils.js"
 });
 
 let reset = function(){
@@ -94,7 +98,8 @@ input.addEventListener('blur', function() {
     if (input.value.trim()){
         if (intl.isValidNumber()){
             validMsg.classList.remove("hide");
-            $('#valid-msg').html("&#10004; Valid number");
+            // $('#valid-msg').html("&#10004; Valid number");
+            $('#valid-msg').html("&#10004; "+_messagesLocalization.Valid_number);
         }
         else{
             $('#valid-msg').text("");
@@ -102,7 +107,8 @@ input.addEventListener('blur', function() {
             let errorCode = intl.getValidationError();
             let code = errorMap[errorCode];
             if (!code){
-                code = "Not valid";
+                // code = "Not valid";
+                code = _messagesLocalization.not_valid;
             }
             errorMsg.innerHTML = code;
             errorMsg.classList.remove("hide");

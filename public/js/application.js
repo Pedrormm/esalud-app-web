@@ -1,17 +1,15 @@
 
-var _avoidAllSendings = false;
-
 document.addEventListener("click", function(){
     assignHeadersToRowsResponsive();
-    $("#mediaTableCss").attr('href', PublicURL + "css/media-table.css");
+    $("#mediaTableCss").attr('href', _publicUrl + "css/media-table.css");
 
     $(document).ajaxComplete(function(){
-        $("#mediaTableCss").attr("href", PublicURL + "css/roleEdit.css");
+        $("#mediaTableCss").attr("href", _publicUrl + "css/roleEdit.css");
     });
 
     if (isABootstrapModalOpen()){
         // $("#mediaTableCss").remove();
-        $("#mediaTableCss").attr("href", PublicURL + "css/roleEdit.css");
+        $("#mediaTableCss").attr("href", _publicUrl + "css/roleEdit.css");
     }
 
   });
@@ -20,14 +18,36 @@ $(document).on( 'draw.dt', function ( e, settings ) {
     assignHeadersToRowsResponsive();
 } );
 
-  
+// On load jquery  
 $(function() {
+    if ($("#topbar-navheader")[0]){
+        $('#topbar-navheader .nav-link,.dropdown-toggle').trigger('click');
+    } 
+    // selectpicker
+    clickOnSelectpicker();
+
+    let flagLanguage = $("#headerTopFlag").data("language");
+    switch(flagLanguage){
+        case "es":
+            $("#headerTopFlag").attr("src",_flagUrl+"es.svg");
+            break;
+        case "en":
+            $("#headerTopFlag").attr("src",_flagUrl+"um.svg");
+            break;
+        case "it":
+            $("#headerTopFlag").attr("src",_flagUrl+"it.svg");
+            break;
+        default:
+            $("#headerTopFlag").attr("src",_flagUrl+"es.svg");
+            break;
+    }
+    $("#headerTopFlag").attr("alt",_longLang+" flag");
 
     $.fn.dataTable.ext.errMode = 'throw';
     if ($('#dataTable').length > 0 ){
         $('#dataTable').DataTable({
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+                "url": _urlDtLang
             },
         });
     }
@@ -46,7 +66,7 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
     if (data.userReceiverId == authUser.id){
 
             showModalConfirm("Llamada entrante de "+data.userReceiverFullName,"¿Desea aceptar la llamada?",()=>{
-            var hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'videoCallContainer', target: 'videoWindow'});
+            var hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: _publicUrl+'videoCallContainer', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
             hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: data.session}));
             $('body').append(hiddenForm);
@@ -64,27 +84,51 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
 
 });//#TAG: #onload-jquery
 
+/**
+ * Fires callback when a user has finished typing. This is determined by the time elapsed
+ * since the last keystroke and timeout parameter or the blur event--whichever comes first.
+ * $('#element').donetyping(callback[, timeout=5000])
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {function} callback - Function to be called when even triggers.
+ * @param {number} [timeout=2000] - Timeout, in ms, to to wait before triggering event if not caused by blur.
+ * @return {void} Nothing
+ */
+ ;(function($){
+    $.fn.extend({
+        donetyping: function(callback,timeout){
+            timeout = timeout || 2e3; // 2 seconds default timeout
+            var timeoutReference,
+                doneTyping = function(el){
+                    if (!timeoutReference) return;
+                    timeoutReference = null;
+                    callback.call(el);
+                };
+            return this.each(function(i,el){
+                var $el = $(el);
+                // Chrome Fix (Use keyup over keypress to detect backspace)
+                $el.is(':input') && $el.on('keyup keypress paste',function(e){
+                    // This catches the backspace button in chrome, but also prevents
+                    // the event from triggering too preemptively. Without this line,
+                    // using tab/shift+tab will make the focused element fire the callback.
+                    if (e.type=='keyup' && e.keyCode!=8) return;
+                    
+                    // Check if timeout has been set. If it has, "reset" the clock and
+                    // start over again.
+                    if (timeoutReference) clearTimeout(timeoutReference);
+                    timeoutReference = setTimeout(function(){
+                        // if we made it here, our timeout has elapsed. Fire the callback
+                        doneTyping(el);
+                    }, timeout);
+                }).on('blur',function(){
+                    // If we can, fire the event since we're leaving the field
+                    doneTyping(el);
+                });
+            });
+        }
+    });
+})(jQuery);
 
-var PublicURL = location.href.includes('public') ? location.href.substring(0, location.href.indexOf('public')+7):
-location.href.match(/^(http(s)?:\/\/([^\/$]+))/);
-
-const weekNameDays = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-
-
-if (!location.href.includes('public')){
-    // PublicURL = PublicURL[0].replace(/(.+)[^\/]$/, "$1/");
-    PublicURL = PublicURL[0].lastIndexOf("/") !== PublicURL[0].length - 1 ? (PublicURL[0] + "/") : PublicURL[0] ;
-}
-
-// "http://asoghaoggaho/".replace(/(.+)[^\/]$/, "$1/") 
-
-// "https://1.1.1.1/hospital/".match(/^(http(s)?:\/\/([^\/$]+))/)
-
-//
-
-
-console.log("**PUBLICURL ", PublicURL);
-
+// Today and timeNow are used for getting the currentDate at the saveNewMessage function
 Date.prototype.today = function () { 
     return ((this.getDate() < 10)?"0":"") + this.getDate() +"-"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"-"+ this.getFullYear();
 }
@@ -93,16 +137,27 @@ Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
  
-var roleId;
+// Using jdocs https://jsdoc.app/tags-param.html
 
+/**
+ * Displays an ajax function over an html tag (selector)
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} endpoint - The endpoint (url) for the ajax call.
+ * @param {Object} jQselector - The selector where the ajax result function will be displayed.
+ * @param {boolean} [displayErrorOnLayer=false] - A boolean indicating whether and error 
+ * is going to be displayed on the selector target when there is an error or not. It is false by default
+ * @param {boolean} [forceDisplay=true] - A boolean indicating whether the selected is going to be forced to be displayed or not
+ * It is true by befault.
+ * @return {void} Nothing
+ */
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
     
-    console.log("Calling asyncCall with args", arguments);
+    // console.log("Calling asyncCall with args", arguments);
     if(typeof displayErrorOnLayer != 'boolean')
         displayErrorOnLayer = false;
     if(typeof forceDisplay != 'boolean')
         forceDisplay = true;
-    $.ajax(PublicURL + endpoint, {
+    $.ajax(_publicUrl + endpoint, {
         method:'get',
         dataType:'html',
         async:true,
@@ -115,7 +170,7 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
                 $(jQselector).show();
         }
         else {
-            console.warn("Destiantion layer", jQselector, "not found");
+            // console.warn("Destiantion layer", jQselector, "not found");
         }
     }).fail(function(xhr, status, error) {
         console.error("fail arguments", arguments);
@@ -127,6 +182,19 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
     });
 }
 
+/**
+ * Shows the return of an ajax call inside a bootstrap Modal with Ajax options
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} url - The endpoint (url) for the ajax call.
+ * @param {Object} [data={}] - The data for the ajax input.
+ * @param {string} [method="PUT"] - The data used for the ajax call
+ * @param {string} [type="json"] - The dataType of the ajax call
+ * @param {function} [callbackOkFunction=function(){}] - Callback function when the user pressed "ok" 
+ * and the function went ok.
+ * @param {boolean} [closeModal=true] - A boolean indicating whether the modal will be hide 
+ * when the callbak function is applied or not. It is true by befault.
+ * @return {void} Nothing
+ */
 function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOkFunction=function(){}, closeModal=true) {
 
     var funcName = "saveModalActionAjax";
@@ -160,12 +228,14 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
         $('#saveModal').off();
    
 }
+
 /**
- * Show an inline message in #error-conatiner container
- * @author Pedro 
- * @param int|string status 
- * @param string message 
- * @param int timeout 0 for no disappear, >0 seconds to disappear
+ * Shows an inline error message in #error-conatiner container
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {number|string} status - The status of the response. 0 for ok | 1 for error
+ * @param {string} message - The message to be displayed on the container
+ * @param {number} [timeout=0] - 0 for no disappearing | >0 for seconds to disappear
+ * @return {void} Nothing
  */
 function showInlineError(status,message, timeout=0, modal=false) {
     let containerNameError = '#error-container';
@@ -180,11 +250,13 @@ function showInlineError(status,message, timeout=0, modal=false) {
     }
 
 }
+
 /**
- * Show an inline message in #message-conatiner container
- * @author Pedro 
- * @param string message 
- * @param int timeout 0 for no disappear, >0 seconds to disappear
+ * Shows an inline success message in #message-conatiner container
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} message - The message to be displayed on the container
+ * @param {number} [timeout=0] - 0 for no disappearing | >0 for seconds to disappear
+ * @return {void} Nothing
  */
 function showInlineMessage(message, timeout=0) {
     $('#message-container').show().html(message);
@@ -195,8 +267,36 @@ function showInlineMessage(message, timeout=0) {
         }, timeout*1000);
     }
 }
+
+/**
+ * Shows the return of an ajax call inside a bootstrap Modal with multiple options
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} title - The title of the bootstrap modal to be displayed.
+ * @param {Object} body - The body of the bootstrap modal in case there is no ajax. 
+ * If there is an ajax call, its response will be overlaped.
+ * @param {boolean} htmlFormat - If it is empty, the bootstrap body will have an ajax response.
+ * If it is not empty, the bootstrap body will have whatever was passed in the previous argument (body).
+ * @param {string} [url=null] - The endpoint (url) for the ajax call.
+ * @param {string} [size=null] - The size of the bootstrap modal.
+ * All the posible sizes are descripted at https://getbootstrap.com/docs/4.2/components/modal/
+ * @param {boolean} [drageable=false] - A boolean indicating whether the modal will be drageable
+ * (meaning that it can be moved) or not. If it is drageable the function dragElement will make it possible.
+ * @param {boolean} [collapseable=false] - A boolean indicating whether the modal will be collapseable
+ * (meaning that it can be collapsed in a single line) or not. 
+ * @param {boolean} [removeApp=false] - A boolean indicating whether #app 
+ * (the videoCall id that will be rendered on React) will be removed or not.
+ * @param {number} [secondstoCancel=null] - null: The modal does not cancel on its own.
+ * Any number: Shows the quantity of seconds for the modal to be canceled.
+ * @param {function} [callbackOkFunction=function(){}] - Callback function when the user pressed "ok" 
+ * and the function went ok.
+ * @param {string} [nameCancelModal="Close"] - null: The cancel button will have the default string value (Close).
+ * Any string: The modal cancel button will have the given string.
+ * @param {string} [nameSaveModal="Save changes"] - null: The save button will have the default string value (Save changes).
+ * Any string: The modal save button will have the given string.
+ * @return {void} Nothing
+ */
 function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
-     removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal="Close", nameSaveModal="Save changes") {
+     removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal=_messagesLocalization.close, nameSaveModal=_messagesLocalization.save_changes) {
     $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
     if (size){
@@ -338,11 +438,21 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
     }
 
 
-}//--fin showModal
+}//--end showModal
 
-
-function showModalConfirm(title="Title", message="No message", callback=function(){},callbackClose=function(){}, optConfirmText="Ok",
-secondsToCancel=null, avoidClose=true) {
+/**
+ * Shows a bootstrap modal with a message and two possible callback functions 
+ * (for when it has been closed and for when it is click on "save" and it works out ok)
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} title - The title of the bootstrap modal to be displayed.
+ * @param {Object} message - The message to be displayed on the bootstrap body
+ * @param {function} [callback=function(){}] - Callback function when the user pressed "ok" 
+ * or whatever the argument optConfirmText has.
+ * @param {function} [callbackClose=function(){}] - Callback function when the user pressed "cancel" 
+ * @param {string} [optConfirmText="Ok"] - The save button (or ok, confirm button) will have the given string.
+ * @return {void} Nothing
+ */
+function showModalConfirm(title=_messagesLocalization.title, message=_messagesLocalization.no_message, callback=function(){},callbackClose=function(){}, optConfirmText=_messagesLocalization.ok) {
     let mainId = '#confirm-modal';
     let buttonOkId = '#okConfirmModal';
     let buttonCloseId = '#closeModalConfirm';
@@ -376,9 +486,14 @@ secondsToCancel=null, avoidClose=true) {
         $(buttonOkId).text(optConfirmText);
     }
     $(mainId).modal('show');
-}//--fin showModalConfirm
+}//--end showModalConfirm
 
-
+/**
+ * Returns the age of a person in years when a date is given
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {date} dateString - The date given.
+ * @return {number} - The age of the person in years.
+ */
 function getAge(dateString) {
     let today = new Date();
     let birthDate = new Date(dateString);
@@ -388,8 +503,14 @@ function getAge(dateString) {
         age--;
     }
     return age;
-  }
+}
 
+/**
+ * Moves dynamically thoughout the window the given element
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {Object} elmnt - The element to be moved.
+ * @return {void} Nothing
+ */
 function dragElement(elmnt) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (document.getElementById(elmnt.id + "header")) {
@@ -431,47 +552,20 @@ function dragElement(elmnt) {
     }
 }
 
-// $('#element').donetyping(callback[, timeout=5000])
-// Fires callback when a user has finished typing. This is determined by the time elapsed
-// since the last keystroke and timeout parameter or the blur event--whichever comes first.
-//   @callback: function to be called when even triggers
-//   @timeout:  (default=2000) timeout, in ms, to to wait before triggering event if not
-//              caused by blur.
-;(function($){
-    $.fn.extend({
-        donetyping: function(callback,timeout){
-            timeout = timeout || 2e3; // 2 seconds default timeout
-            var timeoutReference,
-                doneTyping = function(el){
-                    if (!timeoutReference) return;
-                    timeoutReference = null;
-                    callback.call(el);
-                };
-            return this.each(function(i,el){
-                var $el = $(el);
-                // Chrome Fix (Use keyup over keypress to detect backspace)
-                $el.is(':input') && $el.on('keyup keypress paste',function(e){
-                    // This catches the backspace button in chrome, but also prevents
-                    // the event from triggering too preemptively. Without this line,
-                    // using tab/shift+tab will make the focused element fire the callback.
-                    if (e.type=='keyup' && e.keyCode!=8) return;
-                    
-                    // Check if timeout has been set. If it has, "reset" the clock and
-                    // start over again.
-                    if (timeoutReference) clearTimeout(timeoutReference);
-                    timeoutReference = setTimeout(function(){
-                        // if we made it here, our timeout has elapsed. Fire the callback
-                        doneTyping(el);
-                    }, timeout);
-                }).on('blur',function(){
-                    // If we can, fire the event since we're leaving the field
-                    doneTyping(el);
-                });
-            });
-        }
-    });
-})(jQuery);
-
+/**
+ * Returns the closest phrase (or rather, the most similar) in the dictionary of the given one,
+ * and changes the first letter of each word to uppercase when each word is larger than the charLimit given
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} str - The given phrase
+ * @param {Object} pattern - The reggex value, in case multiple separators will be allowed
+ * @param {boolean} [allCase=false] - A boolean indicating whether all the resulting 
+ * characters will be uppercase or not.
+ * @param {spellCheck} [allCase=true] - A boolean indicating whether the spelling 
+ * (and thus, changing the resulting word accordingly) will be taken into account or not.
+ * @param {number} [charLimit=2] - The number of characters for each word to be taken into account
+ * for being modified.
+ * @return {string} - The resulting phrase
+ */
 function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, charLimit=2) {
     // Via Regex. Allowing multiple separators 
     let splitStr = str.toLowerCase().split(pattern);
@@ -479,13 +573,18 @@ function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, char
         for (let i = 0; i < splitStr.length; i++) {
             // console.log('Original: ', splitStr[i]);
             if (spellCheck){
-                let array_of_suggestions = dictionary.suggest(splitStr[i]);
-                // console.log(array_of_suggestions, array_of_suggestions[0]);
-                if (array_of_suggestions && array_of_suggestions.length) {   
-                    splitStr[i] = array_of_suggestions[0];
+                if (_dictionary){
+                    let array_of_suggestions = _dictionary.suggest(splitStr[i]);
+                    // console.log(array_of_suggestions, array_of_suggestions[0]);
+                    if (array_of_suggestions && array_of_suggestions.length) {   
+                        splitStr[i] = array_of_suggestions[0];
+                    }
+                }
+                else{
+                    splitStr[i]="";
                 }
             }
-            // console.log('Palabra: ', splitStr[i]);
+            // console.log('Word: ', splitStr[i]);
             let caseCondition = allCase ? (splitStr[i].length > charLimit || i == 0) : (i == 0);
             if (caseCondition){
                 splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
@@ -495,29 +594,93 @@ function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, char
     return splitStr.join(' '); 
 }
 
+/**
+ * Sleeps everything for the time given
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {number} milliseconds - The time for the app to be slept, in ms
+ * @return {void} Nothing
+ */
 function sleep(milliseconds) {
     const date = Date.now();
     let currentDate = null;
     do {
       currentDate = Date.now();
     } while (currentDate - date < milliseconds);
-  }
-
-function isABootstrapModalOpen() {
-    return $('.modal.show').length >0;
-    // return true;
 }
 
+/**
+ * Returns whether a bootstrap modal is currently open or not 
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {boolean} - If the modal is opened or not
+ */
+function isABootstrapModalOpen() {
+    return $('.modal.show').length >0;
+}
+
+/**
+ * Returns whether the view the user is in is the videoCall one or not
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {boolean} - If we are located in the videoCall view or not
+ */
 function isInVideoCallView() {
     return window.location.href != (URL+'videoCall');
 }
 
+/**
+ * Creates a pusher trigger with the sent appointment
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {Object} [appointment=null] - The given appointment object.
+ * @param {Object} [channel=null] - Channel where the pusher trigger will occur.
+ * @return {void} Nothing
+ */
+function sendAlert(appointment=null,channel=null ) {
+    if (appointment){
+        
+        $.ajax(_publicUrl + 'messaging/send', {
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },  
+            dataType: 'json',
+            data: {contact_id: userToMessageId, msj: msj},
+            method:'post',
+        }).done(function(res){
+
+            channel.trigger(`client-send`, { 
+                idSender: idSender,
+                idReceiver: userToMessageId,
+                user_id_from: idSender,
+                user_id_to: userToMessageId,    
+                message: msj,
+                date_spa: res.date_spa,
+                date_eng: res.date_eng,
+            });
+            // We push the new message into the messages array cause we already have the other messages locally
+            // We add the msj to the parent
+            console.log("res: ",res);
+            saveNewMessage(res, true);
+        })
+        .fail(function(xhr, st, err) {
+            console.error("error in messaging/send " + xhr, st, err);
+        }); 
+
+        writtenMessage.val('');     
+    }
+}
+
+/**
+ * Creates a pusher trigger with the sent message
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} writtenMessage - The given message to be sent.
+ * @param {number} [userToMessageId=null] - Id of the user who recieves the mesage.
+ * @param {number} [idSender=null] - Id of the user who sends the mesage.
+ * @param {Object} [channel=null] - Channel where the pusher trigger will occur.
+ * @return {void} Nothing
+ */
 function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channel=null ) {
     let msj = writtenMessage.val();
     if (msj && (msj != "")){
         
-
-        $.ajax(PublicURL + 'messaging/send', {
+        $.ajax(_publicUrl + 'messaging/send', {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },  
@@ -548,6 +711,14 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
     }
 }
 
+/**
+ * Saves the given message updating it in the messages feed and in the header
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {Object} messageObj - The message object to be saved.
+ * @param {number} [alienUser=false] - If true, the user who sends the message is the logged user
+ * @param {number} [contactToWriteId=null] - Id of the user where the message will be written.
+ * @return {void} Nothing
+ */
 function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
     let appended = false;
     let oldLength = $(".cMessagesFeed li").length;
@@ -575,6 +746,13 @@ function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
     return appended;
 }
 
+/**
+ * Scrolls the given element to the bottom of the screen at a given speed
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {Object} element - Element that will be scrolled to the bottom.
+ * @param {number} [speed=10] - Speed, in ms, at which the animation will occur.
+ * @return {void} Nothing
+ */
 function scrollToBottom(element, speed=10) {
     setTimeout(function() {
         $(element).animate({ scrollTop: $(document).height() }, speed);
@@ -593,6 +771,11 @@ function scrollToBottom(element, speed=10) {
     }, 50);
 }
 
+/**
+ * Returns the height of the current view
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {number} The height of the document (view)
+ */
 function getDocHeight() {
     var D = document;
     return Math.max(
@@ -602,14 +785,20 @@ function getDocHeight() {
     );
 }
 
-function chatPusherInit() {
+/**
+ * Initializes an element in pusher and subscribes to a pressence channel
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {boolean} [isChat=true] - If it is a chat the channel name is swaped.
+ * @return {void} Nothing
+ */
+function chatPusherInit(isChat = true) {
     console.log("llamada chatPusherInit",chatPusherInit.caller);
     Pusher.logToConsole = false;
 
-    console.log("antes", PublicURL);
+    // console.log("antes", _publicUrl);
 
     let chatPusher = new Pusher("9e2cbb3bb69dab826cef", {
-        authEndpoint: PublicURL+'pusher/auth',
+        authEndpoint: _publicUrl+'pusher/auth',
         cluster: 'ap2',
         encrypted: true,
         auth: { 
@@ -623,21 +812,32 @@ function chatPusherInit() {
             // },
         }
     });
-    console.log("despues: ", PublicURL+'pusher/auth');
+    // console.log("despues: ", _publicUrl+'pusher/auth');
     
     chatPusher.connection.bind( 'error', function( err ) {
         console.log("Pusher chat error: ",err);
     });
-    
-    let chatChannel = chatPusher.subscribe('presence-chat-channel');
+    let channelName ="";
+    if (isChat){
+        channelName='presence-chat-channel';
+    }
+    else{
+        channelName='presence-alert-channel';
+    }
+    let chatChannel = chatPusher.subscribe(channelName);
     return [chatPusher, chatChannel];
 }
 
+/**
+ * Initializes an element in pusher and subscribes to a channel
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {void} Nothing
+ */
 function videoPusherInit() {
     Pusher.logToConsole = false;
 
     let videoPusher = new Pusher("9e2cbb3bb69dab826cef", {
-        authEndpoint: PublicURL+'pusher/auth',
+        authEndpoint: _publicUrl+'pusher/auth',
         cluster: 'ap2',
         encrypted: true,
         auth: { 
@@ -656,6 +856,15 @@ function videoPusherInit() {
     return [videoPusher, videoChannel];
 }
 
+/**
+ * Updates the number in the header top bar messages icon and he messages below
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {boolean} [add=true] - If true, the messages icon will be updating with the previous messages number+1
+ * @param {number} contactToWriteId - The reciever user id (the one who the message is aimed to).
+ * @param {string} message - The message to be updated
+ * @param {number} msjRead - The number of messages that the logged user has read
+ * @return {void} Nothing
+ */
 function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
     let icon = $('#numMessagesHeader');
     let num = icon.text();
@@ -688,16 +897,18 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
             console.log("No se encuentra en el header");
 
             // Ajax call to get the userName and avatar from id
-            $.ajax(PublicURL + 'messaging/getUserFromId', {
+            $.ajax(_publicUrl + 'messaging/getUserFromId', {
                 dataType: 'json',
                 data: {id: contactToWriteId},
                 method:'get',
             }).done(function(res){
-                console.log("respuesta",res);
+                let route = _publicUrl+"images/avatars/"+res.avatar;
                 let whatToInsert =
-                ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${PublicURL}messaging' >`+
+                ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${_publicUrl}messaging' >`+
                  "<div class='dropdown-list-image mr-3'>"+
-                    `<img class='rounded-circle' src='${(res.avatar) ? PublicURL+"images/avatars/"+res.avatar : ((res.sex == "male") ? PublicURL+"images/avatars/user_man.png": (res.sex == "female")? PublicURL+"images/avatars/user_woman.png":null) }' alt='Foto de perfil'>`+  
+                    `<img class='rounded-circle' src='${res.avatar ? route: 
+                        ((res.sex == "male") ? _publicUrl+"images/avatars/user_man.png":
+                         (res.sex == "female")? _publicUrl+"images/avatars/user_woman.png":null)}' alt='Foto de perfil'>`+  
                          "<div class='status-indicator bg-success'></div>"+
                  "</div>"+
                  "<div class='mr-3 font-weight-bold'>"+
@@ -738,11 +949,22 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
     else
         $('#numMessagesHeader').addClass("badge");
 }
-
+/**
+ * Returns wheather the given object is a number or not
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {number} n - The object to be checked.
+ * @return {boolean} - Boolean indicating if the object is a number or not
+ */
 function isNumber(n) {
      return /^-?[\d.]+(?:e-?\d+)?$/.test(n); 
 } 
 
+/**
+ * Validates the phone number and settings for every country
+ * Function made thanks to the International Telephone Input script, https://intl-tel-input.com/
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {void} Nothing
+ */
 function settingUpPhone(){
     let input = document.querySelector("#smsPhone");
     let errorMsg = document.querySelector("#error-msg");
@@ -759,7 +981,7 @@ function settingUpPhone(){
                 successful(countryCode);
             });
         },
-        utilsScript: PublicURL + "vendor/intl-tel-input-master/js/utils.js"
+        utilsScript: _publicUrl + "vendor/intl-tel-input-master/js/utils.js"
     });
 
     let reset = function(){
@@ -805,6 +1027,11 @@ function settingUpPhone(){
 
 }
 
+/**
+ * Makes every table in the app responsive by changing the ths and tds to make it look better and to fit in the device
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {void} Nothing
+ */
 function assignHeadersToRowsResponsive(){
     // if (screen.width <= 1024){
     if (isMobile()){
@@ -829,13 +1056,19 @@ function assignHeadersToRowsResponsive(){
         //     console.log("expansion 1024");
         //     $('.sidebar .collapse').collapse('hide');
         // };
-
-    
-        
     }
 }
 
-
+/**
+ * Disables a default setting in the datatables plug-in, 
+ * so searchs will not be available till a number of min characters given are written
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {Object} dtSelector - The table jquery selector.
+ * @param {number} minChars - The number of characters at minimum needed for the search option to be activated.
+ * @param {boolean} [bloodOption=true] - If true, the option searched is blood, 
+ * so the minimum characters will change accordingly.
+ * @return {void} Nothing
+ */
 function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=null) {
     $('.dataTables_filter input')
         .off()
@@ -845,7 +1078,7 @@ function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=
 
             if (bloodOption){
                 if(/^(A|B|AB|0)[+-]$/i.test(this.value)){
-                    console.log("es sangre");
+                    // console.log("es sangre");
                     $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
                     return false;
                 }    
@@ -861,6 +1094,11 @@ function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=
         });
 }
 
+/**
+ * Returns wheather the device is a mobile phone or not
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @return {boolean} - Boolean indicating if the user is on a phone or not
+ */
 function isMobile(){
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         return true
@@ -869,3 +1107,12 @@ function isMobile(){
         return false
     }
 } 
+
+function clickOnSelectpicker(){
+    if ($(".selectpicker")[0]){
+        setTimeout(function() {
+            $('button.dropdown-toggle').trigger('click');
+            $('body').trigger('click');
+        }, 1000);
+    } 
+}

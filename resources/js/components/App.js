@@ -83,7 +83,7 @@ export default class App extends Component {
 
         videoChannel.bind('pusher:subscription_succeeded', function() {
             let userReceiverFullName ="";
-            $.ajax(PublicURL + 'videoCall/getUserInfo', {
+            $.ajax(_publicUrl + 'videoCall/getUserInfo', {
                 dataType: "text",
                 data: {id: userId},
                 method:'get',
@@ -106,7 +106,7 @@ export default class App extends Component {
             console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
 
             console.log("hiddenform");
-            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: PublicURL+'videoCallContainer', target: 'videoWindow'});
+            let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: _publicUrl+'videoCallContainer', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
             hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: session}));
             $('body').append(hiddenForm);
@@ -123,7 +123,7 @@ export default class App extends Component {
 
             $('#videoFormData').submit();
     
-            // window.open(PublicURL+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
+            // window.open(_publicUrl+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
             // if (this.state.latestSession !== null ){
                 $("#joinButton").css("display", "inline");
             // }
@@ -140,7 +140,7 @@ export default class App extends Component {
 
         videoChannel.bind('pusher:subscription_succeeded', function() {
             let userReceiverFullName ="";
-            $.ajax(PublicURL + 'videoCall/getUserInfo', {
+            $.ajax(_publicUrl + 'videoCall/getUserInfo', {
                 dataType: "text",
                 data: {id: userId},
                 method:'get',

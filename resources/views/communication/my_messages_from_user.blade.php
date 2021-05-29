@@ -29,7 +29,7 @@
                                     <div class="msj-image">
                                         <figure class="">
                                             @if (!empty($userMessage['avatar']))
-                                                <img class="avatar big" src="{{ asset('images/avatars/'.$user->avatar) }}">                                                               
+                                                <img class="avatar big" src="{{ asset('images/avatars/'.$userMessage['avatar']) }}">                                                               
                                             @else
                                                 @if ($userMessage['sex']=="male")
                                                     <img class="avatar big" src="{{ asset('images/avatars/user_man.png') }}">                                                               

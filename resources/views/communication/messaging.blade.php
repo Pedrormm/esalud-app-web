@@ -48,15 +48,14 @@
                           <li value={{ $contact->id }} >
                             <div class="contactAvatar">
                               @if (!empty($contact->avatar))
-                                <img class="avatar" src="{{ asset('images/avatars/'.$user->avatar) }}" 
-                                alt={{ $contact->name. " ".$contact->lastname }}  class="avatar big">                                                               
+                                <img class="avatarContactSize avatar" src="{{ asset('images/avatars/'.$contact->avatar) }}">                                                                 
                               @else
-                                  @if ($contact->sex=="male")
-                                      <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_man.png') }}">                                                               
-                                  @endif
-                                  @if ($contact->sex=="female")
-                                      <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_woman.png') }}">                                                               
-                                  @endif
+                                @if ($contact->sex=="male")
+                                    <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_man.png') }}">                                                               
+                                @endif
+                                @if ($contact->sex=="female")
+                                    <img class="avatarContactSize avatar" src="{{ asset('images/avatars/user_woman.png') }}">                                                               
+                                @endif
                               @endif
                             </div>
 
@@ -86,10 +85,14 @@
         </div>
         <!-- /.container-fluid -->
 
-    <script>
-          let authUser = @json($user->toArray());
-          let contacts = @json($contacts->toArray());
-    </script>
 
-    <script type="text/javascript" src="{{ asset('js/messaging.js')}}"></script>
+@endsection
+
+@section('viewsScripts')
+  <script>
+    let authUser = @json(auth()->user()->toArray());
+    let contacts = @json($contacts->toArray());
+  </script>
+
+  <script type="text/javascript" src="{{ asset('js/messaging.js')}}"></script>
 @endsection

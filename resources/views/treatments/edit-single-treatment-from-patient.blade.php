@@ -118,11 +118,11 @@
 
   @endsection
 
-    @section('scriptsPropios')
+    @section('viewsScripts')
         <script>
             $('.cHeader button').on('click', function(e){
                 e.preventDefault();
-                window.location.href = PublicURL+"patients/";
+                window.location.href = _publicUrl+"patients/";
             });
         </script>
     @endsection

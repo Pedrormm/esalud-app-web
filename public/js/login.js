@@ -1,13 +1,13 @@
 $('.remember_password').on('click', function(e){
     e.preventDefault();
 
-    showModal('Contraseña olvidada ', '', false, $(this).attr('href'), 'modal-xl', true, true, false, null, function() {
+    showModal(_messagesLocalization.forgotten_password + ' ', '', false, $(this).attr('href'), 'modal-xl', true, true, false, null, function() {
 
         // $('#rememberForgotten').submit();
-        // $.post( PublicURL +"loginForgotten", $( "#rememberForgotten" ).serialize() );
+        // $.post( _publicUrl +"loginForgotten", $( "#rememberForgotten" ).serialize() );
         
 
-        $.post( PublicURL +"loginForgotten", $( "#rememberForgotten" ).serialize() , function(res) {
+        $.post( _publicUrl +"loginForgotten", $( "#rememberForgotten" ).serialize() , function(res) {
                 // console.log( "success",res );
                 // $("#infoSession").text(res.message);
                 if (res.status == 0){

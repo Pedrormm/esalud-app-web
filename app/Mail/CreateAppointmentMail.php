@@ -47,7 +47,7 @@ class CreateAppointmentMail extends Mailable
      */
     public function build()
     {
-        $subject = ($this->patient['name'] .", se ha creado una nueva cita médica con el médico " .$this->doctor['name'] );
+        $subject = ($this->patient['name'] .\Lang::get('messages.a new appointment has been created with the doctor') .$this->doctor['name'] );
         $calendarText = Calendar::create('Citas medicas HV')
         ->event(Event::create($subject)
             ->startsAt(new DateTime($this->dateTimeAppointment))
@@ -59,7 +59,7 @@ class CreateAppointmentMail extends Mailable
         ->get();
 
         if ($this->isPatient){
-            return $this->subject($this->patient['name'] .", se ha creado una nueva cita médica con el médico " .$this->doctor['name'] )
+            return $this->subject($this->patient['name'] .\Lang::get('messages.a new appointment has been created with the doctor') .$this->doctor['name'] )
             ->markdown('mail.newAppointmentPatient', ['patientName' => $this->patient['name'], 
             'doctorName' => $this->doctor['name'], 'dateTimeAppointment' => $this->dateTimeAppointment, 'isPatient' => $this->isPatient,
              'role' => $this->role, 'appointmentUserCreatorRole' => $this->appointmentUserCreatorRole, 'appointmentId' => $this->appointmentId])
@@ -70,7 +70,7 @@ class CreateAppointmentMail extends Mailable
              );
         }
         else{
-            return $this->subject($this->doctor['name'] .", se ha creado una nueva cita médica con el paciente " .$this->patient['name'] )
+            return $this->subject($this->doctor['name'] .\Lang::get('messages.a new appointment has been created with the patient') .$this->patient['name'] )
             ->markdown('mail.newAppointmentDoctor', ['patientName' => $this->patient['name'], 
             'doctorName' => $this->doctor['name'], 'dateTimeAppointment' => $this->dateTimeAppointment, 'isPatient' => $this->isPatient,
              'role' => $this->role, 'appointmentUserCreatorRole' => $this->appointmentUserCreatorRole,'appointmentId' => $this->appointmentId])

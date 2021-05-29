@@ -3,13 +3,17 @@ let pusher = chatPusherInit();
 let chatPusher = pusher[0];
 let chatChannel = pusher[1];
 
+const skyImgRoute = _publicUrl + "images/sky.jpg"
+$('.cMessagesFeed').attr('style', 'background: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)), url('+skyImgRoute+') !important');
+
+
 chatChannel.bind(`client-send`, (data) => {
     console.log("Recibido client-send Contactos", data);
     if (data.idReceiver == authUser.id){
         let written = saveNewMessage(data,false,data.idSender);
         updateUnread(data.idSender, false, written);
         if (written){
-            $.ajax(PublicURL + 'messaging/updateReadMessages', {
+            $.ajax(_publicUrl + 'messaging/updateReadMessages', {
                 dataType: 'json',
                 data: {id: data.idSender},
                 method:'get',
@@ -75,12 +79,12 @@ if (width < 768) {
         if (selectedContactNotReadMessages)
             updateHeaderMessages(false, parseInt(selectedContactNotReadMessages.innerText.trim()));
         updateUnread(selectedId, true);
-        $.ajax(PublicURL + 'messaging/updateReadMessages', {
+        $.ajax(_publicUrl + 'messaging/updateReadMessages', {
             dataType: 'json',
             data: {id: selectedId},
             method:'get',
         }).done(function(res){
-            location.assign(PublicURL+"messaging/viewMessagesFromMobile"+"/"+selectedId);
+            location.assign(_publicUrl+"messaging/viewMessagesFromMobile"+"/"+selectedId);
         })
         .fail(function(xhr, st, err) {
             console.error("error in messaging/updateReadMessages " + xhr, st, err);
@@ -130,7 +134,7 @@ else {
             updateHeaderMessages(false, contactId, null, parseInt(selectedContactNotReadMessages[0].innerText.trim()));
         updateUnread(contactId, true);
 
-        $.ajax(PublicURL + 'messaging/getContactInfo', {
+        $.ajax(_publicUrl + 'messaging/getContactInfo', {
             dataType: 'json',
             data: {id: contactId},
             method:'get',
@@ -192,7 +196,7 @@ else {
                     e.preventDefault();
                     let id = $(this).data("delete-message-id");
                     let that = $(this);
-                    $.ajax(PublicURL + 'messaging/deleteMessageChat', {
+                    $.ajax(_publicUrl + 'messaging/deleteMessageChat', {
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }, 

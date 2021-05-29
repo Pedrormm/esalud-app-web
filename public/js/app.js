@@ -56658,7 +56658,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isInVideoCallView", function() { return isInVideoCallView; });
 // VideoUtils.js
 function isInVideoCallView() {
-  return window.location.href == PublicURL + 'videoCall';
+  return window.location.href == _publicUrl + 'videoCall';
 }
 
 /***/ }),
@@ -56848,7 +56848,7 @@ function (_Component) {
       console.log(videoChannel);
       videoChannel.bind('pusher:subscription_succeeded', function () {
         var userReceiverFullName = "";
-        $.ajax(PublicURL + 'videoCall/getUserInfo', {
+        $.ajax(_publicUrl + 'videoCall/getUserInfo', {
           dataType: "text",
           data: {
             id: userId
@@ -56872,7 +56872,7 @@ function (_Component) {
         var hiddenForm = $('<form>', {
           id: 'videoFormData',
           method: 'post',
-          action: PublicURL + 'videoCallContainer',
+          action: _publicUrl + 'videoCallContainer',
           target: 'videoWindow'
         });
         hiddenForm.append($('<input>', {
@@ -56893,7 +56893,7 @@ function (_Component) {
         //     that.state.latestSession = null;
         // };
 
-        $('#videoFormData').submit(); // window.open(PublicURL+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
+        $('#videoFormData').submit(); // window.open(_publicUrl+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
         // if (this.state.latestSession !== null ){
 
         $("#joinButton").css("display", "inline"); // }
@@ -56908,7 +56908,7 @@ function (_Component) {
       var that = this;
       videoChannel.bind('pusher:subscription_succeeded', function () {
         var userReceiverFullName = "";
-        $.ajax(PublicURL + 'videoCall/getUserInfo', {
+        $.ajax(_publicUrl + 'videoCall/getUserInfo', {
           dataType: "text",
           data: {
             id: userId

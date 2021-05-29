@@ -30,7 +30,7 @@
                             <ul>
                                 @foreach ($userMessages as $userMessage)
 
-                                    @if ($userMessage["user_id_from"] == $user->id)
+                                    @if ($userMessage["user_id_from"] == auth()->user()->id)
                                         <li class="alienUser">
                                             <div class="text">
                                                 <span>
@@ -73,11 +73,12 @@
     </div>
     <!-- /.container-fluid -->
 
+@endsection
+
+@section('viewsScripts')
     <script>
-        let authUser = @json($user->toArray());
+        let authUser = @json(auth()->user()->toArray());
     </script>
 
     <script type="text/javascript" src="{{ asset('js/viewMessagesFromMobile.js')}}"></script>
-    
 @endsection
-

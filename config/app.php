@@ -170,6 +170,8 @@ return [
         /*
          * Package Service Providers...
          */
+        // Mariuzzo\LaravelJsLocalization\LaravelJsLocalizationServiceProvider::class,
+        // JsLocalization\JsLocalizationServiceProvider::class,
 
         /*
          * Application Service Providers...

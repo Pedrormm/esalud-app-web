@@ -71,7 +71,9 @@
   </div>
 
 
-  <script type="text/javascript" src="{{ asset('js/sendsms.js')}}"></script>
 
 @endsection
 
+@section('viewsScripts')
+  <script type="text/javascript" src="{{ asset('js/sendsms.js')}}"></script>
+@endsection

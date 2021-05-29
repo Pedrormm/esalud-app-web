@@ -1,6 +1,9 @@
 <?php
   use Carbon\Carbon;
   use Illuminate\Support\Facades\DB;
+  use Illuminate\Support\Str;
+  use Illuminate\Support\Facades\Storage;
+
   use App\Models\Permission;
   use App\Models\Role;
   use App\Models\RolePermission;
@@ -28,6 +31,20 @@
         $time = str_replace(':', '', $time);
         $time = str_replace(' ', '', $time);
         return $time;
+    }
+
+    function getRandomFile($ext) {
+        $rndText = Str::random(10); 
+        $time = getTimeName();
+        $newFileName = $time . $rndText . '.' . $ext;
+
+        //Verify if new name already exists
+        while (\Storage::exists($newFileName)) 
+        {
+            $time = getTimeName();
+            $newFileName = $time . $rndText . '.' . $ext;
+        }
+        return $newFileName;
     }
 
     function getValueName (string $value) {

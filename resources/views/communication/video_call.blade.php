@@ -6,26 +6,9 @@
 
 @section('content')
 
-  @if (auth()->user())
-    <script>
-      window.user = {
-        id: {{ ($user->id) }},
-        dni: "{{ ($user->dni) }}"
-      }
-
-      window.csrfToken = "{{ csrf_token() }}";
-
-      window.allUsers = <?=$allUsers?>;
-
-      window.signalSent = @json($signalSent);
-      
-
-    </script>
-  @endif
-
   <!-- Begin Page Content -->
   <div class="container-fluid">
-    <!-- DataTales Example -->
+    
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
         <h4 class="m-0 font-weight-bold text-primary text-center">Videollamada!</h4>
@@ -44,7 +27,26 @@
   <!-- /.container-fluid -->
   
 </div>
-  <script id="videoApp" src="{{asset('js/app.js')}}" >
-  </script>      
+   
     
+@endsection
+
+@section('viewsScripts')
+  @if (auth()->user())
+    <script>
+      window.user = {
+        id: {{ (auth()->user()->id) }},
+        dni: "{{ (auth()->user()->dni) }}"
+      }
+
+      window.csrfToken = "{{ csrf_token() }}";
+
+      window.allUsers = <?=$allUsers?>;
+
+      window.signalSent = @json($signalSent);
+      
+    </script>
+  @endif
+  
+  <script id="videoApp" src="{{asset('js/app.js')}}" ></script>   
 @endsection

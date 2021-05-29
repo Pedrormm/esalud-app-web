@@ -86,11 +86,15 @@
 													<a name="records" href="{{ URL::asset('/singleRecord/'.$patient['id']) }}"/>                        
 													<div class="box">
 														<div class="record_left text-center pt-3">
-															@if ($patient['sex']=="male")
-																<img src="{{ asset('images/avatars/user_man.png') }}" class="avatar big ">                                                               
-															@endif
-															@if ($patient['sex']=="female")
-																<img src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
+															@if (!empty($patient['avatar']))
+																<img src="{{ asset('images/avatars/'.$patient['avatar']) }}" class="avatar big"/>
+															@else
+																@if ($patient['sex']=="male")
+																	<img src="{{ asset('images/avatars/user_man.png') }}" class="avatar big ">                                                               
+																@endif
+																@if ($patient['sex']=="female")
+																	<img src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
+																@endif
 															@endif
 														</div> <!-- record_left  -->
 														<div class="record_right">
@@ -111,7 +115,7 @@
 																	<div class="row p-3">
 																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">Edad:</span>
 																		<span class="col-xs-12 col-sm-6">{{ \Carbon\Carbon::parse($patient['birthdate'])->age }}</span>
-																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">Sexo:</span>
+																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">@lang('messages.gender'):</span>
 																		<span class="col-xs-12 col-sm-6 text-nowrap">{{ $patient['sex'] }}</span>
 																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">Altura:</span>
 																		<span class="col-xs-12 col-sm-6">{{ $patient['height'] }}</span>
@@ -135,48 +139,37 @@
 				</div> <!-- list_records  -->        
 		</div>
 	</div>
-<script>
-    $(document).ready(function() {  
 
-        if (window.location.href != "{{url('user/records')}}") {
-            if(sessionStorage.getItem('order') !== '') {
-                $('#record_order_type').val(sessionStorage.getItem('order'));
-            }
-            if(sessionStorage.getItem('sex') !== '') {
-                $('#record_sex_filter').val(sessionStorage.getItem('sex'));
-                }
-            if(sessionStorage.getItem('age') !== '') {
-                $('#record_age_filter').val(sessionStorage.getItem('age'));
-            }
-            if(sessionStorage.getItem('search') !== '') {
-                $('#record_search_filter').val(sessionStorage.getItem('search'));
-            }
-        }
-    });
-
-    $('#hmsearch').click(function(e) { 
-		console.log("sdcsdssdss");    
-        // let ord = $('#record_order_type').val();
-        // let sexFilter = $('#record_sex_filter').val();
-        // let ageFilter = $('#record_age_filter').val();
-        // let nameSearch = $('#record_search_filter').val();
-
-        // sessionStorage.setItem('order', ord);
-        // sessionStorage.setItem('sex', sexFilter);
-        // sessionStorage.setItem('age', ageFilter);
-        // sessionStorage.setItem('search', nameSearch);
-
-
-        // location.href = "{{url('records')}}" + "/" + ord + "/" + sexFilter + "/" 
-        // + ageFilter + "/" + nameSearch;
-    });
-
-    // if (screen.width <= 1024){
-	if (isMobile()){
-		$('.leftRecordRow').removeClass('pl-4');
-	}else{
-		$('.leftRecordRow').addClass('pl-4');
-	}
-</script>
            
+@endsection
+
+
+
+
+@section('viewsScripts')
+	<script>
+		$(function() {
+			if (window.location.href != "{{url('user/records')}}") {
+				if(sessionStorage.getItem('order') !== '') {
+					$('#record_order_type').val(sessionStorage.getItem('order'));
+				}
+				if(sessionStorage.getItem('sex') !== '') {
+					$('#record_sex_filter').val(sessionStorage.getItem('sex'));
+					}
+				if(sessionStorage.getItem('age') !== '') {
+					$('#record_age_filter').val(sessionStorage.getItem('age'));
+				}
+				if(sessionStorage.getItem('search') !== '') {
+					$('#record_search_filter').val(sessionStorage.getItem('search'));
+				}
+			}
+		});
+
+		// if (screen.width <= 1024){
+		if (isMobile()){
+			$('.leftRecordRow').removeClass('pl-4');
+		}else{
+			$('.leftRecordRow').addClass('pl-4');
+		}
+	</script>
 @endsection

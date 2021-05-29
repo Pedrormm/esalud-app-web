@@ -56,7 +56,7 @@ class LoginController extends Controller
             
             return redirect()->action('LoginController@index');
         }
-        return back()->withErrors("Authentication failed");
+        return back()->withErrors(\Lang::get('messages.Authentication failed'));
     }
 
     public function loginForgotten(Request $request) {
@@ -72,10 +72,10 @@ class LoginController extends Controller
         $user = User::where('dni', $login)->first();
         if(is_null($user)) {
             // return back()->withErrors("Invalid login");
-            return response()->json(['status' => 1, 'message' => 'The email or dni provided does not exist']);
+            return response()->json(['status' => 1, 'message' => \Lang::get('messages.The email or dni provided does not exist')]);
         }
         
-        $maxSteps = 1000; //Por seguridad, no vamos a permitir esto
+        $maxSteps = 1000; //We do not allow this for security reasons
         $try = 0;
         do {            
             $token = Str::random(32);
@@ -84,7 +84,7 @@ class LoginController extends Controller
             if($try >= $maxSteps) {
                 // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
                 // return back()->withErrors("Internal error");
-                return response()->json(['status' => 1, 'message' => 'Internal error']);
+                return response()->json(['status' => 1, 'message' => \Lang::get('messages.Internal error')]);
 
             }
             $try++;
@@ -92,8 +92,8 @@ class LoginController extends Controller
 
         $contact = User::where('email', $login)->orwhere('dni', $login)->get();
         if (count($contact) == 0){ // Si el usuario no existe
-            // return redirect()->back()->with(['error' => 'The email or dni provided does not exist']);
-            return response()->json(['status' => 1, 'message' => 'The email or dni provided does not exist']);
+            // return redirect()->back()->with(['error' => \Lang::get('messages.The email or dni provided does not exist')]);
+            return response()->json(['status' => 1, 'message' => \Lang::get('messages.The email or dni provided does not exist')]);
         }
 
         $email = $contact[0]->email;
@@ -112,14 +112,14 @@ class LoginController extends Controller
         // $res = Mail::to($contact[0]->email)->send(new InvitationNewUserMail($token, $contact[0]->name));
         
         // return redirect()->back()->with(['successful' => 'A reset email was sent to the email']);
-        return response()->json(['status' => 0, 'message' => 'A reset email was sent to your email']);
+        return response()->json(['status' => 0, 'message' => \Lang::get('messages.A reset email was sent to your email')]);
 
     }
 
     public function forgotPassword($token=null){
         $user = User::where('remember_token', $token)->get();
         if ((empty($token)) || (count($user) == 0)){
-            return redirect('/')->withError("Invalid route");
+            return redirect('/')->withError(\Lang::get('messages.Invalid route'));
         }
         return view('mail.resetpassword', ['token' => $token]);        
     }
@@ -143,7 +143,7 @@ class LoginController extends Controller
         $pass = Hash::make($request->password);
 
         User::where('remember_token', $request->token)->update(['password'=>$pass]);
-        return redirect('/')->with(['successful' => 'The password has been changed']);
+        return redirect('/')->with(['successful' => \Lang::get('messages.The password has been changed')]);
     }
 
     const MAX_MESSAGE_LENGTH = 15;
@@ -156,7 +156,7 @@ class LoginController extends Controller
     
     public function logout(Request $request) {
         Auth::logout();
-        return redirect('/')->withError("Session closed");
+        return redirect('/')->withError(\Lang::get('messages.Session closed'));
     }
 
     public function isPasswordForgotten(Request $request){
@@ -164,9 +164,33 @@ class LoginController extends Controller
             return view('login-is-password-forgotten');
         }
         else{
-            $this->errorNotAjax($request, "Permiso denegado");
+            $this->errorNotAjax($request, \Lang::get('messages.Permission_Denied'));
             // return $this->jsonResponse(1, "Permiso denegado");
         }
+    }
+
+    public function setLanguage(string $lang="es") {
+        // dump($lang);
+        switch ($lang) {
+            case "es":
+                Session::put('lang', 'es');
+                break;
+            case "en":
+                Session::put('lang', 'en');
+                break;
+            case "it":
+                Session::put('lang', 'it');
+                break;
+            default:
+                // if (!session()->has('lang')){
+                Session::put('lang', 'es');
+        }
+        // if (session()->has('lang')){
+        //     $language = session()->get('lang');
+        //     // dd("lang " .$language);
+        // }
+                
+        return back();
     }
 }
 

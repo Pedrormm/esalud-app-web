@@ -22,13 +22,13 @@
 
     $('.cHeader button').on('click', function(e){
         e.preventDefault();
-        window.location.href = PublicURL+"messaging";
+        window.location.href = _publicUrl+"messaging";
     });
 
     $('.cMessagesFeed').bind('DOMSubtreeModified', function(e) {
         if (e.target.innerHTML.length > 0) {
             scrollToBottom(".cMessagesFeed");
-            $.ajax(PublicURL + 'messaging/updateReadMessages', {
+            $.ajax(_publicUrl + 'messaging/updateReadMessages', {
                 dataType: 'json',
                 data: {id: $(".conversationMobile").attr("data-selectedUserId")},
                 method:'get',

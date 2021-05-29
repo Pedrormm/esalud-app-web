@@ -1,7 +1,49 @@
-<script>
+@if(\Route::current()->uri != 'videoCall') 
+  @if (auth()->user()) 
+  <script>
+    window.user = {
+      id: {{ (auth()->user()->id) }},
+      dni: "{{ (auth()->user()->dni) }}"
+    }
 
+    window.csrfToken = "{{ csrf_token() }}";   
+    window.allUsers = [];
+
+    window.signalSent = "#";
+  </script>
+
+  
+  </div>
+
+  <script src="{{asset('js/app.js')}}" >
+  </script>
+
+  @endif
+@endif
+
+<script>
+    document.ready = function(e) {
+        $.ajaxsetup({
+            headers: {
+                'x-csrf-token': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // datatable default extensions
+        // @link https://datatables.net/reference/option/%24.fn.datatable.ext.errmode
+        $.fn.datatable.ext.errmode = 'throw';
+        // @link https://datatables.net/forums/discussion/34131/can-i-change-number-of-pagination-buttons
+        $.fn.datatable.ext.pager.numbers_length = 12;
+        // @link http://live.datatables.net/fumojapu/1/edit
+        // if(typeof _urlDtLang == 'string') {
+        //     $.extend($.fn.datatable.defaults, {
+        //         language: {url: _urlDtLang}
+        //     });
+        // }
+    }
+    
+    asyncCall('appointment/icon', '#alertsDropdown', true);
     asyncCall('messaging/icon', '#messagesDropdown', true);
-     $('#messagesDropdown').click();
+    //  $('#messagesDropdown').click();
     asyncCall('messaging/summary', '#top-navigator-messages', true, false);
     @if($errors->any())
         showInlineError(0, "{{ implode(', ', $errors->all()) }}", 20);
@@ -34,7 +76,31 @@
     }
     
     @if (!Request::is('videoCallContainer*'))
-        var dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+
+        // Dictionaries from the OpenSource site www.oxygenxml.com/spell_checking.html and the repository https://github.com/wooorm/dictionaries
+        
+        let _dictionary = null;
+        switch(_lang){
+            case "es":
+                _dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                break;
+            case "en":
+                _dictionary = new Typo("en_US", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                break;
+            case "it":
+                // _dictionary = new Typo("it_IT", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                _dictionary = null;
+                break;
+            case "fr":
+                _dictionary = new Typo("fr_FR", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                break;
+            case "de":
+                _dictionary = new Typo("de_DE", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                break;
+            default:
+                _dictionary = null;
+                break;
+        }
     @endif  
 
     @if(Request::is('user/create'))
@@ -81,4 +147,6 @@
         $('#navSubitemAppointmentCalendar').css('background-color', '#eaecf4');
         $('#navSubitemAppointmentCalendar').addClass('active');
     @endif
+    
 </script>
+

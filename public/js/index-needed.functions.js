@@ -1,5 +1,5 @@
 function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
-    removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal="Close", nameSaveModal="Save changes") {
+    removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal=_messagesLocalization.close, nameSaveModal=_messagesLocalization.save_changes) {
    $('#generic-modal .modal-body').text('');
    $('#generic-modal .modal-title').text(title);
    if (size){

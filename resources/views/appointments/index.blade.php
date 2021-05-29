@@ -9,10 +9,10 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- DataTales Example -->
+          
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Listado de citas médicas</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.medical appointments list')</h4>
             </div>
 
             <div class="card-body" id="mainCardBody">
@@ -20,11 +20,17 @@
               <table class="table table-bordered" id="mainTableAllAppointments" width="100%" cellspacing="0">
                   <thead >
                     <tr class="text-center">
-                        <th class="bg-primary">Paciente</th>
-                        <th class="bg-primary">Doctor</th>
-                        <th class="bg-primary">Fecha</th>
-                        <th class="bg-primary">Estado</th>
-                        <th class="bg-primary">Acciones</th>
+                        @if (( auth()->user()->role_id) != \HV_ROLES::PATIENT)
+                          <th class="bg-primary">@lang('messages.patient')</th>
+                        @endif
+                        @if (( auth()->user()->role_id) != \HV_ROLES::DOCTOR)
+                          <th class="bg-primary">@lang('messages.doctor')</th>
+                        @endif
+                        <th class="bg-primary">@lang('messages.date')</th>
+                        @if (($appointmentType) == "all")
+                          <th class="bg-primary">@lang('messages.state')</th>
+                        @endif
+                        <th class="bg-primary">@lang('messages.actions')</th>
                     </tr>
                   </thead>
                   {{-- <tbody>
@@ -76,10 +82,11 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a> --}}
-
+  
 @endsection
 
-@section('scriptsPropios')
+@section('viewsScripts')
   {{-- <script src="{{ asset('js/appointments.js') }}"></script> --}}
-  @include('appointments.appointments-index')
+  @include('appointments.appointments-index', ['appointmentType'=>$appointmentType])
+
 @endsection

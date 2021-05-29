@@ -138,7 +138,7 @@ class TreatmentController extends AppBaseController
         ->where("id",$id)->get();
 
         if (empty($treatment)) {
-            return $this->backWithErrors("Treatment not found" );
+            return $this->backWithErrors(\Lang::get('messages.Treatment not found'));
         }
 
         if (!$treatment->isEmpty()){
@@ -203,7 +203,7 @@ class TreatmentController extends AppBaseController
         $treatment = $this->treatmentRepository->find($id);
 
         if (empty($treatment)) {
-            Flash::error('Treatment not found');
+            Flash::error(\Lang::get('messages.Treatment not found'));
 
             return redirect(route('treatments.index'));
         }

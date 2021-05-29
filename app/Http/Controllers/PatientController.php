@@ -83,7 +83,7 @@ class PatientController extends AppBaseController
         $patient = $this->patientRepository->find($id);
 
         if (empty($patient)) {
-            Flash::error('Patient not found');
+            Flash::error(\Lang::get('messages.Patient not found'));
 
             return redirect(route('patients.index'));
         }
@@ -104,9 +104,9 @@ class PatientController extends AppBaseController
         $userLogged = auth()->user();
         $usuario = User::find($id);
         if (empty($usuario)) {
-            // Flash::error('user not found');
+            // Flash::error(\Lang::get('messages.User not found'));
             // return redirect(route('users.index'));
-            return $this->backWithErrors("User not found" );
+            return $this->backWithErrors(\Lang::get('messages.User not found') );
         }
         $rol_usuario_info = "";
 
@@ -114,10 +114,10 @@ class PatientController extends AppBaseController
             $rol_usuario_info = Patient::whereUserId($id)->first();
         }
         else{
-            return $this->backWithErrors("Not enough permissions");
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
         }
         if(!$rol_usuario_info) {
-            return $this->backWithErrors("UsMaCoEd001: Invalid id");
+            return $this->backWithErrors("UsMaCoEd001: "+\Lang::get('messages.Invalid id'));
         }
         $roles = Role::all();
         // dd($usuario->toArray());
@@ -170,7 +170,7 @@ class PatientController extends AppBaseController
 
         $usuario->update($validatedData);
 
-        return view('patients.index')->with('okMessage', "El paciente: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
+        return view('patients.index')->with('okMessage', \Lang::get('messages.The patient: ').$usuario->name." ".$usuario->lastname.\Lang::get('messages.has been succesfully edited'));
 
     }
 
@@ -190,7 +190,7 @@ class PatientController extends AppBaseController
 
 
         if (empty($userToDelete)) {
-            return $this->jsonResponse(1, "User not found"); 
+            return $this->jsonResponse(1, \Lang::get('messages.User not found')); 
         }
 
         $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
@@ -205,10 +205,10 @@ class PatientController extends AppBaseController
             Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
         }
         else{
-            return $this->jsonResponse(1, "The user is not a patient"); 
+            return $this->jsonResponse(1, \Lang::get('messages.The user is not a patient')); 
         }
 
-        return $this->jsonResponse(0, "Patient  ".$userName." deleted successfully.");
+        return $this->jsonResponse(0, \Lang::get('messages.patient')." ".$userName.\Lang::get('messages.deleted successfully'));
     }
 
     public function confirmDelete($id){
@@ -227,7 +227,7 @@ class PatientController extends AppBaseController
 
 
         if(!$request->wantsJson()) {
-            abort(404, 'Bad request');
+            abort(404, \Lang::get('messages.Bad request'));
         }
 
         self::checkDataTablesRules();

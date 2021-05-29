@@ -30,11 +30,11 @@ class CheckUserAdmin
             if($request->ajax()) {
                 return response()->json([
                     'status'=>1,
-                    'messages'=>'Permission denied'
+                    'messages'=>\Lang::get('messages.Permission_Denied')
                 ]);
             }
             else{
-                return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
+                return redirect()->back()->withErrors([\Lang::get('messages.Permission_Denied'), \Lang::get('messages.No permissions')]);
             }
         }
     }

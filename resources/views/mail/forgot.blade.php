@@ -1,19 +1,18 @@
 @component('mail::message')
-# Cambio de contraseña
+# @lang('messages.Password change')
 
-Hola {{ $name }}, se ha solicitado un cambio de contraseña. 
-Por favor, haga click en el siguiente enlace si desea cambiar su contraseña
+@lang('messages.Hello') {{ $name }}, @lang('messages.a password change has been requested')
+@lang('messages.Please click on the following link if you want to change your password')
 
 @component('mail::button', ['url' => URL::asset('password/reset/' . $token)])
-Nueva contraseña
+@lang('messages.Create new password')
 @endcomponent
 
-
 <small>
-NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de navegación:<br>
+@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar')<br>
 {{ URL::asset('password/reset/' . $token) }}
 </small>
 
-Gracias,<br>
+@lang('messages.Thank you'),<br>
 {{ config('app.name') }}
 @endcomponent

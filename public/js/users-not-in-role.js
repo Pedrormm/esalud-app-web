@@ -21,14 +21,16 @@ $('#saveModal').click(function() {
         "responsive": true,
         // "scrollY": 550,
         "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+          "url": _urlDtLang
         },
     } ).on( 'page.dt', function() {
         setTimeout(refreshPickers, 1);
-        
+    }).on( 'draw.dt', function () {
+      console.log("?????");
+      clickOnSelectpicker();
     });
     $("#tableUsersNotInRole").css("display", "table");
-  
+    
     $( this ).off( event );
   });
   $('#userspicker').change(function () {
@@ -79,6 +81,7 @@ $('#saveModal').click(function() {
   });
   
   function refreshPickers() {
+    // alert( 'Table redrawn' );
     let funcName = arguments.callee.name;
     // console.log("Called to ", funcName);
     let sel = $(".selectOtherRole");

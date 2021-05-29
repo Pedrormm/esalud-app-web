@@ -27,8 +27,12 @@ class Controller extends BaseController
         return $this->perms;
     }
 
-    protected function jsonResponse(string $status, string $message) {
-        return response()->json(['status' => $status, 'message' => $message]);
+    protected function jsonResponse(string $status, string $message, $obj = null) {
+        $res = ['status' => $status, 'message' => $message];
+        if ($obj){
+            $res = ['status' => $status, 'message' => $message, 'obj' => $obj];
+        }
+        return response()->json($res);
     }
 
     protected function errorNotAjax(Request $request, string $message) {

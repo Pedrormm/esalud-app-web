@@ -64,8 +64,8 @@ class UserController extends Controller
         else if (auth()->user()->role_id == \HV_ROLES::ADMIN)
             $roles = Role::all();
         else
-            return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
-        return view('user.newUser')->with('roles',$roles);    
+            return redirect()->back()->withErrors([\Lang::get('messages.Permission_Denied'), \Lang::get('messages.No permissions')]);
+        return view('users.newUser')->with('roles',$roles);    
     }
 
   
@@ -93,7 +93,7 @@ class UserController extends Controller
             return $this->backWithErrors("UsMaCoCr001: Invalid dni format");
         }
         if ((auth()->user()->role_id == \HV_ROLES::DOCTOR || auth()->user()->role_id == \HV_ROLES::HELPER) && $rol_id == \HV_ROLES::ADMIN)
-            return redirect()->back()->withErrors(['Permission denied', 'No permissions']);
+            return redirect()->back()->withErrors([\Lang::get('messages.Permission_Denied'), \Lang::get('messages.No permissions')]);
         $existUser = User::exist_user_by_dni($dni);
         $roles = Role::all();
         if($existUser == 0){
@@ -117,7 +117,7 @@ class UserController extends Controller
             // TODO: if (maxTimes > 3(constante)) google Verification Bot. Captcha plugin.
 
             if ($userInvitation->times_sent == HV_MAX_TIMES_CREATE_USER_SENT){
-                return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
+                return view('users.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: Error interno');
             }
 
             $userInvitation->verification_token = $token;
@@ -126,9 +126,9 @@ class UserController extends Controller
             $res = $userInvitation->save();
            
             if(!$res) {
-                return view('user.newUser')->with('roles',$roles)->with('danger','UsMaCoCr002: Error interno');
+                return view('users.newUser')->with('roles',$roles)->with('danger','UsMaCoCr002: Error interno');
             } 
-            $subject = "Se le ha invitado a crear una nueva cuenta en mi Hospital Virtual con el dni ". $dni;
+            $subject = config('app.name').\Lang::get('messages.has invited you to create a new account with the dni(id)'). $dni;
 
             $res = Mail::to($email)->send(new InvitationNewUserMail($token, $dni));
       
@@ -137,10 +137,10 @@ class UserController extends Controller
             }
             else
                 DB::commit();
-            return view('user.newUser')->with('roles',$roles)->with('info','Se ha enviado un correo con las instrucciones para crear el usuario');
+            return view('users.newUser')->with('roles',$roles)->with('info',\Lang::get('messages.A mail has been sent to the one provided with instructions on how to create the new user'));
             
         }else{                        
-            return view('user.newUser')->with('roles',$roles)->with('danger','Ya existe ese DNI. Por favor compruebe los datos');
+            return view('users.newUser')->with('roles',$roles)->with('danger',\Lang::get('messages.The DNI(id) already exists. Please check your data'));
            
         }
     }
@@ -168,13 +168,13 @@ class UserController extends Controller
                 else
                     $branches = "";
 
-                return view('user.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
+                return view('users.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
             }
             else
-                return view('user.newUserMail')->with('showError',true)->withErrors("Token has been expired. Contact an admin to resend an email.");     
+                return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.Token has been expired. Contact an admin to resend an email'));     
         }
         else{
-            return view('user.newUserMail')->with('showError',true)->withErrors("Internal error");        
+            return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.Internal error'));        
         }
     }
 
@@ -231,7 +231,7 @@ class UserController extends Controller
         
         $verify = UserInvitation::whereVerificationToken($token)->first();
         if (!$verify){
-            return back()->withErrors("Mismatch error");        
+            return back()->withErrors(\Lang::get('messages.Mismatch error'));        
         }
         //dd($request->all());
 
@@ -259,7 +259,7 @@ class UserController extends Controller
         $res = $verify->delete();
         if (!$res){
             DB::rollBack();
-            return back()->withErrors("Internal error");        
+            return back()->withErrors(\Lang::get('messages.Internal error'));        
         }
 
 
@@ -281,7 +281,7 @@ class UserController extends Controller
         $res = $user->save();
         if(!$res) {
             DB::rollBack();
-            return back()->withErrors("Internal error");  
+            return back()->withErrors(\Lang::get('messages.Internal error'));  
         }
        
         if($rol_id == \HV_ROLES::PATIENT){
@@ -297,7 +297,7 @@ class UserController extends Controller
             $res = $patient->save();
             if(!$res) {
                 DB::rollBack();
-                return back()->withErrors("Internal error");
+                return back()->withErrors(\Lang::get('messages.Internal error'));
             }
         }
        
@@ -321,7 +321,7 @@ class UserController extends Controller
             
             if(!$res) {
                 DB::rollBack();
-                return back()->withErrors("Internal error");
+                return back()->withErrors(\Lang::get('messages.Internal error'));
             }
         }
         
@@ -331,9 +331,9 @@ class UserController extends Controller
         $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
 
         if (Auth::user())
-            return view('dashboard.index')->with('successful', "An user the dni ".$dni." has been properly created");
+            return view('dashboard.index')->with('successful', \Lang::get('messages.An user with the DNI').$dni.\Lang::get('messages.has been properly created'));
         else
-            return redirect('/')->with('successful', "An user the dni ".$dni." has been properly created. Please log in.");
+            return redirect('/')->with('successful', \Lang::get('messages.An user with the DNI').$dni.\Lang::get('messages.has been properly created. Please log in'));
     }
 
 
@@ -377,7 +377,7 @@ class UserController extends Controller
         if (empty($usuario)) {
             // Flash::error('user not found');
             // return redirect(route('users.index'));
-            return $this->backWithErrors("User not found" );
+            return $this->backWithErrors(\Lang::get('messages.User not found'));
         }
         $rol_usuario_info = "";
 
@@ -386,7 +386,7 @@ class UserController extends Controller
         // }
 
         if($usuario->role_id == \HV_ROLES::ADMIN){
-            return $this->backWithErrors("Not enough permissions");
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
         }
         elseif($usuario->role_id == \HV_ROLES::PATIENT){
             $rol_usuario_info = Patient::whereUserId($id)->first();
@@ -397,7 +397,7 @@ class UserController extends Controller
             $rol_usuario_info = User::whereUserId($id)->first();
         }
         if(!$rol_usuario_info) {
-            return $this->backWithErrors("UsMaCoEd001: Invalid id");
+            return $this->backWithErrors("UsMaCoEd001: ".\Lang::get('messages.Invalid id'));
         }
         $roles = Role::all();
         $branches = Branch::all();
@@ -457,7 +457,7 @@ class UserController extends Controller
 
         $usuario->update($validatedData);
 
-        return view('users.index')->with('okMessage', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
+        return view('users.index')->with('okMessage', \Lang::get('messages.The user:').$usuario->name." ".$usuario->lastname.\Lang::get('messages.has been succesfully edited'));
     }
 
 
@@ -478,7 +478,7 @@ class UserController extends Controller
 
 
         if (empty($userToDelete)) {
-            return $this->jsonResponse(1, "User not found"); 
+            return $this->jsonResponse(1, \Lang::get('messages.User not found')); 
         }
 
         $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
@@ -496,7 +496,7 @@ class UserController extends Controller
             Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
         }
 
-        return $this->jsonResponse(0, "User  ".$userName." deleted successfully.");
+        return $this->jsonResponse(0, \Lang::get('messages.user')." ".$userName.\Lang::get('messages.deleted successfully'));
       }
 
     public function confirmDelete($id){

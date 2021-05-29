@@ -58,7 +58,7 @@ class PermissionController extends AppBaseController
 
         $permission = $this->permissionRepository->create($input);
 
-        Flash::success('Permission saved successfully.');
+        Flash::success(\Lang::get('messages.Permission saved successfully'));
 
         return redirect(route('permission.index'));
     }
@@ -75,7 +75,7 @@ class PermissionController extends AppBaseController
         $permission = $this->permissionRepository->find($id);
 
         if (empty($permission)) {
-            Flash::error('Permission not found');
+            Flash::error(\Lang::get('messages.Permission not found'));
 
             return redirect(route('permission.index'));
         }
@@ -95,7 +95,7 @@ class PermissionController extends AppBaseController
         $permission = $this->permissionRepository->find($id);
 
         if (empty($permission)) {
-            Flash::error('Permission not found');
+            Flash::error(\Lang::get('messages.Permission not found'));
 
             return redirect(route('permission.index'));
         }
@@ -116,14 +116,14 @@ class PermissionController extends AppBaseController
         $permission = $this->permissionRepository->find($id);
 
         if (empty($permission)) {
-            Flash::error('Permission not found');
+            Flash::error(\Lang::get('messages.Permission not found'));
 
             return redirect(route('permission.index'));
         }
 
         $permission = $this->permissionRepository->update($request->all(), $id);
 
-        Flash::success('Permission updated successfully.');
+        Flash::success(\Lang::get('messages.Permission updated successfully'));
 
         return redirect(route('permission.index'));
     }
@@ -142,14 +142,14 @@ class PermissionController extends AppBaseController
         $permission = $this->permissionRepository->find($id);
 
         if (empty($permission)) {
-            Flash::error('Permission not found');
+            Flash::error(\Lang::get('messages.Permission not found'));
 
             return redirect(route('permission.index'));
         }
 
         $this->permissionRepository->delete($id);
 
-        Flash::success('Permission deleted successfully.');
+        Flash::success(\Lang::get('messages.Permission deleted successfully'));
 
         return redirect(route('permission.index'));
     }

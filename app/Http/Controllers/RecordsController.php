@@ -110,63 +110,7 @@ class RecordsController extends Controller
         return view('records.ownRecord')->with('usuario',$user);
     }
 
-    public function settings() {
-        return view('adjustments/settings');
-    }
 
-    public function updateAvatar(Request $request, $id=null) {
-        $user = User::find($id);
-        $userImage = "";
-
-        // Obteniendo nombre de avatar antiguo para poder borrarlo
-        if($user->avatar != null)
-            $userImage = $user->avatar;
-        // Actualizar en BD
-        $user->fill($request->all());
-        
-        //Update Image
-        $file = $request->file('avatar');    
-
-        if($file != null)
-        {
-            $file_name = $file->getClientOriginalName();
-            $file_ext = \File::extension($file_name);
-
-            $time = getTimeName();
-            $new_file_name = $time . '.' . $file_ext;
-
-            //Verify if new name already exist
-            while (\Storage::exists($new_file_name)) 
-            {
-                $time = getTimeName();
-                $new_file_name = $time . '.' . $file_ext;
-            }
-
-            \Storage::disk('avatars')->put($new_file_name,  \File::get($file));
-
-            //Delete old image if exist
-            if($userImage != "")
-                \Storage::delete($userImage);
-
-            $user->avatar = $new_file_name;
-        }
-        else{
-            //Showing an error
-            if($request->ajax()) {
-                return response()->json([
-                    'status'=>1,
-                    'messages'=>'There is no file'
-                ]);
-            }
-            else{
-                return back()->withErrors(['There is no file', 'No file']);
-            }
-        }
-
-        $user->save();
-
-        return redirect()->back();
-    }
     
 
 }

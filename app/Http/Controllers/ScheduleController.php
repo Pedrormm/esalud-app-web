@@ -31,21 +31,6 @@ class ScheduleController extends Controller
         return view('schedule.index');
     }
 
-    // public function confirmDelete($id){
-    //     $singleUser = User::find($id);
-    //     if ($singleUser){
-    //         if (($singleUser->role_id == \HV_ROLES::DOCTOR)||($singleUser->role_id == \HV_ROLES::HELPER)){
-    //             return view('schedule.confirm-delete',['singleUser' => $singleUser]);  
-    //         }
-    //         else{
-    //             return $this->backWithErrors("No tiene permisos" );
-    //         }
-    //     }
-    //     else{
-    //         return $this->backWithErrors("No tiene permisos" );
-    //     }
-    // }
-
     public function destroy($id)
     {
         $userScheduleToDelete = User::find($id);
@@ -61,22 +46,15 @@ class ScheduleController extends Controller
          'staff.id as staff_id', 'staff.user_id as staff_user_id')
         ->where('users.id', $id)->get()->toArray();
         
-        // dd($staffFound);
-        // $userToDelete->delete($id);
         $strResponse = "";
         if($staffFound[0]['staff_id']){
             $staffSchedule = StaffSchedule::with("staff")
             ->where('staff_id',$staffFound[0]['staff_id'])
             ->delete();
-            if ($staffSchedule == 1){
-                $strResponse = "The user ".$userName." had a schedule. It has been deleted successfully.";
-            }
-            else{
-                $strResponse = "The user ".$userName." had an empty schedule, so it is still empty";
-            }
+            $strResponse = "".$userName.\Lang::get('messages.schedule has been deleted successfully');
         }
         else{
-            return $this->jsonResponse(1, "The user is not staff"); 
+            return $this->jsonResponse(1, \Lang::get('messages.The user is not staff')); 
         }
 
         return $this->jsonResponse(0, $strResponse);
@@ -87,7 +65,7 @@ class ScheduleController extends Controller
             $userLogged = Auth::user();
             $userStaff = User::with("staff")->where("id",$id)->get();
             if (($userStaff[0]->staff)->isEmpty()){
-                return $this->backWithErrors("No tiene permisos" );
+                return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
             }
             else{
                 $id = $userStaff[0]->staff[0]->id;
@@ -134,7 +112,7 @@ class ScheduleController extends Controller
             }
             if (($userStaff[0]->staff)->isEmpty()){
                 return response()->json([]);
-                return $this->jsonResponse(1, "Acceso denegado");
+                return $this->jsonResponse(1, \Lang::get('messages.Permission_Denied'));
             }
             else{
                 $id = $userStaff[0]->staff[0]->id;
@@ -149,7 +127,7 @@ class ScheduleController extends Controller
                         $staffSchedule->save();
                     }
                 }
-                return $this->jsonResponse(0, "Se han actualizado los horarios");
+                return $this->jsonResponse(0, \Lang::get('messages.The schedules have been updated'));
             }           
         }
     }

@@ -31,9 +31,21 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         // Using view composer to set the following variables globally
         view()->composer('*',function($view) {
-            $view->with('user', Auth::user());
+            // $view->with('user', Auth::user());
             $view->with('flagsMenuEnabled', getAuthValueFromPermission());
+            $view->with('messagesLocalization', \Lang::get('messages'));
         });
+        
+        \Illuminate\Support\Collection::macro('recursive', function () {
+            return $this->map(function ($value) {
+                if (is_array($value) || is_object($value)) {
+                    return collect($value)->recursive();
+                }
+        
+                return $value;
+            });
+        });
+
         // Config::set(['permissions' => fillPermissionClass()]);
         // Config::set(['roles' => fillRolesClass()]);
         // Blade::include('inc.react', 'react');

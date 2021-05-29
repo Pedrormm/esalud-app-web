@@ -57,11 +57,11 @@ class Appointment extends Model
         $text = "";
 
         if($value == 0){
-            $text = "Pendiente";
+            $text = \Lang::get('messages.pending');
         }else if($value == 1){
-            $text = "Aceptada";
+            $text = \Lang::get('messages.accepted');
         }else if($value == 2){
-            $text = "Rechazada";
+            $text = \Lang::get('messages.rejected');
         }
         return $text;
 
@@ -72,11 +72,11 @@ class Appointment extends Model
         $text = "";
 
         if($value == 0){
-            $text = "Cita no cumplida";
+            $text = \Lang::get('messages.appointment not completed');
         }else if($value == 1){
-            $text = "Cita cumplida";
+            $text = \Lang::get('messages.appointment completed');
         }else if($value == 2){
-            $text = "Cita en Espera";
+            $text = \Lang::get('messages.appointment on hold');
         }
         return $text;
 

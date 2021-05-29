@@ -28,23 +28,16 @@ class MessageController extends Controller
         return view('ajax/messages', compact('userMessages'));
     }
 
-
-    public function showIconMessage(){
+    public function showMessageIcon(){
         $authUser = Auth::user();
         $userMessages = Message::where('user_id_to', $authUser->id)->where('read', 0)
         ->orderByDesc('created_at')->get()->toArray();
         $nMessages = count($userMessages);
-        return view('ajax.message_icon', compact('nMessages'));
+        return view('communication.messages_icon', compact('nMessages'));
     }
 
     public function showMessagesSummary(){
         $authUser = Auth::user();
-
-        // $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
-        // ->orderBy('messages.read')
-        // ->where('user_id_to', $authUser->id)
-        // ->groupBy('messages.user_id_from')
-        // ->get();
 
         $userMessages = Message::where('user_id_to', $authUser->id)
         ->orderBy('messages.created_at', 'desc')
@@ -93,7 +86,7 @@ class MessageController extends Controller
         $userMessages = $userMessages->toArray();
         
         // dd ($userMessages);
-        return view('ajax.messages_summary', compact('userMessages'));
+        return view('communication.messages_summary', compact('userMessages'));
     }
 
     const MAX_MY_MESSAGES_SHOWN_LENGTH = 25;    
@@ -149,13 +142,13 @@ class MessageController extends Controller
                     }
                 }
                 else{
-                    return $this->jsonResponse(1, "The message cannot be deleted");
+                    return $this->jsonResponse(1, \Lang::get('messages.The message cannot be deleted'));
                 }
             }
         }
         else{
             // Error
-            return $this->jsonResponse(1, "Not enough permissions");
+            return $this->jsonResponse(1, \Lang::get('messages.Permission_Denied'));
         }
     }
 
@@ -201,7 +194,7 @@ class MessageController extends Controller
             'message' => $request->input('message')
         ]);
 
-        return ['status' => 'Mensaje enviado'];
+        return ['status' => \Lang::get('messages.The message was sent')];
     }
 
 

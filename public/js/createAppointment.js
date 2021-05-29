@@ -3,9 +3,11 @@
     let minutesPerDate = 30;
 
     let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth()+1; //January is 0
-    let yyyy = today.getFullYear();
+    let tomorrow = new Date(today.getTime()+1000*60*60*24);
+
+    let dd = tomorrow.getDate();
+    let mm = tomorrow.getMonth()+1; //January is 0
+    let yyyy = tomorrow.getFullYear();
     if(dd<10){
         dd='0'+dd
     } 
@@ -13,8 +15,9 @@
         mm='0'+mm
     } 
 
-    today = yyyy+'-'+mm+'-'+dd;
-    document.getElementById("dt_appointment").setAttribute("min", today);
+    tomorrow = yyyy+'-'+mm+'-'+dd;
+    // console.log(tomorrow);
+    document.getElementById("dt_appointment").setAttribute("min", tomorrow);
     let $myForm = $('#createAppointmentForm')
 
     $('#patient').on('change', function (e) {      
@@ -65,21 +68,47 @@
     });
 
     $('#createButton').on("click",function(e){
+        e.preventDefault();
         let time = $(".hv-time-selected").attr("data-hour");
         let dt = $(".hv-time-selected").attr("data-date");
         let dtime = dt + " " + time + ":00";
+
+        console.log("el datime es ",dtime);
         // let date = new Date(dtime);
         // console.log(date);
         let  input = $('<input>').attr("type","hidden").attr("name","dtime").attr("id","dtime").attr("value",dtime);
         input.appendTo( "#createAppointmentForm" );
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, 
+            url:_publicUrl+'appointment',
+            method:"POST",
+            // data: {"data":$("#createAppointmentForm").serialize(),"_method":'PUT'},
+            data: $("#createAppointmentForm").serialize(),
+            dataType:"json",
+            contenttype: "application/json; charset=utf-8",
+        }).done(function(response){
+            // console.log("resp ", response);
+            showInlineMessage(response.message, 30);
+            // console.log("app ",response.obj);
+
+        });
     });
 
+    /**
+     * Calls the appointment/realDoctorSchedule endpoint so the staff schedule will be known
+     * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+     * @param {date} date - The date of the doctor schedule to be looked for int the appointments
+     * @param {number} doctorId - The doctor id to be looked for.
+     * @return {void} Nothing
+     */
     function callSch(date, doctorId) {
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }, 
-            url:PublicURL+'appointment/realDoctorSchedule',
+            url:_publicUrl+'appointment/realDoctorSchedule',
             type:"GET",
             data: {"date":date,"doctorId":doctorId},
             dataType:"json",
@@ -158,18 +187,19 @@
         let continueDate = false;
         let currentWeek = false;
         let today = new Date();
+        let tomorrow = new Date(today.getTime()+1000*60*60*24);
         let parsedGivenDate = new Date(date.replace("-","/"));
         // console.log("parsedGivenDate ",parsedGivenDate);
         // console.log(getWeekNumber(parsedGivenDate), getWeekNumber(today));  
         let givenDateWeek = getWeekNumber(parsedGivenDate);
-        let todayWeek = getWeekNumber(today);
+        let todayWeek = getWeekNumber(tomorrow);
         let todayWeekDay = null;
         if ((givenDateWeek[0] >= todayWeek[0]) && (givenDateWeek[1] > todayWeek[1])){
             continueDate = true;
         }
         else if ((givenDateWeek[0] == todayWeek[0]) && (givenDateWeek[1] == todayWeek[1])){
             continueDate = true;
-            todayWeekDay = getWeekDayDate(today);
+            todayWeekDay = getWeekDayDate(tomorrow);
             currentWeek = true;
         }
 
@@ -216,7 +246,8 @@
     }
 
     function addDays(date, days) {
-        let copy = new Date(Number(date));
+        let copy = new Date((date));
+        // console.log("copy ",copy);
         copy.setDate(date.getDate() + days);
         return copy;
     }
@@ -224,14 +255,13 @@
     function getMondayDate(date) {
         let dt = new Date(date);
         let day = dt.getDay();
-        let prevMondayDate = new Date();
         if(dt.getDay() == 0){
-            prevMondayDate.setDate(dt.getDate() - 6);
+            dt.setDate(dt.getDate() - 6);
         }
         else{
-            prevMondayDate.setDate(dt.getDate() - (day-1));
+            dt.setDate(dt.getDate() - (day-1));
         }
-        return prevMondayDate;
+        return dt;
     }
 
     function getWeekDayDate(date) {
@@ -263,7 +293,7 @@
             let hvSchedule = $('<div />').addClass("hv-schedule");
             let hvHeader = $('<div />').addClass("hv-header");
             hvHeader = hvHeader.append($('<div />').text(""));
-            weekNameDays.forEach(function(d,index) {
+            _weekNameDays.forEach(function(d,index) {
                 let dayNumber = addDays(getMondayDate(date), index).getDate().toString();
                 // console.log("dia ", dayNumber);
                 let day = $('<div />').text(d + " " + dayNumber);

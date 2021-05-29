@@ -1,22 +1,3 @@
-// var ctx = document.getElementById('usersChart').getContext('2d');
-// var chart = new Chart(ctx, {
-//     // The type of chart we want to create
-//     type: 'line',
-
-//     // The data for our dataset
-//     data: {
-//         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//         datasets: [{
-//             label: 'My First dataset',
-//             backgroundColor: 'rgb(255, 99, 132)',
-//             borderColor: 'rgb(255, 99, 132)',
-//             data: [0, 10, 5, 2, 20, 30, 45]
-//         }]
-//     },
-
-//     // Configuration options go here
-//     options: {}
-// });
 
 function createMsgTableTBody(res){
       
@@ -39,8 +20,10 @@ function createMsgTableTBody(res){
       return tbody;
 }
 
+let pending = $("#diaryAppointments").data("pending");
+let processed = $("#diaryAppointments").data("processed");
 
-$.ajax(PublicURL + 'dashboard/fillMsgTable', {
+$.ajax(_publicUrl + 'dashboard/fillMsgTable', {
     dataType: 'json',
     method:'get',
 }).done(function(res){
@@ -49,87 +32,94 @@ $.ajax(PublicURL + 'dashboard/fillMsgTable', {
   $(tbody).insertAfter('#msgTable thead');
 })
 .fail(function(xhr, st, err) {
-    console.error("error in messaging/updateReadMessages " + xhr, st, err);
+    console.error("error in dashboard/fillMsgTable " + xhr, st, err);
+}); 
+
+$.ajax(_publicUrl + 'dashboard/fillDiaryAppointments', {
+  dataType: 'json',
+  method:'get',
+}).done(function(res){
+
+  let diaryAppointments = document.getElementById('diaryAppointments').getContext('2d');
+  let chart = new Chart(diaryAppointments, {
+      // The type of chart we want to create
+      type: 'doughnut',
+      // The data for our dataset
+      data: {
+          datasets: [{
+              data: [res.pending, res.processed],
+
+              backgroundColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(54, 162, 235)',
+                ],
+          }],    
+          // These labels appear in the legend and in the tooltips when hovering different arcs
+          labels: [
+            pending,
+            processed    
+          ]
+      },
+  });
+
+})
+.fail(function(xhr, st, err) {
+  console.error("error in dashboard/fillDiaryAppointments " + xhr, st, err);
 }); 
 
 
-// <table class="table table-striped">
-//                                   <thead>
-//                                       <tr>
-//                                           <th> Role </th>
-//                                           <th> Porcentaje de mensajes enviados </th>
-//                                           <th> Número de mensajes enviados </th>
-//                                           {{-- <th> Número de mensajes recibidos </th> --}}
-//                                       </tr>
-//                                   </thead>
-//                                   </table>
-//                                   <tbody>
-//                                       <tr>
-//                                           <td> Admin </td>
-//                                           <td>
-//                                               <div class="progress">
-//                                                 <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-//                                               </div>
-//                                           </td>
-//                                           <td> 20 </td>
-//                                       </tr>
-                                      
-//                                   </tbody>
-//                               </table>
+$.ajax(_publicUrl + 'dashboard/fillDelayedAppointments', {
+  dataType: 'json',
+  method:'get',
+}).done(function(res){
 
+  let laggardAppointments = document.getElementById('laggardAppointments').getContext('2d');
+  let chart = new Chart(laggardAppointments, {
+      // The type of chart we want to create
+      type: 'pie',
+      // The data for our dataset
+      data: {
+          datasets: [{
+              // data: [15, 20],
+              data: [res.pending, res.processed],
 
-var diaryAppointments = document.getElementById('diaryAppointments').getContext('2d');
-var chart = new Chart(diaryAppointments, {
-    // The type of chart we want to create
-    type: 'doughnut',
-    // The data for our dataset
-    data: {
-        datasets: [{
-            data: [10, 20],
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
+              backgroundColor: [
+                  'rgb(238, 130, 238)',
+                  'rgb(238, 238, 130)'
               ],
-        }],    
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Pendientes',
-            'Procesadas'    
-        ]
-    },
-});
+          }],    
+          // These labels appear in the legend and in the tooltips when hovering different arcs
+          labels: [
+              pending,
+              processed    
+          ]
+      },
+  });
 
-var laggardAppointments = document.getElementById('laggardAppointments').getContext('2d');
-var chart = new Chart(laggardAppointments, {
-    // The type of chart we want to create
-    type: 'pie',
-    // The data for our dataset
-    data: {
-        datasets: [{
-            data: [15, 20],
-            backgroundColor: [
-                'rgb(238, 130, 238)',
-                'rgb(238, 238, 130)'
-            ],
-        }],    
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Pendientes',
-            'Procesadas'    
-        ]
-    },
-});
+})
+.fail(function(xhr, st, err) {
+  console.error("error in dashboard/fillDelayedAppointments " + xhr, st, err);
+}); 
 
-var mostWeekAppointments = document.getElementById('mostWeekAppointments').getContext('2d');
-var chart = new Chart(mostWeekAppointments, {
+
+$.ajax(_publicUrl + 'dashboard/fillWeekAppointments', {
+  dataType: 'json',
+  method:'get',
+}).done(function(res){
+  let weekValue = res.map((week)=>week['value']);
+  let weekName = res.map((week)=>week['weekName']);
+
+  let mostWeekAppointments = document.getElementById('mostWeekAppointments').getContext('2d');
+  let label = $("#mostWeekAppointments").data("label");
+  let chart = new Chart(mostWeekAppointments, {
     // The type of chart we want to create
     type: 'bar',
     // The data for our dataset
     data: {
-        labels: weekNameDays,
+        labels: weekName,
         datasets: [{
-          label: 'Números de cita por días de la semana',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          label: label,
+          data: weekValue,
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(255, 159, 64, 0.2)',
@@ -151,32 +141,38 @@ var chart = new Chart(mostWeekAppointments, {
           borderWidth: 1
         }]
     },
-});
+});   
 
-var usersTypeRoles = document.getElementById('usersTypeRoles').getContext('2d');
-var chart = new Chart(usersTypeRoles, {
-    // The type of chart we want to create
-    type: 'polarArea',
-    // The data for our dataset
-    data: {
-        labels: [
-          'Patients',
-          'Doctors',
-          'Helpers',
-          'Admins',
-          'Guests'
-        ],
-        datasets: [{
-          label: 'My First Dataset',
-          data: [11, 16, 7, 3, 14],
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(75, 192, 192)',
-            'rgb(255, 205, 86)',
-            'rgb(201, 203, 207)',
-            'rgb(54, 162, 235)'
-          ]
-        }]
-      },
-});
+})
+.fail(function(xhr, st, err) {
+  console.error("error in dashboard/fillWeekAppointments " + xhr, st, err);
+}); 
 
+
+
+$.ajax(_publicUrl + 'dashboard/fillUsersTypeRoles', {
+  dataType: 'json',
+  method:'get',
+}).done(function(res){
+  // console.log(res);
+  let roleNames = res.map((roles)=>roles['roles']['name']);
+  let roleColors = res.map((roles)=>roles['color']);
+  let roleTotals = res.map((roles)=>roles['total']);
+
+  let usersTypeRoles = document.getElementById('usersTypeRoles').getContext('2d');
+  let chart = new Chart(usersTypeRoles, {
+      type: 'polarArea',
+      data: {
+          labels: roleNames,
+          datasets: [{
+            label: 'Existing roles',
+            data: roleTotals,
+            backgroundColor: roleColors
+          }]
+        },
+  });
+
+})
+.fail(function(xhr, st, err) {
+  console.error("error in dashboard/fillUsersTypeRoles " + xhr, st, err);
+}); 

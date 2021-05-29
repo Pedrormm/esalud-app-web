@@ -1,15 +1,15 @@
 @component('mail::message')
-# Nueva cita médica
+# @lang('messages.New appointment')
 
-Hola {{ $doctorName }}, se ha creado una nueva cita médica con el paciente {{ $patientName }}. 
-Por favor, haga click en el siguiente enlace para ver o editar su cita médica
+@lang('messages.Hello') {{ $doctorName }}@lang('messages.a new appointment has been created with the patient'){{ $patientName }}. 
+@lang('messages.Please click on the following link to view or edit your medical appointment')
     
 @component('mail::button', ['url' => URL::asset('appointment/'.$appointmentId.'/edit')])
-Ver o editar cita
+@lang('messages.View or edit appointment')
 @endcomponent
 
 <small>
-NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de navegación:<br>
+@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar')<br>
 {{ URL::asset('appointment/'.$appointmentId.'/edit') }}
 </small>
 
@@ -23,7 +23,8 @@ NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de
     @include('mail.newAppointmentSetChecked', ['appointmentId' => $appointmentId])
 
 @else
-    Es otro rol
+    {{-- Es otro rol --}}
 @endif
-
+@lang('messages.Thank you'),<br>
+{{ config('app.name') }}
 @endcomponent

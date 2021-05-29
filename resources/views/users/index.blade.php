@@ -10,10 +10,10 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- DataTales Example -->
+          
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Listado de usuarios</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.List of users')</h4>
             </div>
 
             <input id="isallUsersDelete" type="hidden" 
@@ -24,14 +24,14 @@
                 <table class="table table-bordered" id="mainTableAllUsers" width="100%" cellspacing="0">
                     <thead >
                       <tr class="text-center">
-                          <th class="bg-primary">Apellidos, Nombre</th>
-                          <th class="bg-primary">Rol</th>
+                          <th class="bg-primary">@lang('messages.surname, name')</th>
+                          <th class="bg-primary">@lang('messages.role')</th>
                           <th class="bg-primary">Dni</th>
-                          <th class="bg-primary">Grupo sanguíneo</th>
-                          <th class="bg-primary">Fecha de nacimiento</th>
-                          <th class="bg-primary">Teléfono</th>
-                          <th class="bg-primary">Sexo</th>
-                          <th class="bg-primary">Acciones</th>
+                          <th class="bg-primary">@lang('messages.blood group')</th>
+                          <th class="bg-primary">@lang('messages.date of birth')</th>
+                          <th class="bg-primary">@lang('messages.Phone number')</th>
+                          <th class="bg-primary">@lang('messages.gender')</th>
+                          <th class="bg-primary">@lang('messages.actions')</th>
                       </tr>
                     </thead>
                     @if(!(isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && !($flagsMenuEnabled['ALL_USERS_DELETE']))
@@ -40,11 +40,15 @@
                       
                         <tr class="text_left">
                             <td class="text_left">
-                                @if ($singleUser['sex']=="male")
-                                    <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
-                                @endif
-                                @if ($singleUser['sex']=="female")
-                                    <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
+                                @if (!empty($singleUser['avatar']))
+                                  <img src="{{ asset('images/avatars/'.$singleUser['avatar']) }}" class="avatar big"/>
+                                @else
+                                  @if ($singleUser['sex']=="male")
+                                      <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
+                                  @endif
+                                  @if ($singleUser['sex']=="female")
+                                      <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
+                                  @endif
                                 @endif
                                 <span>{{ urldecode($singleUser['lastname']).", ".urldecode($singleUser['name']) }}</span>
                             </td>
@@ -125,8 +129,12 @@
 
 @endsection
 
-@section('scriptsPropios')
+@section('viewsScripts')
   {{-- <script type="text/javascript" src="{{ asset('js/users-index.js') }}"></script> --}}
-  @include('users.users-index', ['pagination'=>$pagination])
+  @if(!(isset($pagination)))
+    @include('users.users-index', ['pagination'=>\HV_PAGINATION])
+  @else 
+    @include('users.users-index', ['pagination'=>$pagination])
+  @endif
 
 @endsection

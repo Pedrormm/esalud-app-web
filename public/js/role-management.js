@@ -1,9 +1,10 @@
 $.fn.dataTable.ext.errMode = 'throw';
+
 let _mainDataTableRoles = $('#mainTableRoles').DataTable({
   
   "responsive": true,
   "language": {
-      "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+    "url": _urlDtLang
   },
 
   ajax: {
@@ -11,7 +12,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, 
-        url: PublicURL + 'roles/viewDT',
+        url: _publicUrl + 'roles/viewDT',
         method: "POST",
         dataSrc: "data",
         xhrFields: {
@@ -39,7 +40,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                return     '<a href="'+PublicURL+'roles/userManagement/edit/'+row.idRole+'"' + 
+                return     '<a href="'+_publicUrl+'roles/userManagement/edit/'+row.idRole+'"' + 
                             ' class="btn btn-primary role-users-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             'Usuarios asociados' +
@@ -49,8 +50,8 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                // return     '<a href="'+PublicURL+'user/roleManagement/edit/'+row.idRole+'"' + 
-                return     '<a href="'+PublicURL+'roles/'+row.idRole+'/edit/'+'"' + 
+                // return     '<a href="'+_publicUrl+'user/roleManagement/edit/'+row.idRole+'"' + 
+                return     '<a href="'+_publicUrl+'roles/'+row.idRole+'/edit/'+'"' + 
                             ' class="btn btn-primary role-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
                             'Editar' +
@@ -60,9 +61,9 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
         },
         {
             "render": function ( data, type, row ) {
-                // return     '<a href="'+PublicURL+'role/confirmDelete/'+row.idRole+'"' + 'id="roleDelete"'+
+                // return     '<a href="'+_publicUrl+'role/confirmDelete/'+row.idRole+'"' + 'id="roleDelete"'+
                 var isDisabled = row.delible == 1 ? " isDisabled" : "";
-                return     '<a href="'+PublicURL+'roles/'+row.idRole+'/confirmDelete/'+'"' + 
+                return     '<a href="'+_publicUrl+'roles/'+row.idRole+'/confirmDelete/'+'"' + 
                             ' class=\"btn btn-danger roleDelete' +isDisabled+'\"'+
                             ' data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+

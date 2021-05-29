@@ -44,7 +44,7 @@ class CheckUserRole
                 $this->auth->logout();
 
                 if ($request->ajax())
-                    return response('Unauthorized.', 401);
+                    return response(\Lang::get('messages.Permission_Denied'), 401);
                 else
                     return redirect()->to('login');
             break;

@@ -104,7 +104,7 @@ class StaffController extends AppBaseController
         if (empty($usuario)) {
             // Flash::error('user not found');
             // return redirect(route('users.index'));
-            return $this->backWithErrors("User not found" );
+            return $this->backWithErrors(\Lang::get('messages.User not found'));
         }
         $rol_usuario_info = "";
         // dd($usuario->toArray());
@@ -112,10 +112,10 @@ class StaffController extends AppBaseController
             $rol_usuario_info = Staff::whereUserId($id)->first();
         }
         else{
-            return $this->backWithErrors("Not enough permissions");
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
         }
         if(!$rol_usuario_info) {
-            return $this->backWithErrors("Invalid id");
+            return $this->backWithErrors(\Lang::get('messages.Invalid id'));
         }
         $roles = Role::all();
         $branches = Branch::all();
@@ -163,7 +163,7 @@ class StaffController extends AppBaseController
         
 
         if (empty($userToDelete)) {
-            return $this->jsonResponse(1, "User not found"); 
+            return $this->jsonResponse(1, \Lang::get('messages.User not found')); 
         }
 
         $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
@@ -178,10 +178,10 @@ class StaffController extends AppBaseController
             Staff::find($patientOrStaffFound[0]['staff_id'])->delete();
         }
         else{
-            return $this->jsonResponse(1, "The user is not staff"); 
+            return $this->jsonResponse(1, \Lang::get('messages.The user is not staff')); 
         }
 
-        return $this->jsonResponse(0, "User  ".$userName." deleted successfully.");
+        return $this->jsonResponse(0, \Lang::get('messages.user')." ".$userName." ".\Lang::get('messages.deleted successfully'));
     }
 
     public function confirmDelete($id){

@@ -32,7 +32,7 @@
         </div>
         <div class="center">
 
-            <h2>Introduzca DNI y contraseña</h2>
+            <h2>@lang('messages.Enter ID and password')</h2>
             {{-- <form method="post" action="{{ url('login') }}"> --}}
             {{ Form::open(array('url' => 'login', 'method' => 'POST')) }}
 
@@ -41,7 +41,7 @@
                 <input type="password" name="password" class="ct" placeholder="password" />
                 <div class="rememberme form-group form-check m-1">
                     <input name="remember" type="checkbox" class="form-check-input" id="rememberMe" {{ (Cookie::has('credencialesDni')) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="rememberMe">Recordar</label>
+                    <label class="form-check-label" for="rememberMe">@lang('messages.Remember me')</label>
                 </div>
                 @if (session()->has('info'))
                     <div class="alert alert-success" id="infoSession">{{ session()->get('info') }}</div>
@@ -76,7 +76,7 @@
             <div class="text-center m-1">
                 <a href="{{ url('isPasswordForgotten')  }}" class="remember_password" 
                 data-name-role="">
-                ¿Has olvidado tu contraseña?
+                @lang('messages.have you forgotten your password?')
                 </a>
             </div>
   
@@ -91,6 +91,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
 <script type="text/javascript" src="{{ asset('js/login.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/index-needed.functions.js') }}"></script>
+@include('inc.jsGlobalsDefinition')
 {{-- <script type="text/javascript" src="{{ asset('js/application.js') }}"></script> --}}
 
 {{-- <script>

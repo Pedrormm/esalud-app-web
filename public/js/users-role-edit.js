@@ -3,7 +3,7 @@ let _dataTableRoles = $('#tableRoles').DataTable({
   
   "responsive": true,
   "language": {
-      "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+    "url": _urlDtLang
   },
 
   ajax: {
@@ -11,7 +11,7 @@ let _dataTableRoles = $('#tableRoles').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }, 
-            url: PublicURL + 'roles/userManagementInRole/edit/' + currentIdRole,
+            url: _publicUrl + 'roles/userManagementInRole/edit/' + currentIdRole,
             method: "POST",
             dataSrc: "data",
             xhrFields: {
@@ -68,7 +68,6 @@ let _dataTableRoles = $('#tableRoles').DataTable({
         ],
 
         "fnDrawCallback": function( oSettings ) {
-
           let allUsers;
           let _rolesForChange = {};
           let _currentRolesForChange = {};
@@ -77,7 +76,7 @@ let _dataTableRoles = $('#tableRoles').DataTable({
               let roleId = this.options[clickedIndex].value;
               let userId = $(this).data('user-id');
               _currentRolesForChange[userId] = parseInt(roleId);
-              saveModalActionAjax(PublicURL+"roles/userManagementNotInRole/update", _currentRolesForChange, 'POST', 'json', function(res) {
+              saveModalActionAjax(_publicUrl+"roles/userManagementNotInRole/update", _currentRolesForChange, 'POST', 'json', function(res) {
               if(res.status == 0) {
                   $('#tableRoles').DataTable().ajax.reload();
                   showInlineMessage(res.message, 20);
@@ -92,6 +91,9 @@ let _dataTableRoles = $('#tableRoles').DataTable({
 
         }
 
+}).on( 'draw.dt', function () {
+  console.log("algo");
+  clickOnSelectpicker();
 });
 
 $('#usersDistRole').on('click', function(e){
@@ -102,7 +104,7 @@ $('#usersDistRole').on('click', function(e){
 
 $('.cHeader button').on('click', function(e){
   e.preventDefault();
-  window.location.href = PublicURL+"roles/";
+  window.location.href = _publicUrl+"roles/";
 });
 
 

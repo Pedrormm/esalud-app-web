@@ -1,19 +1,19 @@
 @component('mail::message')
-# Nuevo usuario
+# @lang('messages.New user')
 
-Hola, se ha solicitado un nuevo usuario a este email con el dni {{ $dni }}
+@lang('messages.Hello, a new user admission has been requested to this email with the DNI(id) ') {{ $dni }}
 
-Haga click para registrarse en la aplicación:
+@lang('messages.Click to register in the application'){{ config('app.name') }}:
 @component('mail::button', ['url' => URL::asset('user/createUserFromMail/' . $token)])
-Nuevo usuario
+@lang('messages.New user')
 @endcomponent
 
 <small>
-NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de navegación:<br>
+@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar')<br>
 {{ URL::asset('user/createUserFromMail/' . $token) }}
 </small>
 
-Gracias,<br>
+@lang('messages.Thank you'),<br>
 {{ config('app.name') }}
 @endcomponent
 {{-- <!DOCTYPE html>

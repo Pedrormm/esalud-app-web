@@ -1,17 +1,17 @@
 @component('mail::message')
-# Mensaje de bienvenida
+# @lang('messages.Welcome message')
 
-Hola {{ $name." ".$lastname }} , <br/>
-Te damos la bienvenida a {{ config('app.name') }}!
-Una nueva cuenta ha sido creada con el dni {{ $dni }} desde la IP pública {{ $publicIp }}
+@lang('messages.Hello') {{ $name." ".$lastname }} , <br/>
+@lang('messages.We would like to welcome you to') {{ config('app.name') }}!
+@lang('messages.A new user has been created with the dni') {{ $dni }} @lang('messages.from witihin the public IP') {{ $publicIp }}
 
-Para acceder a la aplicación haga click en el siguiente enlace:
+@lang('messages.Should you want to access the application click on the following link'):
 @component('mail::button', ['url' => Auth::user() ? URL::asset('logout/') : URL::asset('/')])
-Acceso al login
+@lang('messages.Login access')
 @endcomponent
 
 <small>
-NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de navegación:<br>
+@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar:')<br>
 @if (Auth::user())
     {{ URL::asset('logout/') }}
 @else
@@ -19,6 +19,6 @@ NOTA: Si el enlace no te funciona, copia y pega el sigueinte link en tu barra de
 @endif
 </small>
 
-Gracias por confiar en nosotros,<br/>
+@lang('messages.Thank you for trusting us'),<br>
 {{ config('app.name') }}
 @endcomponent

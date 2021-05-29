@@ -1,17 +1,17 @@
 
-@section('scriptsPropios')
+@section('viewsScripts')
 
 <script>
     $('.cHeader button').on('click', function(e){
         e.preventDefault();
-        window.location.href = PublicURL+"treatments/";
+        window.location.href = _publicUrl+"treatments/";
     });
 
     let _mainTableAllUsersAjax = $('#TableTreatmentsSinglePatient').DataTable({
         serverSide : true,
         "responsive": true,
         "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+            "url": _urlDtLang
         },
       
         ajax: {
@@ -19,7 +19,7 @@
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }, 
-              url: PublicURL + 'treatments/singlePatient/'+{{ $userId }}+'/viewDT',
+              url: _publicUrl + 'treatments/singlePatient/'+{{ $userId }}+'/viewDT',
               method: "POST",
               dataSrc: "data",
               xhrFields: {
@@ -58,7 +58,7 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-primary confirmDeleteTreatment"';
                     // strButtons += ' href="">';  
-                    strButtons += ' href="'+ PublicURL+'treatments/'+row.id+'/edit' +'">'; 
+                    strButtons += ' href="'+ _publicUrl+'treatments/'+row.id+'/edit' +'">'; 
                     strButtons += ' <i class="fa fa-edit"></i>&ensp;Editar</a></span>';                                                                                                  
                     return strButtons;
                 }
@@ -70,7 +70,7 @@
                     // console.log(data, type, row);
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-info confirmDeleteTreatment"';
-                    strButtons += ' href="'+ PublicURL+'treatments/'+row.users_id+'/indexSinglePatient' +'">';  
+                    strButtons += ' href="'+ _publicUrl+'treatments/'+row.users_id+'/indexSinglePatient' +'">';  
                     strButtons += ' <i class="fa fa-eye"></i>&ensp;Ver</a></span>';                                                                                                  
                     return strButtons;
                 }

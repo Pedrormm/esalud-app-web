@@ -9,7 +9,7 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- DataTales Example -->
+          
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
               <h4 class="m-0 font-weight-bold text-primary text-center">Gestión de roles</h4>
@@ -50,6 +50,9 @@
         </div>
         <!-- /.container-fluid -->
 
-  <script type="text/javascript" src="{{ asset('js/role-management.js')}}"></script>
 
+@endsection
+
+@section('viewsScripts')
+  <script type="text/javascript" src="{{ asset('js/role-management.js')}}"></script>
 @endsection

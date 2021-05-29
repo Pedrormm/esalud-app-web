@@ -43,13 +43,13 @@
 							<td><?php echo date("d/m/Y",strtotime($usuario->birthdate)); ?></td>
 						</tr>
 						<tr>
-							<td>Sexo:</td>
+							<td>@lang('messages.gender'):</td>
 							<td>
 							<?php
 								if($usuario->sex == "male"){
-									echo "Masculino";
+									echo \Lang::get('messages.male');
 								}else{
-									echo "Femenino";
+									echo \Lang::get('messages.female');
 								}
 							
 							?>
@@ -67,7 +67,7 @@
 						</tr>
                         
                         <tr>
-							<td>Turno:</td>
+							<td>@lang('messages.Shift'):</td>
 							<td>
                             
                                 @switch($usuario->shift)
@@ -108,22 +108,22 @@
 						</tr>
 
                         <tr>
-							<td>Oficina:</td>
+							<td>@lang('messages.Office'):</td>
 							<td>{{ $usuario->office }}</td>
 						</tr>
 
                         <tr>
-							<td>Habitación:</td>
+							<td>@lang('messages.Room number'):</td>
 							<td>{{ $usuario->room }}</td>
 						</tr>
 
                         <tr>
-							<td>Teléfono de empresa:</td>
+							<td>@lang('messages.Phone number') de empresa:</td>
 							<td>{{ $usuario->h_phone }}</td>
 						</tr>
 
                         <tr>
-							<td>Especialidad:</td>
+							<td>@lang('messages.specialty'):</td>
 							<td>{{ $usuario->branch_name }}</td>
 						</tr>
 
@@ -149,10 +149,8 @@
 
 @endsection
 
-@section('scriptsPropios')
-
-<script>
-    $('#userInfo td:first-child').addClass('text-left pl-2 font-weight-bold')
-</script>
-
+@section('viewsScripts')
+	<script>
+		$('#userInfo td:first-child').addClass('text-left pl-2 font-weight-bold')
+	</script>
 @endsection

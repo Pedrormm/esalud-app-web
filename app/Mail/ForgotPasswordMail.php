@@ -31,7 +31,7 @@ class ForgotPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->name .", se ha solicitado un cambio de contraseña en mi Hospital Virtual")
+        return $this->subject($this->name .\Lang::get('messages.a password changed has been requested for a user in'). config('app.name'))
                     ->markdown('mail.forgot', ['token' => $this->token, 'name' => $this->name]);
     }
 }

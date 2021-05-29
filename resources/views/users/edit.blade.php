@@ -17,7 +17,7 @@
                   <i class="fas fa-arrow-left"></i>
               </button>
             </div>
-            <h4 class="font-weight-bold text-primary centered">Editar usuario</h4>
+            <h4 class="font-weight-bold text-primary centered">@lang('messages.Edit user')</h4>
         </div>
       </div>
 
@@ -45,7 +45,7 @@
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h3>Datos de Usuario</h3>
+                        <h3>@lang('messages.User data')</h3>
                     </div>
                 </div>
                
@@ -62,7 +62,7 @@
                     <div class="col-lg-4">
                         {{-- <input type="text" class="form-control" value="{{ App\Models\Role::find($usuario->role_id)->id }}" name="role_id" /> --}}
                             <select name="role_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                                data-live-search="true" title="Rol">
+                                data-live-search="true" title=@lang('messages.role')>
                                 @foreach ($roles as $rol)
                                     <option value={{ $rol->id }} {{ $usuario->role_id == $rol->id ? 'selected' : "" }}>{{ $rol->name }}</option>
                                 @endforeach
@@ -72,31 +72,31 @@
 
                 <div class="row mb-3">
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" value="{{ $usuario->name }}" placeholder="Nombre" name="name" required/>
+                        <input type="text" class="form-control" value="{{ $usuario->name }}" placeholder=@lang('messages.name') name="name" required/>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" value="{{ $usuario->lastname }}" placeholder="Apellidos" name="lastname" required/>
+                        <input type="text" class="form-control" value="{{ $usuario->lastname }}" placeholder=@lang('messages.surname') name="lastname" required/>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" value="{{ $usuario->address }}" placeholder="Dirección" name="address" required/>
+                        <input type="text" class="form-control" value="{{ $usuario->address }}" placeholder=@lang('messages.address') name=@lang('messages.address') required/>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" value="{{ $usuario->country }}" placeholder="País" name="country" />
+                        <input type="text" class="form-control" value="{{ $usuario->country }}" placeholder=@lang('messages.Country') name="country" />
                     </div>
                     <div clas s="col-lg-4">
-                        <input type="text" class="form-control" value="{{ $usuario->city }}" placeholder="Ciudad" name="city" />
+                        <input type="text" class="form-control" value="{{ $usuario->city }}" placeholder=@lang('messages.City') name="city" />
                     </div>
                     <div class="col-lg-4">
-                        <input type="number" class="form-control" value="{{ $usuario->zipcode }}" placeholder="Código Postal" name="zipcode" />
+                        <input type="number" class="form-control" value="{{ $usuario->zipcode }}" placeholder=@lang('messages.Zip code') name="zipcode" />
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-lg-3">
-                        {{-- <input type="text" class="form-control" placeholder="Teléfono" name="phone" /> --}}
+                        {{-- <input type="text" class="form-control" placeholder=@lang('messages.Phone number') name="phone" /> --}}
                         <input type='tel' value="{{ $usuario->phone }}" class="form-control" name="phone" id="smsPhone" maxlength="12" />
                         <span id="valid-msg" class="hide"></span>
                         <span id="error-msg" class="hide"></span>
@@ -107,13 +107,13 @@
                     <div class="col-lg-3">
                         {{-- <select name="sex" class="form-control" required> --}}                      
                         <select name="sex" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                        data-live-search="true" title="Sexo">
+                        data-live-search="true" title=@lang('messages.gender')>
                             @if($usuario->sex == "female")
-                            <option selected value="female">Femenino</option>
-                            <option value="male">Masculino</option>
+                            <option selected value="female">@lang('messages.female')</option>
+                            <option value="male">@lang('messages.male')</option>
                             @else
-                            <option value="female">Femenino</option>
-                            <option selected value="male">Masculino</option>
+                            <option value="female">@lang('messages.female')</option>
+                            <option selected value="male">@lang('messages.male')</option>
                             @endif
                            
                         </select>
@@ -121,7 +121,7 @@
                     <div class="col-lg-3">
                         {{-- <select name="blood" class="form-control" required> --}}
                         <select name="blood" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title="Grupo sanguíneo">
+                            data-live-search="true" title=@lang('messages.blood group')>
                             <option value="0-" {{ $usuario->blood == "0-" ? 'selected' : "" }}>0-</option>
                             <option value="0+" {{ $usuario->blood == "0+" ? 'selected' : "" }}>0+</option>
                             <option value="A-" {{ $usuario->blood == "A-" ? 'selected' : "" }}>A-</option>
@@ -134,46 +134,46 @@
                     </div>
                 </div>
 
-                @if($usuario->role_id == 1)
+                @if($usuario->role_id == \HV_ROLES::PATIENT)
                     <div class="row mb-3">
                         <div class="col-lg-12">
                             <hr>
-                            <h3>Datos del Paciente</h3>
+                            <h3>@lang('messages.Patient data')</h3>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-lg-4">
-                            <input value="{{ $rol_usuario_info->historic }}" type="text" class="form-control" placeholder="Histórico" name="historic" />
+                            <input value="{{ $rol_usuario_info->historic }}" type="text" class="form-control" placeholder=@lang('messages.Historical') name="historic" />
                         </div>
                         <div class="col-lg-4">
-                            <input value="{{ $rol_usuario_info->height }}" type="number" class="form-control" placeholder="Altura en cm" name="height" />
+                            <input value="{{ $rol_usuario_info->height }}" type="number" class="form-control" placeholder=@lang('messages.Height in cm') name="height" />
                         </div>
                         <div class="col-lg-4">
-                            <input value="{{ $rol_usuario_info->weight }}" type="text" class="form-control" placeholder="Peso en kg" name="weight" />
+                            <input value="{{ $rol_usuario_info->weight }}" type="text" class="form-control" placeholder=@lang('messages.Weight in kg') name="weight" />
                         </div>
                     </div>
                 @endif
 
-                @if($usuario->role_id == 2)
+                @if($usuario->role_id == \HV_ROLES::DOCTOR)
                     <div class="row mb-3">
                         <div class="col-lg-12">
                             <hr>
-                            <h3>Datos del Doctor</h3>
+                            <h3>@lang('messages.Doctor data')</h3>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-lg-4">
-                            <input type="text" value="{{ $rol_usuario_info->historic }}" class="form-control" placeholder="Histórico" name="historic" />
+                        <div class="col-lg-6">
+                            <input type="text" value="{{ $rol_usuario_info->historic }}" class="form-control" placeholder=@lang('messages.Historical') name="historic" />
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <select class="form-control" name="branch_id">
-                                <option>Seleccione especialidad</option>
+                                <option>@lang('messages.Select specialty')</option>
                                 @foreach( $branches as $branch)
                                     <option {{ $rol_usuario_info->branch_id == $branch->id ? 'selected' : "" }} value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-4">
+                        {{-- <div class="col-lg-4">
                             <select class="form-control selectpicker show-tick" name="shift" data-live-search="true"
                             title="Seleccione horario">
                                 <option {{ $rol_usuario_info->shift == "M" ? 'selected' : '' }} value="M">Mañana</option>
@@ -184,17 +184,17 @@
                                 <option {{ $rol_usuario_info->shift == "EN" ? 'selected' : '' }} value="EN">Tarde y Noche</option>
                                 <option {{ $rol_usuario_info->shift == "N" ? 'selected' : '' }} value="N">Noche</option>
                             </select> 
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row mb-3"> 
                         <div class="col-lg-4">
-                            <input type="text" value="{{ $rol_usuario_info->office }}" class="form-control" placeholder="Oficina" name="office" />
+                            <input type="text" value="{{ $rol_usuario_info->office }}" class="form-control" placeholder=@lang('messages.Office') name="office" />
                         </div>                   
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ $rol_usuario_info->room }}" placeholder="Puerta" name="room" />
+                            <input type="text" class="form-control" value="{{ $rol_usuario_info->room }}" placeholder=@lang('messages.Door') name="room" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ $rol_usuario_info->h_phone }}" placeholder="Teléfono" name="h_phone" />
+                            <input type="text" class="form-control" value="{{ $rol_usuario_info->h_phone }}" placeholder=@lang('messages.Phone number') name="h_phone" />
                         </div>
                     </div>
                 @endif
@@ -220,11 +220,11 @@
 
   @endsection
 
-    @section('scriptsPropios')
+    @section('viewsScripts')
         <script>
             $('.cHeader button').on('click', function(e){
                 e.preventDefault();
-                window.location.href = PublicURL+"users/";
+                window.location.href = _publicUrl+"users/";
             });
         </script>
     @endsection

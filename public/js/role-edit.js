@@ -1,8 +1,9 @@
+
 var _tablaRolPermisos = $('#tablaRolPermisos').DataTable({
     responsive: true,
     pageLength : 5,
     language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+        url: _urlDtLang
     },
     "dom": '<"top"i>rt<"bottom"flp><"clear">',
     // dom: '<"pime-grid-button"B><"pime-grid-filter">frtip',
@@ -16,8 +17,8 @@ $('#saveModal').click(function() {
     var data = serializedReturn + "&" + checks;
     var idRole = $('#idRole').val();
 
-    // saveModalActionAjax(PublicURL+"user/roleManagement/update", data, 'GET', 'json', function(res) {
-    saveModalActionAjax(PublicURL+"roles/"+editRole, data, 'PUT', 'json', function(res) {
+    // saveModalActionAjax(_publicUrl+"user/roleManagement/update", data, 'GET', 'json', function(res) {
+    saveModalActionAjax(_publicUrl+"roles/"+editRole, data, 'PUT', 'json', function(res) {
         if(res.status == 0) {
             showInlineMessage(res.message, 5);
             $('#mainTableRoles').DataTable().ajax.reload();

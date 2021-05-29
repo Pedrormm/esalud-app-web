@@ -21,7 +21,5 @@
     </div>
   </form>
   
-  {{-- <script type="text/javascript" src="{{ asset('js/confirm-delete-user.js') . '?r=' . rand() }}"></script> --}}
-
 
 

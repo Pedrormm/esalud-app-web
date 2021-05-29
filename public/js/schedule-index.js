@@ -12,11 +12,11 @@
           data: {},
           method:'GET',
           contentType: "application/json",
-          url: PublicURL + 'schedule/generateSchedule',
+          url: _publicUrl + 'schedule/generateSchedule',
       }).done(function(res){
           console.log("RESPU",res);
           if (res === false){
-            console.log("falso");
+            // console.log("falso");
             $('.hv-schedule').remove();
             $('#SaveSchedule').remove();
             showInlineMessage("No dispones de horario por no ser empleado", 60);
@@ -126,7 +126,7 @@
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }, 
-          url:PublicURL+'schedule/saveSchedule',
+          url:_publicUrl+'schedule/saveSchedule',
           type:"POST",
           data: {"days":days,"_method":'PATCH'},
           dataType:"json",

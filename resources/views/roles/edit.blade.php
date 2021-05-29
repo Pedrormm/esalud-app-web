@@ -1,6 +1,7 @@
 
   <link rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   {{-- <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/roleEdit.css') }}"> --}}
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/toggle.css') }}">
 
 
 
@@ -75,12 +76,7 @@
   
   <script>
     roleId = {{ $roles['id'] }};
-  
-
   </script>
-
-  <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/toggle.css') }}">
-  <script type="text/javascript" src="{{ asset('js/application.js') }}"></script>
 
   <script type="text/javascript" src="{{ asset('js/role-edit.js') . '?r=' . rand() }}"></script>
   

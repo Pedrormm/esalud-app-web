@@ -1,5 +1,5 @@
 
-@section('scriptsPropios')
+@section('viewsScripts')
 
 <script>
 
@@ -8,7 +8,7 @@
         serverSide : true,
         "responsive": true,
         "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+            "url": _urlDtLang
         },
       
         ajax: {
@@ -16,7 +16,7 @@
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               }, 
-              url: PublicURL + 'schedule/viewDT',
+              url: _publicUrl + 'schedule/viewDT',
               method: "POST",
               dataSrc: "data",
               xhrFields: {
@@ -37,11 +37,16 @@
                 render: function(data, type, row) {
                     // console.log("DATOS "+ data, type, row);
                     let strFullName = "";
-                    if (row.sex=="male"){
-                        strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_man.png") }}'+'" class="avatar big">';                                                                           
+                    if (row.avatar){
+                        strFullName += '<img class="avatar clearfix align-middle" src="'+ _publicUrl+'images/avatars/' + row.avatar + '" class="avatar big">';                                                                           
                     }
-                    if (row.sex=="female"){
-                        strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_woman.png") }}'+'" class="avatar big">';                                                                           
+                    else{
+                        if (row.sex=="male"){
+                            strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_man.png") }}'+'" class="avatar big">';                                                                           
+                        }
+                        if (row.sex=="female"){
+                            strFullName += '<img class="avatar clearfix align-middle" src="'+'{{ asset("images/avatars/user_woman.png") }}'+'" class="avatar big">';                                                                           
+                        }
                     }
 
                     strFullName += '<span class="align-middle">'+data+'</span>';
@@ -73,7 +78,7 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-info viewTreatments"';
                     strButtons += ' data-id-user="'+row.users_id +'"'; 
-                    strButtons += ' href="'+ PublicURL+'schedule/staff/'+row.users_id+'">'; 
+                    strButtons += ' href="'+ _publicUrl+'schedule/staff/'+row.users_id+'">'; 
                     strButtons += ' <i class="fa fa-eye"></i>&ensp;Ver</a></span>';                                                                                                  
                     return strButtons;
                 }
@@ -87,7 +92,7 @@
                     strButtons += ' <span> <a class="btn btn-danger confirmDeleteTreatment"';
                     strButtons += ' data-name-user="'+row.name + ' '+ row.lastname+'" ';
                     strButtons += ' data-id-user="'+row.users_id +'"';
-                    strButtons += ' href="'+ PublicURL+'schedule/staff/'+row.users_id+'/confirmDelete' +'">';  
+                    strButtons += ' href="'+ _publicUrl+'schedule/staff/'+row.users_id+'/confirmDelete' +'">';  
                     strButtons += ' <i class="fa fa-trash"></i>&ensp;Eliminar horario</a></span>';                                                                                                  
                     return strButtons;
                 }
@@ -104,7 +109,7 @@
                 false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
 
                 $('#saveModal').on('click', function(e){
-                    saveModalActionAjax(PublicURL+"schedule/"+scheduleDeleteId, scheduleDeleteId, 'DELETE', 'json', function(res) {
+                    saveModalActionAjax(_publicUrl+"schedule/"+scheduleDeleteId, scheduleDeleteId, 'DELETE', 'json', function(res) {
                         if(res.status == 0) {
                             $('#scheduleStaffTable').DataTable().ajax.reload();
                             showInlineMessage(res.message, 15);

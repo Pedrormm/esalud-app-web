@@ -51,7 +51,6 @@ class RoleController extends AppBaseController
             $rol->count = $count;
         }
 
-        // return view('adjustments/roleManagement', ['roles' => $roles]);
         return view('roles/index', ['roles' => $roles]);
     }
 
@@ -65,7 +64,6 @@ class RoleController extends AppBaseController
      */ 
     public function create(){
         $permissions = Permission::get()->toArray();
-        // return view('adjustments.newRole',['permissions' => $permissions]);
         return view('roles.create',['permissions' => $permissions]);
     }
 
@@ -121,7 +119,7 @@ class RoleController extends AppBaseController
             }
         }
         RolePermission::insert($data); 
-        return $this->jsonResponse(0, "El rol ".$request->name." ha sido creado");
+        return $this->jsonResponse(0, \Lang::get('messages.The role')." ".$request->name.\Lang::get('messages.has been created'));
     }
 
     /**
@@ -156,12 +154,11 @@ class RoleController extends AppBaseController
         $roles = $roles->toArray();
         $permissions = Permission::all();
         if (empty($roles)) {
-            Flash::error('Role not found');
+            Flash::error(\Lang::get('messages.Role not found'));
 
             return redirect(route('roles.index'));
         }
 
-        // return view('adjustments.roleEdit',['roles' => $roles,'permissions' => $permissions]);
         return view('roles.edit',['roles' => $roles,'permissions' => $permissions]);
 
     }
@@ -218,14 +215,14 @@ class RoleController extends AppBaseController
                         $role_permission->save();
                     }
                 }
-                return $this->jsonResponse(0, "El rol ".$request->name." ha sido editado correctamente");
+                return $this->jsonResponse(0, \Lang::get('messages.The role')." ".$request->name.\Lang::get('messages.has been succesfully edited'));
             }
             else{
-                return $this->jsonResponse(1, "Permiso denegado"); 
+                return $this->jsonResponse(1, \Lang::get('messages.Permission_Denied')); 
             }
         }
         else{
-            return $this->jsonResponse(1, "Permiso denegado");
+            return $this->jsonResponse(1, \Lang::get('messages.Permission_Denied'));
         }
 
     }
@@ -244,11 +241,11 @@ class RoleController extends AppBaseController
         $roleToDelete = Role::find($id);
         $roleName = $roleToDelete->name;
         if($roleToDelete->delible == 1 ) {
-            return $this->jsonResponse(1, "The role ".$roleName." cannot be deleted"); 
+            return $this->jsonResponse(1, \Lang::get('messages.The role')." ".$roleName." ".\Lang::get('messages.cannot be deleted')); 
         }
 
         if (empty($roleToDelete)) {
-            return $this->jsonResponse(1, "Role not found"); 
+            return $this->jsonResponse(1, \Lang::get('messages.Role not found')); 
         }
 
         $idRoleNameGuest = Role::select('id')->where('name', HV_ROLE_ASSIGNED_WHEN_DELETED)->first()->id;
@@ -258,7 +255,7 @@ class RoleController extends AppBaseController
 
         RolePermission::where('role_id', $id)->delete();
         
-        return $this->jsonResponse(0, "Role ".$roleName." deleted successfully.");
+        return $this->jsonResponse(0, \Lang::get('messages.role')." ".$roleName.\Lang::get('messages.deleted successfully'));
     
 
     }
@@ -279,7 +276,7 @@ class RoleController extends AppBaseController
         $allUsers = User::with('role')->orderBy('users.id')->get();
         $allUsers = $allUsers->groupBy('id')->toArray();
 
-        return view('adjustments.usersRoleEdit',['id' => $id,'allUsers' => $allUsers, 'usersNotInRole' => $grouped,
+        return view('roles.usersRoleEdit',['id' => $id,'allUsers' => $allUsers, 'usersNotInRole' => $grouped,
          'usersRole' => $usersRole, 'roles' => $roles]);
     }
 
@@ -297,7 +294,7 @@ class RoleController extends AppBaseController
         $allUsers = User::with('role')->orderBy('users.id')->get();
         $allUsers = $allUsers->groupBy('id')->toArray();
 
-        return view('adjustments.usersNotInRoleEdit',['allUsers' => $allUsers, 'usersNotInRole' => $grouped,
+        return view('roles.usersNotInRoleEdit',['allUsers' => $allUsers, 'usersNotInRole' => $grouped,
         'roles' => $roles]);
     }
 
@@ -333,7 +330,7 @@ class RoleController extends AppBaseController
                     $patient->weight = "";
                     $res = $patient->save();
                     if(!$res) {
-                        return $this->jsonResponse(1, "Internal error");
+                        return $this->jsonResponse(1, \Lang::get('messages.Internal error'));
                     }
                 }
             }
@@ -350,7 +347,7 @@ class RoleController extends AppBaseController
                     $staff->room = "";
                     $res = $staff->save();
                     if(!$res) {
-                        return $this->jsonResponse(1, "Internal error");
+                        return $this->jsonResponse(1, \Lang::get('messages.Internal error'));
                     }
                 }
             }
@@ -369,11 +366,6 @@ class RoleController extends AppBaseController
         }
 
         return $this->jsonResponse(0, $response);
-    }
-
-    public function newRole(){
-        $permissions = Permission::get()->toArray();
-        return view('adjustments.newRole',['permissions' => $permissions]);
     }
 
     public function confirmDelete($id){
@@ -424,7 +416,7 @@ class RoleController extends AppBaseController
             return $delible;
         }
         else{
-            jsonResponse("1","Not enough permissions");
+            jsonResponse("1",\Lang::get('messages.Permission_Denied'));
         }
     }
 
@@ -444,13 +436,13 @@ class RoleController extends AppBaseController
                     }
                 }
                 else{
-                    jsonResponse("1","The message cannot be deleted");
+                    jsonResponse("1",\Lang::get('messages.The message cannot be deleted'));
                 }
             }
         }
         else{
             // Error
-            jsonResponse("1","The message cannot be deleted");
+            jsonResponse("1",\Lang::get('messages.The message cannot be deleted'));
         }
     }
 

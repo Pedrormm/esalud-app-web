@@ -4,9 +4,11 @@
 
     <div id="root">
 
-    </div>
-
-    <script id="videoApp" src="{{asset('js/app.js')}}" >
-    </script>      
+    </div>     
       
+  @endsection
+
+  @section('viewsScripts')
+    <script id="videoApp" src="{{asset('js/app.js')}}" >
+    </script> 
   @endsection

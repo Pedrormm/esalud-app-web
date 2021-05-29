@@ -1,3 +1,9 @@
-<audio id="audio_remote" autoplay="autoplay"></audio>
-<audio id="sip_ringtone" loop src="{{ asset('sounds/ringtone.wav') }}"></audio>
-<audio id="sip_ringbacktone" loop src="{{ asset('sounds/ringbacktone.wav') }}"></audio>
+  {{-- Audio from the free music library www.neosounds.com --}}
+
+  <audio id="alert-sound" class="d-none">
+    <source src="{{ asset('sounds/alien.mp3') }}" />
+  </audio>
+
+  <audio id="chat-sound" class="d-none">
+    <source src="{{ asset('sounds/chat.mp3') }}" />
+  </audio>

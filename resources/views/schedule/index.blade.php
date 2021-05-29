@@ -9,7 +9,7 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- DataTales Example -->
+          
           <div class="card shadow mb-4" id="indexScheduleCard">
             <div class="card-header py-3">
               <h4 class="m-0 font-weight-bold text-primary text-center">Mi horario disponible</h4>
@@ -28,178 +28,6 @@
                     <div>Domingo</div>
                 </div>
                 <div class="hv-hours"></div>
-                {{-- <div class='hv-hours'>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>01:00 am</span></div>
-                        <div class="hv-time-selection hv-time-selection-active"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>02:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                    <div class="hv-row">
-                        <div class="hv-time-caption"><span>00:00 am</span></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                        <div class="hv-time-selection"></div>
-                    </div>
-                </div> --}}
             </div>
 
         </div>
@@ -209,6 +37,6 @@
 
 @endsection
 
-@section('scriptsPropios')
+@section('viewsScripts')
   <script type="text/javascript" src="{{ asset('js/schedule-index.js') }}"></script>
 @endsection

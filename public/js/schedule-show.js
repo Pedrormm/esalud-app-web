@@ -1,7 +1,7 @@
 
     $('.cHeader button').on('click', function(e){
         e.preventDefault();
-        window.location.href = PublicURL+"schedule/staff/";
+        window.location.href = _publicUrl+"schedule/staff/";
     });
 3
     $( "#SaveSchedule" ).on( "click", function() {
@@ -108,7 +108,7 @@
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }, 
-          url:PublicURL+'schedule/saveSchedule/'+staffId,
+          url:_publicUrl+'schedule/saveSchedule/'+staffId,
           type:"POST",
           data: {"days":days,"_method":'PATCH'},
           dataType:"json",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Appointment;
 use App\Models\User;
@@ -36,9 +37,11 @@ class AppointmentController extends Controller
             $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
         }
 
+        $appointmentType ="all";
+
         // dd($appointments->toArray());
 
-        return view('appointments.index')->with('appointments',$appointments->toArray());
+        return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
     }
 
     /**
@@ -86,7 +89,8 @@ class AppointmentController extends Controller
         $user_id_patient = $request->input('user_id_patient');
         $user_id_doctor = $request->input('doctor_id');
         $dt_appointment = $request->input('dtime');
-
+            
+        
         $userPatient = User::find($user_id_patient);
         $userPatient = $userPatient->name . " " . $userPatient->lastname;
         $userDoctor = User::find($user_id_doctor);
@@ -95,7 +99,7 @@ class AppointmentController extends Controller
 
         if (Appointment::where('dt_appointment', $dt_appointment)->where('user_id_patient', $user_id_patient)
         ->where('user_id_doctor', $user_id_doctor)->exists()) {
-            return $this->backWithErrors("Ya existe una cita médica igual" );
+            return $this->backWithErrors(\Lang::get('messages.There is already the same appointment') );
         }
         $userAuthRole = auth()->user()->role_id;
         $appointment = new Appointment();
@@ -107,15 +111,33 @@ class AppointmentController extends Controller
         $appointment->accomplished = 0;
         $appointment->save();
 
-        // Crear email con fichero calendar adjunto.
+        // $user_role_creator = User::select()->whereId(auth()->user()->id)->with('roles');
+        $appointment = Appointment
+        // ::with(['userCreator:id,role_id.roles.name'])´
+        ::with(['userCreator' => function ($query) {
+            $query->select('id','role_id', 'dni');
+        }, 'userCreator.roles' => function ($query) {
+            $query->select('id', 'name');
+        }])
+        ->find($appointment->id);
+        
+
+        
+        // dd($appointment);
+        // Crear email con fichero calendar adjunto. 
 
         $appointments = Appointment::with(["userPatient","userCreator","userDoctor"])->find($appointment->id);
 
         $this->sendMailNewAppointment($appointments, $userAuthRole);
+        $message = \Lang::get('messages.An appointment between the patient').$userPatient.\Lang::get('messages.and the doctor').$userDoctor.\Lang::get('messages.on the date').$spanishDate.\Lang::get('messages.has been succesfully created');
+        // return $this->create()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente")
+        // ->with('createAppointment', true);
 
-        // return $this->index();
-        // return back()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente");
-        return $this->create()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente");
+        
+
+        return $this->jsonResponse(0, $message, $appointment);
+
+        //return response()->json(compact('response'),201);
 
     }
 
@@ -149,7 +171,7 @@ class AppointmentController extends Controller
             ->with('appointment',$appointment)->with('dtAppointment',$dtAppointment);
         }
         else{
-            return $this->backWithErrors("Cita no válida" );   
+            return $this->backWithErrors(\Lang::get('messages.not a valid appointment') );   
         }
                                     
     }
@@ -190,7 +212,16 @@ class AppointmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $appointmentToDelete = Appointment::find($id);
+        $appointmentDate = $appointmentToDelete->dt_appointment;
+        $spanishDate = $this->mysqlDateTime2Spanish($appointmentDate);
+        if (empty($appointmentToDelete)) {
+            return $this->jsonResponse(1, \Lang::get('messages.Appointment not found')); 
+        }
+
+        $appointmentToDelete->delete($id);
+        
+        return $this->jsonResponse(0, \Lang::get('messages.The appointment which date is on').$spanishDate.\Lang::get('messages.has been deleted succesfully'));
     }
 
     public function realDoctorSchedule(Request $request)
@@ -275,7 +306,7 @@ class AppointmentController extends Controller
                 $timeStringEnd = Carbon::parse($timeStringIni)->addMinutes($minutesPerDate)->toTimeString();
                 // dd($timeStringEnd);
                 $rpArray[$weekday][] = [$timeStringIni, $timeStringEnd];
-                // dd($weekday);
+                // dd($rpArray);
                 // $hoursWeek[$value['weekday']][] = [$value['starting_workday_time'],$value['ending_workday_time']];
             }
 
@@ -293,11 +324,11 @@ class AppointmentController extends Controller
         $userLogin = auth()->user();
         $rol_user = $userLogin->role_id;
 
-        if($rol_user == 4){
+        if($rol_user == \HV_ROLES::ADMIN){
             $appointments = Appointment::with('userPatient')->with('userDoctor')->get();
-        }else if($rol_user == 2){
+        }else if($rol_user == \HV_ROLES::DOCTOR){
             $appointments = Appointment::where('user_id_doctor',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
-        }else if($rol_user == 1){
+        }else if($rol_user == \HV_ROLES::PATIENT){
             $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
         }
         
@@ -323,8 +354,10 @@ class AppointmentController extends Controller
         $usuarioLogin = auth()->user();
         
         $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
+        $appointmentType ="pending";
+        // return view('appointments.listPending')->with('appointments',$appointments->toArray());
+        return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
 
-        return view('appointments.listPending')->with('appointments',$appointments->toArray());
     }
 
     public function listAccepted()
@@ -332,8 +365,57 @@ class AppointmentController extends Controller
         $usuarioLogin = auth()->user();
 
         $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
-        
-        return view('appointments.listAccepted')->with('appointments',$appointments->toArray());
+        $appointmentType ="accepted";
+
+        return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
+    }
+
+    public function listRejected()
+    {
+        $usuarioLogin = auth()->user();
+
+        $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
+        $appointmentType ="rejected";
+
+        return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
+    }
+
+    public function listOld()
+    {
+        $usuarioLogin = auth()->user();
+
+        $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
+        $appointmentType ="old";
+
+        return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
+    }
+
+
+    public function showAppointmentIcon(){
+        $userLogin = auth()->user();
+        $rol_user = $userLogin->role_id;        
+
+        $data = Appointment::select('appointments.*')->distinct();
+        if($rol_user == \HV_ROLES::DOCTOR){
+            $data = $data->where('user_id_doctor',"=",$userLogin->id);
+        }else if($rol_user == \HV_ROLES::PATIENT){
+            $data = $data->where('user_id_patient',"=",$userLogin->id);
+        }
+
+        $data = $data->where('checked', 0)->orderByDesc('created_at')->get()->toArray();
+        $nAppointments = count($data);
+
+        if(($rol_user != \HV_ROLES::DOCTOR) && ($rol_user != \HV_ROLES::PATIENT) && ($rol_user != \HV_ROLES::ADMIN)){
+            $nAppointments = 0;
+        }
+
+        return view('appointments.icon', compact('nAppointments'));
+    }
+
+    public function showAppointmentsSummary(){
+        $authUser = Auth::user();
+
+        return view('appointments.summary', compact('userMessages'));
     }
 
     public function sendMailNewAppointment($appointment, $userAuthRole=null){
@@ -361,20 +443,25 @@ class AppointmentController extends Controller
 
     public function confirmChecked($id, $checked=null){
         $appointment = Appointment::find($id);
-        $checkedText = ($checked == 1)? "aceptar" : (($checked == 2) ? ("rechazar") : (""));
+        $checkedText = ($checked == 1)? \Lang::get('messages.accept') : (($checked == 2) ? (\Lang::get('messages.reject')) : (""));
         if (!$checkedText){
-            return $this->backWithErrors("Acceso denegado" );
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
         }
         return view('appointments.confirm-checked', compact('appointment','checked','checkedText'));
     }
 
     public function confirmAccomplished($id, $accomplished=null){
         $appointment = Appointment::find($id);
-        $accomplishedText = ($accomplished == 1)? "Cita finalizada" : (($accomplished == 2) ? ("Cita no finalizada") : (""));
+        $accomplishedText = ($accomplished == 1)? \Lang::get('messages.Appointment completed'): (($accomplished == 2) ? (\Lang::get('messages.Appointment not completed')) : (""));
         if (!$accomplishedText){
-            return $this->backWithErrors("Acceso denegado" );
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
         }
         return view('appointments.confirm-accomplished', compact('appointment','accomplished','accomplishedText'));
+    }
+
+    public function confirmDelete($id){
+        $appointment = Appointment::find($id);
+        return view('appointments.confirm-delete', compact('appointment'));
     }
 
     public function setChecked($id, $checked=null, $mailable = false) {
@@ -382,37 +469,51 @@ class AppointmentController extends Controller
             if ($mailable){
                 return view('appointments.index');
             }
-            return $this->jsonResponse(1, "There was an error on the checked requirements");
+            return $this->jsonResponse(1, \Lang::get('messages.There was an error on the checked requirements'));
 
-            return $this->backWithErrors("Acceso denegado" );
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied') );
         }
 
         $appointment = Appointment::find($id);
+
+        $roleCreator = User::select('role_id')->whereId($appointment->user_id_creator)->value('role_id');
+        $loggedRole = auth()->user()->role_id;
+        if (($checked == 1) && ($loggedRole == \HV_ROLES::PATIENT)){
+            return $this->jsonResponse(1, \Lang::get('messages.A patient cannot accept an appointment'));
+        }
+
+        if (($roleCreator == \HV_ROLES::PATIENT) && ($loggedRole == \HV_ROLES::PATIENT)){
+            return $this->jsonResponse(1, \Lang::get('messages.You cannot accept nor deject the appointment'));
+        }
+        if (($roleCreator == \HV_ROLES::DOCTOR) && ($loggedRole == \HV_ROLES::DOCTOR)){
+            return $this->jsonResponse(1, \Lang::get('messages.A doctor created the appointment'));
+        }
         $appointment->update(['checked' =>$checked]);
-        $messageAcRj = ($checked == 1)? "aceptada" : (($checked == 2) ? ("rechazada") : (""));
+        $messageAcRj = ($checked == 1)? \Lang::get('messages.accepted') : (($checked == 2) ? (\Lang::get('messages.rejected')) : (""));
         
         if ($mailable){
             return view('appointments.index');
         }
 
-        return $this->jsonResponse(0,  "La cita: con fecha ".$appointment->dt_appointment." ha sido ".$messageAcRj." correctamente");
+        return $this->jsonResponse(0,  \Lang::get('messages.The appointment with the date').$appointment->dt_appointment.\Lang::get('messages.has been').$messageAcRj.\Lang::get('messages.succesfully'));
     }
 
     public function setAccomplished($id, $accomplished=null) {
         if (($accomplished != 1) &&($accomplished != 2)){
-            return $this->jsonResponse(1, "There was an error on the checked requirements");
+            return $this->jsonResponse(1, \Lang::get('messages.There was an error on the checked requirements'));
 
-            return $this->backWithErrors("Acceso denegado" );
+            return $this->backWithErrors(\Lang::get('messages.Permission_Denied') );
         }
 
         $appointment = Appointment::find($id);
         $appointment->update(['accomplished' =>$accomplished]);
-        $messageAcRj = ($accomplished == 1)? "aceptada" : (($accomplished == 2) ? ("rechazada") : (""));
+        $messageAcRj = ($accomplished == 1)? \Lang::get('messages.accepted') : (($accomplished == 2) ? (\Lang::get('messages.rejected')) : (""));
             
-        return $this->jsonResponse(0,  "La cita: con fecha ".$appointment->dt_appointment." ha sido ".$messageAcRj." correctamente");
+
+        return $this->jsonResponse(0,  \Lang::get('messages.The appointment with the date').$appointment->dt_appointment.\Lang::get('messages.has been').$messageAcRj.\Lang::get('messages.succesfully'));
     }
 
-    public function ajaxViewDatatable(Request $request) {
+    public function ajaxViewDatatable(Request $request, string $appointmentType=null) {
 
         if(!$request->wantsJson()) {
             abort(404, 'Bad request');
@@ -432,10 +533,28 @@ class AppointmentController extends Controller
         $rol_user = $userLogin->role_id;
 
         $data = Appointment::select('appointments.*')->distinct();
+        if (($appointmentType == "all") || ($appointmentType == "pending") || ($appointmentType == "accepted") || ($appointmentType == "rejected")) {
+            $data = $data->whereDate('dt_appointment', '>', Carbon::today());
+        }else if ($appointmentType == "old"){
+            $data = $data->whereDate('dt_appointment', '<', Carbon::today());
+        }
+        
         if($rol_user == \HV_ROLES::DOCTOR){
             $data = $data->where('user_id_doctor',"=",$userLogin->id);
         }else if($rol_user == \HV_ROLES::PATIENT){
             $data = $data->where('user_id_patient',"=",$userLogin->id);
+        }
+
+        if ((!$appointmentType) || ($appointmentType == "all") || ($appointmentType == "old")) {
+            // Mostrar todas
+        } elseif ($appointmentType == "pending") {
+            $data = $data->where('checked',"=",0);
+        } elseif ($appointmentType == "accepted") {
+            $data = $data->where('checked',"=",1);
+        } elseif ($appointmentType == "rejected") {
+            $data = $data->where('checked',"=",2);
+        } else {
+            // Error
         }
 
         $data = $data->groupBy('dt_appointment')
@@ -445,6 +564,7 @@ class AppointmentController extends Controller
         ->with(array('userDoctor' => function($query) {
             $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS doctorFullName"));
         }));
+
 
         // $data = Patient::select('users.*','patients.*','roles.name AS role_name', 'patients.id AS patients_id', 'users.id AS users_id')->join('users', 'patients.user_id', 'users.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
         

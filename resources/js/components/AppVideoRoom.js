@@ -219,7 +219,7 @@ export default class AppVideoRoom extends Component {
         Pusher.logToConsole = false;
         this.pusher = new Pusher(APP_KEY, {
             // authEndpoint: 'https://localhost/esalud-app-web/public/pusher/auth',
-            authEndpoint: PublicURL+'pusher/auth',
+            authEndpoint: _publicUrl+'pusher/auth',
             cluster: 'ap2',
             auth: { 
                 // Auth object that will have to authorized
@@ -245,7 +245,7 @@ export default class AppVideoRoom extends Component {
                 if(signal.data.type=='offer'){
                     let whoCalls="";
 
-                    $.ajax(PublicURL + 'videoCall/getUserInfo', {
+                    $.ajax(_publicUrl + 'videoCall/getUserInfo', {
                         dataType: "text",
                         data: {id: signal.userId},
                         method:'get',
@@ -260,7 +260,7 @@ export default class AppVideoRoom extends Component {
                     if (!utils.isInVideoCallView()){
                         
                         showModalConfirm("Llamada de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
-                            // window.location.replace(PublicURL+'videoCall/'+JSON.stringify(signal));
+                            // window.location.replace(_publicUrl+'videoCall/'+JSON.stringify(signal));
                             $('#saveModal').off('click');
                             console.log("NO EN VENTANA VIDEO");
 
@@ -304,7 +304,7 @@ export default class AppVideoRoom extends Component {
                             this.incomingCall(signal);
                         },()=>{
                             //TODO: Reset the call when cancel is pressed
-                            // window.history.pushState('Cancel', 'Cancel', PublicURL + 'records');
+                            // window.history.pushState('Cancel', 'Cancel', _publicUrl + 'records');
                             // window.history.forward();
                             // location.reload();
                             // this.forceUpdate();

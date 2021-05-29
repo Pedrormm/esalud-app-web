@@ -118,13 +118,18 @@ class User extends Authenticatable
      * @var array
      */
     public static $rules = [
-        'dni' => 'required',
-        'password' => 'required',
+        'token' => 'required|exists:App\Models\UserInvitation,verification_token',
+        'dni' => 'required|min:9|max:9',
+        'email' => 'required|email:rfc,dns',
+        'rol_id' => 'required|numeric|min:1',
+        'name' => 'required',
+        'lastname' => 'required',
+        'zipcode' => 'numeric',
+        'phone' => 'required',
         'birthdate' => 'required',
         'sex' => 'required',
         'blood' => 'required',
-        'role_id' => 'required',
-        'remember_token' => 'required'
+        
     ];
 
     /**

@@ -16,8 +16,8 @@
     </div>
 @endsection
 
-@section('scriptsPropios')
-<script type="text/javascript">
+@section('viewsScripts')
+    <script type="text/javascript">
     
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -37,7 +37,7 @@
                     {
                         @if($rol_user == 1)
                             
-                            title: 'Doctor: {{ $appointment->fullNameDoctor }}',
+                            title: '@lang('messages.doctor'): {{ $appointment->fullNameDoctor }}',
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
@@ -48,7 +48,7 @@
 
                         @elseif($rol_user == 2)
                             
-                            title: 'Paciente: {{ $appointment->fullNamePatient }}',
+                            title: '@lang('messages.patient'): {{ $appointment->fullNamePatient }}',
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
@@ -58,7 +58,7 @@
 
                         @elseif($rol_user == 4)
                             
-                            title: 'Paciente: {{ $appointment->fullNamePatient }}',
+                            title: '@lang('messages.patient'): {{ $appointment->fullNamePatient }}',
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
@@ -73,7 +73,7 @@
                 @endforeach
             ],            
             eventClick: function(info) {               
-                showModal(info.event.title, '', false, PublicURL + "appointment/showCalendar/"+ info.event._def.extendedProps.description, 'modal-xl',
+                showModal(info.event.title, '', false, _publicUrl + "appointment/showCalendar/"+ info.event._def.extendedProps.description, 'modal-xl',
                 true, true, false);                 
             } 
         });
