@@ -59,7 +59,8 @@
                     strButtons += ' <span> <a class="btn btn-primary confirmDeleteTreatment"';
                     // strButtons += ' href="">';  
                     strButtons += ' href="'+ _publicUrl+'treatments/'+row.id+'/edit' +'">'; 
-                    strButtons += ' <i class="fa fa-edit"></i>&ensp;Editar</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-edit"></i>&ensp;';
+                    strButtons += _messagesLocalization.edit_stat+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -71,7 +72,8 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-info confirmDeleteTreatment"';
                     strButtons += ' href="'+ _publicUrl+'treatments/'+row.users_id+'/indexSinglePatient' +'">';  
-                    strButtons += ' <i class="fa fa-eye"></i>&ensp;Ver</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-eye"></i>&ensp;';
+                    strButtons += _messagesLocalization.look_stat+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -83,7 +85,8 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-danger confirmDeleteTreatment"';
                     strButtons += ' href="">';  
-                    strButtons += ' <i class="fa fa-trash"></i>&ensp;Eliminar</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-trash"></i>&ensp;';
+                    strButtons += _messagesLocalization.delete_stat+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -92,7 +95,7 @@
 
           }
       }).on('draw', () => {
-          console.log("entra draw");
+        //   console.log("entra draw");
           disableDataTablesMinCharactersSearch('#TableTreatmentsSinglePatient', 3, true);
           assignHeadersToRowsResponsive();
       });

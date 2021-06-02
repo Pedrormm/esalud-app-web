@@ -19,8 +19,8 @@
             // console.log("falso");
             $('.hv-schedule').remove();
             $('#SaveSchedule').remove();
-            showInlineMessage("No dispones de horario por no ser empleado", 60);
-            $('#indexScheduleCard h4').text("No hay horario");
+            showInlineMessage(_messagesLocalization.since_you_are_not_staff_you_do_not_have_a_schedule, 60);
+            $('#indexScheduleCard h4').text(_messagesLocalization.there_is_no_schedule);
           }
           else{
             model = res;

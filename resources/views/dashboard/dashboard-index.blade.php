@@ -66,12 +66,36 @@
               case "it":
                 publishedDate = new Intl.DateTimeFormat('it-IT', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
                 break;
+              case "pt":
+                publishedDate = new Intl.DateTimeFormat('pt-PT', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;
+              case "fr":
+                publishedDate = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;
+              case "ro":
+                publishedDate = new Intl.DateTimeFormat('ro-RO', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;
+              case "de":
+                publishedDate = new Intl.DateTimeFormat('de-DE', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;
+              case "ar":
+                publishedDate = new Intl.DateTimeFormat('ar-EG', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;
+              case "ru":
+                publishedDate = new Intl.DateTimeFormat('ru-RU', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;     
+              case "zh_CN":
+                publishedDate = new Intl.DateTimeFormat('zh-u-ca-chinese', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break;
+              case "ja":
+                publishedDate = new Intl.DateTimeFormat('ja-JP-u-ca-japanese', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+                break; 
               default:
                 publishedDate = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
                 break;
             }
             publishedDate = publishedDate.substring(0, publishedDate.length-8);
-            dataArt.author = dataArt.author??"@lang('messages.news anonymous')";
+            dataArt.author = dataArt.author??"@lang('messages.news_anonymous')";
 
             let dataContent = (dataArt.content == null) ? '' : dataArt.content;
             let lastCharacterDescription = dataArt.description.slice(-1);
@@ -82,15 +106,15 @@
             
             let jumbotronContainerRow =  $('<div />').addClass("row");
             let jumbotronP = $('<p />').addClass("mb-4 jumbotron-text bg-white text-muted col-lg-8").text(dataArt.description +" "+ dataContent);
-            let blockquote  = $('<blockquote />').addClass("mt-1 blockquote mb-0 blockquote-footer text-right").text("@lang('messages.news source')");
+            let blockquote  = $('<blockquote />').addClass("mt-1 blockquote mb-0 blockquote-footer text-right").text("@lang('messages.news_source')");
             let blockquotecite = $('<cite />').attr('title', 'sample').text(dataArt.source.name);
             let jumbotronRightContainerRow = $('<p />').addClass("col-lg-4 jumbotron-container-right");
             let jumbotronInnerAuthor = $('<span />').addClass("font-italic").text(dataArt.author);
-            let jumbotronAuthor = $('<p />').addClass("mb-4 jumbotron-author bg-white text-muted").text("@lang('messages.news author')");
+            let jumbotronAuthor = $('<p />').addClass("mb-4 jumbotron-author bg-white text-muted").text("@lang('messages.news_author')");
             let jumbotronInnerDate = $('<div />').addClass("jumbotron-inner-date font-italic").text(publishedDate);
-            let jumbotronDate = $('<p />').addClass("mb-4 jumbotron-date bg-white text-muted").text("@lang('messages.news published')");
+            let jumbotronDate = $('<p />').addClass("mb-4 jumbotron-date bg-white text-muted").text("@lang('messages.news_published')");
             let jumbotronLinkContainer = $('<div />').addClass("text-center");
-            let jumbotronLinkButton = $('<a />').addClass("btn btn-primary jumbotron-link").attr('href', dataArt.url).attr('target', "_blank").text("@lang('messages.news link')");
+            let jumbotronLinkButton = $('<a />').addClass("btn btn-primary jumbotron-link").attr('href', dataArt.url).attr('target', "_blank").text("@lang('messages.news_link')");
             jumbotronLinkContainer = jumbotronLinkContainer.append(jumbotronLinkButton);
             blockquote = blockquote.append(blockquotecite);
             jumbotronP = jumbotronP.append(blockquote);
@@ -274,18 +298,20 @@
         let roleColors = res.map((roles)=>roles['color']);
         let roleTotals = res.map((roles)=>roles['total']);
 
-        let usersTypeRoles = document.getElementById('usersTypeRoles').getContext('2d');
-        let chart = new Chart(usersTypeRoles, {
-            type: 'polarArea',
-            data: {
-                labels: roleNames,
-                datasets: [{
-                    label: 'Existing roles',
-                    data: roleTotals,
-                    backgroundColor: roleColors
-                }]
-                },
-        });
+        if ($("#usersTypeRoles").is(":visible")) {
+            let usersTypeRoles = document.getElementById('usersTypeRoles').getContext('2d');
+            let chart = new Chart(usersTypeRoles, {
+                type: 'polarArea',
+                data: {
+                    labels: roleNames,
+                    datasets: [{
+                        label:  _messagesLocalization.existing_roles,
+                        data: roleTotals,
+                        backgroundColor: roleColors
+                    }]
+                    },
+            });
+        }
     })
     .fail(function(xhr, st, err) {
         console.error("error in dashboard/fillUsersTypeRoles " + xhr, st, err);
@@ -335,6 +361,94 @@
                     break;
                 case "it":
                     fetch(_newsApiFirstPart+'it'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        articles=[...data.articles]
+                        createNewsCard(articles)
+                        });
+                    break;
+                case "pt":
+                    fetch(_newsApiFirstPart+'pt'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataPortugal=>{
+                    fetch(_newsApiFirstPart+'br'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataBrazil=>{
+                        articles=[...dataPortugal.articles,...dataBrazil.articles]
+                        createNewsCard(articles)
+                        });
+                    });
+                    break;
+                case "fr":
+                    fetch(_newsApiFirstPart+'fr'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataFrance=>{
+                    fetch(_newsApiFirstPart+'be'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataBelgium=>{
+                    fetch(_newsApiFirstPart+'ma'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataMorocco=>{
+                        articles=[...dataFrance.articles,...dataBelgium.articles,...dataMorocco.articles]
+                        createNewsCard(articles)
+                        });
+                    });
+                    });
+                    break;
+                case "ro":
+                    fetch(_newsApiFirstPart+'ro'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        articles=[...data.articles]
+                        createNewsCard(articles)
+                        });
+                    break;
+                case "de":
+                    fetch(_newsApiFirstPart+'de'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataGermany=>{
+                    fetch(_newsApiFirstPart+'at'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataAustria=>{
+                        articles=[...dataGermany.articles,...dataAustria.articles]
+                        createNewsCard(articles)
+                        });
+                    });
+                    break;
+                case "ar":
+                    fetch(_newsApiFirstPart+'eg'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        articles=[...data.articles]
+                        createNewsCard(articles)
+                        });
+                    break;
+                case "ru":
+                    fetch(_newsApiFirstPart+'ru'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        articles=[...data.articles]
+                        createNewsCard(articles)
+                        });
+                    break;
+                case "zh_CN":
+                    fetch(_newsApiFirstPart+'cn'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataChina=>{
+                    fetch(_newsApiFirstPart+'hk'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataHongKong=>{
+                    fetch(_newsApiFirstPart+'tw'+_newsApiSecondPart)
+                    .then(response=>response.json())
+                    .then(dataTaiwan=>{
+                        articles=[...dataChina.articles,...dataHongKong.articles,...dataTaiwan.articles]
+                        createNewsCard(articles)
+                        });
+                    });
+                    });
+                    break;
+                case "ja":
+                    fetch(_newsApiFirstPart+'jp'+_newsApiSecondPart)
                     .then(response=>response.json())
                     .then(data=>{
                         articles=[...data.articles]

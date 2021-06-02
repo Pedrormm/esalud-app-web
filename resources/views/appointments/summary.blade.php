@@ -1,6 +1,6 @@
       {{-- Messages List --}}
       <h6 class="dropdown-header">
-        @lang('messages.Message Center')
+        @lang('messages.message_center')
       </h6>
 
       @foreach (array_slice($userMessages, 0, 4) as $userMessage)
@@ -11,13 +11,13 @@
           <div class="dropdown-list-image mr-3">
             @if (!empty($userMessage['avatar'])))
               <img src="{{ asset('images/avatars/'.$userMessage['avatar']) }}" class="rounded-circle"
-              alt="Foto de perfil"/>
+              alt=@lang('messages.profile_picture')/>
             @else
               @if ($userMessage['sex']=="male")
-                  <img class="rounded-circle" src="{{ asset('images/avatars/user_man.png') }}" alt="Foto de perfil"/>                                                               
+                  <img class="rounded-circle" src="{{ asset('images/avatars/user_man.png') }}" alt=@lang('messages.profile_picture')/>                                                               
               @endif
               @if ($userMessage['sex']=="female")
-                  <img class="rounded-circle" src="{{ asset('images/avatars/user_woman.png') }}" alt="Foto de perfil"/>                                                               
+                  <img class="rounded-circle" src="{{ asset('images/avatars/user_woman.png') }}" alt=@lang('messages.profile_picture')/>                                                               
               @endif
             @endif
             <div class="status-indicator bg-success"></div>
@@ -37,7 +37,7 @@
         </a>
       @endforeach
       
-      <a class="dropdown-item text-center small text-gray-500" href="{{ URL::asset('/messaging') }}">@lang('messages.Read More Messages')</a>
+      <a class="dropdown-item text-center small text-gray-500" href="{{ URL::asset('/messaging') }}">@lang('messages.read_more_messages')</a>
 
 @section('viewsScripts')
   <script>

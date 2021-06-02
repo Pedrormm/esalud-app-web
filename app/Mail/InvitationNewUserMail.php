@@ -31,7 +31,7 @@ class InvitationNewUserMail extends Mailable
      */
     public function build()
     {
-        return $this->subject(config('app.name').\Lang::get('messages.has invited you to create a new account with the dni(id)'). $this->dni)
+        return $this->subject(config('app.name')." ".\Lang::get('messages.has_invited_you_to_create_a_new_account_with_the_DNI')." ". $this->dni)
                     ->markdown('mail.createUser', ['token' => $this->token, 'dni' => $this->dni]);
     }
 }

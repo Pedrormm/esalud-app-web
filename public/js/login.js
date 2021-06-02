@@ -28,7 +28,7 @@ $('.remember_password').on('click', function(e){
                 // console.log( "finished" );
             });
 
-    }, "Volver", "Solicitar"); 
+    }, _messagesLocalization.go_back, _messagesLocalization.make_a_request); 
 
 });
 

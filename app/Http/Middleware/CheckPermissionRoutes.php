@@ -66,7 +66,7 @@ class CheckPermissionRoutes
                 return response()->json([]);
             }
 
-            Session::put('info', \Lang::get('messages.Permission_Denied'));
+            Session::put('info', \Lang::get('messages.permission_denied'));
             // $request->session()->reflash();
             // $request->session()->keep(['info']);
             // $request->session()->save();

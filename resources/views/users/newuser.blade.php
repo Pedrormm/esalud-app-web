@@ -10,7 +10,7 @@
 
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.User Creation')</h4>
+        <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.user_creation')</h4>
       </div>
 
       <div class="card-body" id="mainCardBody">
@@ -33,7 +33,7 @@
           </div>
           <div class="row mb-4">          
             <div class="col-lg-12 text-center">
-              <button class="btn btn-primary btn-lg" type="submit">@lang('messages.Send creation email')</button>
+              <button class="btn btn-primary btn-lg" type="submit">@lang('messages.send_creation_email')</button>
             </div>
           </div>
       </form>

@@ -82,28 +82,28 @@
 
                             strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/confirmChecked/1' +'"'; 
                             strButtons += ' data-id="'+row.id+'"';
-                            strButtons += ` class="ml-1 primary acceptAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.accept appointment')">`;
+                            strButtons += ` class="ml-1 primary acceptAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.accept_kinda_appointment')">`;
                             strButtons += ' <i class="fa fa-check"></i></a>'; 
                             
                             strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/confirmChecked/2' +'"'; 
                             strButtons += ' data-id="'+row.id+'"';
-                            strButtons += ` class="ml-1 primary rejectAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.reject appointment')">`;
+                            strButtons += ` class="ml-1 primary rejectAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.reject_kinda_appointment')">`;
                             strButtons += ' <i class="fa fa-times"></i></a>';  
                         @endif
                         if (row.comments){
                             strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/comments' +'"'; 
                             strButtons += ' data-id="'+row.id+'"';
-                            strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.view comments')">`;
+                            strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.view_comments')">`;
                             strButtons += ' <i class="fa fa-eye"></i></a>';
                         }
                         
                         strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/edit' +'"'; 
                         strButtons += ' data-id="'+row.id+'"';
-                        strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.edit')">`;
+                        strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.edit_stat')">`;
                         strButtons += ' <i class="fa fa-edit"></i></a>'; 
                         strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/confirmDelete' +'"'; 
                         strButtons += ' data-id="'+row.id+'"';
-                        strButtons += ` class="ml-1 danger deleteAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.delete')">`;
+                        strButtons += ` class="ml-1 danger deleteAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.delete_stat')">`;
                         strButtons += ' <i class="fa fa-trash"></i></a>'; 
                         @endif
                     strButtons += ' </div>'; 
@@ -118,20 +118,20 @@
             $('.acceptAppointment').on('click', function(e){
                 e.preventDefault();
 
-                showModal(_questionMarkSpConcat+"@lang('messages.reject appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
-                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no')", "@lang('messages.yes')"); 
+                showModal(_questionMarkSpConcat+"@lang('messages.reject_kinda_appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
             });
             $('.rejectAppointment').on('click', function(e){
                 e.preventDefault();
 
-                showModal(_questionMarkSpConcat+"@lang('messages.reject appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
-                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no')", "@lang('messages.yes')"); 
+                showModal(_questionMarkSpConcat+"@lang('messages.reject_kinda_appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
             });
             $('.deleteAppointment').on('click', function(e){
                 e.preventDefault();
 
-                showModal(_questionMarkSpConcat+"@lang('messages.delete appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
-                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no')", "@lang('messages.yes')"); 
+                showModal(_questionMarkSpConcat+"@lang('messages.delete_kinda_appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+                $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
             });
           }
       }).on('draw', () => {
@@ -139,11 +139,6 @@
         assignHeadersToRowsResponsive();
       });
       
-
-
-
-
-
 
 </script>
 @endsection

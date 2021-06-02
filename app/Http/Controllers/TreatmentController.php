@@ -102,11 +102,10 @@ class TreatmentController extends AppBaseController
      */
     public function show($id)
     {
-        dd(2);
         $treatment = $this->TreatmentRepository->find($id);
 
         if (empty($treatment)) {
-            Flash::error('Treatment not found');
+            Flash::error(\Lang::get('messages.treatment_not_found'));
 
             return redirect(route('treatments.index'));
         }
@@ -138,7 +137,7 @@ class TreatmentController extends AppBaseController
         ->where("id",$id)->get();
 
         if (empty($treatment)) {
-            return $this->backWithErrors(\Lang::get('messages.Treatment not found'));
+            return $this->backWithErrors(\Lang::get('messages.treatment_not_found'));
         }
 
         if (!$treatment->isEmpty()){
@@ -177,7 +176,7 @@ class TreatmentController extends AppBaseController
         $treatment = $this->treatmentsRepository->find($id);
 
         if (empty($treatment)) {
-            Flash::error('Treatment not found');
+            Flash::error(\Lang::get('messages.treatment_not_found'));
 
             return redirect(route('treatments.index'));
         }
@@ -203,7 +202,7 @@ class TreatmentController extends AppBaseController
         $treatment = $this->treatmentRepository->find($id);
 
         if (empty($treatment)) {
-            Flash::error(\Lang::get('messages.Treatment not found'));
+            Flash::error(\Lang::get('messages.treatment_not_found'));
 
             return redirect(route('treatments.index'));
         }
@@ -227,7 +226,7 @@ class TreatmentController extends AppBaseController
 
 
         if(!$request->wantsJson()) {
-            abort(404, 'Bad request');
+            abort(404, \Lang::get('messages.bad_request'));
         }
 
         self::checkDataTablesRules();
@@ -345,7 +344,7 @@ class TreatmentController extends AppBaseController
     public function ajaxViewDatatableSP($id, Request $request) {
 
         if(!$request->wantsJson()) {
-            abort(404, 'Bad request');
+            abort(404, \Lang::get('messages.bad_request'));
         }
 
         self::checkDataTablesRules();

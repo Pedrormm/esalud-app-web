@@ -26,7 +26,7 @@ $('#saveModal').click(function() {
     } ).on( 'page.dt', function() {
         setTimeout(refreshPickers, 1);
     }).on( 'draw.dt', function () {
-      console.log("?????");
+      // console.log("?????");
       clickOnSelectpicker();
     });
     $("#tableUsersNotInRole").css("display", "table");

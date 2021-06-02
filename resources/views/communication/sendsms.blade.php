@@ -11,7 +11,7 @@
 
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">Enviar SMS</h4>
+        <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.send_SMS')</h4>
       </div>
 
       <div class="card-body" id="mainCardBody">
@@ -29,7 +29,7 @@
         {{-- @if(session('success'))
             <strong>{{ session('success') }}</strong>
         @endif --}}
-            <label for="to">Enter Telephone Number:</label>
+            <label for="to">@lang('messages.enter_telephone_number'):</label>
             <input type='tel' name='to' id='smsPhone' maxlength="12" required/>
             <span id="valid-msg" class="hide"></span>
             <span id="error-msg" class="hide"></span>
@@ -39,7 +39,7 @@
             <br/><br/>
             <div class="row mb-3">
                 <div class="col-lg-2 offset-5 text-center">
-                    <button type='submit' class="btn btn-primary btn-block"><i class="fa fa-sms"></i> Send</button>
+                    <button type='submit' class="btn btn-primary btn-block"><i class="fa fa-sms"></i> @lang('messages.send_stat')</button>
                 </div>              
             </div>
             @csrf

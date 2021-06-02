@@ -43,7 +43,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
                 return     '<a href="'+_publicUrl+'roles/userManagement/edit/'+row.idRole+'"' + 
                             ' class="btn btn-primary role-users-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
-                            'Usuarios asociados' +
+                            _messagesLocalization.associated_users +
                             '</a>'
             },
             "targets": 1
@@ -54,7 +54,7 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
                 return     '<a href="'+_publicUrl+'roles/'+row.idRole+'/edit/'+'"' + 
                             ' class="btn btn-primary role-modal" data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
-                            'Editar' +
+                            _messagesLocalization.edit_stat +
                             '</a>'
             },
             "targets": 4
@@ -67,16 +67,16 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
                             ' class=\"btn btn-danger roleDelete' +isDisabled+'\"'+
                             ' data-name-role="' + row.nameRole + 
                             '" data-role-id="'+ row.idRole +'" role="button">'+
-                            '<i class="fa fa-trash"></i>&ensp;Borrar' +
-                            '</a>'
+                            '<i class="fa fa-trash"></i>&ensp;' +
+                            _messagesLocalization.delete_stat+'</a>'
             },
             "targets": 5
         },
         {
             "render": function ( data, type, row ) {
-                console.log("fila es",row);
-                console.log("data es",data);
-                console.log("type es",type);
+                // console.log("fila es",row);
+                // console.log("data es",data);
+                // console.log("type es",type);
                
                 var parseWithHeaderColumnHidden = (data) => {
                     return '<table><tr><td class="header-toggle-hidden">'+ row.parent.child(0).innerText +'</td><td>'+data+'</td></tr></table>';
@@ -90,27 +90,27 @@ let _mainDataTableRoles = $('#mainTableRoles').DataTable({
     "fnDrawCallback": function( oSettings ) {
         $('.role-modal').on('click', function(e){
             e.preventDefault();
-            showModal('Editar rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl', true, true); 
+            showModal(_messagesLocalization.edit_stat_role+' '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl', true, true); 
         });
 
         $('.roleDelete').on('click', function(e){
             e.preventDefault();
             
-            // showModal('¿Borrar rol '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
+            // showModal(_messagesLocalization.would_you_like_to_delete_the_role+' '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
             // $(this).attr('href'), 'modal-xl', true, true); 
 
-            showModal('¿Borrar rol '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
-            $(this).attr('href'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+            showModal(_messagesLocalization.would_you_like_to_delete_the_role+' '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
+            $(this).attr('href'), 'modal-xl', true, true, false, null, null, _messagesLocalization.no_response, _messagesLocalization.yes_response); 
         });
     }
 }).on('draw', () => {
-    console.log("entra draw");
+    // console.log("entra draw");
     assignHeadersToRowsResponsive();
 });
 
 
 $('#usersDistRole').on('click', function(e){
     e.preventDefault();
-    showModal('Crear nuevo rol ', '', false, $(this).attr('href'), 'modal-xl', true, true);
+    showModal(_messagesLocalization.create_stat_new_role+' ', '', false, $(this).attr('href'), 'modal-xl', true, true);
     $( this ).off( event ); 
 });

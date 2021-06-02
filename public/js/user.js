@@ -10,15 +10,15 @@ var _User = {
                     em_2   : encodeURIComponent(wrapper.find('input[name=email_2]').val())
                 }
                 if(data.em_1 == ""){
-                    alert('error', 'rellena el campo de email');
+                    // alert('error', 'rellena el campo de email');
                     return false;
                 }
                 if(data.em_2 == ""){
-                    alert('error', 'Rellena el campo de repetir email');
+                    // alert('error', 'Rellena el campo de repetir email');
                     return false;
                 }
                 if(data.em_1 != data.em_2){
-                    alert('error', 'Los emails no coinciden');
+                    // alert('error', 'Los emails no coinciden');
                     return false;
                 }
                 _Server.post_data('services/users/post/save_profile.php', {a : 'email', data : $.toJSON(data)} , function(info){
@@ -37,19 +37,19 @@ var _User = {
                     pass_old : encodeURIComponent(wrapper.find('input[name=password_old]').val())
                 }
                 if(data.pass_1 == ""){
-                    alert('error', 'rellena el campo de nueva contraseña');
+                    // alert('error', 'rellena el campo de nueva contraseña');
                     return false;
                 }
                 if(data.pass_2 == ""){
-                    alert('error', 'Rellena el campo de repetir contraseña');
+                    // alert('error', 'Rellena el campo de repetir contraseña');
                     return false;
                 }
                 if(data.pass_old == ""){
-                    alert('error', 'Introduce tu contraseña actual');
+                    // alert('error', 'Introduce tu contraseña actual');
                     return false;
                 }
                 if(data.pass_1 != data.pass_2){
-                    alert('error', 'Las contraseñas no coinciden');
+                    // alert('error', 'Las contraseñas no coinciden');
                     return false;
                 }
                 _Server.post_data('services/users/post/save_profile.php', {a : 'password', data : $.toJSON(data)} , function(info){

@@ -21,7 +21,7 @@
     
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">Videollamada</h4>
+        <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.video_call')</h4>
       </div>
       <div class="card-body" id="mainCardBody">
         <div id="app">

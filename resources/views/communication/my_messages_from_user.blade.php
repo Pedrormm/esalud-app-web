@@ -63,22 +63,22 @@
                                                 <span class="cnvrsDate" data-utcdate="2020-3-5T14:22:00.000Z">1 día, 10 horas</span>
                                             </div> <!-- msj-fecha -->
                                             <div class="msj-opciones">
-                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" 
+                                                <a class="dropdown-toggle" href="javascript:void(0);" role="button" id="dropdownMenuLink" 
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                                 aria-labelledby="dropdownMenuLink">
                                                     <div class="dropdown-header">
-                                                        Actions:
+                                                        @lang('messages.actions_stat'):
                                                     </div>
                                                     @if ($userMessage['read']==0)
-                                                        <a class="dropdown-item" href="#">
-                                                            Mark as read
+                                                        <a class="dropdown-item" href="javascript:void(0);">
+                                                            @lang('messages.mark_as_read')
                                                         </a>
                                                     @endif
-                                                    <a class="dropdown-item" href="#">
-                                                        Delete this message
+                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                        @lang('messages.delete_this_message')
                                                     </a>
                                                 </div>  <!-- animated--fade-in -->                                  
                                             </div> <!-- msj-opciones -->

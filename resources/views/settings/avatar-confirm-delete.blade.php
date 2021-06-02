@@ -10,7 +10,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label id="sureDeleteAvatar" for="sureDeleteAvatar" >
-                                    ¿Seguro que desea borrar la imagen de perfil??
+                                    @lang('messages.are_you_certain_you_wish_to_delete_your_profile_image')
                                 </label>              
                             </div>
                         </div>

@@ -38,7 +38,7 @@ class ScheduleController extends Controller
         
 
         if (empty($userScheduleToDelete)) {
-            return $this->jsonResponse(1, "User not found"); 
+            return $this->jsonResponse(1, "user_not_found"); 
         }
 
         $staffFound = User::leftJoin('staff', 'users.id', 'staff.user_id')
@@ -51,10 +51,10 @@ class ScheduleController extends Controller
             $staffSchedule = StaffSchedule::with("staff")
             ->where('staff_id',$staffFound[0]['staff_id'])
             ->delete();
-            $strResponse = "".$userName.\Lang::get('messages.schedule has been deleted successfully');
+            $strResponse = "".$userName." ".\Lang::get('messages.schedule_has_been_deleted_successfully');
         }
         else{
-            return $this->jsonResponse(1, \Lang::get('messages.The user is not staff')); 
+            return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff')); 
         }
 
         return $this->jsonResponse(0, $strResponse);
@@ -65,7 +65,7 @@ class ScheduleController extends Controller
             $userLogged = Auth::user();
             $userStaff = User::with("staff")->where("id",$id)->get();
             if (($userStaff[0]->staff)->isEmpty()){
-                return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
+                return $this->backWithErrors(\Lang::get('messages.permission_denied'));
             }
             else{
                 $id = $userStaff[0]->staff[0]->id;
@@ -112,7 +112,7 @@ class ScheduleController extends Controller
             }
             if (($userStaff[0]->staff)->isEmpty()){
                 return response()->json([]);
-                return $this->jsonResponse(1, \Lang::get('messages.Permission_Denied'));
+                return $this->jsonResponse(1, \Lang::get('messages.permission_denied'));
             }
             else{
                 $id = $userStaff[0]->staff[0]->id;
@@ -127,7 +127,7 @@ class ScheduleController extends Controller
                         $staffSchedule->save();
                     }
                 }
-                return $this->jsonResponse(0, \Lang::get('messages.The schedules have been updated'));
+                return $this->jsonResponse(0, \Lang::get('messages.the_schedules_have_been_updated'));
             }           
         }
     }
@@ -142,7 +142,7 @@ class ScheduleController extends Controller
     public function ajaxViewDatatable(Request $request) {
 
         if(!$request->wantsJson()) {
-            abort(404, 'Bad request');
+            abort(404, \Lang::get('messages.bad_request'));
         }
 
         self::checkDataTablesRules();

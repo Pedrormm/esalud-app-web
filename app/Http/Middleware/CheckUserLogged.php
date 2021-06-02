@@ -20,14 +20,14 @@ class CheckUserLogged
         
         if($request->ajax() && is_null($user)) {
             // throw new \Exception("quiero salir ya!");
-            $request->session()->flash('info', \Lang::get('messages.Your session has expired due to inactivity. You will need to login again'));
+            $request->session()->flash('info', \Lang::get('messages.your_session_has_expired_due_to_inactivity_you_will_need_to_login_again'));
             return redirect('/');
             return '<div class="alert alert-dange">Void call</div>';
             
         }
         else {
             if (is_null($user)){
-                $request->session()->flash('info', \Lang::get('messages.Your session has expired due to inactivity. You will need to login again'));
+                $request->session()->flash('info', \Lang::get('messages.your_session_has_expired_due_to_inactivity_you_will_need_to_login_again'));
                 
                 return redirect('/');
             }

@@ -20,14 +20,14 @@
           <table class="table table-bordered" id="mainTablePatientsTreatments" width="100%" cellspacing="0">
               <thead>
                 <tr class="text-center">
-                    <th class="bg-primary">@lang('messages.surname, name')</th>
-                    <th class="bg-primary">Dni</th>
-                    <th class="bg-primary">@lang('messages.blood group')</th>
-                    <th class="bg-primary">@lang('messages.date of birth')</th>
-                    <th class="bg-primary">@lang('messages.gender')</th>
-                    <th class="bg-primary">Crear tratamiento</th>
-                    <th class="bg-primary">Ver tratamientos</th>
-                    <th class="bg-primary">Eliminar todos los tratamientos</th>
+                    <th class="bg-primary">@lang('messages.lastnamesurnamecoma_and_name')</th>
+                    <th class="bg-primary">DNI</th>
+                    <th class="bg-primary">@lang('messages.blood_group')</th>
+                    <th class="bg-primary">@lang('messages.date_of_birth')</th>
+                    <th class="bg-primary">@lang('messages.gender_data')</th>
+                    <th class="bg-primary">@lang('messages.create_treatment')</th>
+                    <th class="bg-primary">@lang('messages.view_treatments')</th>
+                    <th class="bg-primary">@lang('messages.delete_all_the_treatments')</th>
                 </tr>
               </thead>
             </table>

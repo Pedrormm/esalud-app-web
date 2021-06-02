@@ -19,7 +19,7 @@
                           <i class="fas fa-arrow-left"></i>
                       </button>
                     </div>
-                    <h4 class="font-weight-bold text-primary centered">Horario disponible de 
+                    <h4 class="font-weight-bold text-primary centered">@lang('messages.available_schedule_of_the_user') 
                         {{ $userStaff->name . " ".$userStaff->lastname }}</h4>
                 </div>
             </div>
@@ -29,13 +29,13 @@
               <div class="hv-schedule">
                 <div class='hv-header'>
                     <div></div>
-                    <div>Lunes</div>
-                    <div>Martes</div>
-                    <div>Miércoles</div>
-                    <div>Jueves</div>
-                    <div>Viernes</div>
-                    <div>Sábado</div>
-                    <div>Domingo</div>
+                    <div>@lang('messages.monday_stat')</div>
+                    <div>@lang('messages.tuesday_stat')</div>
+                    <div>@lang('messages.wednesday_stat')</div>
+                    <div>@lang('messages.thursday_stat')</div>
+                    <div>@lang('messages.friday_stat')</div>
+                    <div>@lang('messages.saturday_stat')</div>
+                    <div>@lang('messages.sunday_stat')</div>
                 </div>
                 <div class="hv-hours"></div>
                 {{-- <div class='hv-hours'>
@@ -213,7 +213,7 @@
             </div>
 
         </div>
-        <button type="button" id="SaveSchedule">Save</button>
+        <button type="button" id="SaveSchedule"> @lang('messages.save_stat')</button>
 
         <!-- /.container-fluid -->
 

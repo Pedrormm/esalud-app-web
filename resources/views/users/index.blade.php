@@ -13,7 +13,7 @@
           
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.List of users')</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.list_of_users')</h4>
             </div>
 
             <input id="isallUsersDelete" type="hidden" 
@@ -24,14 +24,14 @@
                 <table class="table table-bordered" id="mainTableAllUsers" width="100%" cellspacing="0">
                     <thead >
                       <tr class="text-center">
-                          <th class="bg-primary">@lang('messages.surname, name')</th>
-                          <th class="bg-primary">@lang('messages.role')</th>
-                          <th class="bg-primary">Dni</th>
-                          <th class="bg-primary">@lang('messages.blood group')</th>
-                          <th class="bg-primary">@lang('messages.date of birth')</th>
-                          <th class="bg-primary">@lang('messages.Phone number')</th>
-                          <th class="bg-primary">@lang('messages.gender')</th>
-                          <th class="bg-primary">@lang('messages.actions')</th>
+                          <th class="bg-primary">@lang('messages.lastnamesurnamecoma_and_name')</th>
+                          <th class="bg-primary">@lang('messages.role_stat')</th>
+                          <th class="bg-primary">DNI</th>
+                          <th class="bg-primary">@lang('messages.blood_group')</th>
+                          <th class="bg-primary">@lang('messages.date_of_birth')</th>
+                          <th class="bg-primary">@lang('messages.phone_number')</th>
+                          <th class="bg-primary">@lang('messages.gender_data')</th>
+                          <th class="bg-primary">@lang('messages.actions_stat')</th>
                       </tr>
                     </thead>
                     @if(!(isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && !($flagsMenuEnabled['ALL_USERS_DELETE']))

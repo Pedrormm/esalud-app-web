@@ -15,8 +15,8 @@
                                 {{-- Buscador --}}
                                 <select id="userspicker"
                                  class="selectpicker mx-auto users-picker" data-live-search="true"
-                                multiple title="Busque por nombre, apellidos o dni" data-style="btn-info" 
-                                data-width="35%" multiple data-actions-box="true" data-header="Busque por nombre, apellidos o dni"
+                                multiple title=@lang('messages.search_by_name_surname_or_DNI') data-style="btn-info" 
+                                data-width="35%" multiple data-actions-box="true" data-header=@lang('messages.search_by_name_surname_or_DNI')
                                 multiple>
                                   @foreach($usersNotInRole as $roleName => $usersRole)
                                   <optgroup label="{{ $roleName }}">
@@ -36,24 +36,24 @@
                         <table id="tableUsersNotInRole" class="display">
                             <thead>
                               <tr>
-                                <th>Id</th>
-                                <th>Nombre y apellidos</th>
+                                <th>@lang('messages.ID_data')</th>
+                                <th>@lang('messages.full_name')</th>
                                 <th>DNI</th>
-                                <th>Edad</th>
-                                <th>@lang('messages.gender')</th>
-                                <th>@lang('messages.blood group')</th>
-                                <th>Cambiar rol</th>
+                                <th>@lang('messages.age_data')</th>
+                                <th>@lang('messages.gender_data')</th>
+                                <th>@lang('messages.blood_group')</th>
+                                <th>@lang('messages.change_role')</th>
                               </tr>
                             </thead>
                             <tfoot>
                               <tr>
-                                <th>Id</th>
-                                <th>Nombre y apellidos</th>
+                                <th>@lang('messages.ID_data')</th>
+                                <th>@lang('messages.full_name')</th>
                                 <th>DNI</th>
-                                <th>Edad</th>
-                                <th>@lang('messages.gender')</th>
-                                <th>@lang('messages.blood group')</th>
-                                <th>Cambiar rol</th>
+                                <th>@lang('messages.age_data')</th>
+                                <th>@lang('messages.gender_data')</th>
+                                <th>@lang('messages.blood_group')</th>
+                                <th>@lang('messages.change_role')</th>
                               </tr>
                             </tfoot>
                         </table>

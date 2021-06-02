@@ -4,7 +4,6 @@
 <script>
 
 
-
     let _mainTableAllUsersAjax = $('#mainTablePatientsTreatments').DataTable({
         serverSide : true,
         "responsive": true,
@@ -65,7 +64,22 @@
                 data: 'birthdate',
             },
             {
-                data: 'sex'
+                data: 'sex',
+                render: function(data, type, row) {
+                    let strGender = "";
+
+                    if (row.sex=="male"){
+                        strGender += '<span class="align-middle">'+_messagesLocalization.male_data+'</span>';
+                    }
+                    else if (row.sex=="female"){
+                        strGender += '<span class="align-middle">'+_messagesLocalization.female_data+'</span>';
+                    }
+                    else{
+                        strGender += '<span class="align-middle"> </span>';
+                    }
+                    
+                    return strGender;
+                }
             },
             {
                 data: '_create',
@@ -75,7 +89,8 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-primary createTreatment"';
                     strButtons += ' href="">';  
-                    strButtons += ' <i class="fa fa-plus-circle"></i>&ensp;Crear</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-plus-circle"></i>&ensp;';
+                    strButtons += _messagesLocalization.create_stat+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -89,7 +104,8 @@
                     strButtons += ' data-id-user="'+row.users_id +'"'; 
                     // strButtons += ' href="">';  
                     strButtons += ' href="'+ _publicUrl+'treatments/'+row.users_id+'/indexSinglePatient' +'">'; 
-                    strButtons += ' <i class="fa fa-eye"></i>&ensp;Ver</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-eye"></i>&ensp;';
+                    strButtons += _messagesLocalization.look_stat+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -101,7 +117,8 @@
                     let strButtons = "";
                     strButtons += ' <span> <a class="btn btn-danger confirmDeleteTreatment"';
                     strButtons += ' href="">';  
-                    strButtons += ' <i class="fa fa-trash"></i>&ensp;Eliminar todos</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-trash"></i>&ensp;';
+                    strButtons += _messagesLocalization.delete_all_of_them+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -113,11 +130,6 @@
         disableDataTablesMinCharactersSearch('#mainTablePatientsTreatments', 3, true);
         assignHeadersToRowsResponsive();
       });
-      
-
-
-
-
 
 
 </script>

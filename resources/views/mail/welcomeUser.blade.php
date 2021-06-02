@@ -1,17 +1,17 @@
 @component('mail::message')
-# @lang('messages.Welcome message')
+# @lang('messages.welcome_message')
 
-@lang('messages.Hello') {{ $name." ".$lastname }} , <br/>
-@lang('messages.We would like to welcome you to') {{ config('app.name') }}!
-@lang('messages.A new user has been created with the dni') {{ $dni }} @lang('messages.from witihin the public IP') {{ $publicIp }}
+@lang('messages.hello_data') {{ $name." ".$lastname }} , <br/>
+@lang('messages.we_would_like_to_welcome_you_to') {{ config('app.name') }}!
+@lang('messages.a_new_user_has_been_created_with_the_DNI')  {{ $dni }}  @lang('messages.from_within_the_public_IP') {{ $publicIp }}
 
-@lang('messages.Should you want to access the application click on the following link'):
+@lang('messages.should_you_want_to_access_the_application_click_on_the_following_link'):
 @component('mail::button', ['url' => Auth::user() ? URL::asset('logout/') : URL::asset('/')])
-@lang('messages.Login access')
+@lang('messages.login_access')
 @endcomponent
 
 <small>
-@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar:')<br>
+@lang('messages.note_if_the_link_does_not_work_for_you_copy_and_paste_the_following_link_in_your_address_bar:')<br>
 @if (Auth::user())
     {{ URL::asset('logout/') }}
 @else
@@ -19,6 +19,6 @@
 @endif
 </small>
 
-@lang('messages.Thank you for trusting us'),<br>
+@lang('messages.thank_you_for_trusting_us'),<br>
 {{ config('app.name') }}
 @endcomponent

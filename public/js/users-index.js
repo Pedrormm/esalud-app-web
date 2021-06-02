@@ -5,9 +5,9 @@ $('.confirmDeleteUser').on('click', function(e){
     let userDeleteFullName = $(this).data('name-user');
     let userDeleteRole = $(this).data('role-user');
 
-    showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-    '¿Seguro que desea borrar el usuario con nombre '+ userDeleteFullName + ' y rol '+ userDeleteRole + '?',
-     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+    showModal(_messagesLocalization.would_you_like_to_delete_the_user+' '+ userDeleteFullName + '?', 
+    _messagesLocalization.would_you_like_to_delete_the_user_whose_name_is+' '+ userDeleteFullName + " " + _messagesLocalization.and_role + " " + userDeleteRole + '?',
+     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, _messagesLocalization.no_response, _messagesLocalization.yes_response); 
 
      $('#saveModal').on('click', function(e){
         saveModalActionAjax(_publicUrl+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
@@ -72,7 +72,22 @@ if (isallUsersDelete == 1){
                 data: 'phone',
             },
             {
-                data: 'sex'
+                data: 'sex',
+                render: function(data, type, row) {
+                    let strGender = "";
+
+                    if (row.sex=="male"){
+                        strGender += '<span class="align-middle">'+ _messagesLocalization.male_data +'</span>';
+                    }
+                    else if (row.sex=="female"){
+                        strGender += '<span class="align-middle">'+ _messagesLocalization.female_data +'</span>';
+                    }
+                    else{
+                        strGender += '<span class="align-middle"> </span>';
+                    }
+                    
+                    return strGender;
+                }
             },
             {
                 data: '_buttons',
@@ -81,10 +96,12 @@ if (isallUsersDelete == 1){
                     console.log(data, type, row);
                     let strButtons = "";
                     if(row.buttonDelete) {
-                        strButtons += '<button type="button" class="btn btn-danger btn-delete" data-id="'+row.id+'" data-index="'+meta.row+'">Borrar</button>';
+                        strButtons += '<button type="button" class="btn btn-danger btn-delete" data-id="'+row.id+'" data-index="'+meta.row+'">';
+                        strButtons += _messagesLocalization.delete_stat+'</button>';
                     }
                     if(row.buttonUpdate) {
-                        strButtons += '<button type="button" class="btn btn-primary btn-update" data-id="'+row.id+'" data-index="'+meta.row+'">Update</button>';
+                        strButtons += '<button type="button" class="btn btn-primary btn-update" data-id="'+row.id+'" data-index="'+meta.row+'">';
+                        strButtons += _messagesLocalization.update_stat+'</button>';
                     }
                     return strButtons;
                 }
@@ -94,14 +111,14 @@ if (isallUsersDelete == 1){
           "fnDrawCallback": function( oSettings ) {
               $('.role-modal').on('click', function(e){
                   e.preventDefault();
-                  showModal('Editar rol '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl', true, true); 
+                  showModal(_messagesLocalization.edit_stat_role+' '+ $(this).data('name-role'), '', false, $(this).attr('href'), 'modal-xl', true, true); 
               });
       
               $('.roleDelete').on('click', function(e){
                   e.preventDefault();
       
-                  showModal('¿Borrar rol '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
-                  $(this).attr('href'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+                  showModal(_messagesLocalization.would_you_like_to_delete_the_role+' '+ $(this).data('name-role') + '?', $(this).data('name-role'), false, 
+                  $(this).attr('href'), 'modal-xl', true, true, false, null, null, _messagesLocalization.no_response, _messagesLocalization.yes_response); 
               });
           }
       }).on('draw', () => {

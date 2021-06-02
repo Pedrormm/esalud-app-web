@@ -37,6 +37,30 @@ $(function() {
         case "it":
             $("#headerTopFlag").attr("src",_flagUrl+"it.svg");
             break;
+        case "pt":
+            $("#headerTopFlag").attr("src",_flagUrl+"pt.svg");
+            break;
+        case "fr":
+            $("#headerTopFlag").attr("src",_flagUrl+"fr.svg");
+            break;
+        case "ro":
+            $("#headerTopFlag").attr("src",_flagUrl+"ro.svg");
+            break;
+        case "de":
+            $("#headerTopFlag").attr("src",_flagUrl+"de.svg");
+            break;
+        case "ar":
+            $("#headerTopFlag").attr("src",_flagUrl+"sa.svg");
+            break;
+        case "ru":
+            $("#headerTopFlag").attr("src",_flagUrl+"ru.svg");
+            break;     
+        case "zh_CN":
+            $("#headerTopFlag").attr("src",_flagUrl+"cn.svg");
+            break;
+        case "ja":
+            $("#headerTopFlag").attr("src",_flagUrl+"jp.svg");
+            break; 
         default:
             $("#headerTopFlag").attr("src",_flagUrl+"es.svg");
             break;
@@ -296,7 +320,7 @@ function showInlineMessage(message, timeout=0) {
  * @return {void} Nothing
  */
 function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
-     removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal=_messagesLocalization.close, nameSaveModal=_messagesLocalization.save_changes) {
+     removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal=_messagesLocalization.close_stat, nameSaveModal=_messagesLocalization.save_changes) {
     $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
     if (size){
@@ -452,7 +476,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
  * @param {string} [optConfirmText="Ok"] - The save button (or ok, confirm button) will have the given string.
  * @return {void} Nothing
  */
-function showModalConfirm(title=_messagesLocalization.title, message=_messagesLocalization.no_message, callback=function(){},callbackClose=function(){}, optConfirmText=_messagesLocalization.ok) {
+function showModalConfirm(title=_messagesLocalization.title_stat, message=_messagesLocalization.no_response_message, callback=function(){},callbackClose=function(){}, optConfirmText=_messagesLocalization.ok_stat) {
     let mainId = '#confirm-modal';
     let buttonOkId = '#okConfirmModal';
     let buttonCloseId = '#closeModalConfirm';

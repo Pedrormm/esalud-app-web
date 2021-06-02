@@ -53,10 +53,10 @@ function updateUnread(contactId, reset, written=false) {
                     found.append($('<span />').addClass("unread").text('1'));
                 }
                 if (dateInfoFound[0]){
-                    dateInfoFound.text('A while ago');
+                    dateInfoFound.text(_messagesLocalization.a_while_ago);
                 }
                 else{
-                    found.find('.contactInfo').append($('<p />').addClass("dateInfo").text('A while ago'));
+                    found.find('.contactInfo').append($('<p />').addClass("dateInfo").text(_messagesLocalization.a_while_ago));
                 } 
             }
         }
@@ -160,7 +160,7 @@ else {
                 }
             });
             let fullName = contact.name + " " +contact.lastname;
-            $(".conversation .cHeader h4").text(contact ? fullName : 'Select a Contact');
+            $(".conversation .cHeader h4").text(contact ? fullName : _messagesLocalization.select_a_contact);
 
             if (contact){
                 let msjs = res["messages_from_user"];
@@ -205,7 +205,7 @@ else {
                         method:'post',
                     }).done(function(res){
                         if (res.status == 0){ 
-                            console.log("respuesta",res);
+                            console.log("response ",res);
                             that.closest('li').remove();
                         }
                     })

@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<nav class="top">
-					<h3 class="div_2 on text-danger"><i class="fa fa-edit"></i> Historiales médicos</h3>
+					<h3 class="div_2 on text-danger"><i class="fa fa-edit"></i> @lang('messages.medical_records')</h3>
 				</nav>
 			</div>
 		</div>
@@ -17,20 +17,20 @@
 	<div class="container-fluid">
 		<div class="row mt-3 d-flex justify-content-center">
 			<div class="col-lg-8 ">
-				<h4 class="header_box"><i class="fa fa-user"></i> Paciente</h4>
+				<h4 class="header_box"><i class="fa fa-user"></i> @lang('messages.patient_type')</h4>
 				
 				<table class="table table-bordered ">
 					<tbody>
 						<tr>
-							<td>Nombre:</td>
+							<td>@lang('messages.name_data'):</td>
 							<td>{{ $usuario['name'] }}</td>
 						</tr>
 						<tr>
-							<td>Apellidos:</td>
+							<td>@lang('messages.surname_data'):</td>
 							<td>{{ $usuario->lastname }}</td>
 						</tr>
 						<tr>
-							<td>NºHistorial:</td>
+							<td>Nº@lang('messages.historical_stat'):</td>
 							<td>{{ $patient->historic }}</td>
 						</tr>
 						<tr>
@@ -38,32 +38,32 @@
 							<td>{{ $usuario->dni }}</td>
 						</tr>
 						<tr>
-							<td>F.Nacimiento:</td>
+							<td>@lang('messages.date_of_birth'):</td>
 							<td><?php echo date("d/m/Y",strtotime($usuario->birthdate)); ?></td>
 						</tr>
 						<tr>
-							<td>@lang('messages.gender'):</td>
+							<td>@lang('messages.gender_data'):</td>
 							<td>
 							<?php
 								if($usuario->sex == "male"){
-									echo "Masculino";
+									echo \Lang::get('messages.male_data');
 								}else{
-									echo "Femenino";
+									echo \Lang::get('messages.female_data');
 								}
 							
 							?>
 							</td>
 						</tr>
 						<tr>
-							<td>Altura:</td>
+							<td>@lang('messages.height_data'):</td>
 							<td>{{ $patient->height }} cm</td>
 						</tr>
 						<tr>
-							<td>Peso:</td>
+							<td>@lang('messages.weight_data'):</td>
 							<td>{{ $patient->weight }} kg</td>
 						</tr>
 						<tr>
-							<td>G.Sanguineo:</td>
+							<td>@lang('messages.blood_group'):</td>
 							<td>{{ $usuario->blood }}</td>
 						</tr>
 						
@@ -72,20 +72,20 @@
 				
 				<div class="row mt-3">
 					<div class="col-lg-4 mb-2">
-						<a class="btn btn-primary bt-create-event btn-block text-white"><i class="fa fa-calendar"></i> Cita</a> 
+						<a class="btn btn-primary bt-create-event btn-block text-white"><i class="fa fa-calendar"></i> @lang('messages.appointment_stat')</a> 
 					</div>
 					<div class="col-lg-4 mb-2">
-						<a class="btn btn-success bt-send-message btn-block text-white"><i class="fa fa-comments"></i> Chat</a> 
+						<a class="btn btn-success bt-send-message btn-block text-white"><i class="fa fa-comments"></i> @lang('messages.chat_stat')</a> 
 					</div>
 					<div class="col-lg-4 mb-2">
-						<a class="btn btn-warning bt-open-alerts btn-block text-white"><i class="fa fa-cogs"></i> Alertas</a>
+						<a class="btn btn-warning bt-open-alerts btn-block text-white"><i class="fa fa-cogs"></i> @lang('messages.alerts_stat')</a>
 					</div>
 				</div>
 			</div>
         </div>
         <div class="row mt-3 d-flex justify-content-center">
 			<div class="col-lg-6">
-				<h4 class="header_box"><i class="fa fa-report"></i> Listado de informes evolutivos del paciente</h4>
+				<h4 class="header_box"><i class="fa fa-report"></i> @lang('messages.list_of_patient_evolutionary_reports')</h4>
 				
 				<div class="row">
 				  @foreach($events as $event)
@@ -103,12 +103,12 @@
 							<div class="box-body">
 								<div class="row">
 									<div class="col-lg-12">
-										<label><b>Doctor:</b> {{ $event->doctorFullName }}</label> 
+										<label><b>@lang('messages.doctor_type'):</b> {{ $event->doctorFullName }}</label> 
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-lg-12">
-										<label><b>Informe:</b></label>
+										<label><b>@lang('messages.report_stat'):</b></label>
 										<p>{{urldecode($event->report)}}</p>
 									</div>
 								</div>
@@ -230,7 +230,7 @@
                 
                 <div class="box box-danger">					
                     <div class="box-header with-border">
-                      <h3 class="box-title">Tratamientos</h3>
+                      <h3 class="box-title">@lang('messages.treatments_stat')</h3>
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool tratamientos" data-widget="remove"><i class="fa fa-times"></i></button>
                       </div>
@@ -242,17 +242,17 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Fecha inicio</th>
-                                                <th>Fecha fin</th>
-                                                <th>Nombre</th>
-                                                {{-- <th>Dosis</th> --}}
+                                                <th>@lang('messages.start_date')</th>
+                                                <th>@lang('messages.end_date')</th>
+                                                <th>@lang('messages.name_data')</th>
+                                                {{-- <th>@lang('messages.dose_data')</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($treatments as $treatment)
                                             <tr>
-                                                <td>{{ $treatment->treatment_starting_date ?? "[No hay fecha de inicio]" }}</td>
-                                                <td>{{ $treatment->treatment_end_date ?? "[No hay fecha fin]" }}</td>
+                                                <td>{{ $treatment->treatment_starting_date ?? "[".\Lang::get('messages.there_is_no_starting_date')."]" }}</td>
+                                                <td>{{ $treatment->treatment_end_date ?? "[".\Lang::get('messages.there_is_no_ending_date')."]" }}</td>
 
                                                 <td>{{ $treatment->nameMedicine }}</td>
                                                 {{-- <td>
@@ -273,7 +273,7 @@
                 
                 <div class="box box-danger">					
                     <div class="box-header with-border">
-                      <h3 class="box-title">Fecha de sesiones</h3>
+                      <h3 class="box-title">@lang('messages.sessions_date')</h3>
                       <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool sesiones" data-widget="remove"><i class="fa fa-times"></i></button>
                       </div>
@@ -285,9 +285,9 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Nombre</th>
-                                                <th>Fecha Inicio</th>
-                                                <th>Fecha Fin</th>
+                                                <th>@lang('messages.name_data')</th>
+                                                <th>@lang('messages.start_date')</th>
+                                                <th>@lang('messages.end_date')</th>
                                             </tr>
                                         </thead>
                                         <tbody>

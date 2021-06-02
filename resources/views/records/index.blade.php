@@ -2,9 +2,7 @@
 @extends('layout.logged');
 
 @section('nav-bar-top')
-    <!-- <nav class="top">
-        <div class="div_2 on">Historiales médicos</div>
-    </nav> -->
+
 @endsection
 
 @section('content')
@@ -19,37 +17,37 @@
 						@csrf
 						<div class="form-group col-xs-12 col-sm-2 col-md-2 col-lg-2 d-inline-block">
 							<select class="custom-select sel_ord filter_height" name="record_order_type" id="record_order_type">
-								<option value="users.id">Ordenado por:</option>
-								<option value="lastname">Alfbabéticamente por apellidos</option>
-								<option value="name">Alfbabéticamente por Nombre</option>
-								<option value="historic">De menor a mayor por NªHistorial</option>
-								<option value="dni">De menor a mayor por DNI</option>
+								<option value="users.id">@lang('messages.ordered_by'):</option>
+								<option value="lastname">@lang('messages.alphabetically_by_surnames')</option>
+								<option value="name">@lang('messages.alphabetically_by_name')</option>
+								<option value="historic">@lang('messages.from_lowest_to_highest_by_history_number')</option>
+								<option value="dni">@lang('messages.from_lowest_to_highest_by_DNI')</option>
 							</select>
 						</div>
 						<div class="form-group col-xs-6 col-sm-2 col-md-2 col-lg-2 d-inline-block">
 							<select class="custom-select sel_sex filter_height" name="record_sex_filter" id="record_sex_filter">
-								<option value="no">Hombres y Mujeres</option>
-								<option value="male">Hombres</option>
-								<option value="female">Mujeres</option>
+								<option value="no">@lang('messages.men_and_women')</option>
+								<option value="male">@lang('messages.men_stat')</option>
+								<option value="female">@lang('messages.women_stat')</option>
 							</select>
 						</div>
 						<div class="form-group col-xs-6 col-sm-2 col-md-2 col-lg-2 d-inline-block">
 							<select class="custom-select sel_old filter_height" name="record_age_filter" id="record_age_filter">
-								<option value="no">Cualquier edad</option>
-								<option value="0-18">- 18 años</option>
-								<option value="18-24">18 a 24 años</option>
-								<option value="24-40">24 a 40 años</option>
-								<option value="40-65">40 a 65 años</option>
-								<option value="65-140">+ 65 años</option>
+								<option value="no">@lang('messages.any_age')</option>
+								<option value="0-18">@lang('messages.-18yo_age')</option>
+								<option value="18-24">@lang('messages.18-24yo_age')</option>
+								<option value="24-40">@lang('messages.24-40yo_age')</option>
+								<option value="40-65">@lang('messages.40-65yo_age')</option>
+								<option value="65-140">@lang('messages.+65yo_age')</option>
 							</select>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 d-inline-block">
-							<input type="text" placeholder="Nombre, apellidos, historial o dni" class="inp_search filter_height" 
-							name="record_search_filter" id="record_search_filter">
+							<input type="text" placeholder=@lang('messages.name_surname_historial_or_DNI') 
+							class="inp_search filter_height" name="record_search_filter" id="record_search_filter">
 						</div>
 						<div class="col-lg-2 d-inline-block">
 							<button type="submit" id="hmsearch" class="col-xs-12 btn btn-primary bt-search
-							filter_height btn-block"><i class="fa fa-search"></i> Buscar</a>
+							filter_height btn-block"><i class="fa fa-search"></i> @lang('messages.search_data')</a>
 						</div>
 					
 					{{ Form::close() }}
@@ -101,11 +99,11 @@
 															<div class="row">
 																<div class=" col-xs-12 col-md-12 col-lg-7">
 																	<div class="row p-3">
-																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold ">Nombre:</span>
+																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold ">@lang('messages.name_data'):</span>
 																		<span class="col-xs-8 col-md-8 dots leftRecordRow">{{ urldecode($patient['name']) }}</span>
-																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold">Apellidos:</span>
+																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold">@lang('messages.surname_data'):</span>
 																		<span class="col-xs-8 col-md-8 dots leftRecordRow">{{ urldecode($patient['lastname']) }}</span>
-																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold">Historial:</span>
+																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold">@lang('messages.historical_stat'):</span>
 																		<span class="col-xs-8 col-md-8 dots leftRecordRow">{{ $patient['historic'] }}</span>
 																		<span class="r_title col-xs-4 col-md-4 text-nowrap font-weight-bold">DNI:</span>
 																		<span class="col-xs-8 col-md-8 leftRecordRow">{{ $patient['dni'] }}</span>
@@ -113,13 +111,13 @@
 																</div>
 																<div class="hidden-xs hidden-sm col-md-12 col-lg-5">
 																	<div class="row p-3">
-																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">Edad:</span>
+																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">@lang('messages.age_data'):</span>
 																		<span class="col-xs-12 col-sm-6">{{ \Carbon\Carbon::parse($patient['birthdate'])->age }}</span>
-																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">@lang('messages.gender'):</span>
-																		<span class="col-xs-12 col-sm-6 text-nowrap">{{ $patient['sex'] }}</span>
-																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">Altura:</span>
+																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">@lang('messages.gender_data'):</span>
+																		<span class="col-xs-12 col-sm-6 text-nowrap">{{ $patient['sex']='male'?\Lang::get('messages.male_data'):\Lang::get('messages.female_data') }}</span>
+																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">@lang('messages.height_data'):</span>
 																		<span class="col-xs-12 col-sm-6">{{ $patient['height'] }}</span>
-																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">Peso:</span>
+																		<span class="r_title hidden-xs col-sm-6 text-nowrap font-weight-bold">@lang('messages.weight_data'):</span>
 																		<span class="col-xs-12 col-sm-6">{{ $patient['weight'] }}</span>
 																	</div>
 																</div>              

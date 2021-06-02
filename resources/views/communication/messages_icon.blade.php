@@ -1,10 +1,10 @@
 <i class="fas fa-envelope fa-fw"></i>
 <!-- Counter - Messages -->
 <span class="badge badge-danger badge-counter" id="numMessagesHeader">
-    {{(($nMessages>0 && $nMessages<100) ? $nMessages : ($nMessages>99 ? "99+": null))}}
+    {{(($nMessages>0 && $nMessages<100) ? $nMessages : ($nMessages>99 ? "99+": ""))}}
 </span>
 
-@section('viewsScripts')
+{{-- @section('viewsScripts') --}}
     <script>
         window.authUser = @json(auth()->user()->toArray());
         window.nMessages = {{ $nMessages }};
@@ -45,7 +45,7 @@
         }
 
     </script>
-@endsection
+{{-- @endsection --}}
 
 
 

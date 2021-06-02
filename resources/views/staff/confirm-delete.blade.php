@@ -10,7 +10,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label id="sureDeleteUser" for="sureDeleteUser" data-role-delete-id="{{ $singleUser->id }}">
-                                    @lang('messages.Are you sure you want to delete the staff') {{ $singleUser->name }} {{ $singleUser->lastname }}?
+                                    @lang('messages.are_you_sure_you_want_to_delete_the_staff') {{ $singleUser->name }} {{ $singleUser->lastname }}?
                                 </label>              
                             </div>
                         </div>

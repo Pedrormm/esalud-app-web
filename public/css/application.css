@@ -230,7 +230,7 @@ body {
 
 
 /* ========================================================================
-  dashboard news jumbotron
+  dashboard_news jumbotron
 ========================================================================== */
 
 .jumbotron-container{
@@ -1452,7 +1452,7 @@ caption {
 }
 
 /* hide our custom/fake placeholder text when in focus to show the default
- * 'mm/dd/yyyy' value and when valid to show the users' date of birth value.
+ * 'mm/dd/yyyy' value and when valid to show the users' date_of_birth value.
  */
  #bDate:focus::before,
  #bDate:valid::before { display: none }

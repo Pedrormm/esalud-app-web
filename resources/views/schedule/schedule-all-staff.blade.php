@@ -79,7 +79,8 @@
                     strButtons += ' <span> <a class="btn btn-info viewTreatments"';
                     strButtons += ' data-id-user="'+row.users_id +'"'; 
                     strButtons += ' href="'+ _publicUrl+'schedule/staff/'+row.users_id+'">'; 
-                    strButtons += ' <i class="fa fa-eye"></i>&ensp;Ver</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-eye"></i>&ensp;'; 
+                    strButtons += _messagesLocalization.look_stat+'</a></span>';                                                                                                   
                     return strButtons;
                 }
             },
@@ -93,7 +94,8 @@
                     strButtons += ' data-name-user="'+row.name + ' '+ row.lastname+'" ';
                     strButtons += ' data-id-user="'+row.users_id +'"';
                     strButtons += ' href="'+ _publicUrl+'schedule/staff/'+row.users_id+'/confirmDelete' +'">';  
-                    strButtons += ' <i class="fa fa-trash"></i>&ensp;Eliminar horario</a></span>';                                                                                                  
+                    strButtons += ' <i class="fa fa-trash"></i>&ensp;';
+                    strButtons += _messagesLocalization.delete_stat_schedule+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },
@@ -104,9 +106,9 @@
                 let scheduleDeleteId = $(this).data('id-user');
                 let scheduleDeleteFullName = $(this).data('name-user');
                 
-                showModal('¿Borrar horarios del usuario '+ scheduleDeleteFullName + '?', 
-                '¿Seguro que desea eliminar todos los horarios del usuario '+ scheduleDeleteFullName + '?',
-                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+                showModal("@lang('messages.do_you_want_to_the_delete_the_schedule_of_the_user')"+ scheduleDeleteFullName + '?', 
+                "@lang('messages.are_you_sure_you_want_to_delete_all_schedules_of_the_user')"+ scheduleDeleteFullName + '?',
+                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
 
                 $('#saveModal').on('click', function(e){
                     saveModalActionAjax(_publicUrl+"schedule/"+scheduleDeleteId, scheduleDeleteId, 'DELETE', 'json', function(res) {

@@ -103,8 +103,8 @@ class DashboardController extends Controller
 
             // dd($data);
 
-            // dd(__('messages.hello'));
-            // dd(@lang('messages.dashboard pending'));
+            // dd(__('messages.hello_data'));
+            // dd(@lang('messages.dashboard_pending'));
 
             return response()->json($data);
         }

@@ -109,6 +109,30 @@ class HV_LANGUAGE{
             case 'it':
                 return 'Italian';
                 break;
+            case "pt":
+                return 'Portuguese';
+                break;
+            case "fr":
+                return 'French';
+                break;
+            case "ro":
+                return 'Romanian';
+                break;
+            case "de":
+                return 'German';
+                break;
+            case "ar":
+                return 'Arabic';
+                break;
+            case "ru":
+                return 'Russian';
+                break;     
+            case "zh_CN":
+                return 'Chinese';
+                break;
+            case "ja":
+                return 'Japanese';
+                break; 
             default:
                 return null;
                 break;

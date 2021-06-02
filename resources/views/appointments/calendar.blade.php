@@ -35,9 +35,9 @@
             //   {title:'prueba', start:'2021-03-03T10:30:00'},
                 @foreach($appointments as $appointment)
                     {
-                        @if($rol_user == 1)
+                        @if($rol_user == \HV_ROLES::PATIENT)
                             
-                            title: '@lang('messages.doctor'): {{ $appointment->fullNameDoctor }}',
+                            title: "@lang('messages.doctor_type')"+": {{ $appointment->fullNameDoctor }}",
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
@@ -46,9 +46,9 @@
                             textColor: '#ffffff',
                             allDay: false
 
-                        @elseif($rol_user == 2)
+                        @elseif($rol_user == \HV_ROLES::DOCTOR)
                             
-                            title: '@lang('messages.patient'): {{ $appointment->fullNamePatient }}',
+                            title: "@lang('messages.patient_type')"+": {{ $appointment->fullNamePatient }}",
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',
@@ -56,9 +56,9 @@
                             textColor: '#ffffff',
                             allDay: false
 
-                        @elseif($rol_user == 4)
+                        @elseif($rol_user == \HV_ROLES::ADMIN)
                             
-                            title: '@lang('messages.patient'): {{ $appointment->fullNamePatient }}',
+                            title: "@lang('messages.patient_type')"+": {{ $appointment->fullNamePatient }}",
                             description: '{{  $appointment->id }}',
                             // start: '{{ date("Y-m-d",strtotime($appointment->dt_appointment)) }}',
                             start: '{{ date("Y-m-d\TH:i",strtotime($appointment->dt_appointment)) }}',

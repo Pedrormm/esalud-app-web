@@ -89,9 +89,6 @@ function handleSuccess(stream) {
   video.srcObject = stream;
 }
 
-
-
-
   $( "#takeScreenshot" ).one( "click", function() {
     $("#snapshot-container").removeClass( "d-none" );
     init();
@@ -100,18 +97,19 @@ function handleSuccess(stream) {
   $('#takeScreenshot').on("click",function(e){
     $( "#snapshot-container" ).toggle( "slow", function() {
       if($("#snapshot-container").is(":visible")){
-        $("#capturerText").text("Ocultar capturarador de imagen de la cámara");
+        $("#capturerText").text(_messagesLocalization.hide_image_grabber_from_camera);
       }
       else{
-        $("#capturerText").text("Mostrar capturarador de imagen de la cámara");
+        $("#capturerText").text(_messagesLocalization.show_image_grabber_from_camera);
       }
     });
   });
 
   $('#deleteImage').on("click",function(e){
-    showModal('¿Borrar la imagen de perfil?', 
-    '¿Seguro que desea borrar la imagen de perfil?',
-    false, _publicUrl+'settings/avatar/confirmAvatarDelete' , 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+    showModal(_messagesLocalization.would_you_like_to_delete_the_profile_picture, 
+      _messagesLocalization.are_you_sure_you_want_to_delete_the_profile_picture,
+      false, _publicUrl+'settings/avatar/confirmAvatarDelete' , 'modal-xl', true, true, false, null, null,
+      _messagesLocalization.no_response, _messagesLocalization.yes_response); 
 
   });
 
@@ -156,7 +154,7 @@ function handleSuccess(stream) {
       }); 
     }
     else{
-      showInlineError(1, "There is no image to upload", 5);
+      showInlineError(1, _messagesLocalization.there_is_no_image_to_upload, 5);
     }
 });
 

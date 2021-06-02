@@ -92,13 +92,13 @@ let _dataTableRoles = $('#tableRoles').DataTable({
         }
 
 }).on( 'draw.dt', function () {
-  console.log("algo");
+  // console.log("algo");
   clickOnSelectpicker();
 });
 
 $('#usersDistRole').on('click', function(e){
     e.preventDefault();
-    showModal('Buscar usuarios con rol distinto a '+ $(this).data('name-role'), '', false, $(this).attr('href'), 
+    showModal(_messagesLocalization.lookfor_different_users_to+' '+ $(this).data('name-role'), '', false, $(this).attr('href'), 
     'modal-xl', true, true); 
 });
 

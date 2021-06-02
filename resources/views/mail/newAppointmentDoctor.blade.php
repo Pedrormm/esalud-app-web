@@ -1,15 +1,15 @@
 @component('mail::message')
-# @lang('messages.New appointment')
+# @lang('messages.new_appointment')
 
-@lang('messages.Hello') {{ $patientName }}@lang('messages.a new appointment has been created with the doctor'){{ $doctorName }}. 
-@lang('messages.Please click on the following link to view or edit your medical appointment')
+@lang('messages.hello_data') {{ $patientName }}, @lang('messages.a_new_appointment_has_been_created_with_the_doctor') {{ $doctorName }}. 
+@lang('messages.please_click_on_the_following_link_to_view_or_edit_your_medical_appointment')
     
 @component('mail::button', ['url' => URL::asset('appointment/'.$appointmentId.'/edit')])
-@lang('messages.View or edit appointment')
+@lang('messages.view_or_edit_appointment')
 @endcomponent
 
 <small>
-@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar')<br>
+@lang('messages.note_if_the_link_does_not_work_for_you_copy_and_paste_the_following_link_in_your_address_bar'): <br>
 {{ URL::asset('appointment/'.$appointmentId.'/edit') }}
 </small>
 
@@ -26,6 +26,6 @@
     {{-- Es otro rol --}}
 @endif
 
-@lang('messages.Thank you'),<br>
+@lang('messages.thank_you'),<br>
 {{ config('app.name') }}
 @endcomponent

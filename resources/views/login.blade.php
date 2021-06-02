@@ -22,7 +22,7 @@
     <div class="container-fluid" >
         <div class="top">
             <div class="d-flex justify-content-center logo">
-                <img src="{{ url('/images/logo.png') }}" alt="Logo">
+                <img src="{{ url('/images/logo.png') }}" alt=@lang('messages.logo_stat')>
             </div>
         </div>
         <div class="bottom">
@@ -32,16 +32,16 @@
         </div>
         <div class="center">
 
-            <h2>@lang('messages.Enter ID and password')</h2>
+            <h2>@lang('messages.enter_DNI_and_password')</h2>
             {{-- <form method="post" action="{{ url('login') }}"> --}}
             {{ Form::open(array('url' => 'login', 'method' => 'POST')) }}
 
                 @csrf
-                <input type="text" name="dni" class="ct" placeholder="DNI o email" value="{{ Cookie::get('credencialesDni') }}" />
-                <input type="password" name="password" class="ct" placeholder="password" />
+                <input type="text" name="dni" class="ct" placeholder=@lang('messages.DNI_or_email') value="{{ Cookie::get('credencialesDni') }}" />
+                <input type="password" name="password" class="ct" placeholder=@lang('messages.password_stat') />
                 <div class="rememberme form-group form-check m-1">
                     <input name="remember" type="checkbox" class="form-check-input" id="rememberMe" {{ (Cookie::has('credencialesDni')) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="rememberMe">@lang('messages.Remember me')</label>
+                    <label class="form-check-label" for="rememberMe">@lang('messages.remember_me')</label>
                 </div>
                 @if (session()->has('info'))
                     <div class="alert alert-success" id="infoSession">{{ session()->get('info') }}</div>
@@ -69,14 +69,14 @@
                         {{ session('successful') }}
                     </div>
                 @endif
-                <button type="submit" class="btn btn-primary btn-lg form-control form-control-lg" >Entrar</button>
+                <button type="submit" class="btn btn-primary btn-lg form-control form-control-lg" >@lang('messages.enter_stat')</button>
             {{-- </form> --}}
             {{ Form::close() }}
 
             <div class="text-center m-1">
                 <a href="{{ url('isPasswordForgotten')  }}" class="remember_password" 
                 data-name-role="">
-                @lang('messages.have you forgotten your password?')
+                @lang('messages.have_you_forgotten_your_password')
                 </a>
             </div>
   

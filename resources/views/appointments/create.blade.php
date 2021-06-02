@@ -12,7 +12,7 @@
           
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.create medical appointment')</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.create_medical_appointment')</h4>
             </div>
 
             <div class="card-body" id="mainCardBody">
@@ -30,7 +30,7 @@
                 @endphp
                     <div class="row">
                         <div class="col-lg-{{ $gridCols }}">
-                            <label>@lang('messages.patients list') (*)</label>
+                            <label>@lang('messages.patients_list') (*)</label>
                             <select required 
                             name="user_id_patient" required data-width="100%" aria-describedby="patientValidity"
                             class="selectpicker show-tick form-control"
@@ -40,14 +40,14 @@
                                 @endforeach
                             </select>
                             <div id="patientValidity" class="invalid-feedback">
-                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please provide a valid patient')
+                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please_provide_a_valid_patient')
                             </div>
 
                         </div>
                         
                         @if(auth()->user()->role_id == \HV_ROLES::ADMIN)
                             <div class="col-lg-{{ $gridCols }}">                      
-                                <label>@lang('messages.doctors list') (*)</label>
+                                <label>@lang('messages.doctors_list') (*)</label>
                                 <select required name="doctor_id" required data-width="100%" aria-describedby="doctorValidity"
                                 class="selectpicker show-tick form-control"
                                 data-live-search="true" title="Doctor" id="doctor">
@@ -56,19 +56,19 @@
                                 @endforeach
                                 </select> 
                                 <div id="doctorValidity" class="invalid-feedback">
-                                    <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please provide a valid doctor')
+                                    <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please_provide_a_valid_doctor')
                                 </div>
 
                             </div>
                         @endif
                         
                         <div class="col-lg-{{ $gridCols }}">
-                            <label>@lang('messages.appointment date') (*)</label>
+                            <label>@lang('messages.appointment_date') (*)</label>
                             {{-- mirar cambio a type week --}}
                             {{-- con libreria jquery ui. https://jqueryui.com/datepicker/ --}}
                             <input required type="date" class="form-control" name="dt_appointment" id="dt_appointment"/>
                             <div id="dateValidity" class="invalid-feedback">
-                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please provide a valid date')
+                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please_provide_a_valid_date')
                             </div>
                         </div>
 
@@ -85,13 +85,13 @@
 
                     <div class="row mt-3" id="showAppointmentsButton">
                         <div class="col-lg-12 text-center">
-                            <button type="button" class="btn btn-primary btn-lg">@lang('messages.show appointments')</button>
+                            <button type="button" class="btn btn-primary btn-lg">@lang('messages.show_appointments')</button>
                         </div>
                     </div>
           
                     <div class="row mt-3" id="createButton">
                         <div class="col-lg-12 text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">@lang('messages.create')</button>
+                            <button type="submit" class="btn btn-primary btn-lg">@lang('messages.create_stat')</button>
                         </div>
                     </div>
 

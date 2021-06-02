@@ -21,7 +21,7 @@
                     <div class="conversation">
                         {{-- Conversation header --}}
                         <div class="cHeader">
-                          {{-- <h4>{{ contact ? $contact->name. " ".$contact->lastname : "Select a Contact" }}</h4> --}}
+                          {{-- <h4>{{ contact ? $contact->name. " ".$contact->lastname : @lang('messages.select_a_contact') }}</h4> --}}
                           
                           <h4></h4>
                         </div>
@@ -29,13 +29,13 @@
 
                         {{-- Messages feed --}}
                         <div class="cMessagesFeed selectAContact">
-                          <span>Select a Contact...</span>
+                          <span>@lang('messages.select_a_contact')...</span>
                         </div>
                         {{-- --end Messages feed --}}
 
                         {{-- Message composer --}}
                         <div class="cMessageComposer">
-                          <textarea placeholder="Write a message..."></textarea>
+                          <textarea placeholder=@lang('messages.write_a_message')></textarea>
                         </div>
                         {{-- --end Message composer --}}
                     </div>

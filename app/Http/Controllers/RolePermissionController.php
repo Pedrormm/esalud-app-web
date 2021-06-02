@@ -58,7 +58,7 @@ class RolePermissionController extends AppBaseController
 
         $rolePermission = $this->rolePermissionRepository->create($input);
 
-        Flash::success('Role Permission saved successfully.');
+        Flash::success('Role permission_saved_successfully.');
 
         return redirect(route('rolePermissions.index'));
     }
@@ -75,7 +75,7 @@ class RolePermissionController extends AppBaseController
         $rolePermission = $this->rolePermissionRepository->find($id);
 
         if (empty($rolePermission)) {
-            Flash::error('Role Permission not found');
+            Flash::error('Role permission_not_found');
 
             return redirect(route('rolePermissions.index'));
         }
@@ -95,7 +95,7 @@ class RolePermissionController extends AppBaseController
         $rolePermission = $this->rolePermissionRepository->find($id);
 
         if (empty($rolePermission)) {
-            Flash::error('Role Permission not found');
+            Flash::error('Role permission_not_found');
 
             return redirect(route('rolePermissions.index'));
         }
@@ -116,14 +116,14 @@ class RolePermissionController extends AppBaseController
         $rolePermission = $this->rolePermissionRepository->find($id);
 
         if (empty($rolePermission)) {
-            Flash::error('Role Permission not found');
+            Flash::error('Role permission_not_found');
 
             return redirect(route('rolePermissions.index'));
         }
 
         $rolePermission = $this->rolePermissionRepository->update($request->all(), $id);
 
-        Flash::success('Role Permission updated successfully.');
+        Flash::success('Role permission_updated_successfully.');
 
         return redirect(route('rolePermissions.index'));
     }
@@ -142,14 +142,14 @@ class RolePermissionController extends AppBaseController
         $rolePermission = $this->rolePermissionRepository->find($id);
 
         if (empty($rolePermission)) {
-            Flash::error('Role Permission not found');
+            Flash::error('Role permission_not_found');
 
             return redirect(route('rolePermissions.index'));
         }
 
         $this->rolePermissionRepository->delete($id);
 
-        Flash::success('Role Permission deleted successfully.');
+        Flash::success('Role permission_deleted_successfully.');
 
         return redirect(route('rolePermissions.index'));
     }

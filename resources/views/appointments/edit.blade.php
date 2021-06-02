@@ -18,7 +18,7 @@
             </div>
             {{-- <h4 class="font-weight-bold text-primary mx-auto ">Editar cita con fecha {{ $appointment[0]['dt_appointment'] }}</h4> --}}
             {{-- <h4 class="font-weight-bold text-primary col-lg-6 offset-3">Editar cita con fecha {{ $appointment[0]['dt_appointment'] }}</h4> --}}
-            <h4 class="font-weight-bold text-primary centered">@lang('messages.edit an appointment that has the date') {{ $appointment[0]['dt_appointment'] }}</h4>
+            <h4 class="font-weight-bold text-primary centered"> @lang('messages.edit_an_appointment_that_has_the_date')  {{ $appointment[0]['dt_appointment'] }}</h4>
 
           </div>
 
@@ -30,18 +30,18 @@
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h3>@lang('messages.appointment details')</h3>
+                        <h3>@lang('messages.appointment_details')</h3>
                     </div>
                 </div>
                
                 <div class="row mb-3">
                     <input type="hidden" value="{{ $appointment[0]['id']}}" name="appointment_id" />
                     <div class="col-lg-4">
-                        <input type="text" class="form-control-plain-text" name="user_patient" placeholder=@lang('messages.patient') disabled
+                        <input type="text" class="form-control-plain-text" name="user_patient" placeholder=@lang('messages.patient_type') disabled
                         value="{{ $appointment[0]['user_patient']['name'].' '. $appointment[0]['user_patient']['lastname']}}"/>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control-plain-text" name="user_doctor" placeholder=@lang('messages.doctor') disabled
+                        <input type="text" class="form-control-plain-text" name="user_doctor" placeholder=@lang('messages.doctor_type') disabled
                         value="{{ $appointment[0]['user_doctor']['name'].' '. $appointment[0]['user_doctor']['lastname']}}" />                        
                     </div>
                     <div class="col-lg-4">
@@ -59,37 +59,37 @@
                 <div class="row mb-3">
                     @if ($userLogin->role_id == \HV_ROLES::PATIENT)
                         <div class="col-lg-11 mx-auto">                      
-                            <label for="doctorComments">@lang('messages.doctor comments')</label>
+                            <label for="doctorComments">@lang('messages.doctor_comments')</label>
                             <textarea id="doctorComments" class="form-control" name="doctorComments" 
                             aria-describedby="commentHelpBlockDoctor" >{{ $appointment[0]['comments']}}</textarea>
                             <small id="commentHelpBlockDoctor" class="form-text text-muted">
-                                @lang('messages.special patient order')
+                                @lang('messages.special_patient_order')
                             </small>
                         </div>
                     @elseif ($userLogin->role_id == \HV_ROLES::DOCTOR)
                         <div class="col-lg-11 mx-auto">                      
-                            <label for="patientComments">@lang('messages.patient comments')</label>
+                            <label for="patientComments">@lang('messages.patient_comments')</label>
                             <textarea id="patientComments" class="form-control" name="patientComments" 
                             aria-describedby="commentHelpBlockPatient">{{ $appointment[0]['user_comment']}}</textarea>
                             <small id="commentHelpBlockPatient" class="form-text text-muted">
-                                @lang('messages.special doctor order')
+                                @lang('messages.special_doctor_order')
                             </small>
                         </div>
                     @elseif ($userLogin->role_id == \HV_ROLES::ADMIN)
                         <div class="col-lg-6">                      
-                            <label for="doctorComments">@lang('messages.doctor comments')</label>
+                            <label for="doctorComments">@lang('messages.doctor_comments')</label>
                             <textarea id="doctorComments" class="form-control" name="doctorComments" 
                             aria-describedby="commentHelpBlockDoctor" >{{ $appointment[0]['comments']}}</textarea>
                             <small id="commentHelpBlockDoctor" class="form-text text-muted">
-                                @lang('messages.special patient order')
+                                @lang('messages.special_patient_order')
                             </small>
                         </div>
                         <div class="col-lg-6">                      
-                            <label for="patientComments">@lang('messages.patient comments')</label>
+                            <label for="patientComments">@lang('messages.patient_comments')</label>
                             <textarea id="patientComments" class="form-control" name="patientComments" 
                             aria-describedby="commentHelpBlockPatient">{{ $appointment[0]['user_comment']}}</textarea>
                             <small id="commentHelpBlockPatient" class="form-text text-muted">
-                                @lang('messages.special doctor order')
+                                @lang('messages.special_doctor_order')
                             </small>
                         </div>
                     @endif
@@ -99,11 +99,11 @@
                     @if ($appointment[0]['user_creator']['role_id'] == \HV_ROLES::PATIENT)
                         <div class="col-lg-8 mx-auto">                      
                             <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
-                            data-width="100%" data-header="Estado de la cita"
-                            data-live-search="true" title="Estado de la cita" id="appointmentChecked">
-                                <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending')</option>
-                                <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted')</option>
-                                <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected')</option>
+                            data-width="100%" data-header=@lang('messages.appointment_status')
+                            data-live-search="true" title=@lang('messages.appointment_status') id="appointmentChecked">
+                                <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending_stat')</option>
+                                <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted_stat')</option>
+                                <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
                             </select>  
                         </div>
                     @elseif (($appointment[0]['user_creator']['role_id'] == \HV_ROLES::DOCTOR) || 
@@ -111,19 +111,19 @@
                     ($appointment[0]['user_creator']['role_id'] == \HV_ROLES::ADMIN))
                         <div class="col-lg-6">                      
                             <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
-                            data-width="100%" data-header="Estado de la cita"
-                            data-live-search="true" title="Estado de la cita" id="appointmentChecked">
-                                <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending')</option>
-                                <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted')</option>
-                                <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected')</option>
+                            data-width="100%" data-header=@lang('messages.appointment_status')
+                            data-live-search="true" title=@lang('messages.appointment_status') id="appointmentChecked">
+                                <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending_stat')</option>
+                                <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted_stat')</option>
+                                <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
                             </select>  
                         </div>
                         <div class="col-lg-6">                      
                             <select name="appointmentAccomplished" required class="selectpicker show-tick form-control"
-                            data-width="100%" data-header="Realización de la cita"
-                            data-live-search="true" title="Realización de la cita" id="appointmentAccomplished">
-                                <option value="0" {{ $appointment[0]['accomplished'] == "0" ? 'selected' : "" }}>@lang('messages.not accomplished')</option>
-                                <option value="1" {{ $appointment[0]['accomplished'] == "1" ? 'selected' : "" }}>@lang('messages.accomplished')</option>
+                            data-width="100%" data-header=@lang('messages.appointment_fulfillment')
+                            data-live-search="true" title=@lang('messages.appointment_fulfillment') id="appointmentAccomplished">
+                                <option value="0" {{ $appointment[0]['accomplished'] == "0" ? 'selected' : "" }}>@lang('messages.not_accomplished')</option>
+                                <option value="1" {{ $appointment[0]['accomplished'] == "1" ? 'selected' : "" }}>@lang('messages.accomplished_stat')</option>
                             </select>  
                         </div>
                     @endif
@@ -131,7 +131,7 @@
 
                 <div class="row mb-3">
                     <div class="col-lg-2 offset-5 text-center">
-                        <button class="btn btn-primary btn-block"><i class="fa fa-edit"></i> @lang('messages.edit')</button>
+                        <button class="btn btn-primary btn-block"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
                     </div>
                 </div>
             

@@ -10,7 +10,7 @@
 
         <div class="card shadow mb-4" id="mainCardShadow">
           <div class="card-header py-3">
-            <h4 class="m-0 font-weight-bold text-primary text-center">Ajustes</h4>
+            <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.settings_stat')</h4>
             {{-- <div class="row">
                 <div class="cHeader col-2">
                   <button type="button" class="btn btn-primary">
@@ -29,7 +29,7 @@
                     @csrf
                     <div class="row mb-3">
                         <div class="col-lg-12">
-                            <h3>Mis datos de usuario</h3>
+                            <h3>@lang('messages.my_user_data')</h3>
                         </div>
                     </div>
                    
@@ -46,7 +46,7 @@
                         <div class="col-lg-4">
                             {{-- <input type="text" class="form-control" value="{{ App\Models\Role::find(auth()->user()->role_id)->id }}" name="role_id" /> --}}
                                 <select name="role_id" class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                                    data-live-search="true" title=@lang('messages.role')>
+                                    data-live-search="true" title=@lang('messages.role_stat')>
                                     @foreach ($roles as $rol)
                                         <option value={{ $rol->id }} {{ auth()->user()->role_id == $rol->id ? 'selected' : "" }}>{{ $rol->name }}</option>
                                     @endforeach
@@ -66,47 +66,47 @@
     
                     <div class="row mb-3">
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ auth()->user()->name }}" placeholder=@lang('messages.name') name="name" />
+                            <input type="text" class="form-control" value="{{ auth()->user()->name }}" placeholder=@lang('messages.name_data') name="name" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ auth()->user()->lastname }}" placeholder=@lang('messages.surname') name="lastname" />
+                            <input type="text" class="form-control" value="{{ auth()->user()->lastname }}" placeholder=@lang('messages.surname_data') name="lastname" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ auth()->user()->address }}" placeholder=@lang('messages.address') name="address" />
+                            <input type="text" class="form-control" value="{{ auth()->user()->address }}" placeholder=@lang('messages.address_data') name="address" />
                         </div>
                     </div>
     
                     <div class="row mb-3">
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ auth()->user()->country }}" placeholder=@lang('messages.Country') name="country" />
+                            <input type="text" class="form-control" value="{{ auth()->user()->country }}" placeholder=@lang('messages.country_data') name="country" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" value="{{ auth()->user()->city }}" placeholder=@lang('messages.City') name="city" />
+                            <input type="text" class="form-control" value="{{ auth()->user()->city }}" placeholder=@lang('messages.city_data') name="city" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="number" class="form-control" value="{{ auth()->user()->zipcode }}" placeholder=@lang('messages.Zip code') name="zipcode" />
+                            <input type="number" class="form-control" value="{{ auth()->user()->zipcode }}" placeholder=@lang('messages.zip_code') name="zipcode" />
                         </div>
                     </div>
     
                     <div class="row mb-3">
                         <div class="col-lg-3">
-                            {{-- <input type="text" class="form-control" placeholder=@lang('messages.Phone number') name="phone" /> --}}
+                            {{-- <input type="text" class="form-control" placeholder=@lang('messages.phone_number') name="phone" /> --}}
                             <input type='tel' value="{{ auth()->user()->phone }}" class="form-control" name="phone" id="smsPhone" maxlength="12" />
                             <span id="valid-msg" class="hide"></span>
                             <span id="error-msg" class="hide"></span>
                         </div>
                         <div class="col-lg-3">
-                            <input type="date" value="{{ date("Y-m-d", strtotime(auth()->user()->birthdate)) }}" name="birthdate" class="form-control" data-placeholder="Fecha de Nacimiento"  aria-="true" id="bDate" />
+                            <input type="date" value="{{ date("Y-m-d", strtotime(auth()->user()->birthdate)) }}" name="birthdate" class="form-control" data-placeholder=@lang('messages.date_of_birth')  aria-="true" id="bDate" />
                         </div>
                         <div class="col-lg-3">
                             <select name="sex"  class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.gender')>
+                            data-live-search="true" title=@lang('messages.gender_data')>
                                 @if(auth()->user()->sex == "female")
-                                <option selected value="female">@lang('messages.female')</option>
-                                <option value="male">@lang('messages.male')</option>
+                                <option selected value="female">@lang('messages.female_data')</option>
+                                <option value="male">@lang('messages.male_data')</option>
                                 @else
-                                <option value="female">@lang('messages.female')</option>
-                                <option selected value="male">@lang('messages.male')</option>
+                                <option value="female">@lang('messages.female_data')</option>
+                                <option selected value="male">@lang('messages.male_data')</option>
                                 @endif
                                
                             </select>
@@ -114,7 +114,7 @@
                         <div class="col-lg-3">
                             {{-- <select name="blood" class="form-control" > --}}
                             <select name="blood"  class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                                data-live-search="true" title=@lang('messages.blood group')>
+                                data-live-search="true" title=@lang('messages.blood_group')>
                                 <option value="0-" {{ auth()->user()->blood == "0-" ? 'selected' : "" }}>0-</option>
                                 <option value="0+" {{ auth()->user()->blood == "0+" ? 'selected' : "" }}>0+</option>
                                 <option value="A-" {{ auth()->user()->blood == "A-" ? 'selected' : "" }}>A-</option>
@@ -131,18 +131,18 @@
                         <div class="row mb-3">
                             <div class="col-lg-12">
                                 <hr>
-                                <h3>@lang('messages.Patient data')</h3>
+                                <h3>@lang('messages.patient_data')</h3>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-4">
-                                <input value="{{ $rol_usuario_info->historic }}" type="text" class="form-control" placeholder=@lang('messages.Historical') name="historic" />
+                                <input value="{{ $rol_usuario_info->historic }}" type="text" class="form-control" placeholder=@lang('messages.historical_stat') name="historic" />
                             </div>
                             <div class="col-lg-4">
-                                <input value="{{ $rol_usuario_info->height }}" type="number" class="form-control" placeholder="Altura en cm" name="height" />
+                                <input value="{{ $rol_usuario_info->height }}" type="number" class="form-control" placeholder=@lang('messages.height_in_cm') name="height" />
                             </div>
                             <div class="col-lg-4">
-                                <input value="{{ $rol_usuario_info->weight }}" type="text" class="form-control" placeholder="Peso en kg" name="weight" />
+                                <input value="{{ $rol_usuario_info->weight }}" type="text" class="form-control" placeholder=@lang('messages.weight_in_kg') name="weight" />
                             </div>
                         </div>
                     @endif
@@ -151,16 +151,16 @@
                         <div class="row mb-3">
                             <div class="col-lg-12">
                                 <hr>
-                                <h3>@lang('messages.Doctor data')</h3>
+                                <h3>@lang('messages.doctor_data')</h3>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-6">
-                                <input type="text" value="{{ $rol_usuario_info->historic }}" class="form-control" placeholder=@lang('messages.Historical') name="historic" />
+                                <input type="text" value="{{ $rol_usuario_info->historic }}" class="form-control" placeholder=@lang('messages.historical_stat') name="historic" />
                             </div>
                             <div class="col-lg-6">
                                 <select class="form-control" name="branch_id">
-                                    <option>@lang('messages.Select specialty')</option>
+                                    <option>@lang('messages.select_specialty')</option>
                                     @foreach( $branches as $branch)
                                         <option {{ $rol_usuario_info->branch_id == $branch->id ? 'selected' : "" }} value="{{ $branch->id }}">{{ $branch->name }}</option>
                                     @endforeach
@@ -169,13 +169,13 @@
                         </div>
                         <div class="row mb-3"> 
                             <div class="col-lg-4">
-                                <input type="text" value="{{ $rol_usuario_info->office }}" class="form-control" placeholder=@lang('messages.Office') name="office" />
+                                <input type="text" value="{{ $rol_usuario_info->office }}" class="form-control" placeholder=@lang('messages.office_data') name="office" />
                             </div>                   
                             <div class="col-lg-4">
-                                <input type="text" class="form-control" value="{{ $rol_usuario_info->room }}" placeholder=@lang('messages.Door') name="room" />
+                                <input type="text" class="form-control" value="{{ $rol_usuario_info->room }}" placeholder=@lang('messages.door_data') name="room" />
                             </div>
                             <div class="col-lg-4">
-                                <input type="text" class="form-control" value="{{ $rol_usuario_info->h_phone }}" placeholder=@lang('messages.Phone number') name="h_phone" />
+                                <input type="text" class="form-control" value="{{ $rol_usuario_info->h_phone }}" placeholder=@lang('messages.phone_number') name="h_phone" />
                             </div>
                         </div>
                     @endif
@@ -184,7 +184,7 @@
 
                     <div class="row mb-3">
                         <div class="col-lg-2 offset-5 text-center">
-                            <button class="btn btn-primary btn-block" type="button" id="editSettings"><i class="fa fa-edit"></i> Editar</button>
+                            <button class="btn btn-primary btn-block" type="button" id="editSettings"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
                         </div>
                     </div>
 
@@ -201,7 +201,7 @@
 
                     <!-- Trigger canvas web API -->
                     <div class="controller text-center">
-                        <button class="btn btn-info" type="button" id="snap"><i class="fa fa-camera"></i><span class="tab"> Capture</span></button>
+                        <button class="btn btn-info" type="button" id="snap"><i class="fa fa-camera"></i><span class="tab"> @lang('messages.capture_stat')</span></button>
                     </div>
 
                     <!-- Webcam video snapshot -->
@@ -234,18 +234,18 @@
 
                                                     <div class="settings-box box-solid">
                                                       <div class="box-header with-border">
-                                                        <div><b>Profile picture</b></div>
+                                                        <div><b>@lang('messages.profile_picture')</b></div>
                                                         <div class="box-tools-left float-left">                                                    
                                                             <button type="button" class="btn btn-success btn-xs" id="takeScreenshot">
                                                               <i class="fa fa-camera-retro"></i>
-                                                              <span id="capturerText" class="tab"> Mostrar capturarador de imagen de la cámara</span>
+                                                              <span id="capturerText" class="tab"> @lang('messages.show_image_grabber_from_camera')</span>
                                                             </button>
                                                         </div>
 
                                                         <div class="box-tools float-right">
                                                           <button type="button" class="btn btn-info btn-xs remove-preview">
                                                             <i class="fa fa-eye-slash"></i>
-                                                            <span class="tab"> Ocultar imagen</span>
+                                                            <span class="tab"> @lang('messages.hide_image')</span>
                                                           </button>
                                                           
                                                         </div>
@@ -269,7 +269,7 @@
                                                   <div class="dropzone-wrapper">
                                                     <div class="dropzone-desc">
                                                       <i class="glyphicon glyphicon-download-alt"></i>
-                                                      <p>Choose an image file or drag it here.</p>
+                                                      <p>@lang('messages.choose_an_image_file_or_drag_it_here')</p>
                                                     </div>
                                                     <input type="file" name="avatar" id="imgAvatar" class="dropzone" accept=".png,.jpg,.jpeg,.bmp">
                                                   </div>
@@ -281,12 +281,12 @@
                                               <div class="col-md-12">
                                                 <button type="button" class="btn btn-danger float-left" id="deleteImage">
                                                     <i class="fa fa-trash-alt"></i>
-                                                    <span class="tab"> Delete profile picture</span>
+                                                    <span class="tab"> @lang('messages.delete_profile_picture')</span>
                                                 </button>
 
                                                 <button type="submit" class="btn btn-primary float-right" id="uploadImage" disabled>
                                                     <i class="fa fa-file-upload"></i>
-                                                    <span class="tab"> Upload</span>
+                                                    <span class="tab"> @lang('messages.upload_stat')</span>
                                                 </button>
                                               </div>
                                             </div>

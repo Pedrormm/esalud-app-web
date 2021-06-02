@@ -9,7 +9,7 @@ $(document).ready(function() {
         const smsForm = document.getElementById('smsForm');
 
         // let errorLongMap = [ "Invalid number", "The phone number has an invalid country code", "The phone number is too short", "The phone number is too long", "Invalid number"];
-        let errorLongMap = [ _messagesLocalization.Invalid_number, _messagesLocalization.The_phone_number_has_an_invalid_country_code, _messagesLocalization.The_phone_number_is_too_short, _messagesLocalization.The_phone_number_is_too_long, _messagesLocalization.Invalid_number];
+        let errorLongMap = [ _messagesLocalization.invalid_number, _messagesLocalization.the_phone_number_has_an_invalid_country_code, _messagesLocalization.the_phone_number_is_too_short, _messagesLocalization.the_phone_number_is_too_long, _messagesLocalization.invalid_number];
 
 
         smsForm.addEventListener('submit', (e) => {
@@ -17,11 +17,11 @@ $(document).ready(function() {
           let messages = [];
 
           if (smsPhone.value === '' || smsPhone.value == null) {
-            messages.push(_messagesLocalization.The_phone_number_is_required);
+            messages.push(_messagesLocalization.the_phone_number_is_required);
           }
 
           if (messagesSms.value === '' || messagesSms.value == null) {
-            messages.push(_messagesLocalization.Body_is_required);
+            messages.push(_messagesLocalization.body_is_required);
           }
 
           if (input.value.trim()){
@@ -29,7 +29,7 @@ $(document).ready(function() {
                   let errorCode = intl.getValidationError();
                   let code = errorLongMap[errorCode];
                   if (!code){
-                      code = _messagesLocalization.Invalid_number;
+                      code = _messagesLocalization.invalid_number;
                   }
                   messages.push(code);
               }
@@ -58,7 +58,7 @@ $(document).ready(function() {
 
     // let errorMap = [ "Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
 
-    let errorMap = [ _messagesLocalization.no_valid_number, _messagesLocalization.Invalid_country_code, _messagesLocalization.too_short, _messagesLocalization.too_long, _messagesLocalization.no_valid_number];
+    let errorMap = [ _messagesLocalization.no_response_valid_number, _messagesLocalization.invalid_country_code, _messagesLocalization.too_short, _messagesLocalization.too_long, _messagesLocalization.no_response_valid_number];
 
 
     let intl = window.intlTelInput(input, {
@@ -86,7 +86,7 @@ $(document).ready(function() {
         if (input.value.trim()){
             if (intl.isValidNumber()){
                 validMsg.classList.remove("hide");
-                $('#valid-msg').html("&#10004; "+_messagesLocalization.Valid_number);
+                $('#valid-msg').html("&#10004; "+_messagesLocalization.valid_number);
             }
             else{
                 $('#valid-msg').text("");
@@ -94,7 +94,7 @@ $(document).ready(function() {
                 let errorCode = intl.getValidationError();
                 let code = errorMap[errorCode];
                 if (!code){
-                    code = _messagesLocalization.not_valid;
+                    code = _messagesLocalization.no_responset_valid;
                 }
                 errorMsg.innerHTML = code;
                 errorMsg.classList.remove("hide");

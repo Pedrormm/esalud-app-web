@@ -99,7 +99,7 @@ class AppointmentController extends Controller
 
         if (Appointment::where('dt_appointment', $dt_appointment)->where('user_id_patient', $user_id_patient)
         ->where('user_id_doctor', $user_id_doctor)->exists()) {
-            return $this->backWithErrors(\Lang::get('messages.There is already the same appointment') );
+            return $this->backWithErrors(\Lang::get('messages.there_is_already_the_same_appointment') );
         }
         $userAuthRole = auth()->user()->role_id;
         $appointment = new Appointment();
@@ -129,7 +129,7 @@ class AppointmentController extends Controller
         $appointments = Appointment::with(["userPatient","userCreator","userDoctor"])->find($appointment->id);
 
         $this->sendMailNewAppointment($appointments, $userAuthRole);
-        $message = \Lang::get('messages.An appointment between the patient').$userPatient.\Lang::get('messages.and the doctor').$userDoctor.\Lang::get('messages.on the date').$spanishDate.\Lang::get('messages.has been succesfully created');
+        $message = \Lang::get('messages.an_appointment_between_the_patient')." ".$userPatient." ".\Lang::get('messages.and_the_doctor')." ".$userDoctor." ".\Lang::get('messages.on_the_date')." ".$spanishDate." ".\Lang::get('messages.has_been_succesfully_created');
         // return $this->create()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente")
         // ->with('createAppointment', true);
 
@@ -171,7 +171,7 @@ class AppointmentController extends Controller
             ->with('appointment',$appointment)->with('dtAppointment',$dtAppointment);
         }
         else{
-            return $this->backWithErrors(\Lang::get('messages.not a valid appointment') );   
+            return $this->backWithErrors(\Lang::get('messages.not_a_valid_appointment') );   
         }
                                     
     }
@@ -216,12 +216,12 @@ class AppointmentController extends Controller
         $appointmentDate = $appointmentToDelete->dt_appointment;
         $spanishDate = $this->mysqlDateTime2Spanish($appointmentDate);
         if (empty($appointmentToDelete)) {
-            return $this->jsonResponse(1, \Lang::get('messages.Appointment not found')); 
+            return $this->jsonResponse(1, \Lang::get('messages.appointment_not_found')); 
         }
 
         $appointmentToDelete->delete($id);
         
-        return $this->jsonResponse(0, \Lang::get('messages.The appointment which date is on').$spanishDate.\Lang::get('messages.has been deleted succesfully'));
+        return $this->jsonResponse(0, \Lang::get('messages.the_appointment_which_date_is_on')." ".$spanishDate." ".\Lang::get('messages.has_been_deleted_succesfully'));
     }
 
     public function realDoctorSchedule(Request $request)
@@ -443,18 +443,18 @@ class AppointmentController extends Controller
 
     public function confirmChecked($id, $checked=null){
         $appointment = Appointment::find($id);
-        $checkedText = ($checked == 1)? \Lang::get('messages.accept') : (($checked == 2) ? (\Lang::get('messages.reject')) : (""));
+        $checkedText = ($checked == 1)? \Lang::get('messages.accept_stat') : (($checked == 2) ? (\Lang::get('messages.reject_stat')) : (""));
         if (!$checkedText){
-            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
+            return $this->backWithErrors(\Lang::get('messages.permission_denied'));
         }
         return view('appointments.confirm-checked', compact('appointment','checked','checkedText'));
     }
 
     public function confirmAccomplished($id, $accomplished=null){
         $appointment = Appointment::find($id);
-        $accomplishedText = ($accomplished == 1)? \Lang::get('messages.Appointment completed'): (($accomplished == 2) ? (\Lang::get('messages.Appointment not completed')) : (""));
+        $accomplishedText = ($accomplished == 1)? \Lang::get('messages.appointment_completed'): (($accomplished == 2) ? (\Lang::get('messages.appointment_not_completed')) : (""));
         if (!$accomplishedText){
-            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
+            return $this->backWithErrors(\Lang::get('messages.permission_denied'));
         }
         return view('appointments.confirm-accomplished', compact('appointment','accomplished','accomplishedText'));
     }
@@ -469,9 +469,9 @@ class AppointmentController extends Controller
             if ($mailable){
                 return view('appointments.index');
             }
-            return $this->jsonResponse(1, \Lang::get('messages.There was an error on the checked requirements'));
+            return $this->jsonResponse(1, \Lang::get('messages.there_was_an_error_on_the_checked_requirements'));
 
-            return $this->backWithErrors(\Lang::get('messages.Permission_Denied') );
+            return $this->backWithErrors(\Lang::get('messages.permission_denied') );
         }
 
         $appointment = Appointment::find($id);
@@ -479,44 +479,44 @@ class AppointmentController extends Controller
         $roleCreator = User::select('role_id')->whereId($appointment->user_id_creator)->value('role_id');
         $loggedRole = auth()->user()->role_id;
         if (($checked == 1) && ($loggedRole == \HV_ROLES::PATIENT)){
-            return $this->jsonResponse(1, \Lang::get('messages.A patient cannot accept an appointment'));
+            return $this->jsonResponse(1, \Lang::get('messages.a_patient_cannot_accept_an_appointment'));
         }
 
         if (($roleCreator == \HV_ROLES::PATIENT) && ($loggedRole == \HV_ROLES::PATIENT)){
-            return $this->jsonResponse(1, \Lang::get('messages.You cannot accept nor deject the appointment'));
+            return $this->jsonResponse(1, \Lang::get('messages.you_cannot_accept_nor_reject_the_appointment'));
         }
         if (($roleCreator == \HV_ROLES::DOCTOR) && ($loggedRole == \HV_ROLES::DOCTOR)){
-            return $this->jsonResponse(1, \Lang::get('messages.A doctor created the appointment'));
+            return $this->jsonResponse(1, \Lang::get('messages.a_doctor_created_the_appointment'));
         }
         $appointment->update(['checked' =>$checked]);
-        $messageAcRj = ($checked == 1)? \Lang::get('messages.accepted') : (($checked == 2) ? (\Lang::get('messages.rejected')) : (""));
+        $messageAcRj = ($checked == 1)? \Lang::get('messages.accepted_stat') : (($checked == 2) ? (\Lang::get('messages.rejected_stat')) : (""));
         
         if ($mailable){
             return view('appointments.index');
         }
 
-        return $this->jsonResponse(0,  \Lang::get('messages.The appointment with the date').$appointment->dt_appointment.\Lang::get('messages.has been').$messageAcRj.\Lang::get('messages.succesfully'));
+        return $this->jsonResponse(0,  \Lang::get('messages.the_appointment_with_the_date').$appointment->dt_appointment." ".\Lang::get('messages.has_been')." ".$messageAcRj." ".\Lang::get('messages.succesfully_stat'));
     }
 
     public function setAccomplished($id, $accomplished=null) {
         if (($accomplished != 1) &&($accomplished != 2)){
-            return $this->jsonResponse(1, \Lang::get('messages.There was an error on the checked requirements'));
+            return $this->jsonResponse(1, \Lang::get('messages.there_was_an_error_on_the_checked_requirements'));
 
-            return $this->backWithErrors(\Lang::get('messages.Permission_Denied') );
+            return $this->backWithErrors(\Lang::get('messages.permission_denied') );
         }
 
         $appointment = Appointment::find($id);
         $appointment->update(['accomplished' =>$accomplished]);
-        $messageAcRj = ($accomplished == 1)? \Lang::get('messages.accepted') : (($accomplished == 2) ? (\Lang::get('messages.rejected')) : (""));
+        $messageAcRj = ($accomplished == 1)? \Lang::get('messages.accepted_stat') : (($accomplished == 2) ? (\Lang::get('messages.rejected_stat')) : (""));
             
 
-        return $this->jsonResponse(0,  \Lang::get('messages.The appointment with the date').$appointment->dt_appointment.\Lang::get('messages.has been').$messageAcRj.\Lang::get('messages.succesfully'));
+        return $this->jsonResponse(0,  \Lang::get('messages.the_appointment_with_the_date').$appointment->dt_appointment." ".\Lang::get('messages.has_been')." ".$messageAcRj." ".\Lang::get('messages.succesfully_stat'));
     }
 
     public function ajaxViewDatatable(Request $request, string $appointmentType=null) {
 
         if(!$request->wantsJson()) {
-            abort(404, 'Bad request');
+            abort(404, \Lang::get('messages.bad_request'));
         }
 
         self::checkDataTablesRules();

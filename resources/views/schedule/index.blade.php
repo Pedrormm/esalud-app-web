@@ -12,26 +12,26 @@
           
           <div class="card shadow mb-4" id="indexScheduleCard">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">Mi horario disponible</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.my_available_schedule')</h4>
             </div>
 
             <div class="card-body" id="mainStaffScheduleBody">
               <div class="hv-schedule">
                 <div class='hv-header'>
                     <div></div>
-                    <div>Lunes</div>
-                    <div>Martes</div>
-                    <div>Miércoles</div>
-                    <div>Jueves</div>
-                    <div>Viernes</div>
-                    <div>Sábado</div>
-                    <div>Domingo</div>
+                    <div>@lang('messages.monday_stat')</div>
+                    <div>@lang('messages.tuesday_stat')</div>
+                    <div>@lang('messages.wednesday_stat')</div>
+                    <div>@lang('messages.thursday_stat')</div>
+                    <div>@lang('messages.friday_stat')</div>
+                    <div>@lang('messages.saturday_stat')</div>
+                    <div>@lang('messages.sunday_stat')</div>
                 </div>
                 <div class="hv-hours"></div>
             </div>
 
         </div>
-        <button type="button" id="SaveSchedule">Save</button>
+        <button type="button" id="SaveSchedule"> @lang('messages.save_stat')</button>
 
         <!-- /.container-fluid -->
 

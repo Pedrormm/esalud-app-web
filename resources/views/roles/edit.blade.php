@@ -17,12 +17,12 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="firstName">Nombre del rol</label>
+                                <label for="firstName">@lang('messages.role_name')</label>
                                 <input id="name" name="name" class="form-control" type="text" 
-                                placeholder="Introuzca el nombre del rol" value="{{ $roles['name'] }}">
+                                placeholder=@lang('messages.enter_the_role_name') value="{{ $roles['name'] }}">
                                 <div  class="invalid-feedback">
                                     <div>
-                                        El Nombre del rol es requerido
+                                      @lang('messages.the_role_name_is_required')
                                     </div>
                                 </div>
                             </div>
@@ -34,11 +34,11 @@
                         
                           <table class="table table-responsive display" id="tablaRolPermisos">
   
-                            <caption>Permisos asociados al rol</caption>
+                            <caption>@lang('messages.permissions_associated_to_the_role')</caption>
                               <thead>
                                 <tr>
-                                  <th>Módulo</th>
-                                  <th>Activación</th>
+                                  <th>@lang('messages.unit_name')</th>
+                                  <th>@lang('messages.activation_stat')</th>
                                 </tr>
                               </thead>
                             <tbody class="text-center">                                          
@@ -59,7 +59,7 @@
                                   @endforeach
                                 @else
                                 <tr>
-                                  <td colspan="4">No hay permisos seleccionados...</td>
+                                  <td colspan="4">@lang('messages.there_are_no_selected_permissions')...</td>
                                 </tr>
                                 @endif                           
                               

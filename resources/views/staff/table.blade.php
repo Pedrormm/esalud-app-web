@@ -2,14 +2,14 @@
     <table class="table" id="staff-table">
         <thead>
             <tr>
-                <th>Historic</th>
-        <th>User Id</th>
-        <th>Branch</th>
-        <th>Shift</th>
-        <th>Office</th>
-        <th>Room</th>
-        <th>H Phone</th>
-                <th colspan="3">Action</th>
+                <th>@lang('messages.historical_stat')</th>
+                <th>@lang('messages.user_id')</th>
+                <th>@lang('messages.branch_stat')</th>
+                <th>@lang('messages.shift_data')</th>
+                <th>@lang('messages.office_data')</th>
+                <th>@lang('messages.room_number')</th>
+                <th>@lang('messages.business_phone_number')</th>
+                <th colspan="3">@lang('messages.action_stat')</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                     <div class='btn-group'>
                         <a href="{{ route('staff.show', [$staff->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
                         <a href="{{ route('staff.edit', [$staff->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
-                        {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm( _messagesLocalization.are_you_sure)"]) !!}
                     </div>
                     {!! Form::close() !!}
                 </td>

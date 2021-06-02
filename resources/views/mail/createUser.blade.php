@@ -1,19 +1,19 @@
 @component('mail::message')
-# @lang('messages.New user')
+# @lang('messages.new_user')
 
-@lang('messages.Hello, a new user admission has been requested to this email with the DNI(id) ') {{ $dni }}
+@lang('messages.hello_a_new_user_admission_has_been_requested_to_this_email_with_the_DNI')  {{ $dni }}
 
-@lang('messages.Click to register in the application'){{ config('app.name') }}:
+@lang('messages.click_to_register_in_the_application') {{ config('app.name') }}:
 @component('mail::button', ['url' => URL::asset('user/createUserFromMail/' . $token)])
-@lang('messages.New user')
+@lang('messages.new_user')
 @endcomponent
 
 <small>
-@lang('messages.NOTE: If the link does not work for you, copy and paste the following link in your address bar')<br>
+@lang('messages.note_if_the_link_does_not_work_for_you_copy_and_paste_the_following_link_in_your_address_bar'): <br>
 {{ URL::asset('user/createUserFromMail/' . $token) }}
 </small>
 
-@lang('messages.Thank you'),<br>
+@lang('messages.thank_you'),<br>
 {{ config('app.name') }}
 @endcomponent
 {{-- <!DOCTYPE html>

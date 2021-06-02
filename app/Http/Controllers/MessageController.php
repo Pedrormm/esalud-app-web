@@ -142,13 +142,13 @@ class MessageController extends Controller
                     }
                 }
                 else{
-                    return $this->jsonResponse(1, \Lang::get('messages.The message cannot be deleted'));
+                    return $this->jsonResponse(1, \Lang::get('messages.the_message_cannot_be_deleted'));
                 }
             }
         }
         else{
             // Error
-            return $this->jsonResponse(1, \Lang::get('messages.Permission_Denied'));
+            return $this->jsonResponse(1, \Lang::get('messages.permission_denied'));
         }
     }
 
@@ -180,7 +180,6 @@ class MessageController extends Controller
         ->first();
         $userFrom->name = urldecode($userFrom->name);
         $userFrom->lastname = urldecode($userFrom->lastname);
-
         
         return view('communication/my_messages_from_user', ['userMessages' => $userMessages,'user' => $authUser,
         'userFrom' => $userFrom]);
@@ -194,7 +193,7 @@ class MessageController extends Controller
             'message' => $request->input('message')
         ]);
 
-        return ['status' => \Lang::get('messages.The message was sent')];
+        return ['status' => \Lang::get('messages.the_message_was_sent')];
     }
 
 

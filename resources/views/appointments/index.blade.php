@@ -12,7 +12,7 @@
           
           <div class="card shadow mb-4" id="mainCardShadow">
             <div class="card-header py-3">
-              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.medical appointments list')</h4>
+              <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.medical_appointments_list')</h4>
             </div>
 
             <div class="card-body" id="mainCardBody">
@@ -21,16 +21,16 @@
                   <thead >
                     <tr class="text-center">
                         @if (( auth()->user()->role_id) != \HV_ROLES::PATIENT)
-                          <th class="bg-primary">@lang('messages.patient')</th>
+                          <th class="bg-primary">@lang('messages.patient_type')</th>
                         @endif
                         @if (( auth()->user()->role_id) != \HV_ROLES::DOCTOR)
-                          <th class="bg-primary">@lang('messages.doctor')</th>
+                          <th class="bg-primary">@lang('messages.doctor_type')</th>
                         @endif
-                        <th class="bg-primary">@lang('messages.date')</th>
+                        <th class="bg-primary">@lang('messages.date_data')</th>
                         @if (($appointmentType) == "all")
-                          <th class="bg-primary">@lang('messages.state')</th>
+                          <th class="bg-primary">@lang('messages.state_stat')</th>
                         @endif
-                        <th class="bg-primary">@lang('messages.actions')</th>
+                        <th class="bg-primary">@lang('messages.actions_stat')</th>
                     </tr>
                   </thead>
                   {{-- <tbody>

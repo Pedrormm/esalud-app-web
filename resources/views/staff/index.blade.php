@@ -38,7 +38,7 @@
       
       <div class="card shadow mb-4" id="mainCardShadow">
         <div class="card-header py-3">
-          <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.List of staff')</h4>
+          <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.list_of_staff')</h4>
         </div>
 
         <div class="card-body" id="mainCardBody">
@@ -46,20 +46,20 @@
           <table class="table table-bordered" id="mainTableStaff" width="100%" cellspacing="0">
               <thead>
                 <tr class="text-center">
-                    <th class="bg-primary">@lang('messages.surname, name')</th>
-                    <th class="bg-primary">@lang('messages.role')</th>
-                    <th class="bg-primary">@lang('messages.Historical')</th>
-                    <th class="bg-primary">@lang('messages.specialty')</th>
-                    <th class="bg-primary">@lang('messages.Shift')</th>
-                    <th class="bg-primary">@lang('messages.Office')</th>
-                    <th class="bg-primary">@lang('messages.Room number')</th>
-                    <th class="bg-primary">@lang('messages.Business phone number')</th>
-                    <th class="bg-primary">Dni</th>
-                    <th class="bg-primary">@lang('messages.blood group')</th>
-                    <th class="bg-primary">@lang('messages.date of birth')</th>
-                    <th class="bg-primary">@lang('messages.Phone number')</th>
-                    <th class="bg-primary">@lang('messages.gender')</th>
-                    <th class="bg-primary">@lang('messages.actions')</th>
+                    <th class="bg-primary">@lang('messages.lastnamesurnamecoma_and_name')</th>
+                    <th class="bg-primary">@lang('messages.role_stat')</th>
+                    <th class="bg-primary">@lang('messages.historical_stat')</th>
+                    <th class="bg-primary">@lang('messages.specialty_stat')</th>
+                    {{-- <th class="bg-primary">@lang('messages.shift_data')</th> --}}
+                    <th class="bg-primary">@lang('messages.office_data')</th>
+                    <th class="bg-primary">@lang('messages.room_number')</th>
+                    <th class="bg-primary">@lang('messages.business_phone_number')</th>
+                    <th class="bg-primary">DNI</th>
+                    <th class="bg-primary">@lang('messages.blood_group')</th>
+                    <th class="bg-primary">@lang('messages.date_of_birth')</th>
+                    <th class="bg-primary">@lang('messages.phone_number')</th>
+                    <th class="bg-primary">@lang('messages.gender_data')</th>
+                    <th class="bg-primary">@lang('messages.actions_stat')</th>
                 </tr>
               </thead>
             </table>

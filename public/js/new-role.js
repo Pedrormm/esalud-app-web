@@ -14,11 +14,11 @@ $('#saveModal').click(function() {
     let messages = [];
 
     if (roleToBeNew.value === '' || roleToBeNew.value == null) {
-        messages.push(_messagesLocalization.The_role_name_is_required);
+        messages.push(_messagesLocalization.the_role_name_is_required);
     }
 
     if (roleToBeNew.value.length < 2){
-        messages.push(_messagesLocalization.The_role_name_must_be_at_least_2_characters_long);
+        messages.push(_messagesLocalization.the_role_name_must_be_at_least_2_characters_long);
     }
 
     if (messages.length > 0) {

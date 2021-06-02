@@ -64,44 +64,44 @@
             {
                 data: 'branch_name',
             },
-            {
-                data: 'shift',
+            // {
+            //     data: 'shift',
 
-                render: function(data, type, row) {
-                    let strShift = "";
+            //     render: function(data, type, row) {
+            //         let strShift = "";
 
-                    strShift += '<span class="align-middle">';
-                    switch(row.shift) {
-                        case "M":
-                            strShift += 'Mañana';
-                            break;
-                        case "ME":
-                            strShift += 'Mañana y Tarde';
-                            break;
-                        case "MN":
-                            strShift += 'Mañana y Noche';
-                            break;
-                        case "MEN":
-                            strShift += 'Mañana, Tarde y Noche';
-                            break;
-                        case "E":
-                            strShift += 'Tarde';
-                            break;
-                        case "EN":
-                            strShift += 'Tarde y Noche';
-                            break;
-                        case "N":
-                            strShift += 'Noche';
-                            break;
-                        default:
-                            strShift += ' ';
-                    }
-                    strShift += '</span>';
+            //         strShift += '<span class="align-middle">';
+            //         switch(row.shift) {
+            //             case "M":
+            //                 strShift += 'Mañana';
+            //                 break;
+            //             case "ME":
+            //                 strShift += 'Mañana y Tarde';
+            //                 break;
+            //             case "MN":
+            //                 strShift += 'Mañana y Noche';
+            //                 break;
+            //             case "MEN":
+            //                 strShift += 'Mañana, Tarde y Noche';
+            //                 break;
+            //             case "E":
+            //                 strShift += 'Tarde';
+            //                 break;
+            //             case "EN":
+            //                 strShift += 'Tarde y Noche';
+            //                 break;
+            //             case "N":
+            //                 strShift += 'Noche';
+            //                 break;
+            //             default:
+            //                 strShift += ' ';
+            //         }
+            //         strShift += '</span>';
 
 
-                    return strShift;
-                }
-            },
+            //         return strShift;
+            //     }
+            // },
             {
                 data: 'office',
             },
@@ -125,6 +125,21 @@
             },
             {
                 data: 'sex',
+                render: function(data, type, row) {
+                    let strGender = "";
+
+                    if (row.sex=="male"){
+                        strGender += '<span class="align-middle">'+_messagesLocalization.male_data+'</span>';
+                    }
+                    else if (row.sex=="female"){
+                        strGender += '<span class="align-middle">'+_messagesLocalization.female_data+'</span>';
+                    }
+                    else{
+                        strGender += '<span class="align-middle"> </span>';
+                    }
+                    
+                    return strGender;
+                }
             },
             {
                 data: '_buttons',
@@ -163,9 +178,9 @@
                 let userDeleteFullName = $(this).data('name-user');
                 let userDeleteRole = $(this).data('role-user');
 
-                showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-                '¿Seguro que desea borrar el usuario con nombre '+ userDeleteFullName + ' y rol '+ userDeleteRole + '?',
-                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "No", "Sí"); 
+                showModal("@lang('messages.would_you_like_to_delete_the_user')"+' '+ userDeleteFullName + '?', 
+                "@lang('messages.would_you_like_to_delete_the_user_whose_name_is')"+' '+ userDeleteFullName + " " + "@lang('messages.and_role')"+ " " + userDeleteRole + '?',
+                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
 
                 $('#saveModal').on('click', function(e){
                     saveModalActionAjax(_publicUrl+"staff/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {

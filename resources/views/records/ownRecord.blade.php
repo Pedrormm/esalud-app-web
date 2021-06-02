@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<nav class="top">
-					<h3 class="div_2 on text-danger"><i class="fa fa-edit"></i> Historiales médicos</h3>
+					<h3 class="div_2 on text-danger"><i class="fa fa-edit"></i> @lang('messages.medical_records')</h3>
 				</nav>
 			</div>
 		</div>
@@ -23,11 +23,11 @@
 				<table class="table table-bordered" id="userInfo">
 					<tbody>
 						<tr>
-							<td>Nombre:</td>
+							<td>@lang('messages.name_data'):</td>
 							<td>{{ $usuario->name }}</td>
 						</tr>
 						<tr>
-							<td>Apellidos:</td>
+							<td>@lang('messages.surname_data'):</td>
 							<td>{{ $usuario->lastname }}</td>
 						</tr>
                         <tr>
@@ -43,13 +43,13 @@
 							<td><?php echo date("d/m/Y",strtotime($usuario->birthdate)); ?></td>
 						</tr>
 						<tr>
-							<td>@lang('messages.gender'):</td>
+							<td>@lang('messages.gender_data'):</td>
 							<td>
 							<?php
 								if($usuario->sex == "male"){
-									echo \Lang::get('messages.male');
+									echo \Lang::get('messages.male_data');
 								}else{
-									echo \Lang::get('messages.female');
+									echo \Lang::get('messages.female_data');
 								}
 							
 							?>
@@ -62,12 +62,12 @@
                         @if (($usuario->role_id == \HV_ROLES::DOCTOR) || ($usuario->role_id == \HV_ROLES::HELPER)) 
                         
                         <tr>
-							<td>Número de historial:</td>
+							<td>@lang('messages.historical_number'):</td>
 							<td>{{ $usuario->historic }}</td>
 						</tr>
                         
-                        <tr>
-							<td>@lang('messages.Shift'):</td>
+                        {{-- <tr>
+							<td>@lang('messages.shift_data'):</td>
 							<td>
                             
                                 @switch($usuario->shift)
@@ -105,25 +105,25 @@
 
                             
                             </td>
-						</tr>
+						</tr> --}}
 
                         <tr>
-							<td>@lang('messages.Office'):</td>
+							<td>@lang('messages.office_data'):</td>
 							<td>{{ $usuario->office }}</td>
 						</tr>
 
                         <tr>
-							<td>@lang('messages.Room number'):</td>
+							<td>@lang('messages.room_number'):</td>
 							<td>{{ $usuario->room }}</td>
 						</tr>
 
                         <tr>
-							<td>@lang('messages.Phone number') de empresa:</td>
+							<td>@lang('messages.business_phone_number'):</td>
 							<td>{{ $usuario->h_phone }}</td>
 						</tr>
 
                         <tr>
-							<td>@lang('messages.specialty'):</td>
+							<td>@lang('messages.specialty_stat'):</td>
 							<td>{{ $usuario->branch_name }}</td>
 						</tr>
 
@@ -134,13 +134,13 @@
 				
 				<div class="row mt-3">
 					<div class="col-lg-4 mb-2">
-						<a class="btn btn-primary bt-create-event btn-block text-white"><i class="fa fa-calendar"></i> Cita</a> 
+						<a class="btn btn-primary bt-create-event btn-block text-white"><i class="fa fa-calendar"></i> @lang('messages.appointment_stat')</a> 
 					</div>
 					<div class="col-lg-4 mb-2">
-						<a class="btn btn-success bt-send-message btn-block text-white"><i class="fa fa-comments"></i> Chat</a> 
+						<a class="btn btn-success bt-send-message btn-block text-white"><i class="fa fa-comments"></i> @lang('messages.chat_stat')</a> 
 					</div>
 					<div class="col-lg-4 mb-2">
-						<a class="btn btn-warning bt-open-alerts btn-block text-white"><i class="fa fa-cogs"></i> Alertas</a>
+						<a class="btn btn-warning bt-open-alerts btn-block text-white"><i class="fa fa-cogs"></i> @lang('messages.alerts_stat')</a>
 					</div>
 				</div>
 			</div>

@@ -91,12 +91,30 @@
                 // _dictionary = new Typo("it_IT", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
                 _dictionary = null;
                 break;
+            case "pt":
+                _dictionary = null;
+                break;
             case "fr":
                 _dictionary = new Typo("fr_FR", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                break;
+            case "ro":
+                _dictionary = null;
                 break;
             case "de":
                 _dictionary = new Typo("de_DE", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
                 break;
+            case "ar":
+                _dictionary = null;
+                break;
+            case "ru":
+                _dictionary = null;
+                break;     
+            case "zh_CN":
+                _dictionary = null;
+                break;
+            case "ja":
+                _dictionary = null;
+                break; 
             default:
                 _dictionary = null;
                 break;

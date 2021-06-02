@@ -7,7 +7,7 @@
 
     <div class="card shadow mb-4" id="mainCardShadow">
       <div class="card-header py-3">
-        <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.Create new user')</h4>
+        <h4 class="m-0 font-weight-bold text-primary text-center">@lang('messages.create_new_user')</h4>
       </div>
 
       <div class="card-body" id="mainCardBody">
@@ -33,7 +33,7 @@
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h3>@lang('messages.User data')</h3>
+                        <h3>@lang('messages.user_datas')</h3>
                     </div>
                 </div>
                
@@ -55,51 +55,51 @@
 
                 <div class="row mb-3">
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" placeholder=@lang('messages.name') name="name" required/>
+                        <input type="text" class="form-control" placeholder=@lang('messages.name_data') name="name" required/>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" placeholder=@lang('messages.surname') name="lastname" required/>
+                        <input type="text" class="form-control" placeholder=@lang('messages.surname_data') name="lastname" required/>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" placeholder=@lang('messages.address') name="address" required/>
+                        <input type="text" class="form-control" placeholder=@lang('messages.address_data') name="address" required/>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" placeholder=@lang('messages.Country') name="country" />
+                        <input type="text" class="form-control" placeholder=@lang('messages.country_data') name="country" />
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" placeholder=@lang('messages.City') name="city" />
+                        <input type="text" class="form-control" placeholder=@lang('messages.city_data') name="city" />
                     </div>
                     <div class="col-lg-4">
-                        <input type="number" class="form-control" placeholder=@lang('messages.Zip code') name="zipcode" />
+                        <input type="number" class="form-control" placeholder=@lang('messages.zip_code') name="zipcode" />
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-lg-3">
-                        {{-- <input type="text" class="form-control" placeholder=@lang('messages.Phone number') name="phone" /> --}}
+                        {{-- <input type="text" class="form-control" placeholder=@lang('messages.phone_number') name="phone" /> --}}
                         
                         <input type='tel' class="form-control" name="phone" id="smsPhone" maxlength="12" />
                         <div id="valid-msg" class="valid-feedback hide"></div>
                         <div id="error-msg" class="valid-feedback hide"></div>
                     </div>
                     <div class="col-lg-3">
-                        <input type="date" name="birthdate" class="form-control" data-placeholder=@lang('messages.date of birth') required aria-required="true" id="bDate" />
+                        <input type="date" name="birthdate" class="form-control" data-placeholder=@lang('messages.date_of_birth') required aria-required="true" id="bDate" />
                     </div>
                     <div class="col-lg-3">
                         {{-- <select name="sex" class="form-control" required> --}}                      
                         <select name="sex" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                        data-live-search="true" title=@lang('messages.gender')>
-                            <option value="female">@lang('messages.female')</option>
-                            <option value="male">@lang('messages.male')</option>
+                        data-live-search="true" title=@lang('messages.gender_data')>
+                            <option value="female">@lang('messages.female_data')</option>
+                            <option value="male">@lang('messages.male_data')</option>
                         </select>
                     </div>
                     <div class="col-lg-3">
                         {{-- <select name="blood" class="form-control" required> --}}
                         <select name="blood" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.blood group')>
+                            data-live-search="true" title=@lang('messages.blood_group')>
                             <option value="0-">0-</option>
                             <option value="0+">0+</option>
                             <option value="A-">A-</option>
@@ -116,18 +116,18 @@
                     <div class="row mb-3">
                         <div class="col-lg-12">
                             <hr>
-                            <h3>@lang('messages.Patient data')</h3>
+                            <h3>@lang('messages.patient_data')</h3>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" placeholder=@lang('messages.Historical') name="historic" />
+                            <input type="text" class="form-control" placeholder=@lang('messages.historical_stat') name="historic" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="number" class="form-control" placeholder=@lang('messages.Height in cm') name="height" />
+                            <input type="number" class="form-control" placeholder=@lang('messages.height_in_cm') name="height" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" placeholder=@lang('messages.Weight in kg') name="weight" />
+                            <input type="text" class="form-control" placeholder=@lang('messages.weight_in_kg') name="weight" />
                         </div>
                     </div>
                 @endif
@@ -136,18 +136,18 @@
                     <div class="row mb-3">
                         <div class="col-lg-12">
                             <hr>
-                            <h3>@lang('messages.Doctor data')</h3>
+                            <h3>@lang('messages.doctor_data')</h3>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-lg-6">
-                            <input type="text" class="form-control" placeholder=@lang('messages.Historical') name="historic" />
+                            <input type="text" class="form-control" placeholder=@lang('messages.historical_stat') name="historic" />
                         </div>
                         <div class="col-lg-6">
                             {{-- <select class="form-control" name="branch">
-                                <option>@lang('messages.Select specialty')</option> --}}
+                                <option>@lang('messages.select_specialty')</option> --}}
                             <select name="branch" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.Select specialty')>
+                            data-live-search="true" title=@lang('messages.select_specialty')>
                                 @foreach( $branches as $branch)
                                     <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
@@ -168,13 +168,13 @@
                     </div>
                     <div class="row mb-3"> 
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" placeholder=@lang('messages.Office') name="office" />
+                            <input type="text" class="form-control" placeholder=@lang('messages.office_data') name="office" />
                         </div>                   
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" placeholder=@lang('messages.Door') name="room" />
+                            <input type="text" class="form-control" placeholder=@lang('messages.door_data') name="room" />
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" placeholder=@lang('messages.Phone number') name="h_phone" />
+                            <input type="text" class="form-control" placeholder=@lang('messages.phone_number') name="h_phone" />
                         </div>
                     </div>
                 @endif
@@ -182,21 +182,21 @@
                 <div class="row mb-3">
                     <div class="col-lg-12">
                         <hr>
-                        <h3>@lang('messages.Access data')</h3>
+                        <h3>@lang('messages.access_data')</h3>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-lg-6">
-                        <input type="password" class="form-control" placeholder=@lang('messages.Password') name="password" id="password" required/>
+                        <input type="password" class="form-control" placeholder=@lang('messages.password_stat') name="password" id="password" required/>
                     </div>
                     <div class="col-lg-6">
-                        <input type="password" class="form-control" placeholder=@lang('messages.Repeat password') name="repeat_password" id="repeat_password" required/>
+                        <input type="password" class="form-control" placeholder=@lang('messages.repeat_password') name="repeat_password" id="repeat_password" required/>
                     </div>
                 </div>
                 
                 <div class="row mb-3">
                     <div class="col-lg-2 offset-5 text-center">
-                        <button class="btn btn-primary btn-block"><i class="fa fa-plus"></i> @lang('messages.create')</button>
+                        <button class="btn btn-primary btn-block"><i class="fa fa-plus"></i> @lang('messages.create_stat')</button>
                     </div>
                 </div>
 

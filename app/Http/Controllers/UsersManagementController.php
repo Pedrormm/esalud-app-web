@@ -35,7 +35,7 @@ class UsersManagementController extends Controller
         else if (auth()->user()->role_id == \HV_ROLES::ADMIN)
             $roles = Role::all();
         else
-            return redirect()->back()->withErrors([\Lang::get('messages.Permission_Denied'), \Lang::get('messages.No permissions')]);
+            return redirect()->back()->withErrors([\Lang::get('messages.permission_denied'), \Lang::get('messages.No permissions')]);
         return view('users.newUser')->with('roles',$roles);    
     }
 
@@ -59,10 +59,10 @@ class UsersManagementController extends Controller
 
         //Check valid dni letter
         if(!checkDni($dni)) {
-            return $this->backWithErrors("UsMaCoCr001: ".\Lang::get('messages.Invalid DNI format'));
+            return $this->backWithErrors("UsMaCoCr001: ".\Lang::get('messages.invalid_DNI_format'));
         }
         if ((auth()->user()->role_id == \HV_ROLES::DOCTOR || auth()->user()->role_id == \HV_ROLES::HELPER) && $rol_id == \HV_ROLES::ADMIN)
-            return redirect()->back()->withErrors([\Lang::get('messages.Permission_Denied'), \Lang::get('messages.No permissions')]);
+            return redirect()->back()->withErrors([\Lang::get('messages.permission_denied'), \Lang::get('messages.No permissions')]);
         $existUser = User::exist_user_by_dni($dni);
         $roles = Role::all();
         if($existUser == 0){
@@ -100,9 +100,9 @@ class UsersManagementController extends Controller
             //dd($res);
 
             if(!$res) {
-                return view('users.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: '.\Lang::get('messages.Internal error'));
+                return view('users.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: '.\Lang::get('messages.internal_error'));
             } 
-            $subject = config('app.name').\Lang::get('messages.has invited you to create a new account with the dni(id)'). $dni;
+            $subject = config('app.name')." ".\Lang::get('messages.has_invited_you_to_create_a_new_account_with_the_DNI')." ". $dni;
             DB::commit();
             $res = Mail::to($email)->send(new InvitationNewUserMail($token, $dni));
             // dd($res);
@@ -111,10 +111,10 @@ class UsersManagementController extends Controller
             }
             else
                 DB::commit();*/
-            return view('users.newUser')->with('roles',$roles)->with('info',\Lang::get('messages.A mail has been sent to the one provided with instructions on how to create the new user'));
+            return view('users.newUser')->with('roles',$roles)->with('info',\Lang::get('messages.a_mail_has_been_sent_to_the_one_provided_with_instructions_on_how_to_create_the_new_user'));
             
         }else{                        
-            return view('users.newUser')->with('roles',$roles)->with('danger',\Lang::get('messages.The DNI(id) already exists. Please check your data'));
+            return view('users.newUser')->with('roles',$roles)->with('danger',\Lang::get('messages.the_DNI_already_exists_please_check_your_data'));
            
         }
     }
@@ -153,10 +153,10 @@ class UsersManagementController extends Controller
                 return view('users.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
             }
             else
-                return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.Token has been expired. Contact an admin to resend an email'));     
+                return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.token_has_been_expired_contact_an_admin_to_resend_an_email'));     
         }
         else{
-            return view('users.newUserMail')->with('showError',true)->withErrors("UsMaCoCrUsFrMa001: ".\Lang::get('messages.Internal error'));        
+            return view('users.newUserMail')->with('showError',true)->withErrors("UsMaCoCrUsFrMa001: ".\Lang::get('messages.internal_error'));        
         }
     }
 
@@ -215,12 +215,12 @@ class UsersManagementController extends Controller
         // dd($verifyDni);
         // Si ya existe dni
         if ($verifyDni){ 
-            return back()->withErrors("UsMaCoCrNeUs002: ".\Lang::get('messages.Mismatch error'));        
+            return back()->withErrors("UsMaCoCrNeUs002: ".\Lang::get('messages.mismatch_error'));        
         }
 
         $verify = UserInvitation::whereVerificationToken($token)->first();
         if (!$verify){
-            return back()->withErrors(\Lang::get('messages.Mismatch error'));        
+            return back()->withErrors(\Lang::get('messages.mismatch_error'));        
         }
         //dd($request->all());
 
@@ -248,7 +248,7 @@ class UsersManagementController extends Controller
         $res = $verify->delete();
         if (!$res){
             DB::rollBack();
-            return back()->withErrors(\Lang::get('messages.Internal error'));        
+            return back()->withErrors(\Lang::get('messages.internal_error'));        
         }
 
 
@@ -270,7 +270,7 @@ class UsersManagementController extends Controller
         $res = $user->save();
         if(!$res) {
             DB::rollBack();
-            return back()->withErrors(\Lang::get('messages.Internal error'));  
+            return back()->withErrors(\Lang::get('messages.internal_error'));  
         }
        
         if($rol_id == \HV_ROLES::PATIENT){
@@ -286,7 +286,7 @@ class UsersManagementController extends Controller
             $res = $patient->save();
             if(!$res) {
                 DB::rollBack();
-                return back()->withErrors(\Lang::get('messages.Internal error'));
+                return back()->withErrors(\Lang::get('messages.internal_error'));
             }
         }
        
@@ -310,7 +310,7 @@ class UsersManagementController extends Controller
             
             if(!$res) {
                 DB::rollBack();
-                return back()->withErrors(\Lang::get('messages.Internal error'));
+                return back()->withErrors(\Lang::get('messages.internal_error'));
             }
         }
         
@@ -320,9 +320,9 @@ class UsersManagementController extends Controller
         $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
 
         if (Auth::user())
-            return view('dashboard.index')->with('successful', \Lang::get('messages.An user with the DNI').$dni.\Lang::get('messages.has been properly created'));
+            return view('dashboard.index')->with('successful', \Lang::get('messages.an_user_with_the_DNI')." ".$dni." ".\Lang::get('messages.has_been_properly_created'));
         else
-            return redirect('/')->with('successful', \Lang::get('messages.An user with the DNI').$dni.\Lang::get('messages.has been properly created. Please log in'));
+            return redirect('/')->with('successful', \Lang::get('messages.an_user_with_the_DNI')." ".$dni." ".\Lang::get('messages.has_been_properly_created_please_log_in'));
     }
 
     /**
@@ -337,7 +337,7 @@ class UsersManagementController extends Controller
         $rol_usuario_info = "";
 
         if($usuario->role_id == \HV_ROLES::ADMIN){
-            return $this->backWithErrors(\Lang::get('messages.Permission_Denied'));
+            return $this->backWithErrors(\Lang::get('messages.permission_denied'));
         }
         elseif($usuario->role_id == \HV_ROLES::PATIENT){
             // DB::table('patients')->whereUserId($id)->limit(1)->first();
@@ -351,7 +351,7 @@ class UsersManagementController extends Controller
             $rol_usuario_info = User::whereUserId($id)->first();
         }
         if(!$rol_usuario_info) {
-            return $this->backWithErrors("UsMaCoEd001: ".\Lang::get('messages.Invalid id'));
+            return $this->backWithErrors("UsMaCoEd001: ".\Lang::get('messages.invalid_id'));
         }
         return view('users.edit')->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info[0]);
     }
@@ -435,7 +435,7 @@ class UsersManagementController extends Controller
             $staff->save();
         }
 
-        return view('dashboard.index')->with('successful', \Lang::get('messages.The user:').$usuario->name." ".$usuario->lastname.\Lang::get('messages.has been succesfully edited'));
+        return view('dashboard.index')->with('successful', \Lang::get('messages.the_user').$usuario->name." ".$usuario->lastname." ".\Lang::get('messages.has_been_succesfully_edited'));
     }
 
     /**

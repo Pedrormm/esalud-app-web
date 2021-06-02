@@ -5,7 +5,7 @@
 </span>
 
 
-@section('viewsScripts')
+{{-- @section('viewsScripts') --}}
     <script>
         window.authUser = @json(auth()->user()->toArray());
         window.nAppointments = {{ $nAppointments }};
@@ -19,14 +19,14 @@
         }
 
 
-            window.pusher = chatPusherInit(false);
-            window.chatChannel = pusher[1];
-            console.log("pusher ",window.pusher);
-            chatChannel.bind(`client-send`, (data) => {
-                console.log("Recibido client-send Appointment_icon", data);
-            });
+            // window.pusher = chatPusherInit(false);
+            // window.chatChannel = pusher[1];
+            // console.log("pusher ",window.pusher);
+            // chatChannel.bind(`client-send`, (data) => {
+            //     console.log("Recibido client-send Appointment_icon", data);
+            // });
     </script>
-@endsection
+{{-- @endsection --}}
 
 
 

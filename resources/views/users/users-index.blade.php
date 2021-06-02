@@ -9,9 +9,9 @@ $('.confirmDeleteUser').on('click', function(e){
     let userDeleteFullName = $(this).data('name-user');
     let userDeleteRole = $(this).data('role-user');
 
-    showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-    '@lang('messages.Are you sure you want to delete the user whose name is')'+ userDeleteFullName + '@lang("messages.and role")' + userDeleteRole + '?',
-     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, @lang('messages.no'), @lang('messages.yes')); 
+    showModal("@lang('messages.would_you_like_to_delete_the_user')"+' '+ userDeleteFullName + '?', 
+    "@lang('messages.are_you_sure_you_want_to_delete_the_user_whose_name_is')"+ " " + userDeleteFullName + " " + "@lang('messages.and_role')" + " " + userDeleteRole + '?',
+     false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
 
      $('#saveModal').on('click', function(e){
         saveModalActionAjax(_publicUrl+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {
@@ -102,7 +102,22 @@ $('.confirmDeleteUser').on('click', function(e){
                 data: 'phone',
             },
             {
-                data: 'sex'
+                data: 'sex',
+                render: function(data, type, row) {
+                    let strGender = "";
+
+                    if (row.sex=="male"){
+                        strGender += '<span class="align-middle">'+_messagesLocalization.male_data+'</span>';
+                    }
+                    else if (row.sex=="female"){
+                        strGender += '<span class="align-middle">'+_messagesLocalization.female_data+'</span>';
+                    }
+                    else{
+                        strGender += '<span class="align-middle"> </span>';
+                    }
+                    
+                    return strGender;
+                }
             },
             {
                 data: '_buttons',
@@ -141,9 +156,9 @@ $('.confirmDeleteUser').on('click', function(e){
                 let userDeleteFullName = $(this).data('name-user');
                 let userDeleteRole = $(this).data('role-user');
 
-                showModal('¿Borrar usuario '+ userDeleteFullName + '?', 
-                '@lang('messages.Are you sure you want to delete the user whose name is')'+ userDeleteFullName + '@lang('messages.and role')'+ userDeleteRole + '?',
-                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, '@lang('messages.no')', '@lang('messages.yes')'); 
+                showModal("@lang('messages.would_you_like_to_delete_the_user')"+' '+ userDeleteFullName + '?', 
+                "@lang('messages.are_you_sure_you_want_to_delete_the_user_whose_name_is')"+ " " + userDeleteFullName + " " + "@lang('messages.and_role')"+ " " + userDeleteRole + '?',
+                false, $(this).data('link'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
 
                 $('#saveModal').on('click', function(e){
                     saveModalActionAjax(_publicUrl+"users/"+userDeleteId, userDeleteId, 'DELETE', 'json', function(res) {

@@ -35,7 +35,7 @@ class SettingController extends Controller
             $rol_usuario_info = User::whereId($id)->first();
         }
         if(!$rol_usuario_info) {
-            return $this->backWithErrors("UsMaCoEd001: ".\Lang::get('messages.Invalid id'));
+            return $this->backWithErrors("UsMaCoEd001: ".\Lang::get('messages.invalid_id'));
         }
         return view('settings/index', compact('userLogin', 'rol_usuario_info', 'roles', 'branches'));
     }
@@ -91,7 +91,7 @@ class SettingController extends Controller
             $this->updateAvatar($request,auth()->user()->id,true);
         // return view('users.index')->with('okMessage', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
     
-        $message = \Lang::get('messages.Your user data').$usuario->name." ".$usuario->lastname.\Lang::get('messages.has been edited successfully');
+        $message = \Lang::get('messages.your_user_data')." (".$usuario->name." ".$usuario->lastname.") ".\Lang::get('messages.has_been_edited_successfully');
 
         return $this->jsonResponse(0, $message);
     
@@ -112,7 +112,7 @@ class SettingController extends Controller
             $image64 = $request->data;
             $regularExpression = "/^data\:image\\/([\w]{3,4});base64,/"; //data:image/png;base64,
             if(!preg_match($regularExpression, $image64, $matches)) { 
-                return $this->jsonResponse(1, \Lang::get('messages.The file does not have an image format'));
+                return $this->jsonResponse(1, \Lang::get('messages.the_file_does_not_have_an_image_format'));
             }
             $ext = $matches[1];
             $image64 = preg_replace($regularExpression, '', $image64);
@@ -121,7 +121,7 @@ class SettingController extends Controller
             $bytes=strlen($imageBytes);
             $imgSizeInMb = strval((int)HV_IMAGE_MAX_SIZE/1000000);
             if ($bytes > HV_IMAGE_MAX_SIZE)
-                return $this->jsonResponse(1, \Lang::get('messages.The image cannot be larger than').$imgSizeInMb."Mb");
+                return $this->jsonResponse(1, \Lang::get('messages.the_image_cannot_be_larger_than')." ".$imgSizeInMb."Mb");
 
             \Storage::disk('avatars')->put($newFileName,  $imageBytes);
 
@@ -131,10 +131,10 @@ class SettingController extends Controller
             // file_put_contents($destFile, $imageBytes);
 
             // return $this->jsonResponse(0, "",$destFile);
-            return $this->jsonResponse(0, \Lang::get('messages.The avatar has been updated'),$newFileName);
+            return $this->jsonResponse(0, \Lang::get('messages.the_avatar_has_been_updated'),$newFileName);
         }
         else{
-            return back()->withErrors([\Lang::get('messages.Permission_Denied')]);
+            return back()->withErrors([\Lang::get('messages.permission_denied')]);
         }
 
     }
@@ -163,10 +163,10 @@ class SettingController extends Controller
         if($userLogged) {
             $userLogged->avatar = '';
             $userLogged->save();
-            return $this->jsonResponse(0, \Lang::get('messages.The avatar has been updated'),$sex);
+            return $this->jsonResponse(0, \Lang::get('messages.the_avatar_has_been_updated'),$sex);
         }
         else{
-            return $this->jsonResponse(1, \Lang::get('messages.There was a problem while deleting the avatar'));
+            return $this->jsonResponse(1, \Lang::get('messages.there_was_a_problem_while_deleting_the_avatar'));
         }
 
     }
@@ -194,7 +194,7 @@ class SettingController extends Controller
             return $this->jsonResponse(0, "",$destFile);
         }
         else{
-            return back()->withErrors([\Lang::get('messages.Permission_Denied')]);
+            return back()->withErrors([\Lang::get('messages.permission_denied')]);
         }
     
     }

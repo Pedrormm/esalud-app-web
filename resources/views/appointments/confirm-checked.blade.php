@@ -11,7 +11,7 @@
                             <div class="form-group">
                                 <label id="sureAppointment" data-ap-id="{{ $appointment->id }}"
                                     data-accept-or-reject-id="{{ $appointment->id }}">
-                                    @lang('messages.Are you sure you want to') {{ $checkedText }} @lang('messages.the appointment') {{ $appointment->id }}?
+                                    @lang('messages.are_you_sure_you_want_to') {{ $checkedText }} @lang('messages.the_appointment') {{ $appointment->id }}?
                                 </label>              
                             </div>
                         </div>

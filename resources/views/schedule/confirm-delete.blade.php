@@ -10,7 +10,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label id="sureDeleteSchedule" for="sureDeleteSchedule" data-delete-id="{{ $singleUser->id }}">
-                                    ¿Seguro que desea eliminar todos los horarios del usuario {{ $singleUser->name }} {{ $singleUser->lastname }}?
+                                    @lang('messages.are_you_sure_you_want_to_delete_all_schedules_of_the_user') {{ $singleUser->name }} {{ $singleUser->lastname }}?
                                 </label>              
                             </div>
                         </div>

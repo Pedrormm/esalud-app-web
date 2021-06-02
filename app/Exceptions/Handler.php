@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
                 return response()->json([]);
             }
 
-            Session::put('info', 'Bad request');
+            Session::put('info', \Lang::get('messages.bad_request'));
 
             return redirect('/');
 

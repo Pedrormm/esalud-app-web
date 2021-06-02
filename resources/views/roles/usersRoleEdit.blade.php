@@ -16,7 +16,7 @@
                       <i class="fas fa-arrow-left"></i>
                   </button>
                 </div>
-                <h4 class="font-weight-bold text-primary centered">Usuarios asociados al rol {{ $usersRole[0]["name"] }}</h4>
+                <h4 class="font-weight-bold text-primary centered"> @lang('messages.associated_users_to_the_role')  {{ $usersRole[0]["name"] }}</h4>
 
               </div>
             </div>
@@ -28,13 +28,13 @@
                 <table class="table table-bordered" id="tableRoles" width="100%" cellspacing="0">
                   <thead class="text-center">
                     <tr>
-                      <th>Id</th>
-                      <th>Nombre y apellidos</th>
+                      <th>@lang('messages.ID_data')</th>
+                      <th>@lang('messages.full_name')</th>
                       <th>DNI</th>
-                      <th>Edad</th>
-                      <th>@lang('messages.gender')</th>
-                      <th>@lang('messages.blood group')</th>
-                      <th>Cambiar rol</th>
+                      <th>@lang('messages.age_data')</th>
+                      <th>@lang('messages.gender_data')</th>
+                      <th>@lang('messages.blood_group')</th>
+                      <th>@lang('messages.change_role')</th>
                     </tr>
                   </thead>
                 </table>       
@@ -43,7 +43,7 @@
 
               <a href="{{ URL::asset('/roles/userManagementNotInRole/edit/'.$id)  }}" class="btn btn-primary borderShadow" 
                 id="usersDistRole" data-name-role="{{ $usersRole[0]["name"] }}"><i class="fa fa-search"></i>
-                Buscar usuarios asociados a un rol distinto de {{ $usersRole[0]["name"] }}
+                 @lang('messages.look_for_associated_users_that_have_a_different_role_than')  {{ $usersRole[0]["name"] }}
               </a>   
 
         </div>

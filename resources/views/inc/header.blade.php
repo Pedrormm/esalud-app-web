@@ -13,7 +13,7 @@
 <!-- Topbar Search -->
 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
   <div class="input-group">
-    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+    <input type="text" class="form-control bg-light border-0 small" placeholder=@lang('messages.search_for') aria-label="Search" aria-describedby="basic-addon2">
     <div class="input-group-append">
       <button class="btn btn-primary" type="button">
         <i class="fas fa-search fa-sm"></i>
@@ -27,14 +27,14 @@
 
   <!-- Nav Item - Search Dropdown (Visible Only XS) -->
   <li class="nav-item dropdown no-arrow d-sm-none">
-    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-search fa-fw"></i>
     </a>
     <!-- Dropdown - Messages -->
     <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
       <form class="form-inline mr-auto w-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." 
+          <input type="text" class="form-control bg-light border-0 small" placeholder=@lang('messages.search_for') 
           aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
             <button class="btn btn-primary" type="button">
@@ -53,51 +53,138 @@
     aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-flag"></i>
       <img id="headerTopFlag" data-language={{ app()->getLocale() }}
-      src="https://lipis.github.io/flag-icon-css/flags/4x3/es.svg" alt="Selected Flag">
+      src="https://lipis.github.io/flag-icon-css/flags/4x3/es.svg" alt=@lang('messages.selected_flag')>
     </a>
     
     <!-- Dropdown - Languages -->
     <div id="dropLanguages" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
     aria-labelledby="languagesDropdown">
       <h6 class="dropdown-header">
-        Idiomas
+        @lang('messages.languages_stat')
       </h6>
       <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/en') }}">
         <div class="mr-3">
           <div class="">
-            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/um.svg" alt="United States Flag">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/um.svg" alt=@lang('messages.flag_of_united_states')>
           </div>
         </div>
         <div>
           {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
-          <span class="font-weight-bold">@lang('messages.language English')</span>
+          <span class="font-weight-bold">@lang('messages.english_language')</span>
         </div>
       </a>
       <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/es') }}">
         <div class="mr-3">
           <div class="">
-            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/es.svg" alt="Spain Flag">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/es.svg" alt=@lang('messages.flag_of_spain')>
           </div>
         </div>
         <div>
           {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
-          <span class="font-weight-bold">@lang('messages.language Spanish')</span>
+          <span class="font-weight-bold">@lang('messages.spanish_language')</span>
         </div>
       </a>
 
       <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/it') }}">
         <div class="mr-3">
           <div class="">
-            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/it.svg" alt="Italy Flag">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/it.svg" alt=@lang('messages.flag_of_italy')>
           </div>
         </div>
         <div>
           {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
-          <span class="font-weight-bold">@lang('messages.language Italian')</span>
+          <span class="font-weight-bold">@lang('messages.italian_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/pt') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/pt.svg" alt=@lang('messages.flag_of_portugal')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.portuguese_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/fr') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/fr.svg" alt=@lang('messages.flag_of_france')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.french_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/ro') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/ro.svg" alt=@lang('messages.flag_of_romania')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.romanian_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/de') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/de.svg" alt=@lang('messages.flag_of_germany')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.german_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/ar') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/sa.svg" alt=@lang('messages.flag_of_saudi_arabia')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.arabic_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/ru') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/ru.svg" alt=@lang('messages.flag_of_russia')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.russian_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/zh_CN') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/cn.svg" alt=@lang('messages.flag_of_china')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.chinese_language')</span>
+        </div>
+      </a>
+      <a class="dropdown-item d-flex align-items-center" href="{{ url('/setLanguage/ja') }}">
+        <div class="mr-3">
+          <div class="">
+            <img class="headerFlag" src="https://lipis.github.io/flag-icon-css/flags/4x3/jp.svg" alt=@lang('messages.flag_of_japan')>
+          </div>
+        </div>
+        <div>
+          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
+          <span class="font-weight-bold">@lang('messages.japanese_language')</span>
         </div>
       </a>
 
-    
 
     </div>
   </li>
@@ -112,7 +199,7 @@
     <!-- Dropdown - Alerts for Appointments -->
     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
       <h6 class="dropdown-header">
-        Alerts Center
+        @lang('messages.alerts_center')
       </h6>
       <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
         <div class="mr-3">
@@ -148,7 +235,7 @@
           Spending Alert: We've noticed unusually high spending for your account.
         </div>
       </a>
-      <a class="dropdown-item text-center small text-gray-500" href="javascript:void(0);">Show All Alerts</a>
+      <a class="dropdown-item text-center small text-gray-500" href="javascript:void(0);">@lang('messages.show_all_alerts')</a>
     </div>
   </li>
 
@@ -175,13 +262,13 @@
       <span class="mr-2 d-none d-lg-inline text-gray-600 " style="color:white !important">{{  Auth::user()->name }}</span>
       {{-- <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"> --}}
       @if (!empty(auth()->user()->avatar))
-          <img src="{{ asset('images/avatars/'.auth()->user()->avatar) }}" class="img-profile rounded-circle" alt="Profile picture" id="profilePicture"/>
+          <img src="{{ asset('images/avatars/'.auth()->user()->avatar) }}" class="img-profile rounded-circle" alt=@lang('messages.profile_picture') id="profilePicture"/>
       @else
           @if (auth()->user()->sex=="male")
-              <img src="{{ asset('images/avatars/user_man.png') }}" class="img-profile rounded-circle" alt="Profile picture" id="profilePicture"/>                                                               
+              <img src="{{ asset('images/avatars/user_man.png') }}" class="img-profile rounded-circle" alt=@lang('messages.profile_picture') id="profilePicture"/>                                                               
           @endif
           @if (auth()->user()->sex=="female")
-              <img src="{{ asset('images/avatars/user_woman.png') }}" class="img-profile rounded-circle" alt="Profile picture" id="profilePicture"/>                                                               
+              <img src="{{ asset('images/avatars/user_woman.png') }}" class="img-profile rounded-circle" alt=@lang('messages.profile_picture') id="profilePicture"/>                                                               
           @endif
       @endif
     </a>
@@ -193,17 +280,17 @@
       </a> --}}
       <a class="dropdown-item" href="{{ URL::asset('/settings/index') }}">
         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-        Settings
+        @lang('messages.settings_stat')
       </a>
       {{-- <a class="dropdown-item" href="javascript:void(0);">
         <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-        Activity Log
+        @lang('messages.activity_log')
       </a> --}}
       <div class="dropdown-divider"></div>
       <a href="{{ URL::asset('/logout') }}" class="dropdown-item" data-toggle="modal" data-target="#logoutModal" onclick="event.preventDefault();
        document.getElementById('logout-form').submit();">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-          Logout    
+          @lang('messages.logout_stat')    
       <form id="logout-form" action="{{ URL::asset('/logout') }}"method="POST" class="d-none">
           {{ csrf_field() }}
       </form>      
