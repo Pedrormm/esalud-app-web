@@ -21,6 +21,7 @@
         "laravelcollective/html": "^6.0",
         "nesbot/carbon": "^2.35",
         "orangehill/iseed": "^2.6",
+        "prettus/l5-repository": "^2.7",
         "pusher/pusher-php-server": "^4.1",
         "spatie/icalendar-generator": "^2.1",
         "squareetlabs/laravel-openvidu": "^1.1",
