@@ -34,73 +34,7 @@
                           <th class="bg-primary">@lang('messages.actions_stat')</th>
                       </tr>
                     </thead>
-                    @if(!(isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && !($flagsMenuEnabled['ALL_USERS_DELETE']))
-                      <tbody>
-                        @foreach($users as $singleUser) 
-                      
-                        <tr class="text_left">
-                            <td class="text_left">
-                                @if (!empty($singleUser['avatar']))
-                                  <img src="{{ asset('images/avatars/'.$singleUser['avatar']) }}" class="avatar big"/>
-                                @else
-                                  @if ($singleUser['sex']=="male")
-                                      <img class="avatar" src="{{ asset('images/avatars/user_man.png') }}" class="avatar big">                                                               
-                                  @endif
-                                  @if ($singleUser['sex']=="female")
-                                      <img class="avatar" src="{{ asset('images/avatars/user_woman.png') }}" class="avatar big">                                                               
-                                  @endif
-                                @endif
-                                <span>{{ urldecode($singleUser['lastname']).", ".urldecode($singleUser['name']) }}</span>
-                            </td>
-                            <td>                        
-                                <span>{{ App\Models\Role::find($singleUser['role_id'])->name }}</span>          
-                            </td>
-                            <td>
-                                <span>{{ $singleUser['dni'] }}</span>          
-                            </td>
-                            <td>
-                                <span>{{ $singleUser['blood'] }}</span>                    
-                            </td>
-                            <td>
-                                <span>{{ date('d/m/Y', strtotime($singleUser['birthdate'])) }}</span>                    
-                            </td>
-                            <td>
-                                <span>{{ $singleUser['phone'] }}</span>                    
-                            </td>
-                            <td>
-                                <span>{{ $singleUser['sex'] }}</span>                   
-                            </td>
-                            <td>
-                                {{-- @if ($singleUser['role_id'] !== \HV_ROLES::ADMIN) --}}
-                                @if(isset($flagsMenuEnabled['ALL_USERS_EDIT']) && $flagsMenuEnabled['ALL_USERS_EDIT'])
-                                  <span>
-                                    <a href="{{ URL::asset('users/'.$singleUser['id'].'/edit')  }}"><i class="fa fa-edit"></i></a>
-                                  </span>   
-                                @else
-                                  <span>
-                                    <i class="fa fa-edit" style="color:gray"></i>
-                                  </span> 
-                                @endif    
-                                @if(isset($flagsMenuEnabled['ALL_USERS_DELETE']) && $flagsMenuEnabled['ALL_USERS_DELETE'])
-                                  <span>
-                                    <a class="confirmDeleteUser" data-name-user="{{ $singleUser['name']." ".$singleUser['lastname'] }}"
-                                    data-role-user="{{ App\Models\Role::find($singleUser['role_id'])->name }}" 
-                                    data-id-user="{{  $singleUser['id'] }}"
-                                    href="{{ URL::asset('users/'.$singleUser['id'].'/confirmDelete')  }}"><i class="fa fa-trash"></i></a>
-                                  </span>   
-                                @else
-                                  <span>
-                                    <i class="fa fa-trash" style="color:gray"></i>
-                                  </span> 
-                                @endif    
-                            </td>
-                        </tr>
 
-                        @endforeach
-
-
-                      </tbody>
-                    @endif
                 </table>
               </div>
 
@@ -129,7 +63,7 @@
 
 @endsection
 
-@section('viewsScripts')
+{{-- @section('viewsScripts') --}}
   {{-- <script type="text/javascript" src="{{ asset('js/users-index.js') }}"></script> --}}
   @if(!(isset($pagination)))
     @include('users.users-index', ['pagination'=>\HV_PAGINATION])
@@ -137,4 +71,4 @@
     @include('users.users-index', ['pagination'=>$pagination])
   @endif
 
-@endsection
+{{-- @endsection --}}

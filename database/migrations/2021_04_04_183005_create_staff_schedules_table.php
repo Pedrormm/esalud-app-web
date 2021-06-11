@@ -15,11 +15,11 @@ class CreateStaffSchedulesTable extends Migration
     {
         Schema::create('staff_schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('staff_id')->unsigned()->comment('Relación con el staff');
-            $table->timeTz('starting_workday_time')->nullable()->comment('Hora de inicio de la jornada laboral');
-            $table->timeTz('ending_workday_time')->nullable()->comment('Hora de fin de la jornada laboral');
-            $table->integer('weekday')->nullable()->comment('Día de la semana de la jornada laboral');
-            $table->softDeletes();
+            $table->bigInteger('staff_id')->unsigned()->comment('Associated staff id');
+            $table->timeTz('starting_workday_time')->nullable()->comment('Start working time');
+            $table->timeTz('ending_workday_time')->nullable()->comment('End working time');
+            $table->integer('weekday')->nullable()->comment('Weekday that the staff is working');
+            // $table->softDeletes();
             $table->timestamps();
         });
     }

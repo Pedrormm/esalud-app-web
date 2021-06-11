@@ -560,8 +560,10 @@ return [
     'user_id' => 'Identifiant',
     'branch_stat' => 'Branche',
 
-    'edit_traitement' => 'Modifier le traitement',
-    'traitement_données' => 'Données de traitement',
+    'edit_treatment' => 'Modifier le traitement',
+    'treatment_data' => 'Données de traitement',
+    'create_treatment' => 'Créer un traitement',
+    'of_the_user' => 'de l utilisateur',
     'type_of_medicine' => 'Type de médicament',
     'medicine_administration' => 'Mode d administration du médicament',
     'description_stat' => 'Description',
@@ -584,6 +586,37 @@ return [
     'selected_flag' => 'Drapeau sélectionné',
     'lookfor_different_users_to' => 'Rechercher des utilisateurs avec un rôle autre que',
     'edit_stat_role' => 'Modifier le rôle',
+    'delete_message' => 'Supprimer le message',
+    'generic_treatment' => 'Générique',
+
+    'a_new_treatment_was_created' => 'Un nouveau traitement a été créé',
+    'treatment_updated_successfully' => 'Traitement mis à jour avec succès',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Voulez-vous supprimer tous les traitements de l utilisateur',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Êtes-vous sûr de vouloir supprimer tous les traitements de l utilisateur dont le nom est ',
+    'all_treatments_of_the_user' => 'Tous les traitements de l utilisateur',
+    'were_deleted_sucessfully' => 'ont été supprimés avec succès',
+    'the_treatment_has_no_description' => 'Le traitement n a pas de description',
+    'description_of_the_treatment' => 'Description du traitement',
+    'would_you_like_to_delete_the_treatment' => 'Voulez-vous supprimer le traitement ?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Êtes-vous sûr de vouloir supprimer le traitement ?',
+    'the_treatment_was_deleted_sucessfully' => 'Le traitement a été supprimé avec succès',
+
+    'deleted_already_stat' => 'Supprimé',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'L utilisateur ne peut pas être supprimé en raison de rendez-vous médicaux ou de traitements associés',
+
+    'dashboard_pending_accepted_rejected' => 'En attente, accepté et rejeté',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Rendez-vous en attente, acceptés et rejetés',
+    'accepted_stat_plural' => 'Accepté',
+    'rejected_stat_plural' => 'Rejeté',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Nombre de traitements en cours et nombre de traitements terminés',
+    'traitements_in_progress' => 'En cours',
+    'finished_treatments' => 'Terminé',
+    'nav-main_my_medical_treatment' => 'Mes traitements médicaux',
+    'number_of_news_displayed' => 'Nombre de news à afficher',
+    'activate_spelling_checker' => 'Activer le correcteur orthographique',
+    'activated' => 'Activé',
+    'desactivated_stat' => 'Deactivated',
+
 
 ] ;
 

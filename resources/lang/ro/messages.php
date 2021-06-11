@@ -234,7 +234,7 @@ return [
 
     'edit_appointment' => 'Editați întâlnirea',
     'want_to_delete_role' => 'Doriți să ștergeți rolul?',
-    'forget_password' => 'Am uitat parola',
+    'forgotten_password' => 'Am uitat parola',
     'the_role_name_is_required' => 'Numele rolului este obligatoriu',
     'the_role_name_must_be_at_least_2_characters_long' => 'Numele rolului trebuie să aibă cel puțin 2 caractere lungime',
 
@@ -359,7 +359,7 @@ return [
     'login_access' => 'Acces la autentificare',
 
     'enter_DNI_and_password' => 'Introduceți ID-ul și parola',
-    'remember_me' => 'Remember',
+    'remember_me' => 'Ține-mă minte',
     'have_you_forgotten_your_password' => 'Ți-ai uitat parola?',
     'should_you_have_forgotten_your_password_enter_your_DNI_or_email_to_request_a_new_one' => 'Dacă ați uitat parola, introduceți ID-ul sau adresa de e-mail pentru a solicita una nouă',
 
@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => 'Editați tratamentul',
     'treatment_data' => 'Date despre tratament',
+    'create_treatment' => 'Creați un tratament',
+    'of_the_user' => 'al utilizatorului',
     'type_of_medicine' => 'Tipul de medicament',
     'medicine_administration' => 'Mod de administrare a medicamentelor',
     'description_stat' => 'Descriere',
@@ -584,7 +586,36 @@ return [
     'selected_flag' => 'Steag selectat',
     'lookfor_different_users_to' => 'Căutați utilizatori cu un alt rol decât',
     'edit_stat_role' => 'Editați rolul',
-    
+    'delete_message' => 'Sterge mesajul',
+    'generic_treatment' => 'Generic',
+
+    'a_new_treatment_was_created' => 'Un nou tratament a fost creat',
+    'treatment_updated_successfully' => 'Tratamentul a fost actualizat cu succes',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Doriți să ștergeți toate tratamentele utilizatorilor',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Sigur doriți să ștergeți toate tratamentele utilizatorilor',
+    'all_treatments_of_the_user' => 'Toate tratamentele utilizatorilor',
+    'were_deleted_sucessfully' => 'au fost șterse cu succes',
+    'the_treatment_has_no_description' => 'Tratamentul nu are descriere',
+    'description_of_the_treatment' => 'Descrierea tratamentului',
+    'would_you_like_to_delete_the_treatment' => 'Doriți să ștergeți tratamentul?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Sigur doriți să încheiați tratamentul?',
+    'the_treatment_was_deleted_sucessfully' => 'Tratamentul a fost șters cu succes',
+
+    'deleted_already_stat' => 'Șters',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'Utilizatorul nu poate fi șters din cauza programărilor medicale sau a tratamentelor asociate',
+
+    'dashboard_pending_accepted_rejected' => 'În așteptare, acceptat și respins',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Programări în așteptare, acceptate și respinse',
+    'accepted_stat_plural' => 'Acceptat',
+    'rejected_stat_plural' => 'Respins',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Numărul de tratamente în curs și numărul de tratamente finalizate',
+    'treatment_in_progress' => 'În curs',
+    'finished_treatments' => 'Finalizat',
+    'nav-main_my_medical_treatment' => 'Tratamentele mele medicale',
+    'number_of_news_displayed' => 'Numărul de știri de afișat',
+    'activate_spelling_checker' => 'Activați verificatorul ortografic',
+    'activated' => 'Activat',
+    'desactivated_stat' => 'Dezactivat',
 
 ];
 

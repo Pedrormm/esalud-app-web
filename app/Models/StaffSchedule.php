@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
 class StaffSchedule extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
     public $table = 'staff_schedules';
     

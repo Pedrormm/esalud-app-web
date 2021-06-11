@@ -1,54 +1,77 @@
       {{-- Messages List --}}
       <h6 class="dropdown-header">
-        @lang('messages.message_center')
+        @lang('messages.alerts_center')
       </h6>
 
-      @foreach (array_slice($userMessages, 0, 4) as $userMessage)
-        {{-- <a class="dropdown-item d-flex align-items-center" href="{{ URL::asset('/messaging').'/'. $userMessage['users_id'] }}"> --}}
-        <a class="dropdown-item d-flex align-items-center" data-contact-id="{{ $userMessage['users_id'] }}" href="{{ URL::asset('/messaging') }}">
+      @foreach (array_slice($data, 0, 4) as $appointment)
+        <div class="dropdown-item d-flex align-items-center" data-appointment-id="{{ $appointment['id'] }}" >
 
-          {{-- Opcionalmente pasarle el id de un mensaje, para que entre en ese usuario directamente --}}
-          <div class="dropdown-list-image mr-3">
-            @if (!empty($userMessage['avatar'])))
-              <img src="{{ asset('images/avatars/'.$userMessage['avatar']) }}" class="rounded-circle"
-              alt=@lang('messages.profile_picture')/>
-            @else
-              @if ($userMessage['sex']=="male")
-                  <img class="rounded-circle" src="{{ asset('images/avatars/user_man.png') }}" alt=@lang('messages.profile_picture')/>                                                               
-              @endif
-              @if ($userMessage['sex']=="female")
-                  <img class="rounded-circle" src="{{ asset('images/avatars/user_woman.png') }}" alt=@lang('messages.profile_picture')/>                                                               
-              @endif
-            @endif
-            <div class="status-indicator bg-success"></div>
-          </div>
-          <div class="mr-3 top-message {{ $userMessage['unread_count']=="0"? "":'font-weight-bold' }}">
-            <div class="text-truncate">{{ $userMessage['messageCorrected'] }}</div>
-            <div class="small text-gray-500">{{ urldecode($userMessage['name'])." ". urldecode($userMessage['lastname']) }} · <span class="headerDate">{{ ($userMessage['dateHumanReadable']) }}</span>
+          <div class="mr-3">
+            <div class="bg-success appointment-summary-icon">
+              <i class="fas fa-calendar-check text-white"></i>
             </div>
           </div>
-          <div class="mr-3 header-unread">
-            @if ($userMessage['unread_count'] == "0")
-            @else
-              <span class="unread">{{ ($userMessage['unread_count']) }}</span>
+          <div>
+            @if (( auth()->user()->role_id) != \HV_ROLES::PATIENT)
+              <span class="font-weight-bold appointment-user-size"><strong class="font-italic">@lang('messages.patient_type'): </strong>
+                {{ $appointment['user_patient']["name"]." ".$appointment['user_patient']["lastname"] }}</span>
             @endif
+            @if (( auth()->user()->role_id) != \HV_ROLES::DOCTOR)
+              <span class="font-weight-bold appointment-user-size"><strong class="font-italic">@lang('messages.doctor_type'): </strong>
+                {{ $appointment['user_doctor']["name"]." ".$appointment['user_doctor']["lastname"] }}</span>
+            @endif
+            <div class="appointment-summary-date" data-appointment-date="{{ $appointment['dt_appointment'] }}"></div>
+          </div>
+          <div class="appointment-summary-links">
+            <a href="{{ url('/appointment/'.$appointment['id'].'/confirmChecked/1') }}" data-id="{{ $appointment['id'] }}" class="ml-1 primary acceptAppointmentSummary"
+            data-toggle="tooltip" data-placement="top" title="@lang('messages.accept_kinda_appointment')">
+              <i class="fa fa-check"></i>
+            </a>
+            <a href="{{ url('/appointment/'.$appointment['id'].'/confirmChecked/2') }}" data-id="{{ $appointment['id'] }}" class="ml-1 primary rejectAppointmentSummary"
+            data-toggle="tooltip" data-placement="top" title="@lang('messages.reject_kinda_appointment')">
+              <i class="fa fa-times"></i>
+            </a>
           </div>
 
-        </a>
+        </div>
       @endforeach
-      
-      <a class="dropdown-item text-center small text-gray-500" href="{{ URL::asset('/messaging') }}">@lang('messages.read_more_messages')</a>
+  
+  <a class="dropdown-item text-center small text-gray-500" href="{{ URL::asset('/appointment') }}"> @lang('messages.show_all_alerts')</a>
 
-@section('viewsScripts')
+
+{{-- @section('viewsScripts') --}}
   <script>
 
-    $("[data-contact-id]").on('click', function(e){
+    $(".appointment-summary-date").text(function(i){
+      let givenDate = $(this).attr("data-appointment-date");
+      let publishedDate = getLanguageDate(givenDate);
+      return publishedDate;     
+    });
+
+    $("[data-appointment-id] > div:not(.appointment-summary-links)").on('click', function(e){
       e.preventDefault();
-      let id = $(this).attr("data-contact-id");
+      let id = $(this).parent("[data-appointment-id]").attr("data-appointment-id");
       // console.log(id);
-      window.localStorage.setItem("contact-id",id);
-      location.href = $(this).attr("href");
+      
+      location.href = _publicUrl + 'appointment/'+id+'/edit';
+    });
+
+    $('.acceptAppointmentSummary').on('click', function(e){
+      e.preventDefault();
+
+      // alert("accept");
+
+      showModal(_questionMarkSpConcat+"@lang('messages.reject_kinda_appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+      $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
+    });
+    $('.rejectAppointmentSummary').on('click', function(e){
+      e.preventDefault();
+      // alert("reject");
+
+      showModal(_questionMarkSpConcat+"@lang('messages.reject_kinda_appointment')"+' '+ $(this).data('id') + '?', $(this).data('id'), false, 
+      $(this).attr('href'), 'modal-xl', true, true, false, null, null, "@lang('messages.no_response')", "@lang('messages.yes_response')"); 
     });
     
   </script>
-@endsection
+{{-- @endsection --}}
+

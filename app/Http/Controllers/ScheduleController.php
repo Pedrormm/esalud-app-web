@@ -169,10 +169,8 @@ class ScheduleController extends Controller
             if(preg_match("/\d{3,}/", $searchPhrase, $matches)) {
 
                 $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('birthdate', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('phone', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('h_phone', 'like', '%' . $searchPhrase . '%');
+                    $query
+                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%');
                 });
                 $numRecords = $data->count();
             }
@@ -187,22 +185,10 @@ class ScheduleController extends Controller
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('sex', 'like', '%' . $searchPhrase . '%')      
                         ->orWhere('branches.name', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('shift', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('office', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('room', 'like', '%' . $searchPhrase . '%');
                 });
                         
-                $numRecords = $data->count();
-            }
-
-            // Search by blood type
-            elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
-               
-                $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
-                });
-                        
-                $numRecords = $data->count();
+                $numRecords = $data->count();   
             }
             
         }

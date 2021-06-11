@@ -1,27 +1,3 @@
-{{-- @extends('layouts.app')
-
-@section('content')
-    <section class="content-header">
-        <h1>
-            @lang('messages.staff_type')
-        </h1>
-   </section>
-   <div class="content">
-       @include('adminlte-templates::common.errors')
-       <div class="box box-primary">
-           <div class="box-body">
-               <div class="row">
-                   {!! Form::model($staff, ['route' => ['staff.update', $staff->id], 'method' => 'patch']) !!}
-
-                        @include('staff.fields')
-
-                   {!! Form::close() !!}
-               </div>
-           </div>
-       </div>
-   </div>
-@endsection --}}
-
 @extends('layout.logged')
 
 @section('nav-bar-top')
@@ -67,7 +43,7 @@
             <div id="message-container" class="alert alert-success dNone"></div>
 
             {{-- <form action="/user/editUser" method="POST" id="newUserMailForm"> --}}
-            {{ Form::open(array('url' => '/users/'.$usuario->id, 'method' => 'PUT', 'id'=>'newUserMailForm')) }}
+            {{ Form::open(array('url' => '/staff/'.$usuario->id, 'method' => 'PUT', 'id'=>'newUserMailForm')) }}
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
@@ -160,7 +136,7 @@
                     </div>
                 </div>
 
-                @if($usuario->role_id == 2)
+                @if($usuario->role_id == \HV_ROLES::DOCTOR)
                     <div class="row mb-3">
                         <div class="col-lg-12">
                             <hr>
@@ -179,18 +155,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{-- <div class="col-lg-4">
-                            <select class="form-control selectpicker show-tick" name="shift" data-live-search="true"
-                            title="Seleccione horario">
-                                <option {{ $rol_usuario_info->shift == "M" ? 'selected' : '' }} value="M">Mañana</option>
-                                <option {{ $rol_usuario_info->shift == "ME" ? 'selected' : '' }} value="ME">Mañana y Tarde</option>
-                                <option {{ $rol_usuario_info->shift == "MN" ? 'selected' : '' }}n value="MN">Mañana y Noche</option>
-                                <option {{ $rol_usuario_info->shift == "MEN" ? 'selected' : '' }} value="MEN">Mañana , Tarde y Noche</option>
-                                <option {{ $rol_usuario_info->shift == "E" ? 'selected' : '' }} value="E">Tarde</option>
-                                <option {{ $rol_usuario_info->shift == "EN" ? 'selected' : '' }} value="EN">Tarde y Noche</option>
-                                <option {{ $rol_usuario_info->shift == "N" ? 'selected' : '' }} value="N">Noche</option>
-                            </select> 
-                        </div> --}}
+
                     </div>
                     <div class="row mb-3"> 
                         <div class="col-lg-4">

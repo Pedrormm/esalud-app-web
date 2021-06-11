@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-lg-12">
-        <label><b>@lang('messages.patient_type'):</b> {{ App\User::find($appointment->user_id_patient)->name }} {{ App\User::find($appointment->user_id_patient)->lastname }}</label>
+        <label><b>@lang('messages.patient_type'):</b> {{ App\Models\User::find($appointment->user_id_patient)->name }} {{ App\Models\User::find($appointment->user_id_patient)->lastname }}</label>
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-12">
-        <label><b>@lang('messages.doctor_type'):</b> {{ App\User::find($appointment->user_id_doctor)->name }} {{ App\User::find($appointment->user_id_doctor)->lastname }}</label>
+        <label><b>@lang('messages.doctor_type'):</b> {{ App\Models\User::find($appointment->user_id_doctor)->name }} {{ App\Models\User::find($appointment->user_id_doctor)->lastname }}</label>
     </div>
 </div>
 
@@ -18,7 +18,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <label><b>@lang('messages.appointment_date'):</b> {{ date("d/m/Y H:i",strtotime($appointment->dt_appointment)) }}</label> 
+        <label><b>@lang('messages.appointment_date'):</b> <span class="calendar-date" data-calendar-date="{{ $appointment->dt_appointment }}"> {{ date("d/m/Y H:i",strtotime($appointment->dt_appointment)) }}</span></label> 
     </div>
 </div>
 
@@ -41,3 +41,14 @@
         </div>
     </div>
 @endif
+
+<script>
+    $('#saveModal').hide();
+
+    $(".calendar-date").text(function(i){
+        let givenDate = $(this).attr("data-calendar-date");
+        let publishedDate = getLanguageDate(givenDate);
+        return publishedDate;     
+    });
+
+</script>

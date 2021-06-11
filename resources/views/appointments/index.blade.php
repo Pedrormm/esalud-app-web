@@ -33,34 +33,7 @@
                         <th class="bg-primary">@lang('messages.actions_stat')</th>
                     </tr>
                   </thead>
-                  {{-- <tbody>
-                   @foreach($appointments as $appointment)
-                    <tr data-row-id="{{ $appointment['id'] }}">
-                      <td>{{ $appointment['user_patient']['name'] }} {{ $appointment['user_patient']['lastname'] }}</td>
-                      <td>{{ $appointment['user_doctor']['name'] }} {{ $appointment['user_doctor']['lastname'] }}</td>
-                      <td>{{ date("d/m/Y H:i:s", strtotime($appointment['dt_appointment'])) }}</td>
-                      <td>{{ App\Models\Appointment::getChecked($appointment['checked']) }}</td>                      
-                      <td class="d-flex justify-content-center">
-                        @if((auth()->user()->role_id == \HV_ROLES::PATIENT) || (auth()->user()->role_id == \HV_ROLES::DOCTOR))
-                          <a class="btn btn-primary text-white btnAcceptAppointment" data-id="{{ $appointment['id'] }}"><i class="fa fa-eye"></i> Aceptar cita</a>
-                          <a class="btn btn-danger text-white"><i class="fa fa-trash"></i> Rechazar cita</a>
-                        @else
-                          @isset($appointment['comments']))
-                            <a class="btn btn-primary text-white"><i class="fa fa-eye"></i> Ver comentario</a>
-                          @endisset
-                
-                          <a href="{{ URL::asset('/appointment/'.$appointment['id']) }}" data-id="{{ $appointment['id'] }}" class="ml-1 primary" 
-                          data-toggle="tooltip" data-placement="top" title="Ver"><i class="fa fa-eye"></i></a>
-                          <a href="{{ URL::asset('/appointment/'.$appointment['id']."/edit") }}" data-id="{{ $appointment['id'] }}" class="ml-1 primary" 
-                          data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-edit"></i></a>
-                          <a href="{{ URL::asset('/appointment/'.$appointment['id']."/confirmDelete") }}" data-id="{{ $appointment['id'] }}" class="ml-1 danger" 
-                          data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-trash"></i></a>
-                        @endif                      
-                      </td>
-                    </tr>
-                   @endforeach
-                   
-                  </tbody> --}}
+
                 </table>
               </div>
             </div>

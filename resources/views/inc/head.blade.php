@@ -14,7 +14,8 @@
 
         <!-- Full calendar -->
         <!-- https://fullcalendar.io/ -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css" />
+        {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css" /> --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.css" />
 
         <!-- Datatables-->
         <!-- https://datatables.net/ -->

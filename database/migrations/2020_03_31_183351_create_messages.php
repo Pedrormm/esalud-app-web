@@ -15,10 +15,10 @@ class CreateMessages extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id_from')->unsigned()->comment('Emisor del mensaje');
-            $table->bigInteger('user_id_to')->unsigned()->comment('Receptor del mensaje');
-            $table->longText('message')->nullable()->comment('Texto del mensaje');
-            $table->boolean('read')->nullable()->default(false)->comment('Mensaje leído');
+            $table->bigInteger('user_id_from')->unsigned()->comment('Message sender');
+            $table->bigInteger('user_id_to')->unsigned()->comment('Message reciever');
+            $table->longText('message')->nullable()->comment('Message text');
+            $table->boolean('read')->nullable()->default(false)->comment('True if the message has been read');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -38,5 +38,5 @@
 @endsection
 
 @section('viewsScripts')
-  <script type="text/javascript" src="{{ asset('js/schedule-index.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/schedule-index.js')  . '?r=' . rand() }}"></script>
 @endsection

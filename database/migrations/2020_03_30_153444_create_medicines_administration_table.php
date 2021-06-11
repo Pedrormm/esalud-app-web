@@ -15,7 +15,7 @@ class CreateMedicinesAdministrationTable extends Migration
     {
         Schema::create('medicines_administration', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 200)->nullable()->comment('Nombre del modo de aministración del fármaco');
+            $table->string('name', 200)->nullable()->comment('Name of the medicine administration');
             $table->softDeletes();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

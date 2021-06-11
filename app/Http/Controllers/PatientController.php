@@ -14,6 +14,7 @@ use App\Models\Patient;
 use App\Models\Role;
 use Flash;
 use Response;
+use Carbon\Carbon;
 
 class PatientController extends AppBaseController
 {
@@ -199,13 +200,43 @@ class PatientController extends AppBaseController
          'staff.id as staff_id', 'staff.user_id as staff_user_id')
         ->where('users.id', $id)->get()->toArray();
 
-        $userToDelete->delete($id);
-        
-        if($patientOrStaffFound[0]['patient_id']){
-            Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
+        // Si el paciente no tiene relacion con appointments y treatments:
+        $hasRelations = User::leftJoin('patients as p', 'users.id', 'p.user_id')
+        ->leftJoin('appointments as a', function($join) {
+            $join->on('a.user_id_creator', '=', 'users.id')->orOn('a.user_id_patient', '=', 'users.id');
+        })
+        ->leftJoin('treatments as t', 'users.id', 't.user_id_patient')
+        ->select('users.id as user_id', 'a.dt_appointment as dt', 'a.id as appointment_id', 
+        'a.deleted_at as a_deleted', 't.id as treatement_id', 't.deleted_at as t_deleted',)
+        ->where('users.id', $id)
+        ->where(function($q) {
+            $q->whereDate('a.dt_appointment', '>', Carbon::today())
+                ->orWhereNull('a.dt_appointment');
+        })
+        ->get();
+
+        // deleted=null: has value. When one is null a relation is found.
+        $foundRelation = false;
+        foreach($hasRelations as $rel) {
+            if ((!is_null($rel->appointment_id) && is_null($rel->a_deleted)) || 
+            (!is_null($rel->treatement_id) && is_null($rel->t_deleted))) {
+                $foundRelation = true;
+                break;
+            }
         }
-        else{
-            return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_a_patient')); 
+         
+        if (!$foundRelation)
+            $userToDelete->delete($id);
+        else
+            return $this->jsonResponse(1, \Lang::get('messages.the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments'));
+
+        if (!$foundRelation){
+            if($patientOrStaffFound[0]['patient_id']){
+                Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
+            }
+            else{
+                return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_a_patient')); 
+            }
         }
 
         return $this->jsonResponse(0, \Lang::get('messages.patient_type')." ".$userName." ".\Lang::get('messages.deleted_successfully'));

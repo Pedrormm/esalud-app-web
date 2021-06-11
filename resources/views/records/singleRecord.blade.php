@@ -71,249 +71,145 @@
 				</table>
 				
 				<div class="row mt-3">
-					<div class="col-lg-4 mb-2">
-						<a class="btn btn-primary bt-create-event btn-block text-white"><i class="fa fa-calendar"></i> @lang('messages.appointment_stat')</a> 
+					<div class="col-lg-4 mb-2 mx-auto">
+						<a class="btn btn-primary bt-create-event btn-block text-white" href="{{ url('appointment') }}"><i class="fa fa-calendar"></i> @lang('messages.appointment_stat')</a> 
 					</div>
-					<div class="col-lg-4 mb-2">
-						<a class="btn btn-success bt-send-message btn-block text-white"><i class="fa fa-comments"></i> @lang('messages.chat_stat')</a> 
+					<div class="col-lg-4 mb-2 mx-auto">
+						<a class="btn btn-success bt-send-message btn-block text-white" data-chat-record-id="{{ $usuario->id }}" href="{{ url('/messaging') }}"><i class="fa fa-comments"></i> @lang('messages.chat_stat')</a> 
 					</div>
-					<div class="col-lg-4 mb-2">
+					{{-- <div class="col-lg-4 mb-2">
 						<a class="btn btn-warning bt-open-alerts btn-block text-white"><i class="fa fa-cogs"></i> @lang('messages.alerts_stat')</a>
-					</div>
+					</div> --}}
 				</div>
 			</div>
         </div>
-        <div class="row mt-3 d-flex justify-content-center">
-			<div class="col-lg-6">
-				<h4 class="header_box"><i class="fa fa-report"></i> @lang('messages.list_of_patient_evolutionary_reports')</h4>
-				
-				<div class="row">
-				  @foreach($events as $event)
-					<div class="col-lg-6">
-						<div class="box box-success">					
-							<div class="box-header with-border boxEvent">
-							  <h3 class="box-title">{{$event->request}} (<?php echo date("d/m/Y",strtotime($event->created_at)); ?>) </h3>
-							  <div class="box-tools pull-right">
-								<button type="button" class="btn btn-box-tool eventClose" data-bs-dismiss="alert" data-widget="remove">
-                                    <i class="fa fa-times"></i>
-                                </button>
-							  </div>
-							</div>
-							
-							<div class="box-body">
-								<div class="row">
-									<div class="col-lg-12">
-										<label><b>@lang('messages.doctor_type'):</b> {{ $event->doctorFullName }}</label> 
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-12">
-										<label><b>@lang('messages.report_stat'):</b></label>
-										<p>{{urldecode($event->report)}}</p>
-									</div>
-								</div>
-							</div> 					
-						</div>
-					</div>
-				  @endforeach
-				</div>				
-			
-			</div>
-		</div>
-       
-        {{-- <div class="row mt-3">
-            <div class="col-lg-12">
-                <div class="box box-success">					
-                    <div class="box-header with-border">
-                      <h3 class="box-title">Analíticas</h3>
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                      </div>
-                    </div>                    
-                    <div class="box-body">
-                        <div class="row">
-                            
-                            <div class="col-lg-6">
-                                <div class="box box-danger">					
-                                    <div class="box-header with-border">
-                                      <h3 class="box-title">Subpoblaciones Linfocitaria</h3>
-                                      <div class="box-tools pull-right">
-                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                                      </div>
+
+        @if ($userTreatments)
+            <div class="row mt-3">
+                <div class="col-lg-7 mx-auto text-center">
+                    
+                    <div class="box box-danger">					
+                        <div class="box-header with-border">
+                        <h3 class="box-title">@lang('messages.treatments_stat')</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool tratamientos" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                        </div>                    
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th class="bg-primary">@lang('messages.start_date')</th>
+                                                    <th class="bg-primary">@lang('messages.end_date')</th>
+                                                    <th class="bg-primary">@lang('messages.doctor_in_charge')</th>
+                                                    <th class="bg-primary">@lang('messages.medicine_drug')</th>
+                                                    <th class="bg-primary">@lang('messages.medicine_administration')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($userTreatments as $treatment)
+                                                <tr>
+                                                    <td>{{ $treatment["startingDate"] ?? "[".\Lang::get('messages.there_is_no_starting_date')."]" }}</td>
+                                                    <td>{{ $treatment["endingDate"] ?? "[".\Lang::get('messages.there_is_no_ending_date')."]" }}</td>
+                                                    <td>{{ $treatment["user_doctor"]?$treatment["user_doctor"]["name"] . " " . $treatment["user_doctor"]["lastname"]:null }}</td>
+                                                    <td>{{ $treatment["type_medicine"]["name"]  }}</td>
+                                                    <td>{{ $treatment["medicine_administration"] ?? "[".\Lang::get('messages.generic_treatment')."]" }}</td>
+                                                    
+                                                </tr>                                                        
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    
-                                    <div class="box-body">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Fecha</th>
-                                                                <th>Linf</th>
-                                                                <th>T4</th>
-                                                                <th>T4 Abs</th>
-                                                                <th>%T8</th>
-                                                                <th>T8 Abs</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($analytics1 as $analytic2)
-                                                            <tr>
-                                                                <td><?php echo date("d/m/Y", strtotime($analytic2->created_at)); ?></td>
-                                                                <?php $resultados = json_decode($analytic2->result); ?>
-                                                                @foreach($resultados as $resultado)
-                                                                    <td>{{ $resultado }}</td>
-                                                                @endforeach
-                                                            </tr>                                                        
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> 					
-                                </div>                                
-                            </div>
-                            
-                            <div class="col-lg-6">
-                                <div class="box box-warning">					
-                                    <div class="box-header with-border">
-                                      <h3 class="box-title">Cargas Virales</h3>
-                                      <div class="box-tools pull-right">
-                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                                      </div>
-                                    </div>                                    
-                                    <div class="box-body">
-                                        <div class="row">                                            
-                                            <div class="col-lg-12">
-
-                                                <div class="table-responsive">
-                                                    <table class="table table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Fecha</th>
-                                                                <th>Carga</th>
-                                                                <th>Dif</th>
-                                                                <th>Log</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($analytics2 as $analytic2)
-                                                            <tr>
-                                                                <td><?php echo date("d/m/Y", strtotime($analytic2->created_at)); ?></td>
-                                                                <?php $resultados2 = json_decode($analytic2->result); ?>
-                                                                @foreach($resultados2 as $resultado2)
-                                                                    <td>{{ $resultado2 }}</td>
-                                                                @endforeach
-                                                            </tr>                                                        
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div> 					
-                                </div>                                
-                            </div>
-
-                        </div>
-                    </div> 					
-                </div>
-            </div>
-        </div>  --}}
-        
-        <div class="row mt-3">
-            <div class="col-lg-7">
-                
-                <div class="box box-danger">					
-                    <div class="box-header with-border">
-                      <h3 class="box-title">@lang('messages.treatments_stat')</h3>
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool tratamientos" data-widget="remove"><i class="fa fa-times"></i></button>
-                      </div>
-                    </div>                    
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('messages.start_date')</th>
-                                                <th>@lang('messages.end_date')</th>
-                                                <th>@lang('messages.name_data')</th>
-                                                {{-- <th>@lang('messages.dose_data')</th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($treatments as $treatment)
-                                            <tr>
-                                                <td>{{ $treatment->treatment_starting_date ?? "[".\Lang::get('messages.there_is_no_starting_date')."]" }}</td>
-                                                <td>{{ $treatment->treatment_end_date ?? "[".\Lang::get('messages.there_is_no_ending_date')."]" }}</td>
-
-                                                <td>{{ $treatment->nameMedicine }}</td>
-                                                {{-- <td>
-                                                    {{ $treatment->treatment_end_date }}
-                                                </td> --}}
-                                            </tr>                                                        
-                                            @endforeach
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
-                        </div>
-                    </div> 					
-                </div>
+                        </div> 					
+                    </div>
 
+                </div>
             </div>
-            <div class="col-lg-5">
-                
-                <div class="box box-danger">					
-                    <div class="box-header with-border">
-                      <h3 class="box-title">@lang('messages.sessions_date')</h3>
-                      <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool sesiones" data-widget="remove"><i class="fa fa-times"></i></button>
-                      </div>
-                    </div>                    
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('messages.name_data')</th>
-                                                <th>@lang('messages.start_date')</th>
-                                                <th>@lang('messages.end_date')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($protocols as $protocol)
-                                            <tr>
-                                                <td>{{ $protocol->name }}</td>
-                                                <td><?php echo date("d/m/Y", strtotime($protocol->starting_date)); ?></td>
-                                                <td><?php echo date("d/m/Y", strtotime($protocol->ending_date)); ?></td>                                               
-                                            </tr>                                                        
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+        @endif
+
+        @if ($appointments)
+            <div class="row mt-3">
+                <div class="col-lg-7 mx-auto text-center">
+                    
+                    <div class="box box-danger">					
+                        <div class="box-header with-border">
+                        <h3 class="box-title">@lang('messages.nav-main_appointments')</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool tratamientos" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                        </div>                    
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    @if (( $usuario->role_id) != \HV_ROLES::PATIENT)
+                                                        <th class="bg-primary">@lang('messages.patient_type')</th>
+                                                    @endif
+                                                    @if (( $usuario->role_id) != \HV_ROLES::DOCTOR)
+                                                        <th class="bg-primary">@lang('messages.doctor_type')</th>
+                                                        <th class="bg-primary">@lang('messages.specialty_stat')</th>                                    
+                                                    @endif
+                                                    <th class="bg-primary">@lang('messages.date_data')</th>
+                                                    <th class="bg-primary">@lang('messages.state_stat')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach($appointments as $appointment)
+                                                <tr>
+                                                    @if (( $usuario->role_id) != \HV_ROLES::PATIENT)
+                                                        <td>{{ $appointment["user_patient"]["name"] . " " . $appointment["user_patient"]["lastname"] }}</td>                                                    @endif
+                                                    @if (( $usuario->role_id) != \HV_ROLES::DOCTOR)
+
+                                                        <td>{{ $appointment["user_doctor"]?$appointment["user_doctor"]["name"] . " " . $appointment["user_doctor"]["lastname"]:null }}</td> 
+                                                        <td>{{ $appointment["user_doctor"]?$appointment["user_doctor"]["staff"][0]["branch"]["name"]:null}}</td> 
+                                                    @endif
+                                                    <td class="record-appointment-date" data-record-appointment-date="{{ $appointment["dt_appointment"] }}"></td>
+                                                    <td>{{ $appointment["checkedStatus"]  }}</td>
+                                                    
+                                                </tr>                                                        
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div> 					
-                </div>
+                        </div> 					
+                    </div>
 
+                </div>
             </div>
-        </div>
+        @endif
+
 	</div>
 
 @endsection
 
 @section('viewsScripts')
     <script>
+
+        $("[data-chat-record-id]").on('click', function(e){
+            e.preventDefault();
+            let id = $(this).attr("data-chat-record-id");
+            // console.log(id);
+            window.localStorage.setItem("contact-id",id);
+            location.href = $(this).attr("href");
+        });
+
+        $("[data-record-appointment-date]").text(function(i){
+            let givenDate = $(this).attr("data-record-appointment-date");
+            let publishedDate = getLanguageDate(givenDate);
+            return publishedDate;     
+        });
+
         $('.eventClose').click(function(){
         $(this).parent().parent().parent().fadeOut();
         })

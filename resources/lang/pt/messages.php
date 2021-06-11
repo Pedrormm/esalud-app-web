@@ -234,7 +234,7 @@ return [
 
     'edit_appointment' => 'Editar compromisso',
     'want_to_delete_role' => 'Deseja deletar a função?',
-    'Forgot_password' => 'Esqueci a senha',
+    'forgotten_password' => 'Esqueci a senha',
     'the_role_name_is_required' => 'O nome da função é obrigatório',
     'the_role_name_must_be_at_least_2_characters_long' => 'O nome da função deve ter pelo menos 2 caracteres',
 
@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => 'Editar tratamento',
     'treatment_data' => 'Dados de tratamento',
+    'create_treatment' => 'Criar tratamento',
+    'of_the_user' => 'do usuário',
     'type_of_medicine' => 'Tipo de medicamento',
     'medicine_administration' => 'Modo de administração de medicamentos',
     'description_stat' => 'Descrição',
@@ -584,7 +586,36 @@ return [
     'selected_flag' => 'Bandeira selecionada',
     'lookfor_different_users_to' => 'Procure usuários com uma função diferente de',
     'edit_stat_role' => 'Editar função',
-    
+    'delete_message' => 'Apagar mensagem',
+    'generic_treatment' => 'Genérico',
+
+    'a_new_treatment_was_created' => 'Um novo tratamento foi criado',
+    'treatment_updated_successfully' => 'Tratamento atualizado com sucesso',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Deseja deletar todos os tratamentos do usuário',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Tem certeza que deseja deletar todos os tratamentos do usuário cujo nome é',
+    'all_treatments_of_the_user' => 'Todos os tratamentos do usuário',
+    'were_deleted_sucessfully' => 'foram deletados com sucesso',
+    'the_treatment_has_no_description' => 'O tratamento não tem descrição',
+    'description_of_the_treatment' => 'Descrição do tratamento',
+    'would_you_like_to_delete_the_treatment' => 'Deseja deletar o tratamento?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Tem certeza que deseja excluir o tratamento?',
+    'the_treatment_was_deleted_sucessfully' => 'O tratamento foi excluído com sucesso',
+
+    'deleted_already_stat' => 'Excluído',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'O usuário não pode ser excluído por causa de consultas médicas ou tratamentos associados',
+
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Pendente, aceito e rejeitado',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Compromissos pendentes, aceitos e rejeitados',
+    'accepted_stat_plural' => 'Aceito',
+    'rejected_stat_plural' => 'Rejeitado',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Número de tratamentos em andamento e número de tratamentos concluídos',
+    'treatments_in_progress' => 'Em andamento',
+    'finished_treatments' => 'Concluído',
+    'nav-main_my_medical_treatment' => 'Meus tratamentos médicos',
+    'number_of_news_displayed' => 'Número de notícias a serem exibidas',
+    'activate_spelling_checker' => 'Ativar verificador ortográfico',
+    'activated' => 'Ativado',
+    'desactivated_stat' => 'Desativado',
 
 ];
 

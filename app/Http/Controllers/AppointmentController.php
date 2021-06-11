@@ -185,20 +185,46 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+        if (auth()->user()->role_id == \HV_ROLES::PATIENT){
+            $validatedData = parent::checkValidation([
+                'appointmentChecked' => 'required',
+            ]);
+        }
+        else{
+            $validatedData = parent::checkValidation([
+                'dateTimeOther' => 'required',
+                'appointmentChecked' => 'required',
+                'appointmentAccomplished' => 'required',
+            ]);
+        }
+
+
         $appointment = Appointment::find($id);      
 
-        $user_id_doctor = $request->input('user_id_doctor');
-        $dt_appointment = $request->input('dt_appointment');
-        $accomplished = $request->input('accomplished');
-        $comments = $request->input('comments');
+        // $appointment->update($request->all());
+
+        if ($request->input('dateTimeOther'))
+            $dt_appointment = $request->input('dateTimeOther');
+        if ($request->input('appointmentChecked'))
+            $checked = $request->input('appointmentChecked');
+        if ($request->input('appointmentAccomplished'))
+            $accomplished = $request->input('appointmentAccomplished');
+        if ($request->input('doctorComments'))
+            $comments = $request->input('doctorComments');
+        if ($request->input('patientComments'))
+            $user_comment = $request->input('patientComments');
        
-        $appointment->user_id_doctor = $user_id_doctor;
-        $appointment->dt_appointment = $dt_appointment;
-        $appointment->user_id_creator = auth()->user()->id;
-        $appointment->checked = 0;
-        $appointment->accomplished = $accomplished;
-        $appointment->comments = $comments;
+        if (isset ($dt_appointment))
+            $appointment->dt_appointment = $dt_appointment;
+        if (isset ($checked))
+            $appointment->checked = $checked;
+        if (isset ($accomplished))
+            $appointment->accomplished = $accomplished;
+        if (isset ($comments))
+            $appointment->comments = $comments;
+        if (isset ($user_comment))
+            $appointment->user_comment = $user_comment;
         $appointment->save();
 
         return $this->index();
@@ -325,12 +351,16 @@ class AppointmentController extends Controller
         $rol_user = $userLogin->role_id;
 
         if($rol_user == \HV_ROLES::ADMIN){
-            $appointments = Appointment::with('userPatient')->with('userDoctor')->get();
+            $appointments = Appointment::with('userPatient')->with('userDoctor');
         }else if($rol_user == \HV_ROLES::DOCTOR){
-            $appointments = Appointment::where('user_id_doctor',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
+            $appointments = Appointment::where('user_id_doctor',"=",$userLogin->id)->with('userPatient')->with('userDoctor');
         }else if($rol_user == \HV_ROLES::PATIENT){
-            $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
+            $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor');
         }
+
+        $appointments = $appointments->distinct()
+        ->groupBy('dt_appointment')
+        ->get();
         
         foreach($appointments as $ap) {
             $ap["fullNameCreator"] = User::find($ap->user_id_creator)->name . " " . User::find($ap->user_id_creator)->lastname;
@@ -342,10 +372,32 @@ class AppointmentController extends Controller
     }
 
     public function showCalendar($id){
+        // dd($id);
         $userLogin = auth()->user();
+        $rol_user = $userLogin->role_id;
+
         $appointment = Appointment::find($id);
         $especialidad = DB::select('SELECT branches.name FROM appointments INNER JOIN staff ON appointments.user_id_doctor = staff.user_id INNER JOIN branches ON staff.branch_id = branches.id WHERE appointments.user_id_doctor = '.$appointment->user_id_doctor.'');
         
+
+        $data = Appointment::select('appointments.*')->distinct()->where('id',"=",$id)
+        ->groupBy('dt_appointment')
+        ->with(array('userPatient' => function($query) {
+            $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS patientFullName"));
+        }))
+        ->with(['userDoctor' => function ($query) {
+            $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS doctorFullName"));
+        }, 'userDoctor.staff' => function ($query) {
+            $query->select('id', 'user_id', 'branch_id');
+        }, 'userDoctor.staff.branch' => function ($query) {
+            $query->select('id', 'name', 'role_id');
+        }])
+        ->get()->toArray();
+
+        if ($data[0])
+            $data = $data[0];
+        // dd($data);
+
         return view('appointments.showCalendar')->with('appointment',$appointment)->with('especialidad',$especialidad);
     }
 
@@ -402,7 +454,10 @@ class AppointmentController extends Controller
             $data = $data->where('user_id_patient',"=",$userLogin->id);
         }
 
-        $data = $data->where('checked', 0)->orderByDesc('created_at')->get()->toArray();
+        $data = $data->where('checked', 0)->orderByDesc('created_at')
+        ->whereDate('dt_appointment', '>', Carbon::today())
+        ->get()->toArray();
+
         $nAppointments = count($data);
 
         if(($rol_user != \HV_ROLES::DOCTOR) && ($rol_user != \HV_ROLES::PATIENT) && ($rol_user != \HV_ROLES::ADMIN)){
@@ -414,8 +469,29 @@ class AppointmentController extends Controller
 
     public function showAppointmentsSummary(){
         $authUser = Auth::user();
+        $rol_user = $authUser->role_id;        
 
-        return view('appointments.summary', compact('userMessages'));
+        $data = Appointment::select('appointments.*')->distinct();
+        if($rol_user == \HV_ROLES::DOCTOR){
+            $data = $data->where('user_id_doctor',"=",$authUser->id);
+        }else if($rol_user == \HV_ROLES::PATIENT){
+            $data = $data->where('user_id_patient',"=",$authUser->id);
+        }
+
+        $data = $data->where('checked', 0)->orderByDesc('created_at')
+        ->whereDate('dt_appointment', '>', Carbon::today())
+        ->distinct()
+        ->groupBy('dt_appointment')
+        ->with(array('userPatient' => function($query) {
+            $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS patientFullName"));
+        }))
+        ->with(array('userDoctor' => function($query) {
+            $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS doctorFullName"));
+        }))
+        ->get()->toArray();
+
+        // dd($data);
+        return view('appointments.summary', compact('data'));
     }
 
     public function sendMailNewAppointment($appointment, $userAuthRole=null){
@@ -464,7 +540,8 @@ class AppointmentController extends Controller
         return view('appointments.confirm-delete', compact('appointment'));
     }
 
-    public function setChecked($id, $checked=null, $mailable = false) {
+    public function setChecked($id, $checked=null, $mailable = false, Request $request) {
+
         if (($checked != 1) &&($checked != 2)){
             if ($mailable){
                 return view('appointments.index');
@@ -478,17 +555,28 @@ class AppointmentController extends Controller
 
         $roleCreator = User::select('role_id')->whereId($appointment->user_id_creator)->value('role_id');
         $loggedRole = auth()->user()->role_id;
-        if (($checked == 1) && ($loggedRole == \HV_ROLES::PATIENT)){
-            return $this->jsonResponse(1, \Lang::get('messages.a_patient_cannot_accept_an_appointment'));
+        // if (($checked == 1) && ($loggedRole == \HV_ROLES::PATIENT)){
+        //     return $this->jsonResponse(1, \Lang::get('messages.a_patient_cannot_accept_an_appointment'));
+        // }
+
+        // if (($roleCreator == \HV_ROLES::PATIENT) && ($loggedRole == \HV_ROLES::PATIENT)){
+        //     return $this->jsonResponse(1, \Lang::get('messages.you_cannot_accept_nor_reject_the_appointment'));
+        // }
+        // if (($roleCreator == \HV_ROLES::DOCTOR) && ($loggedRole == \HV_ROLES::DOCTOR)){
+        //     return $this->jsonResponse(1, \Lang::get('messages.a_doctor_created_the_appointment'));
+        // }
+        if ($request->apComments){
+            if ($loggedRole == \HV_ROLES::PATIENT){
+                $appointment->update(['checked' =>$checked, 'user_comment' =>$request->apComments]);
+            }
+            else{
+                $appointment->update(['checked' =>$checked, 'comments' =>$request->apComments]);
+            }
+        }
+        else{
+            $appointment->update(['checked' =>$checked]);
         }
 
-        if (($roleCreator == \HV_ROLES::PATIENT) && ($loggedRole == \HV_ROLES::PATIENT)){
-            return $this->jsonResponse(1, \Lang::get('messages.you_cannot_accept_nor_reject_the_appointment'));
-        }
-        if (($roleCreator == \HV_ROLES::DOCTOR) && ($loggedRole == \HV_ROLES::DOCTOR)){
-            return $this->jsonResponse(1, \Lang::get('messages.a_doctor_created_the_appointment'));
-        }
-        $appointment->update(['checked' =>$checked]);
         $messageAcRj = ($checked == 1)? \Lang::get('messages.accepted_stat') : (($checked == 2) ? (\Lang::get('messages.rejected_stat')) : (""));
         
         if ($mailable){

@@ -1140,3 +1140,110 @@ function clickOnSelectpicker(){
         }, 1000);
     } 
 }
+
+/**
+ * Returns the date in the selected language format
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {date} date - The given date.
+ * @return {string} - The date properly formatted with the language
+ */
+
+function getLanguageDate(date){
+    let mydate = new Date(date);
+    let publishedDate;
+    
+    switch(_lang){
+      case "es":
+        publishedDate = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "en":
+        publishedDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "it":
+        publishedDate = new Intl.DateTimeFormat('it-IT', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "pt":
+        publishedDate = new Intl.DateTimeFormat('pt-PT', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "fr":
+        publishedDate = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "ro":
+        publishedDate = new Intl.DateTimeFormat('ro-RO', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "de":
+        publishedDate = new Intl.DateTimeFormat('de-DE', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "ar":
+        publishedDate = new Intl.DateTimeFormat('ar-EG', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "ru":
+        publishedDate = new Intl.DateTimeFormat('ru-RU', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;     
+      case "zh_CN":
+        publishedDate = new Intl.DateTimeFormat('zh-u-ca-chinese', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+      case "ja":
+        publishedDate = new Intl.DateTimeFormat('ja-JP-u-ca-japanese', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break; 
+      default:
+        publishedDate = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
+        break;
+    }
+    publishedDate = publishedDate.substring(0, publishedDate.length-8);
+    return publishedDate;
+
+}
+
+
+/**
+ * Returns the language format for datatables
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} language - The given language.
+ * @return {string} - The date properly formatted with the language
+ */
+
+ function getLanguageDtFormat(language){
+    let lang;
+    
+    switch(language){
+      case "es":
+        lang = "es";
+        break;
+      case "en":
+        lang = "en";
+        break;
+      case "it":
+        lang = "it";
+        break;
+      case "pt":
+        lang = "pt";
+        break;
+      case "fr":
+        lang = "fr";
+        break;
+      case "ro":
+        lang = "ro";
+        break;
+      case "de":
+        lang = "de";
+        break;
+      case "ar":
+        lang = "ar";
+        break;
+      case "ru":
+        lang = "ru";
+        break;     
+      case "zh_CN":
+        lang = "zh-cn";
+        break;
+      case "ja":
+        lang = "ja";
+        break; 
+      default:
+        lang = "es";
+        break;
+    }
+    return lang;
+
+}

@@ -15,9 +15,9 @@ class CreateRoles extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->string('name', 250)->nullable()->index()->comment('Nombre del rol');
-            $table->unsignedBigInteger('user_id_creator')->comment('Id del creador');
-            $table->unsignedSmallInteger('delible')->nullable()->default(0)->comment('Campo puede ser borrado');
+            $table->string('name', 250)->nullable()->index()->comment('Role name');
+            $table->unsignedBigInteger('user_id_creator')->comment('Creator Id');
+            $table->unsignedSmallInteger('delible')->nullable()->default(0)->comment('If the value is 1 the role cannot be deleted');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -55,7 +55,9 @@ class SettingController extends Controller
             'country' => 'string',
             'city' => 'string',
             'address' => 'string',
-            'avatar' => 'file'
+            'avatar' => 'file',
+            'news_number' => 'integer|min:1|max:9',
+            'has_spelling_checker' => 'integer',
         ]);
         $token = $request->input('token');
         $mapValidation=[];
@@ -84,8 +86,17 @@ class SettingController extends Controller
         $usuario = User::find($user_id);
 
         $validatedData = array_merge($mapValidation, $validatedData);
-
+        // dd(request()->all());
         $usuario->update($validatedData);
+
+        if (($request->news_number) || ($request->has_spelling_checker)){
+            $specialFieldsUser = User::find($user_id);
+            if ($request->news_number)
+                $specialFieldsUser->news_number = $request->news_number;
+            if ($request->has_spelling_checker)
+                $specialFieldsUser->has_spelling_checker = $request->has_spelling_checker;
+            $specialFieldsUser->save();
+        }
 
         if ($request->file)
             $this->updateAvatar($request,auth()->user()->id,true);

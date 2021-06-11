@@ -45,7 +45,7 @@ class MessageController extends Controller
         ->join('users', 'messages.user_id_from', 'users.id')
         ->select('messages.id AS messages_id', 'messages.message', 'messages.read', 'messages.user_id_to', 'messages.user_id_from',
          'messages.created_at', 'users.id AS users_id', 'users.dni', 'users.sex', 'users.name', 
-            'users.lastname', 'users.email', 'users.phone', 'users.avatar')
+            'users.lastname', 'users.email', 'users.phone', 'users.avatar','users.deleted_at')
         ->get()
         ->unique('user_id_from');
 
@@ -57,6 +57,16 @@ class MessageController extends Controller
 
 
         foreach($userMessages as $i=>$userMessage) {
+
+            if (!$userMessage->deleted_at){
+                $userMessage->name = $userMessage->name;
+                $userMessage->lastname = $userMessage->lastname;
+            }
+            else{
+                $userMessage->name = \Lang::get('messages.user_type')." ";
+                $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+            }
+
             $text = urldecode($userMessage->message);
             if(strlen($text) > self::MAX_MESSAGE_LENGTH) {
                 $text = substr($text, 0, self::MAX_MESSAGE_LENGTH) . " ...";
@@ -95,7 +105,7 @@ class MessageController extends Controller
 
         $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
         ->select('messages.*', 'users.id', 
-        'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id')
+        'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id','users.deleted_at')
         ->where('user_id_to', $authUser->id)
         ->orderBy('messages.read')
         ->orderByDesc('messages.created_at')
@@ -103,14 +113,28 @@ class MessageController extends Controller
 
         foreach($userMessages as $i=>$userMessage) {
             $text = urldecode($userMessage->message);
-            $name = urldecode($userMessage->name);
-            $lastname = urldecode($userMessage->lastname);
+            if (!$userMessage->deleted_at){
+                $name = urldecode($userMessage->name);
+                $lastname = urldecode($userMessage->lastname);
+            }
+            else{
+                $name = \Lang::get('messages.user_type')." ";
+                $lastname = \Lang::get('messages.deleted_already_stat');
+            }
+
             /*if(strlen($text) > self::MAX_MY_MESSAGES_SHOWN_LENGTH) {
                 $text = substr($text, 0, self::MAX_MY_MESSAGES_SHOWN_LENGTH) . " ...";
             }*/
             $userMessage->messageCorrected = $text;
-            $userMessage->name = $name;
-            $userMessage->lastname = $lastname;
+            if (!$userMessage->deleted_at){
+                $userMessage->name = $name;
+                $userMessage->lastname = $lastname;
+            }
+            else{
+                $userMessage->name = \Lang::get('messages.user_type')." ";
+                $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+            }
+
             $userMessages[$i] = $userMessage;
         }
 
@@ -157,7 +181,7 @@ class MessageController extends Controller
         $authUser = Auth::user();
         $userIdFromTo = [$authUser->id, $id];
         $userMessages = Message::leftjoin('users', 'messages.user_id_from', 'users.id')
-        ->select('messages.*', 'users.id', 'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id')
+        ->select('messages.*', 'users.id', 'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id','users.deleted_at')
         ->whereIn('user_id_to', $userIdFromTo)
         ->whereIn('user_id_from', $userIdFromTo)
         ->orderByDesc('messages.read')
@@ -165,11 +189,23 @@ class MessageController extends Controller
         ->get();
         foreach($userMessages as $i=>$userMessage) {
             $text = urldecode($userMessage->message);
-            $name = urldecode($userMessage->name);
-            $lastname = urldecode($userMessage->lastname);
+            if (!$userMessage->deleted_at){
+                $name = urldecode($userMessage->name);
+                $lastname = urldecode($userMessage->lastname);
+            }
+            else{
+                $name = \Lang::get('messages.user_type')." ";
+                $lastname = \Lang::get('messages.deleted_already_stat');
+            }
             $userMessage->messageCorrected = $text;
-            $userMessage->name = $name;
-            $userMessage->lastname = $lastname;
+            if (!$userMessage->deleted_at){
+                $userMessage->name = $name;
+                $userMessage->lastname = $lastname;
+            }
+            else{
+                $userMessage->name = \Lang::get('messages.user_type')." ";
+                $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+            }
             $userMessages[$i] = $userMessage;
         }
 
@@ -200,7 +236,7 @@ class MessageController extends Controller
     public function showMessaging(){
         // Adding a lastMessageDate field to contact collection
         $contacts = DB::table("users_with_messages_view")
-        ->select(\DB::raw('id, dni, sex, name, lastname, email, phone, avatar, MAX(`message_date`) as message_date'))
+        ->select(\DB::raw('id, dni, sex, name, lastname, deleted_at, email, phone, avatar, MAX(`message_date`) as message_date'))
         ->where('id', '!=', auth()->id())
         ->groupBy('id')
         ->orderByDesc(\DB::raw("MAX(message_date)"))
@@ -219,6 +255,15 @@ class MessageController extends Controller
 
         // Add an unread key to each contact with the count of unread messages
         $contacts = $contacts->map(function($contact) use ($unreadIds) {
+            if (!$contact->deleted_at){
+                $contact->name = $contact->name;
+                $contact->lastname = $contact->lastname;
+            }
+            else{
+                $contact->name = \Lang::get('messages.user_type')." ";
+                $contact->lastname = \Lang::get('messages.deleted_already_stat');
+            }
+            
             $contactUnread = $unreadIds->where('sender_id', $contact->id)->first();
 
             $contact->unread = $contactUnread ? $contactUnread->messages_count : 0;
@@ -244,8 +289,20 @@ class MessageController extends Controller
 
             $id = $request->id;
             $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name', 
-            'users.lastname', 'users.email', 'users.phone', 'users.avatar')
+            'users.lastname', 'users.email', 'users.phone', 'users.avatar','users.deleted_at')
             ->where('id', $id)->get();
+
+            foreach($user_to_be_found as $i=>$userMessage) {
+                if (!$userMessage->deleted_at){
+                    $userMessage->name = $userMessage->name;
+                    $userMessage->lastname = $userMessage->lastname;
+                }
+                else{
+                    $userMessage->name = \Lang::get('messages.user_type')." ";
+                    $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+                }
+            }
+
 
             // dd($user_to_be_found->toArray());
 
@@ -273,12 +330,23 @@ class MessageController extends Controller
             // dd($messages_from_user->toArray());
 
             $contacts = DB::table("users_with_messages_view")
-            ->select(\DB::raw('id, dni, name, lastname, MAX(`message_date`) as message_date'))
+            ->select(\DB::raw('id, dni, name, lastname, deleted_at, MAX(`message_date`) as message_date'))
             ->where('id', '!=', auth()->id())
             ->where('message_date', '!=', null)
             ->groupBy('id')
             ->orderByDesc(\DB::raw("MAX(message_date)"))
             ->get();
+
+            foreach($contacts as $i=>$userMessage) {
+                if (!$userMessage->deleted_at){
+                    $userMessage->name = $userMessage->name;
+                    $userMessage->lastname = $userMessage->lastname;
+                }
+                else{
+                    $userMessage->name = \Lang::get('messages.user_type')." ";
+                    $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+                }
+            }
 
             $unreadIds = Message::select(\DB::raw('`user_id_from` as sender_id, count(`user_id_from`) as messages_count'))
             ->where('user_id_to', auth()->id())
@@ -353,7 +421,18 @@ class MessageController extends Controller
 
             $id = $request->id;
 
-            $found_user = User::find($id, ['id', 'dni', 'name', 'lastname', 'sex', 'avatar']);
+            $found_user = User::find($id, ['id', 'dni', 'name', 'lastname', 'sex', 'avatar', 'deleted_at']);
+
+            foreach($found_user as $i=>$userMessage) {
+                if (!$userMessage->deleted_at){
+                    $userMessage->name = $userMessage->name;
+                    $userMessage->lastname = $userMessage->lastname;
+                }
+                else{
+                    $userMessage->name = \Lang::get('messages.user_type')." ";
+                    $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+                }
+            }
 
             // dd($found_user->toArray());
 
@@ -383,8 +462,20 @@ class MessageController extends Controller
     public function viewMessagesFromMobile($id){
 
         $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name', 
-        'users.lastname', 'users.email', 'users.phone', 'users.avatar')
+        'users.lastname', 'users.email', 'users.phone', 'users.avatar', 'users.deleted_at')
         ->where('id', $id)->get()->toArray();
+
+
+        foreach($user_to_be_found as $i=>$userMessage) {
+            if (!$userMessage->deleted_at){
+                $userMessage->name = $userMessage->name;
+                $userMessage->lastname = $userMessage->lastname;
+            }
+            else{
+                $userMessage->name = \Lang::get('messages.user_type')." ";
+                $userMessage->lastname = \Lang::get('messages.deleted_already_stat');
+            }
+        }
 
         // dd($user_to_be_found->toArray());
 

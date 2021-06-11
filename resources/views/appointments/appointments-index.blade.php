@@ -42,7 +42,7 @@
               }
           },
 
-          columnDefs: [
+        columnDefs: [
             {
                 // targets: 0,
                 // className: 'dt-body-left'
@@ -62,6 +62,12 @@
             @endif  
             {
                 data: 'dt_appointment',
+                render: function(data, type, row) {
+                    let publishedDate = getLanguageDate(row.dt_appointment);
+                    let strDate = "";
+                    strDate += '<span class="align-middle">'+publishedDate+'</span>';
+                    return strDate;
+                }
             },
             @if (($appointmentType) == "all")
             {
@@ -90,12 +96,12 @@
                             strButtons += ` class="ml-1 primary rejectAppointment" data-toggle="tooltip" data-placement="top" title="@lang('messages.reject_kinda_appointment')">`;
                             strButtons += ' <i class="fa fa-times"></i></a>';  
                         @endif
-                        if (row.comments){
-                            strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/comments' +'"'; 
-                            strButtons += ' data-id="'+row.id+'"';
-                            strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.view_comments')">`;
-                            strButtons += ' <i class="fa fa-eye"></i></a>';
-                        }
+                        // if (row.comments){
+                        //     strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/comments' +'"'; 
+                        //     strButtons += ' data-id="'+row.id+'"';
+                        //     strButtons += ` class="ml-1 primary" data-toggle="tooltip" data-placement="top" title="@lang('messages.view_comments')">`;
+                        //     strButtons += ' <i class="fa fa-eye"></i></a>';
+                        // }
                         
                         strButtons += ' <a href="'+ _publicUrl+'appointment/'+row.id+'/edit' +'"'; 
                         strButtons += ' data-id="'+row.id+'"';

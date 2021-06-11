@@ -15,10 +15,10 @@ class CreatePatients extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->comment('Id relacionado al usuario');
-            $table->string('historic', 100)->unique()->comment('Numero de historial del paciente');
-            $table->integer('height')->nullable()->comment('Altura del paciente en cm');
-            $table->double('weight')->nullable()->comment('Peso del paciente en kg');
+            $table->unsignedBigInteger('user_id')->comment('Id associated to user');
+            $table->string('historic', 100)->unique()->comment('Patient historical number');
+            $table->integer('height')->nullable()->comment('Patient height in cm');
+            $table->double('weight')->nullable()->comment('Patient weight in kg');
             $table->softDeletes();
             $table->timestamps();
         });

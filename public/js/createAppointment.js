@@ -23,16 +23,26 @@
     $('#patient').on('change', function (e) {      
       let valueSelected = this.value;
       showAndHideValidationMessage(valueSelected, '#patientValidity', $myForm);
+      $('.hv-time-selection').removeClass("hv-time-selected");
+      active = false;
     });
 
     $('#doctor').on('change', function (e) {
       let valueSelected = this.value;
       showAndHideValidationMessage(valueSelected, '#doctorValidity', $myForm);
+      $('.hv-time-selection').removeClass("hv-time-selected");
+      active = false;
     });
+
+    $('#dt_appointment').on('change', function (e) {
+        $('.hv-time-selection').removeClass("hv-time-selected");
+        active = false;
+    });
+    
 
 
     $('#showAppointmentsButton').on("click",function(e){
-
+        
         if (!$myForm[0].checkValidity()) {
             // Invalid
             let pat =  $('#patient');
@@ -63,6 +73,7 @@
             // console.log("doctorId ",doctorId);
             // console.log("value ", doctorId);
             callSch(fullDate,doctorId);
+            
         }
 
     });
@@ -92,7 +103,8 @@
             // console.log("resp ", response);
             showInlineMessage(response.message, 30);
             // console.log("app ",response.obj);
-
+            $('.hv-time-selection').removeClass("hv-time-selected");
+            active = false;
         });
     });
 

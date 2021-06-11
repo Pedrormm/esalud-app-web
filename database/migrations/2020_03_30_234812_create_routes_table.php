@@ -15,8 +15,8 @@ class CreateRoutesTable extends Migration
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('permission_id')->unsigned()->comment('Permiso asociado');
-            $table->string('name', 200)->nullable()->comment('Nombre de la ruta');
+            $table->bigInteger('permission_id')->unsigned()->comment('Associated permission');
+            $table->string('name', 200)->nullable()->comment('Route name');
             $table->softDeletes();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

@@ -50,9 +50,12 @@
                     <th class="bg-primary">@lang('messages.role_stat')</th>
                     <th class="bg-primary">@lang('messages.historical_stat')</th>
                     <th class="bg-primary">@lang('messages.specialty_stat')</th>
+                    @if(isset($flagsMenuEnabled['SCHEDULE_SHOW_AND_EDIT_ALL']) && $flagsMenuEnabled['SCHEDULE_SHOW_AND_EDIT_ALL'])
+                      <th class="bg-primary">@lang('messages.check_schedule')</th>
+                    @endif
                     {{-- <th class="bg-primary">@lang('messages.shift_data')</th> --}}
-                    <th class="bg-primary">@lang('messages.office_data')</th>
-                    <th class="bg-primary">@lang('messages.room_number')</th>
+                    {{-- <th class="bg-primary">@lang('messages.office_data')</th>
+                    <th class="bg-primary">@lang('messages.room_number')</th> --}}
                     <th class="bg-primary">@lang('messages.business_phone_number')</th>
                     <th class="bg-primary">DNI</th>
                     <th class="bg-primary">@lang('messages.blood_group')</th>

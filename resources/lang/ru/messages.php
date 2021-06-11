@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => 'Изменить лечение',
     'treatment_data' => 'Данные о лечении',
+    'create_treatment' => 'Создать лечение',
+    'of_the_user' => 'пользователя',
     'type_of_medicine' => 'Тип лекарства',
     'medicine_administration' => 'Режим приема лекарств',
     'description_stat' => 'Описание',
@@ -584,6 +586,37 @@ return [
     'selected_flag' => 'Выбранный флаг',
     'lookfor_different_users_to' => 'Искать пользователей с ролью, отличной от',
     'edit_stat_role' => 'Изменить роль',
+    'delete_message' => 'Удаленное сообщение',
+    'generic_treatment' => 'Общий',
+
+    'a_new_treatment_was_created' => 'Создано новое лечение',
+    'treatment_updated_successfully' => 'Лечение успешно обновлено',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Вы хотите удалить все пользовательские процедуры',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Вы уверены, что хотите удалить все пользовательские процедуры',
+    'all_treatments_of_the_user' => 'Все пользовательские процедуры',
+    'were_deleted_sucessfully' => 'были успешно удалены',
+    'the_treatment_has_no_description' => 'У лечения нет описания',
+    'description_of_the_treatment' => 'Описание лечения',
+    'would_you_like_to_delete_the_treatment' => 'Хотите удалить лечение?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Вы уверены, что хотите прекратить лечение?',
+    'the_treatment_was_deleted_sucessfully' => 'Лечение успешно удалено',
+
+    'deleted_already_stat' => 'Удалено',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'Пользователь не может быть удален из-за связанных с ним посещений врача или лечения',
+
+    'dashboard_pending_accepted_rejected' => 'Ожидает, принято и отклонено',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Ожидающие, принятые и отклоненные встречи',
+    'accepted_stat_plural' => 'Принято',
+    'rejected_stat_plural' => 'Отклонено',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Количество выполняемых процедур и количество завершенных процедур',
+    'treatment_in_progress' => 'В процессе',
+    'finished_treatments' => 'Готово',
+    'nav-main_my_medical_treatment' => 'Мое лечение',
+    'number_of_news_displayed' => 'Количество отображаемых новостей',
+    'activate_spelling_checker' => 'Активировать проверку орфографии',
+    'activated' => 'Активировано',
+    'deactivated_stat' => 'Деактивировано',
+
     
 
 ];

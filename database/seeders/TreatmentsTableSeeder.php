@@ -126,7 +126,15 @@ class TreatmentsTableSeeder extends Seeder
                 [
                     'user_id_patient' => 26,
                     'user_id_doctor' => 25,
-                    'type_medicine_id' => 1,
+                    'type_medicine_id' => 2,
+                    // 'medicine_administration_id' => 3,
+                    'created_at'=> date("Y-m-d H:i:s"),
+                    'updated_at'=> date("Y-m-d H:i:s")  
+                ],
+                [
+                    'user_id_patient' => 26,
+                    'user_id_doctor' => 14,
+                    'type_medicine_id' => 3,
                     'created_at'=> date("Y-m-d H:i:s"),
                     'updated_at'=> date("Y-m-d H:i:s")  
                 ],

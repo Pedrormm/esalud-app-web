@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => 'Behandlung bearbeiten',
     'treatment_data' => 'Behandlungsdaten',
+    'create_treatment' => 'Behandlung erstellen',
+    'of_the_user' => 'des Benutzers',
     'type_of_medicine' => 'Art der Medizin',
     'medicine_administration' => 'Medikamentenverabreichungsmodus',
     'description_stat' => 'Beschreibung',
@@ -584,7 +586,36 @@ return [
     'selected_flag' => 'Ausgewähltes Flag',
     'lookfor_different_users_to' => 'Suche nach Benutzern mit einer anderen Rolle als',
     'edit_stat_role' => 'Rolle bearbeiten',
-    
+    'delete_message' => 'Nachricht löschen',
+    'generic_treatment' => 'Generisch',
+
+    'a_new_treatment_was_created' => 'Eine neue Behandlung wurde erstellt',
+    'treatment_updated_successfully' => 'Behandlung erfolgreich aktualisiert',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Möchten Sie alle Benutzerbehandlungen löschen',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Sind Sie sicher, dass Sie alle Benutzerbehandlungen löschen möchten',
+    'all_treatments_of_the_user' => 'Alle Benutzerbehandlungen',
+    'were_deleted_sucessfully' => 'wurden erfolgreich gelöscht',
+    'the_treatment_has_no_description' => 'Die Behandlung hat keine Beschreibung',
+    'description_of_the_treatment' => 'Beschreibung der Behandlung',
+    'would_you_like_to_delete_the_treatment' => 'Möchten Sie die Behandlung löschen?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Sind Sie sicher, dass Sie die Behandlung beenden möchten?',
+    'the_treatment_was_deleted_sucessfully' => 'Die Behandlung wurde erfolgreich gelöscht',
+
+    'deleted_already_stat' => 'Gelöscht',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'Der Benutzer kann wegen Arztterminen oder damit verbundenen Behandlungen nicht gelöscht werden',
+
+    'dashboard_pending_accepted_rejected' => 'Ausstehend, akzeptiert und abgelehnt',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Ausstehende, angenommene und abgelehnte Termine',
+    'accepted_stat_plural' => 'Akzeptiert',
+    'rejected_stat_plural' => 'Abgelehnt',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Anzahl der laufenden Behandlungen und Anzahl der abgeschlossenen Behandlungen',
+    'treatments_in_progress' => 'In Bearbeitung',
+    'finished_treatments' => 'Fertig',
+    'nav-main_my_medical_treatment' => 'Meine medizinischen Behandlungen',
+    'number_of_news_displayed' => 'Anzahl der anzuzeigenden News',
+    'activate_spelling_checker' => 'Rechtschreibprüfung aktivieren',
+    'activated' => 'Aktiviert',
+    'desactivated_stat' => 'Deaktiviert',
 
 ];
 

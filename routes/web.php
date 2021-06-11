@@ -89,6 +89,10 @@ Route::group(['middleware' => ['isLogged','setLocale', 'checkUserRole','checkPer
     Route::match(array('GET', 'POST'), 'treatments/singlePatient/{id}/viewDT', 'TreatmentController@ajaxViewDatatableSP');
     Route::get('treatments/{id}/indexSinglePatient', 'TreatmentController@indexSinglePatient');
     Route::post('treatments/indexSinglePatient', 'TreatmentController@indexSinglePatient');
+    Route::get('treatments/{id}/create', 'TreatmentController@create');
+    Route::delete('treatments/{id}/deleteAll', 'TreatmentController@deleteAll');
+    Route::get('treatments/{id}/viewDescription', 'TreatmentController@viewDescription');
+    // Route::post('treatments/{id}/store', 'TreatmentController@store');
     Route::resource('treatments', 'TreatmentController');
 
     // Records routes
@@ -103,6 +107,8 @@ Route::group(['middleware' => ['isLogged','setLocale', 'checkUserRole','checkPer
     Route::get('dashboard/fillWeekAppointments', 'DashboardController@fillWeekAppointments');
     Route::get('dashboard/fillDiaryAppointments', 'DashboardController@fillDiaryAppointments');
     Route::get('dashboard/fillDelayedAppointments', 'DashboardController@fillDelayedAppointments');
+    Route::get('dashboard/fillSinglePatientAppointments', 'DashboardController@fillSinglePatientAppointments');
+    Route::get('dashboard/filltreatmentsInProgress', 'DashboardController@filltreatmentsInProgress');
 
 
     /*

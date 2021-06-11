@@ -227,5 +227,5 @@
         console.log(staffSchedule);
     </script>
     {{-- {{ dd($staffSchedule) }} --}}
-  <script type="text/javascript" src="{{ asset('js/schedule-show.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/schedule-show.js') . '?r=' . rand() }}"></script>
 @endsection

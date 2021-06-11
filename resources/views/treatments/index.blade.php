@@ -25,9 +25,15 @@
                     <th class="bg-primary">@lang('messages.blood_group')</th>
                     <th class="bg-primary">@lang('messages.date_of_birth')</th>
                     <th class="bg-primary">@lang('messages.gender_data')</th>
-                    <th class="bg-primary">@lang('messages.create_treatment')</th>
-                    <th class="bg-primary">@lang('messages.view_treatments')</th>
-                    <th class="bg-primary">@lang('messages.delete_all_the_treatments')</th>
+                    @if(isset($flagsMenuEnabled['MEDICAL_TREATMENT_CREATE']) && $flagsMenuEnabled['MEDICAL_TREATMENT_CREATE'])
+                      <th class="bg-primary">@lang('messages.create_treatment')</th>
+                    @endif
+                    @if(isset($flagsMenuEnabled['MEDICAL_TREATMENT_SHOW_FROM_SINGLE_PATIENT']) && $flagsMenuEnabled['MEDICAL_TREATMENT_SHOW_FROM_SINGLE_PATIENT'])
+                      <th class="bg-primary">@lang('messages.view_treatments')</th>
+                    @endif
+                    @if(isset($flagsMenuEnabled['MEDICAL_TREATMENT_DELETE_ALL_FROM_SINGLE_PATIENT']) && $flagsMenuEnabled['MEDICAL_TREATMENT_DELETE_ALL_FROM_SINGLE_PATIENT'])
+                      <th class="bg-primary">@lang('messages.delete_all_the_treatments')</th>
+                    @endif
                 </tr>
               </thead>
             </table>

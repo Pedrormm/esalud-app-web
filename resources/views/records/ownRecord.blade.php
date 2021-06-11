@@ -31,7 +31,7 @@
 							<td>{{ $usuario->lastname }}</td>
 						</tr>
                         <tr>
-							<td>Nombre de rol:</td>
+							<td>@lang('messages.role_name'):</td>
 							<td>{{ $usuario->role_name }}</td>
 						</tr>
 						<tr>
@@ -39,7 +39,7 @@
 							<td>{{ $usuario->dni }}</td>
 						</tr>
 						<tr>
-							<td>Fecha de Nacimiento:</td>
+							<td>@lang('messages.date_of_birth'):</td>
 							<td><?php echo date("d/m/Y",strtotime($usuario->birthdate)); ?></td>
 						</tr>
 						<tr>
@@ -56,7 +56,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Grupo Sanguíneo:</td>
+							<td>@lang('messages.blood_group'):</td>
 							<td>{{ $usuario->blood }}</td>
 						</tr>
                         @if (($usuario->role_id == \HV_ROLES::DOCTOR) || ($usuario->role_id == \HV_ROLES::HELPER)) 
@@ -133,15 +133,15 @@
 				</table>
 				
 				<div class="row mt-3">
-					<div class="col-lg-4 mb-2">
-						<a class="btn btn-primary bt-create-event btn-block text-white"><i class="fa fa-calendar"></i> @lang('messages.appointment_stat')</a> 
+					<div class="col-lg-4 mb-2 mx-auto">
+						<a class="btn btn-primary bt-create-event btn-block text-white" href="{{ url('appointment') }}"><i class="fa fa-calendar"></i> @lang('messages.appointment_stat')</a> 
 					</div>
-					<div class="col-lg-4 mb-2">
-						<a class="btn btn-success bt-send-message btn-block text-white"><i class="fa fa-comments"></i> @lang('messages.chat_stat')</a> 
+					<div class="col-lg-4 mb-2 mx-auto">
+						<a class="btn btn-success bt-send-message btn-block text-white" data-chat-record-id="{{ $usuario->id }}" href="{{ url('/messaging') }}"><i class="fa fa-comments"></i> @lang('messages.chat_stat')</a> 
 					</div>
-					<div class="col-lg-4 mb-2">
+					{{-- <div class="col-lg-4 mb-2">
 						<a class="btn btn-warning bt-open-alerts btn-block text-white"><i class="fa fa-cogs"></i> @lang('messages.alerts_stat')</a>
-					</div>
+					</div> --}}
 				</div>
 			</div>
         </div>

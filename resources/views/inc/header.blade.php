@@ -197,14 +197,13 @@
       {{-- <span class="badge badge-danger badge-counter">3+</span> --}}
     </a>
     <!-- Dropdown - Alerts for Appointments -->
-    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+    <div id="top-navigator-appointments" class="alert-summary dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
       <h6 class="dropdown-header">
         @lang('messages.alerts_center')
       </h6>
-      <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
+      {{-- <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
         <div class="mr-3">
           <div class="icon-circle bg-primary">
-            {{-- <i class="fas fa-file-alt text-white"></i> --}}
             <i class="fas fa-calendar-check text-white"></i>
           </div>
         </div>
@@ -235,7 +234,7 @@
           Spending Alert: We've noticed unusually high spending for your account.
         </div>
       </a>
-      <a class="dropdown-item text-center small text-gray-500" href="javascript:void(0);">@lang('messages.show_all_alerts')</a>
+      <a class="dropdown-item text-center small text-gray-500" href="javascript:void(0);">@lang('messages.show_all_alerts')</a> --}}
     </div>
   </li>
 

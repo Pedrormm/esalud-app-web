@@ -1,8 +1,6 @@
 
 @section('viewsScripts')
-
 <script>
-
 $('.confirmDeleteUser').on('click', function(e){
     e.preventDefault();
     let userDeleteId = $(this).data('id-user');
@@ -27,12 +25,9 @@ $('.confirmDeleteUser').on('click', function(e){
     });
 
 });
-// let isallUsersDelete = $('#isallUsersDelete').val();
-// if (isallUsersDelete == 1){
-@if((isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && ($flagsMenuEnabled['ALL_USERS_DELETE']))
+
 
     // console.log("isallUsersDelete ",isallUsersDelete);
-
     let _mainTableAllUsersAjax = $('#mainTableAllUsers').DataTable({
         serverSide : true,
         "responsive": true,
@@ -184,19 +179,6 @@ $('.confirmDeleteUser').on('click', function(e){
 
 
 // }
-@else(!(isset($flagsMenuEnabled['ALL_USERS_DELETE'])) && !($flagsMenuEnabled['ALL_USERS_DELETE']))
-// else if (isallUsersDelete == 0){
-    if ($('#mainTableAllUsers').length > 0 ){
-        $('#mainTableAllUsers').DataTable({
-            "responsive": true,
-            "language": {
-                "url": _urlDtLang
-            },
-        });
-    }
-// }
-
-@endif
 
 
 </script>

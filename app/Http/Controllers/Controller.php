@@ -37,7 +37,7 @@ class Controller extends BaseController
 
     protected function errorNotAjax(Request $request, string $message) {
         if($request->wantsJson()) {
-            dd($request);
+            // dd($request);
             // return response()->json([]);
             return $this->jsonResponse(1, $message);
         }

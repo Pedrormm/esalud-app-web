@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Message;
+use App\Models\Treatment;
 use DB;
 use Carbon\Carbon;
 use Lang;
@@ -174,4 +175,67 @@ class DashboardController extends Controller
             return response()->json($data);
         }
     }
+
+    public function fillSinglePatientAppointments(Request $request){
+        if ($request->ajax()){
+            $id = auth()->user()->id;
+            $ap = Appointment::select('id','dt_appointment','checked','updated_at')
+            ->where('user_id_patient', $id)
+            ->get();
+            // dd($ap->toArray());
+            $data = [];
+            $pendingCount = 0;
+            $acceptedCount = 0;
+            $rejectedCount = 0;
+            $data["pending"]=$pendingCount;
+            $data["accepted"]=$acceptedCount;
+            $data["rejected"]=$rejectedCount;
+
+            foreach ($ap as $a){
+                if (isset($a->checked)) {
+                    if (($a->checked) == 0){
+                        $pendingCount++;
+                        $data["pending"]=$pendingCount;
+                    }
+                    else if (($a->checked) == 1){
+                        $acceptedCount++;
+                        $data["accepted"]=$acceptedCount;
+                    }
+                    else if (($a->checked) == 2){
+                        $rejectedCount++;
+                        $data["rejected"]=$rejectedCount;
+                    }
+                    else{
+                        // error
+                    }
+                }
+
+            }
+
+            return response()->json($data);
+        }
+    }
+
+    public function filltreatmentsInProgress(Request $request){
+        if ($request->ajax()){
+            $id = auth()->user()->id;
+
+            $pastTreatments = Treatment::select('id','user_id_patient','description','treatment_starting_date','treatment_end_date')
+            ->where('user_id_patient', 17)
+            ->whereDate('treatment_end_date', '<=', Carbon::today())
+            ->get()->count();
+
+            $futureTreatments = Treatment::select('id','user_id_patient','description','treatment_starting_date','treatment_end_date')
+            ->where('user_id_patient', 17)
+            ->whereDate('treatment_end_date', '>', Carbon::today())
+            ->get()->count();
+
+            $data = [];
+            $data["progress"]=$futureTreatments;
+            $data["finished"]=$pastTreatments;
+
+            return response()->json($data);
+        }
+    }
+
 }

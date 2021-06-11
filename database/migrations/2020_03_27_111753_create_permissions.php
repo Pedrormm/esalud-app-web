@@ -14,10 +14,10 @@ class CreatePermissions extends Migration
     public function up()
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('ID de la vista a dar permisos');
-            $table->string('flag_meaning', 100)->index()->comment('Nombre de la vista a dar permisos');
-            $table->smallInteger('default_permission')->default(0)->index()->comment('Permiso por defecto de la vista: 0/1');
-            // $table->string('permission_name', 100)->comment('Nombre del tipo de permiso');
+            $table->bigIncrements('id')->comment('Permission id');
+            $table->string('flag_meaning', 100)->index()->comment('Permission name');
+            $table->smallInteger('default_permission')->default(0)->index()->comment('Default permission: 0/1');
+            // $table->string('permission_name', 100)->comment('Permission name');
             $table->softDeletes();
             $table->timestamps();
         });

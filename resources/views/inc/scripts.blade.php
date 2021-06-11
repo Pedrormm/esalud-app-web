@@ -42,6 +42,7 @@
     }
     
     asyncCall('appointment/icon', '#alertsDropdown', true);
+    asyncCall('appointment/summary', '#top-navigator-appointments', true, false);
     asyncCall('messaging/icon', '#messagesDropdown', true);
     //  $('#messagesDropdown').click();
     asyncCall('messaging/summary', '#top-navigator-messages', true, false);
@@ -64,8 +65,10 @@
     if (screen.width >= 1024){
         @if((Request::is('users/create','users*','patients*','staff*')))
             $('#collapseUserManagement').collapse('show');
-        @elseif ((Request::is('messaging*','videoCall*','messaging/myMessages','openvidu/token')))
+        @elseif ((Request::is('messaging*','videoCall*')))
             $('#collapseCommunication').collapse('show');
+        @elseif ((Request::is('schedule*')))
+            $('#collapseSchedule').collapse('show');
         @elseif ((Request::is('appointment*')))
             $('#collapseAppoinment').collapse('show');
         @endif
@@ -80,48 +83,52 @@
         // Dictionaries from the OpenSource site www.oxygenxml.com/spell_checking.html and the repository https://github.com/wooorm/dictionaries
         
         let _dictionary = null;
-        switch(_lang){
-            case "es":
-                _dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
-                break;
-            case "en":
-                _dictionary = new Typo("en_US", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
-                break;
-            case "it":
-                // _dictionary = new Typo("it_IT", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
-                _dictionary = null;
-                break;
-            case "pt":
-                _dictionary = null;
-                break;
-            case "fr":
-                _dictionary = new Typo("fr_FR", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
-                break;
-            case "ro":
-                _dictionary = null;
-                break;
-            case "de":
-                _dictionary = new Typo("de_DE", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
-                break;
-            case "ar":
-                _dictionary = null;
-                break;
-            case "ru":
-                _dictionary = null;
-                break;     
-            case "zh_CN":
-                _dictionary = null;
-                break;
-            case "ja":
-                _dictionary = null;
-                break; 
-            default:
-                _dictionary = null;
-                break;
-        }
+        @if (auth()->user()->has_spelling_checker)
+            @if (auth()->user()->has_spelling_checker == 1)
+                switch(_lang){
+                    case "es":
+                        _dictionary = new Typo("es_ES", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                        break;
+                    case "en":
+                        _dictionary = new Typo("en_US", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                        break;
+                    case "it":
+                        // _dictionary = new Typo("it_IT", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                        _dictionary = null;
+                        break;
+                    case "pt":
+                        _dictionary = null;
+                        break;
+                    case "fr":
+                        _dictionary = new Typo("fr_FR", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                        break;
+                    case "ro":
+                        _dictionary = null;
+                        break;
+                    case "de":
+                        _dictionary = new Typo("de_DE", false, false, { dictionaryPath: "{{ asset('js/typo/dictionaries')}}" });
+                        break;
+                    case "ar":
+                        _dictionary = null;
+                        break;
+                    case "ru":
+                        _dictionary = null;
+                        break;     
+                    case "zh_CN":
+                        _dictionary = null;
+                        break;
+                    case "ja":
+                        _dictionary = null;
+                        break; 
+                    default:
+                        _dictionary = null;
+                        break;
+                }
+            @endif
+        @endif
     @endif  
 
-    @if(Request::is('user/create'))
+    @if(Request::is('user/create') || Request::is('user/newUser'))
         $('#navSubitemCreateNewUser').css('background-color', '#eaecf4');
         $('#navSubitemCreateNewUser').addClass('active');
     @elseif(Request::is('users*'))
@@ -135,10 +142,7 @@
         $('#navSubitemStaffManagement').addClass('active');
     @endif
 
-    @if(Request::is('messaging/myMessages'))
-        $('#navSubitemMyMessages').css('background-color', '#eaecf4');
-        $('#navSubitemMyMessages').addClass('active');
-    @elseif(Request::is('messaging'))
+    @if(Request::is('messaging'))
         $('#navSubitemMessaging').css('background-color', '#eaecf4');
         $('#navSubitemMessaging').addClass('active');
     @elseif(Request::is('videoCall'))
@@ -146,22 +150,33 @@
         $('#navSubitemVideocall').addClass('active');
     @endif
 
-    @if(Request::is('appointment/listPending'))
+    @if(Request::is('schedule'))
+        $('#navSubItemMySchedule').css('background-color', '#eaecf4');
+        $('#navSubItemMySchedule').addClass('active');
+    @elseif(Request::is('schedule/staff*'))
+        $('#navSubItemAllSchedules').css('background-color', '#eaecf4');
+        $('#navSubItemAllSchedules').addClass('active');
+    @endif
+
+    @if(Request::is('appointment/listPending*'))
         $('#navSubitemPendingAppointments').css('background-color', '#eaecf4');
         $('#navSubitemPendingAppointments').addClass('active');
-    @elseif(Request::is('appointment/listAccepted'))
+    @elseif(Request::is('appointment/listAccepted*'))
         $('#navSubitemAcceptedAppointments').css('background-color', '#eaecf4');
         $('#navSubitemAcceptedAppointments').addClass('active');
+    @elseif(Request::is('appointment/listRejected*'))
+        $('#navSubitemRejectedAppointments').css('background-color', '#eaecf4');
+        $('#navSubitemRejectedAppointments').addClass('active');
     @elseif(Request::is('appointment'))
         $('#navSubitemShowAppointments').css('background-color', '#eaecf4');
         $('#navSubitemShowAppointments').addClass('active');
-    @elseif(Request::is('appointment/all'))
-        $('#navSubitemShowAllApointments').css('background-color', '#eaecf4');
-        $('#navSubitemShowAllApointments').addClass('active');
-    @elseif(Request::is('appointment/create'))
+    @elseif(Request::is('appointment/listOld*'))
+        $('#navSubitemOldAppointments').css('background-color', '#eaecf4');
+        $('#navSubitemOldAppointments').addClass('active');
+    @elseif(Request::is('appointment/create*'))
         $('#navSubitemCreateAppointment').css('background-color', '#eaecf4');
         $('#navSubitemCreateAppointment').addClass('active');
-    @elseif(Request::is('appointment/calendar'))
+    @elseif(Request::is('appointment/calendar*'))
         $('#navSubitemAppointmentCalendar').css('background-color', '#eaecf4');
         $('#navSubitemAppointmentCalendar').addClass('active');
     @endif

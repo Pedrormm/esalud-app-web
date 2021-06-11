@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => '治療の編集',
     'treatment_data' => '治療データ',
+    'create_ Treatment' => 'トリートメントの作成',
+    'of_the_user' => 'ユーザーの',
     'type_of_medicine' => '薬の種類',
     'medicine_administration' => '薬剤投与モード',
     'description_stat' => '説明',
@@ -582,7 +584,39 @@ return [
     'enter_stat' => '入る',
 
     'selected_flag' => '選択されたフラグ',
+    'lookfor_different_users_to' => 'と異なるユーザーを探します',
     'edit_stat_role' => '役割の編集',
+    'delete_message' => 'メッセージを削除',
+    'generic_treatment' => 'ジェネリック',
+
+    'a_new_treatment_was_created' => '新しい治療法が作成されました',
+    'treatment_updated_successfully' => '治療法は正常に更新されました',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'すべてのユーザー トリートメントを削除しますか',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => '本当にすべてのユーザー トリートメントを削除しますか',
+    'all_treatments_of_the_user' => 'すべてのユーザー トリートメント',
+    'were_deleted_sucessfully' => '正常に削除されました',
+    'the_treatment_has_no_description' => '治療法には説明がありません',
+    'description_of_the_treatment' => 'トリートメントの説明',
+    'would_you_like_to_delete_the_トリートメント' => 'トリートメントを削除しますか?',
+    'are_you_sure_you_want_to_delete_the_治療' => '治療を終了してもよろしいですか?',
+    'the_treatment_was_deleted_sucessfully' => 'トリートメントは正常に削除されました',
+
+    'deleted_already_stat' => '削除済み',
+    'the_user_cannot_be_deleted_since_it_already_has_ Treatments_or_appointments' => '医療の予約または関連する治療のため、ユーザーを削除できません',
+
+    'dashboard_pending_accepted_rejected' => '保留中、受け入れ、拒否',
+    'dashboard_pending_accepted_and_rejected_appointments' => '保留中、承認済み、および拒否された予定',
+    'accepted_stat_plural' => '受け入れ',
+    'rejected_stat_plural' => '拒否',
+    'dashboard_number_of_treatments_in_progress_and_finished' => '進行中の治療数と完了した治療数',
+    'treatments_in_progress' => '進行中',
+    'finished_treatments' => 'フィニッシュ',
+    'nav-main_my_medical_treatment' => '私の治療法',
+    'number_of_news_displayed' => '表示されるニュースの数',
+    'activate_spelling_checker' => 'スペルチェッカーを有効にする',
+    'activated' => '「アクティブ化」',
+    'desactivated_stat' => '非アクティブ化',   
+
 
 ];
 

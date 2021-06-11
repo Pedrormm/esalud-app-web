@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => 'تحرير العلاج',
     'treatment_data' => 'بيانات العلاج',
+    'create_treatment' => 'ابتكر العلاج',
+    'of_the_user' => 'للمستخدم',
     'type_of_medicine' => 'نوع الدواء',
     'medicine_administration' => 'وضع إدارة الدواء',
     'description_stat' => 'الوصف',
@@ -584,6 +586,37 @@ return [
     'selected_flag' => 'العلم المختار',
     'lookfor_different_users_to' => 'ابحث عن مستخدمين لهم دور آخر غير',
     'edit_stat_role' => 'تحرير الدور',
+    'delete_message' => 'حذف رسالة',
+    'generic_treatment' => 'نوعي',
+
+    'a_new_treatment_was_created' => 'تم إنشاء علاج جديد',
+    'treatment_updated_successfully' => 'تم تحديث العلاج بنجاح',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'هل ترغب في حذف جميع علاجات المستخدم',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'هل أنت متأكد أنك تريد حذف جميع علاجات المستخدم',
+    'all_treatments_of_the_user' => 'جميع علاجات المستخدم',
+    'were_deleted_sucessfully' => 'تمت إزالتها بنجاح',
+    'the_treatment_has_no_description' => 'العلاج ليس له وصف',
+    'description_of_the_treatment' => 'وصف العلاج',
+    'would_you_like_to_delete_the_treatment' => 'هل ترغب في إزالة العلاج؟',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'هل أنت متأكد أنك تريد إنهاء العلاج؟',
+    'the_treatment_was_deleted_sucessfully' => 'تم حذف العلاج بنجاح',
+
+    'deleted_already_stat' => 'إزالة',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'لا يمكن حذف المستخدم لأنه لديه مواعيد طبية أو علاجات مرتبطة به',
+
+    'dashboard_pending_accepted_rejected' => 'معلق ، مقبول ومرفوض',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'التعيينات المعلقة والمقبولة والمرفوضة',
+    'accepted_stat_plural' => 'قبلت',
+    'rejected_stat_plural' => 'مرفوض',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'عدد العلاجات الجارية وعدد العلاجات المكتملة ',
+    'treatments_in_progress' => 'في تقدم',
+    'finished_treatments' => 'تم الانتهاء من',
+    'nav-main_my_medical_treatment' => 'علاجاتي الطبية',
+    'number_of_news_displayed' => 'عدد الأخبار المراد عرضها',
+    'activate_spelling_checker' => 'تفعيل المدقق الإملائي',
+    'activated' => 'مفعل',
+    'desactivated_stat' => 'معاق',
+
 
 ];
 

@@ -1,7 +1,8 @@
 
     $('.cHeader button').on('click', function(e){
         e.preventDefault();
-        window.location.href = _publicUrl+"schedule/staff/";
+        // window.location.href = _publicUrl+"schedule/staff/";
+        history.go(-1);
     });
 3
     $( "#SaveSchedule" ).on( "click", function() {

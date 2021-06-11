@@ -18,7 +18,7 @@
             </div>
             {{-- <h4 class="font-weight-bold text-primary mx-auto ">Editar cita con fecha {{ $appointment[0]['dt_appointment'] }}</h4> --}}
             {{-- <h4 class="font-weight-bold text-primary col-lg-6 offset-3">Editar cita con fecha {{ $appointment[0]['dt_appointment'] }}</h4> --}}
-            <h4 class="font-weight-bold text-primary centered"> @lang('messages.edit_an_appointment_that_has_the_date')  {{ $appointment[0]['dt_appointment'] }}</h4>
+            <h4 class="font-weight-bold text-primary centered edit-appointment-header" data-appointment-id="{{ $appointment[0]['dt_appointment']}}"> @lang('messages.edit_an_appointment_that_has_the_date')  {{ $appointment[0]['dt_appointment'] }}</h4>
 
           </div>
 
@@ -35,7 +35,7 @@
                 </div>
                
                 <div class="row mb-3">
-                    <input type="hidden" value="{{ $appointment[0]['id']}}" name="appointment_id" />
+                    <input type="hidden" value="{{ $appointment[0]['id']}}" name="  " />
                     <div class="col-lg-4">
                         <input type="text" class="form-control-plain-text" name="user_patient" placeholder=@lang('messages.patient_type') disabled
                         value="{{ $appointment[0]['user_patient']['name'].' '. $appointment[0]['user_patient']['lastname']}}"/>
@@ -58,7 +58,21 @@
 
                 <div class="row mb-3">
                     @if ($userLogin->role_id == \HV_ROLES::PATIENT)
-                        <div class="col-lg-11 mx-auto">                      
+                        <div class="col-lg-6">                      
+                            <label for="doctorComments">@lang('messages.doctor_comments')</label>
+                            <textarea disabled id="doctorComments" class="form-control" name="doctorComments" 
+                            aria-describedby="commentHelpBlockDoctor" >{{ $appointment[0]['comments']}}</textarea>
+                        </div>
+                        <div class="col-lg-6">                      
+                            <label for="patientComments">@lang('messages.patient_comments')</label>
+                            <textarea id="patientComments" class="form-control" name="patientComments" 
+                            aria-describedby="commentHelpBlockPatient">{{ $appointment[0]['user_comment']}}</textarea>
+                            <small id="commentHelpBlockPatient" class="form-text text-muted">
+                                @lang('messages.special_doctor_order')
+                            </small>    
+                        </div>
+                    @elseif ($userLogin->role_id == \HV_ROLES::DOCTOR)
+                        <div class="col-lg-6">                      
                             <label for="doctorComments">@lang('messages.doctor_comments')</label>
                             <textarea id="doctorComments" class="form-control" name="doctorComments" 
                             aria-describedby="commentHelpBlockDoctor" >{{ $appointment[0]['comments']}}</textarea>
@@ -66,14 +80,21 @@
                                 @lang('messages.special_patient_order')
                             </small>
                         </div>
-                    @elseif ($userLogin->role_id == \HV_ROLES::DOCTOR)
-                        <div class="col-lg-11 mx-auto">                      
+                        <div class="col-lg-6">                      
                             <label for="patientComments">@lang('messages.patient_comments')</label>
-                            <textarea id="patientComments" class="form-control" name="patientComments" 
+                            <textarea disabled id="patientComments" class="form-control" name="patientComments" 
+                            aria-describedby="commentHelpBlockPatient">{{ $appointment[0]['user_comment']}}</textarea>   
+                        </div>
+                    @elseif ($userLogin->role_id == \HV_ROLES::HELPER)
+                        <div class="col-lg-6">                      
+                            <label for="doctorComments">@lang('messages.doctor_comments')</label>
+                            <textarea disabled id="doctorComments" class="form-control" name="doctorComments" 
+                            aria-describedby="commentHelpBlockDoctor" >{{ $appointment[0]['comments']}}</textarea>
+                        </div>
+                        <div class="col-lg-6">                      
+                            <label for="patientComments">@lang('messages.patient_comments')</label>
+                            <textarea disabled id="patientComments" class="form-control" name="patientComments" 
                             aria-describedby="commentHelpBlockPatient">{{ $appointment[0]['user_comment']}}</textarea>
-                            <small id="commentHelpBlockPatient" class="form-text text-muted">
-                                @lang('messages.special_doctor_order')
-                            </small>
                         </div>
                     @elseif ($userLogin->role_id == \HV_ROLES::ADMIN)
                         <div class="col-lg-6">                      
@@ -90,13 +111,13 @@
                             aria-describedby="commentHelpBlockPatient">{{ $appointment[0]['user_comment']}}</textarea>
                             <small id="commentHelpBlockPatient" class="form-text text-muted">
                                 @lang('messages.special_doctor_order')
-                            </small>
+                            </small>    
                         </div>
                     @endif
                 </div>
 
                 <div class="row mb-3">
-                    @if ($appointment[0]['user_creator']['role_id'] == \HV_ROLES::PATIENT)
+                    @if ($userLogin->role_id == \HV_ROLES::PATIENT)
                         <div class="col-lg-8 mx-auto">                      
                             <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
                             data-width="100%" data-header=@lang('messages.appointment_status')
@@ -106,9 +127,8 @@
                                 <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
                             </select>  
                         </div>
-                    @elseif (($appointment[0]['user_creator']['role_id'] == \HV_ROLES::DOCTOR) || 
-                    ($appointment[0]['user_creator']['role_id'] == \HV_ROLES::HELPER) || 
-                    ($appointment[0]['user_creator']['role_id'] == \HV_ROLES::ADMIN))
+                        <input type="hidden" value="{{ $appointment[0]['accomplished'] }}" name="appointmentAccomplished">
+                    @else
                         <div class="col-lg-6">                      
                             <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
                             data-width="100%" data-header=@lang('messages.appointment_status')
@@ -147,6 +167,13 @@
 
     @section('viewsScripts')
         <script>
+
+            $(".edit-appointment-header").text(function(i){
+                let givenDate = $(this).attr("data-appointment-id");
+                let publishedDate = getLanguageDate(givenDate);
+                return _messagesLocalization.edit_an_appointment_that_has_the_date + " " + publishedDate;     
+            });
+
             $('.cHeader button').on('click', function(e){
                 e.preventDefault();
                 window.location.href = _publicUrl+"appointment/";

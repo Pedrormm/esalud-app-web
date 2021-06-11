@@ -8,6 +8,7 @@ use App\Repositories\StaffRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Staff;
 use App\Models\Role;
@@ -123,28 +124,59 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Update the specified Staff in storage.
-     *
-     * @param int $id
-     * @param UpdateStaffRequest $request
-     *
-     * @return Response
-     */
-    public function update($id, UpdateStaffRequest $request)
-    {
-        $staff = $this->staffRepository->find($id);
+     * Update the selected user in the Database
+     * Endpoint: users/{id}
+     * @author Pedro
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */      
+    public function update(Request $request, int $id){
+        
+        $validatedData = parent::checkValidation([
+            'role_id' => 'required|exists:App\Models\Role,id',
+            'email' => 'required|email:rfc,dns',
+            'name' => 'required',
+            'lastname' => 'required',
+            'zipcode' => 'numeric',
+            'phone' => 'required',
+            'birthdate' => 'required|date',
+            'sex' => 'required',
+            'blood' => 'required',
+            'country' => 'string',
+            'city' => 'string',
+            'address' => 'string',
+        ]);
+        $token = $request->input('token');
+        
+        if ($request->input('role_id')==\HV_ROLES::PATIENT){
+            $mapValidation = parent::checkValidation([
+                'historic' => 'required',
+                'height' => 'required|numeric',
+                'weight' => 'required|numeric',
+            ]);
 
-        if (empty($staff)) {
-            Flash::error('Staff not found');
-
-            return redirect(route('staff.index'));
+            $res = Patient::whereUserId($id)->update($mapValidation);
+        }
+        if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
+            $mapValidation = parent::checkValidation([
+                'historic' => 'required',
+                'branch_id' => 'required|exists:App\Models\Branch,id',
+                'shift' => Rule::in(\SHIFTS::$types),
+                'office' => 'required|numeric',
+                'room' => 'required|numeric',
+                'h_phone' => 'required|numeric',
+            ]); 
+            $res = Staff::whereUserId($id)->update($mapValidation);
         }
 
-        $staff = $this->staffRepository->update($request->all(), $id);
+        $user_id = $request->input('user_id');
+        $usuario = User::find($user_id);
 
-        Flash::success('Staff updated successfully.');
+        $validatedData = array_merge($mapValidation, $validatedData);
+        // dd($validatedData);
+        $usuario->update($validatedData);
 
-        return redirect(route('staff.index'));
+        return view('staff.index')->with('okMessage', \Lang::get('messages.the_user').$usuario->name." ".$usuario->lastname." ".\Lang::get('messages.has_been_succesfully_edited'));
     }
 
     /**
@@ -172,13 +204,42 @@ class StaffController extends AppBaseController
          'staff.id as staff_id', 'staff.user_id as staff_user_id')
         ->where('users.id', $id)->get()->toArray();
 
-        $userToDelete->delete($id);
-        
-        if($patientOrStaffFound[0]['staff_id']){
-            Staff::find($patientOrStaffFound[0]['staff_id'])->delete();
+        $hasRelations = User::leftJoin('staff as s', 'users.id', 's.user_id')
+        ->leftJoin('appointments as a', function($join) {
+            $join->on('a.user_id_creator', '=', 'users.id')->orOn('a.user_id_doctor', '=', 'users.id');
+        })
+        ->leftJoin('treatments as t', 'users.id', 't.user_id_doctor')
+        ->select('users.id as user_id', 'a.dt_appointment as dt', 'a.id as appointment_id', 
+        'a.deleted_at as a_deleted', 't.id as treatement_id', 't.deleted_at as t_deleted',)
+        ->where('users.id', $id)
+        ->where(function($q) {
+            $q->whereDate('a.dt_appointment', '>', Carbon::today())
+                ->orWhereNull('a.dt_appointment');
+        })
+        ->get();
+
+        // deleted=null: has value. When one is null a relation is found.
+        $foundRelation = false;
+        foreach($hasRelations as $rel) {
+            if ((!is_null($rel->appointment_id) && is_null($rel->a_deleted)) || 
+            (!is_null($rel->treatement_id) && is_null($rel->t_deleted))) {
+                $foundRelation = true;
+                break;
+            }
         }
-        else{
-            return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff')); 
+        
+        if (!$foundRelation)
+            $userToDelete->delete($id);
+        else
+            return $this->jsonResponse(1, \Lang::get('messages.the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments'));
+
+        if(!$foundRelation){
+            if($patientOrStaffFound[0]['staff_id']){
+                Staff::find($patientOrStaffFound[0]['staff_id'])->delete();
+            }
+            else{
+                return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff')); 
+            }
         }
 
         return $this->jsonResponse(0, \Lang::get('messages.user_type')." ".$userName." ".\Lang::get('messages.deleted_successfully'));
@@ -234,7 +295,7 @@ class StaffController extends AppBaseController
                 });
                 $numRecords = $data->count();
             }
-            // Search by name, surname, role, dni, sex, branch_name, shift, office or room
+            // Search by name, surname, role, dni, sex, branch_name, office or room
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
                
@@ -245,7 +306,7 @@ class StaffController extends AppBaseController
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('sex', 'like', '%' . $searchPhrase . '%')      
                         ->orWhere('branches.name', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('shift', 'like', '%' . $searchPhrase . '%')
+                        // ->orWhere('shift', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('office', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('room', 'like', '%' . $searchPhrase . '%');
                 });

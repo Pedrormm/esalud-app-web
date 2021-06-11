@@ -16,7 +16,7 @@
                   <i class="fas fa-arrow-left"></i>
               </button>
             </div>
-            <h4 class="font-weight-bold text-primary centered">@lang('messages.edit_treatment')</h4>
+            <h4 class="font-weight-bold text-primary centered">@lang('messages.create_treatment')</h4>
   
           </div>
 
@@ -41,28 +41,24 @@
             <div id="error-container" class="alert alert-danger dNone"></div>
             <div id="message-container" class="alert alert-success dNone"></div>
 
-            {{ Form::open(array('url' => '/treatments/'.$treatment->id, 'method' => 'PUT', 'id'=>'newUserMailForm')) }}
+            {{-- {{ Form::open(array('url' => '/treatments/'.$selectedUser["id"].'/store', 'method' => 'POST', 'id'=>'createTreatmentForm')) }} --}}
+            {{ Form::open(array('id'=>'createNewTreatmentForm')) }}
+
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h3>@lang('messages.treatment_data') </h3>
+                        <h3>@lang('messages.treatment_data') @lang('messages.of_the_user') {{ $selectedUser["name"] ." ".$selectedUser["lastname"]}}</h3>
                     </div>
                 </div>
                
                 <div class="row mb-3">
-                    <input type="hidden" value="{{ $treatment->id }}" name="treatment_id" />
+                    {{-- <input type="hidden" value="{{ $selectedUser["id"] }}" name="user_id" /> --}}
                     <div class="col-lg-4">
                         <select name="doctor_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
                             data-live-search="true" title=@lang('messages.doctor_type')>
-                            @if ($treatment->userDoctor)
-                                @foreach ($doctors as $doctor)
-                                    <option value={{ $doctor->id }} {{ $treatment->userDoctor->id == $doctor->id ? 'selected' : "" }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
-                                @endforeach
-                            @else
-                                @foreach ($doctors as $doctor)
-                                    <option value={{ $doctor->id }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
-                                @endforeach
-                            @endif
+                            @foreach ($doctors as $doctor)
+                                <option value={{ $doctor->id }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
+                            @endforeach
                         </select> 
                     </div>
 
@@ -70,7 +66,7 @@
                         <select name="type_medicines_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
                             data-live-search="true" title=@lang('messages.type_of_medicine')>
                             @foreach ($typeMedicines as $typeMedicine)
-                                <option value={{ $typeMedicine->id }} {{ $treatment->typeMedicine->id == $typeMedicine->id ? 'selected' : "" }}>{{ $typeMedicine->name }}</option>
+                                <option value={{ $typeMedicine->id }} >{{ $typeMedicine->name }}</option>
                             @endforeach
                         </select> 
                     </div>
@@ -79,9 +75,7 @@
                         <select name="medicines_administration_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
                             data-live-search="true" title=@lang('messages.medicine_administration')>
                             @foreach ($medicinesAdministration as $medicineAdministration)
-                                <option value={{ $medicineAdministration->id }} 
-                                    {{ is_null($treatment->medicineAdministration)?"": 
-                                    ($treatment->medicineAdministration->id == $medicineAdministration->id ? 'selected' : "") }}>{{ $medicineAdministration->name }}</option>
+                                <option value={{ $medicineAdministration->id }}>{{ $medicineAdministration->name }}</option>
                             @endforeach
                         </select> 
                     </div>
@@ -89,29 +83,24 @@
 
                 <div class="row mb-3 d-flex justify-content-center">
                     <div class="col-lg-11">
-                        <textarea class="form-control" id="treatmentDescription" rows="3" value="{{ $treatment->description }}" placeholder=@lang('messages.description_stat') name="description"></textarea>
+                        <textarea class="form-control" id="treatmentDescription" rows="3" placeholder=@lang('messages.description_stat') name="description"></textarea>
                     </div>
                 </div>
 
-                @if ($treatment->treatment_end_date > $today)
-                    <div class="row mb-3 d-flex justify-content-center">
-                        <div class="col-lg-4">
-                            <label>@lang('messages.treatment_end_date')</label>
-                            {{-- <input required type="datetime-local" 
-                            value="{{ !is_null($treatment->treatment_end_date)? substr($treatment->treatment_end_date,0, 10)."T".substr($treatment->treatment_end_date,11,16) :"" }}" 
-                            class="form-control" name="treatment_end_date" /> --}}
-
-                            <input required type="date" 
-                            value="{{ !is_null($treatment->treatment_end_date)? substr($treatment->treatment_end_date,0, 10) :"" }}" 
-                            class="form-control" name="treatment_end_date" />
-
-                        </div>
+                <div class="row mb-3 d-flex justify-content-center">
+                    <div class="col-lg-4">
+                        <label>@lang('messages.treatment_start_date')</label>
+                        <input type="date" class="form-control" name="treatment_start_date" id="treatment_start_date"/>
                     </div>
-                @endif
+                    <div class="col-lg-4">
+                        <label>@lang('messages.treatment_end_date')</label>
+                        <input type="date" class="form-control" name="treatment_end_date" id="treatment_end_date"/>
+                    </div>
+                </div>
 
-                <div class="row mb-3 ">
-                    <div class="col-lg-2 offset-5 text-center">
-                        <button class="btn btn-primary btn-block"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
+                <div class="row mt-3" id="createTreatmentButton">
+                    <div class="col-lg-12 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-plus-circle"></i> @lang('messages.create_stat')</button>
                     </div>
                 </div>
 
@@ -125,18 +114,39 @@
 
   </div>
 
-  {{-- <script type="text/javascript" src="{{ asset('js/newUserMail.js')}}"></script> --}}
-
   @endsection
 
     @section('viewsScripts')
         <script>
-
             $('.cHeader button').on('click', function(e){
                 e.preventDefault();
-                // window.location.href = _publicUrl+"treatments/"+id+"/indexSinglePatient";
-                history.go(-1);
+                window.location.href = _publicUrl+"treatments/";
             });
+
+            $('#createTreatmentButton').on("click",function(e){
+                e.preventDefault();
+                let id= {{ $selectedUser["id"] }};
+
+                let  input = $('<input>').attr("type","hidden").attr("name","userId").attr("value",id);
+                input.appendTo( "#createNewTreatmentForm" );
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }, 
+                    url:_publicUrl+'treatments',
+                    method:"POST",
+                    data: $("#createNewTreatmentForm").serialize(),
+                    dataType:"json",
+                    contenttype: "application/json; charset=utf-8",
+                }).done(function(response){
+                    // console.log("resp ", response);
+                    showInlineMessage(response.message, 30);
+                    // console.log("app ",response.obj);
+
+                });
+            });
+
+
         </script>
     @endsection
 

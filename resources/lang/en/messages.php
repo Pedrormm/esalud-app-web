@@ -133,7 +133,7 @@ return [
     'nav-main_adjustments' => 'Adjustments',
     'nav-main_role_management' => 'Role management',
 
-    'MY_V_HOSPITAL' => 'MY HOSPITAL V.',
+    'MY_V_HOSPITAL' => 'MY V. HOSPITAL',
     
     'user_type' => 'User',
     'patient_type' => 'Patient',
@@ -562,6 +562,8 @@ return [
 
     'edit_treatment' => 'Edit treatment',
     'treatment_data' => 'Treatment Data',
+    'create_treatment' => 'Create treatment',
+    'of_the_user' => 'of the user',
     'type_of_medicine' => 'Type of medicine',
     'medicine_administration' => 'Medicine administration mode',
     'description_stat' => 'Description',
@@ -584,5 +586,37 @@ return [
     'selected_flag' => 'Selected flag',
     'lookfor_different_users_to' => 'Find users with a different role than',
     'edit_stat_role' => 'Edit role',
+    'delete_message' => 'Delete message',
+    'generic_treatment' => 'Generic',
+
+    'a_new_treatment_was_created' => 'A new treatment was created',
+    'treatment_updated_successfully' => 'Treatment updated successfully',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Would you like to delete all the treatments of the user ',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Are you sure you want to delete all the treatments of the user whose name is ',
+    'all_treatments_of_the_user' => 'All treatments of the user',
+    'were_deleted_sucessfully' => 'were deleted sucessfully',
+    'the_treatment_has_no_description' => 'The treatment has no description',
+    'description_of_the_treatment' => 'Description of the treatment',
+    'would_you_like_to_delete_the_treatment' => 'Would you like to delete the treatment?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Are you sure you want to delete the treatment?',
+    'the_treatment_was_deleted_sucessfully' => 'The treatment was deleted sucessfully',
+
+    'deleted_already_stat' => 'Deleted',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'The user cannot be deleted because of medical appointments or associated treatments',
+
+    'dashboard_pending_accepted_rejected' => 'Pending, accepted and rejected',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Pending, accepted and rejected appointments',
+    'accepted_stat_plural' => 'Accepted',
+    'rejected_stat_plural' => 'Rejected',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Number of treatments in progress and number of treatments completed',
+    'treatments_in_progress' => 'In progress',
+    'finished_treatments' => 'Finished',
+    'nav-main_my_medical_treatment' => 'My medical treatments',
+    'number_of_news_displayed' => 'Number of news to be displayed',
+    'activate_spelling_checker' => 'Activate spell checker',
+    'activated' => 'Activated',
+    'deactivated' => 'Deactivated',
+
+
 ];
 

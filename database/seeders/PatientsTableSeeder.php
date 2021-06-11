@@ -20,19 +20,19 @@ class PatientsTableSeeder extends Seeder
         \DB::table('patients')->insert(array (
             0 => 
             array (
-                'id' => 21,
+                'id' => 1,
                 'user_id' => 17,
-                'historic' => '111444555',
-                'height' => 0,
-                'weight' => 0,
+                'historic' => '442795863',
+                'height' => 161,
+                'weight' => 61,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ),
             1 => 
             array (
-                'id' => 22,
+                'id' => 2,
                 'user_id' => 20,
-                'historic' => '123456789',
+                'historic' => '384325109',
                 'height' => 172,
                 'weight' => 76,
                 'created_at' => date("Y-m-d H:i:s"),
@@ -40,29 +40,29 @@ class PatientsTableSeeder extends Seeder
             ),
             2 => 
             array (
-                'id' => 23,
+                'id' => 3,
                 'user_id' => 26,
-                'historic' => '1318020427',
+                'historic' => '935647675',
                 'height' => 180,
-                'weight' => 80,
+                'weight' => 81,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ),
             3 => 
             array (
-                'id' => 24,
+                'id' => 4,
                 'user_id' => 19,
-                'historic' => '22215128345100',
-                'height' => 0,
-                'weight' => 0,
+                'historic' => '762877810',
+                'height' => 171,
+                'weight' => 63,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ),
             4 => 
             array (
-                'id' => 25,
+                'id' => 5,
                 'user_id' => 5,
-                'historic' => '36843287',
+                'historic' => '305233559',
                 'height' => 159,
                 'weight' => 58,
                 'created_at' => date("Y-m-d H:i:s"),
@@ -70,7 +70,7 @@ class PatientsTableSeeder extends Seeder
             ),
             5 => 
             array (
-                'id' => 26,
+                'id' => 6,
                 'user_id' => 21,
                 'historic' => '425412189',
                 'height' => 180,
@@ -80,9 +80,9 @@ class PatientsTableSeeder extends Seeder
             ),
             6 => 
             array (
-                'id' => 27,
+                'id' => 7,
                 'user_id' => 10,
-                'historic' => '4565454',
+                'historic' => '969319652',
                 'height' => 178,
                 'weight' => 86,
                 'created_at' => date("Y-m-d H:i:s"),
@@ -90,9 +90,9 @@ class PatientsTableSeeder extends Seeder
             ),
             7 => 
             array (
-                'id' => 28,
+                'id' => 8,
                 'user_id' => 6,
-                'historic' => '5users445300',
+                'historic' => '389736147',
                 'height' => 198,
                 'weight' => 110,
                 'created_at' => date("Y-m-d H:i:s"),
@@ -100,14 +100,36 @@ class PatientsTableSeeder extends Seeder
             ),
             8 => 
             array (
-                'id' => 29,
+                'id' => 9,
                 'user_id' => 4,
-                'historic' => '987654321',
+                'historic' => '559808318',
                 'height' => 180,
                 'weight' => 96,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ),
+
+            9 => 
+            array (
+                'id' => 10,
+                'user_id' => 27,
+                'historic' => '581356347',
+                'height' => 170,
+                'weight' => 100,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            10 => 
+            array (
+                'id' => 11,
+                'user_id' => 31,
+                'historic' => '817746340',
+                'height' => 175,
+                'weight' => 80,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+
         ));
         
         

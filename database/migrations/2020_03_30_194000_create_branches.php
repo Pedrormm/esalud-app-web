@@ -15,9 +15,9 @@ class CreateBranches extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 100)->comment('Nombre de la especialidad');
-            // $table->enum('branch_type',['doctor','helper'])->comment('Tipo de especialidad');
-            $table->unsignedSmallInteger('role_id')->nullable()->comment('Tipo de especialidad asociada al rol de usuario');
+            $table->string('name', 100)->comment('Speciality name');
+            // $table->enum('branch_type',['doctor','helper'])->comment('Speciality name');
+            $table->unsignedSmallInteger('role_id')->nullable()->comment('Specility kind, associated to an user role');
             $table->softDeletes();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));

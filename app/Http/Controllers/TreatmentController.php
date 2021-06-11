@@ -43,6 +43,13 @@ class TreatmentController extends AppBaseController
     public function indexSinglePatient($id=null, Request $request)
     {
         $user = Auth::user();
+        if ($id){
+            $userParam = User::find($id);
+            if($userParam->role_id != \HV_ROLES::PATIENT){
+                return $this->backWithErrors(\Lang::get('messages.the_user_is_not_a_patient') );
+            }
+        }
+
         $singlePatient = User::select('id','name','lastname')->where('id',$id)->get();
         // ->find($id)->name . " " . User::find($id)->lastname;
 
@@ -70,27 +77,83 @@ class TreatmentController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create($id)
     {
-        return view('treatments.create');
+
+        $userLogged = auth()->user();
+
+        $selectedUser = User::select('id','dni','name','lastname','role_id')->where('id',$id)->get()->toArray();
+        if (empty($selectedUser)) {
+            $selectedUser = null;
+        }
+        else{
+            $selectedUser = $selectedUser[0];
+        }
+
+
+        $doctors = User::select('id','dni','name','lastname','role_id')->where('role_id',2)->get();
+
+        $typeMedicines = TypeMedicine::select('id','name')->get();
+
+        $medicinesAdministration = MedicineAdministration::select('id','name')->get();
+        // dd($selectedUser);
+        // dd($treatment->toArray());
+        $today = Carbon::now();
+        return view('treatments.create', compact('selectedUser','doctors','typeMedicines','medicinesAdministration','today'));
     }
 
     /**
      * Store a newly created Treatment in storage.
      *
-     * @param CreateTreatmentRequest $request
+     * @param Request $request
      *
      * @return Response
      */
-    public function store(CreateTreatmentRequest $request)
+    public function store(Request $request)
     {
+        // dd($id);
+        // dd($request->all());
         $input = $request->all();
+        $validatedData = parent::checkValidation([
+            'doctor_id' => 'required',
+            'type_medicines_id' => 'required',
+            'medicines_administration_id' => 'required',
+            'userId' => 'required',
+            'treatment_start_date' => 'date|after:today',
+            'treatment_end_date' => 'date|after:treatment_start_date'
+        ]);
+        // dd($input);
+        $doctor_id = $request->input('doctor_id');
+        $type_medicines_id = $request->input('type_medicines_id');
+        $medicines_administration_id = $request->input('medicines_administration_id');
+        $userId = $request->input('userId');
+        if ($request->input('description'))
+            $description = $request->input('description');
+        if ($request->input('treatment_start_date'))
+            $treatment_start_date = $request->input('treatment_start_date');
+        if ($request->input('treatment_end_date'))
+            $treatment_end_date = $request->input('treatment_end_date');
 
-        $treatment = $this->treatmentRepository->create($input);
+        $treatment = new Treatment();
+        if ($userId)
+            $treatment->user_id_patient = $userId;
+        if ($doctor_id)
+            $treatment->user_id_doctor = $doctor_id;
+        if ($type_medicines_id)
+            $treatment->type_medicine_id = $type_medicines_id;
+        if ($medicines_administration_id)
+            $treatment->medicine_administration_id = $medicines_administration_id;
+        if (isset ($description))
+            $treatment->description = $description;
+        if (isset ($treatment_start_date))
+            $treatment->treatment_starting_date = $treatment_start_date;
+        if (isset ($treatment_end_date))
+            $treatment->treatment_end_date = $treatment_end_date;
+        $treatment->save();
+       
+        $message = \Lang::get('messages.a_new_treatment_was_created');
 
-        Flash::success('Treatment saved successfully.');
-
-        return redirect(route('treatments.index'));
+        return $this->jsonResponse(0, $message);
     }
 
     /**
@@ -120,9 +183,9 @@ class TreatmentController extends AppBaseController
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-    
+        // $userId = $request->id;
         $userLogged = auth()->user();
 
         $treatment = Treatment::query()
@@ -152,13 +215,24 @@ class TreatmentController extends AppBaseController
         }
 
         $doctors = User::select('id','dni','name','lastname','role_id')->where('role_id',2)->get();
-
         $typeMedicines = TypeMedicine::select('id','name')->get();
 
         $medicinesAdministration = MedicineAdministration::select('id','name')->get();
         // dd($doctors->toArray());
         // dd($treatment->toArray());
         $today = Carbon::now();
+
+        $selectedUser = User::select('id','dni','name','lastname','role_id')->where('id',$id)->get()->toArray();
+        if (empty($selectedUser)) {
+            $selectedUser = null;
+        }
+        else{
+            $selectedUser = $selectedUser[0];
+        }
+        // $returnHTML = view('treatments.edit-single-treatment-from-patient', compact('treatment','doctors','typeMedicines','medicinesAdministration','today','userId'))->render();
+        // $message="";
+        
+        // return $this->jsonResponse(0, $message, $returnHTML);
         return view('treatments.edit-single-treatment-from-patient', compact('treatment','doctors','typeMedicines','medicinesAdministration','today'));
 
     }
@@ -171,7 +245,7 @@ class TreatmentController extends AppBaseController
      *
      * @return Response
      */
-    public function update($id, UpdateTreatmentRequest $request)
+    public function update($id, Request $request)
     {
         $treatment = $this->treatmentsRepository->find($id);
 
@@ -185,6 +259,8 @@ class TreatmentController extends AppBaseController
 
         Flash::success('Treatment updated successfully.');
 
+        $message = \Lang::get('messages.treatment_updated_successfully');
+
         return redirect(route('treatments.index'));
     }
 
@@ -197,21 +273,44 @@ class TreatmentController extends AppBaseController
      *
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $treatment = $this->treatmentRepository->find($id);
+        if ($request->ajax()){
+            $res=Treatment::where('id',$id)->delete();
 
-        if (empty($treatment)) {
-            Flash::error(\Lang::get('messages.treatment_not_found'));
+            $message = \Lang::get('messages.the_treatment_was_deleted_sucessfully');
+           
+            return $this->jsonResponse(0, $message);
+        }
+    }
 
-            return redirect(route('treatments.index'));
+
+    public function deleteAll($userId, Request $request){
+        if ($request->ajax()){
+
+            $singleUser = User::find($userId);
+            $userName = $singleUser->name ." ".$singleUser->lastname;
+
+            $res=Treatment::where('user_id_patient',$userId)->delete();
+
+            $message = \Lang::get('messages.all_treatments_of_the_user')." ".$userName." ".\Lang::get('messages.were_deleted_sucessfully');
+           
+            return $this->jsonResponse(0, $message);
+        }
+    }
+
+    public function viewDescription($id){
+        $treatment = Treatment::find($id);
+        $hasDescription = false;
+        $description = \Lang::get('messages.the_treatment_has_no_description');
+        if ($treatment){
+            if (($treatment->description) && ($treatment->description != "0")){
+                $description= $treatment->description;
+                $hasDescription = true;
+            }
         }
 
-        $this->treatmentRepository->delete($id);
-
-        Flash::success('Treatment deleted successfully.');
-
-        return redirect(route('treatments.index'));
+        return view('treatments.view-description', compact('treatment','description','hasDescription'));
     }
 
 
@@ -253,11 +352,7 @@ class TreatmentController extends AppBaseController
 
                 $data->where(function($query) use ($searchPhrase) {
                     $query->orWhere('birthdate', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('phone', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('historic', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('height', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('weight', 'like', '%' . $searchPhrase . '%');
+                    ->orWhere('dni', 'like', '%' . $searchPhrase . '%');
                 });
                 $numRecords = $data->count();
             }
@@ -280,7 +375,7 @@ class TreatmentController extends AppBaseController
             elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
                
                 $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
+                    $query->orWhere('users.blood', 'like', '%' . $searchPhrase . '%');            
                 });
                         
                 $numRecords = $data->count();
@@ -446,7 +541,6 @@ class TreatmentController extends AppBaseController
         if($data->isEmpty()) {
             return response()->json(['data'=>[]]);
         }
-
         /*
          * Apply data processing
          */
@@ -475,13 +569,17 @@ class TreatmentController extends AppBaseController
                     $row->endingDate = $this->mysqlDate2Spanish(now()->addDays(7));
                 }
             }
-            
-            $row->doctorFullName = $row->userDoctor->name . " " . $row->userDoctor->lastname;
+            if ($row->userDoctor){
+                $row->doctorFullName = $row->userDoctor->name . " " . $row->userDoctor->lastname;
+            }
+            else{
+                $row->doctorFullName = null;
+            }
             $row->nameTypeMedicine = $row->typeMedicine->name;
-            $row->medicineAdministration = ($row->medicine_administration)?$row->medicine_administration:"Genérico";
+            $row->medicineAdministration = ($row->medicineAdministration)?$row->medicineAdministration->name:\Lang::get('messages.generic_treatment');
             
         }
-
+        // dd($data->toArray());
         if(request()->wantsJson()) {
             return self::responseDataTables($data->toArray(), (int)$request->draw, $numTotal, $numRecords);
         }

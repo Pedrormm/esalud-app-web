@@ -298,11 +298,11 @@ function generateMessageLine(msj, authUserId, otherUserId) {
     let str = '';
     if ((msj.user_id_from == otherUserId) && (msj.user_id_to == authUserId)){
         str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a></div></div></li>'
+        str += '<div class="dropdown-content"></div></div></li>'
     }
     else if ((msj.user_id_from == authUserId) && (msj.user_id_to == otherUserId)){
         str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-        str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>Eliminar mensaje</a></div></div></li>'
+        str += '<div class="dropdown-content"><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>'+_messagesLocalization.delete_message+'</a></div></div></li>'
                                 
         // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
         // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';

@@ -426,7 +426,7 @@ return [
     '24-40yo_age'=> '24至40歲',
     '40-65yo_age'=> '40至65歲',
     '+65yo_age'=>'+ 65歲',
-    '男人和女人'=>'男人和女人',
+    'men_and_women'=>'男人和女人',
     'men_stat'=>'男子',
     'women_stat'=>'婦女',
     'ordered_by'=>'訂購者',
@@ -562,6 +562,8 @@ return [
 
     'edit_treatment'=>'編輯治療方法',
     'treatment_data'=>'治療數據',
+    'create_treatment' => '創造治療',
+    'of_the_user' => '用戶的',
     'type_of_medicine'=>'藥品類型',
     'medicine_administration'=>'藥物管理模式',
     'description_stat'=>'描述',
@@ -584,6 +586,21 @@ return [
     'selected_flag'=>'選定標誌',
     'lookfor_different_users_to' => '查找除以下角色以外的用戶',
     'edit_stat_role' => '編輯角色',
-    
+    'delete_message' => '刪除消息',
+    'generic_treatment' => '通用的',
+
+    'a_new_treatment_was_created' => '一個新的治療已經創建',
+    'treatment_updated_successfully' => '治療更新成功',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => '您是否要刪除所有用戶處理',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => '您確定要刪除所有用戶處理嗎',
+    'all_treatments_of_the_user' => '所有用戶處理',
+    'were_deleted_sucessfully' => '已成功刪除',
+    'the_treatment_has_no_description' => '治療沒有描述',
+    'description_of_the_treatment' => '治療描述',
+    'would_you_like_to_delete_the_treatment' => '你想刪除治療嗎？',
+    'are_you_sure_you_want_to_delete_the_treatment' => '您確定要結束治療嗎？',
+    'the_treatment_was_deleted_sucessfully' => '治療已成功刪除',
+
+
 ];
 

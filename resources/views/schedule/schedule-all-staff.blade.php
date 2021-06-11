@@ -95,7 +95,7 @@
                     strButtons += ' data-id-user="'+row.users_id +'"';
                     strButtons += ' href="'+ _publicUrl+'schedule/staff/'+row.users_id+'/confirmDelete' +'">';  
                     strButtons += ' <i class="fa fa-trash"></i>&ensp;';
-                    strButtons += _messagesLocalization.delete_stat_schedule+'</a></span>';                                                                                                  
+                    strButtons += _messagesLocalization.delete_stat+'</a></span>';                                                                                                  
                     return strButtons;
                 }
             },

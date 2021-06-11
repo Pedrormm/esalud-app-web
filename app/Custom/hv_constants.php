@@ -76,6 +76,8 @@ class HV_DASHBOARD_USERS_COLORS  {
     ];
 }
 
+
+
 class IPS{
     const PUBLIC_IP_SITE = 'http://checkip.dyndns.com/';
     public static function getPrivateIp (){

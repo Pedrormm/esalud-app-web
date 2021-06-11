@@ -41,7 +41,7 @@
 
 
 
-@section('viewsScripts')
+{{-- @section('viewsScripts') --}}
   <script>
 
     $("[data-contact-id]").on('click', function(e){
@@ -53,4 +53,4 @@
     });
     
   </script>
-@endsection
+{{-- @endsection --}}

@@ -36,9 +36,15 @@
                     <th class="bg-primary">@lang('messages.doctor_in_charge')</th>
                     <th class="bg-primary">@lang('messages.medicine_drug')</th>
                     <th class="bg-primary">@lang('messages.medicine_administration')</th>
-                    <th class="bg-primary">@lang('messages.edit_treatment')</th>
-                    <th class="bg-primary">@lang('messages.see_description')</th>
-                    <th class="bg-primary">@lang('messages.delete_treatment')</th>
+                    @if(isset($flagsMenuEnabled['MEDICAL_TREATMENT_EDIT']) && $flagsMenuEnabled['MEDICAL_TREATMENT_EDIT'])
+                      <th class="bg-primary">@lang('messages.edit_treatment')</th>
+                    @endif
+                    @if(isset($flagsMenuEnabled['MEDICAL_TREATMENT_SHOW_DESCRIPTION']) && $flagsMenuEnabled['MEDICAL_TREATMENT_SHOW_DESCRIPTION'])        
+                      <th class="bg-primary">@lang('messages.see_description')</th>
+                    @endif
+                    @if(isset($flagsMenuEnabled['MEDICAL_TREATMENT_DELETE_ONE']) && $flagsMenuEnabled['MEDICAL_TREATMENT_DELETE_ONE'])
+                      <th class="bg-primary">@lang('messages.delete_treatment')</th>
+                    @endif
                 </tr>
               </thead>
             </table>

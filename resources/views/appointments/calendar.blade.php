@@ -22,15 +22,18 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+
+          locale: getLanguageDtFormat(_lang),
+
           initialView: 'dayGridMonth',
-            @if($rol_user == 4)
+            @if($rol_user == \HV_ROLES::ADMIN)
                 // editable: true,
             @endif
-          header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
+        //   headerToolbar: {
+        //         left: 'prev,next today',
+        //         center: 'title',
+        //         right: 'month,agendaWeek,agendaDay'
+        //     },
           events: [
             //   {title:'prueba', start:'2021-03-03T10:30:00'},
                 @foreach($appointments as $appointment)

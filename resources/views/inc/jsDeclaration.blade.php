@@ -18,18 +18,26 @@
     crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
-
     <!-- Latest compiled bootstrap JavaScript -->
     <!-- https://getbootstrap.com/ -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
 
     <!-- Full calendar -->
     <!-- https://fullcalendar.io/ -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script> --}}
 
-    <!-- Latest compiled and minified Bootstrap Select JavaScript (selectpicker) -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.2/locales-all.min.js"></script>
+
+
+
+
+    <!-- Compiled and minified Bootstrap Select JavaScript (selectpicker) -->
     <!-- https://developer.snapappointments.com/bootstrap-select/ -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
+    <!-- Selectpicker JavaScript translation files -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/i18n/defaults-*.min.js"></script> --}}
+
 
     <!-- Datatables-->
     <!-- https://datatables.net/ -->

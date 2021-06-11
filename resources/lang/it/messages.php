@@ -392,7 +392,7 @@ return [
     'are_you_sure_you_want_to_delete_the_staff' => 'Sei sicuro di voler eliminare l utente di tipo personale',
 
     'shift_data' => 'Spostamento',
-    'room_number' => 'stanza',
+    'room_number' => 'Stanza',
     'business_phone_number' => 'Telefono ufficio',
     'list_of_staff' => 'Elenco del personale',
     'list_of_patients' => 'Elenco dei pazienti',
@@ -560,6 +560,8 @@ return [
 
     'edit_treatment' => 'Modifica trattamento',
     'treatment_data' => 'Dati del trattamento',
+    'create_treatment' => 'Crea trattamento',
+    'of_the_user' => 'dell utente',
     'type_of_medicine' => 'Tipo di medicinale',
     'medicine_administration' => 'Modalità di somministrazione del farmaco',
     'description_stat' => 'Descrizione',
@@ -582,7 +584,37 @@ return [
     'selected_flag' => 'Bandiera selezionata',
     'lookfor_different_users_to' => 'Cerca utenti con un ruolo diverso da',
     'edit_stat_role' => 'Modifica ruolo',
-    
+    'delete_message' => 'Cancella il messaggio',
+    'generic_treatment' => 'Generico',
+
+    'a_new_treatment_was_created' => 'È stato creato un nuovo trattamento',
+    'treatment_updated_successfully' => 'Trattamento aggiornato con successo',
+    'would_you_like_to_delete_all_the_treatments_of_the_user' => 'Vuoi eliminare tutti i trattamenti dell utente',
+    'are_you_sure_you_want_to_delete_all_the_treatments_of_the_user_whose_name_is' => 'Sei sicuro di voler eliminare tutti i trattamenti dell utente il cui nome è ',
+    'all_treatments_of_the_user' => 'Tutti i trattamenti dell utente',
+    'were_deleted_sucessfully' => 'sono stati cancellati con successo',
+    'the_treatment_has_no_description' => 'Il trattamento non ha descrizione',
+    'description_of_the_treatment' => 'Descrizione del trattamento',
+    'would_you_like_to_delete_the_treatment' => 'Vuoi eliminare il trattamento?',
+    'are_you_sure_you_want_to_delete_the_treatment' => 'Sei sicuro di voler eliminare il trattamento?',
+    'the_treatment_was_deleted_sucessfully' => 'Il trattamento è stato cancellato con successo',
+
+    'deleted_already_stat' => 'Cancellato',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => 'L utente non può essere cancellato a causa di visite mediche o trattamenti associati',
+
+    'dashboard_pending_accepted_rejected' => 'In attesa, accettato e rifiutato',
+    'dashboard_pending_accepted_and_rejected_appointments' => 'Appuntamenti in attesa, accettati e rifiutati',
+    'accepted_stat_plural' => 'Accettato',
+    'rejected_stat_plural' => 'Rifiutato',
+    'dashboard_number_of_treatments_in_progress_and_finished' => 'Numero di trattamenti in corso e numero di trattamenti completati',
+    'treatments_in_progress' => 'In corso',
+    'finished_treatments' => 'Finito',
+    'nav-main_my_medical_treatment' => 'Le mie cure mediche',
+    'number_of_news_displayed' => 'Numero di notizie da visualizzare',
+    'activate_spelling_checker' => 'Attiva il controllo ortografico',
+    'attivato' => 'attivato',
+    'disattivato' => 'disattivato',
+
 
 
 ];

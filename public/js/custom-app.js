@@ -3976,6 +3976,7 @@
         var removeAfterDrop = $('#remove-after-drop');
 
         calElement.fullCalendar({
+            // lang: 'es',
             // isRTL: true,
             header: {
                 left: 'prev,next today',

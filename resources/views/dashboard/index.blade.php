@@ -116,7 +116,35 @@
       
         @elseif (auth()->user()->role_id == \HV_ROLES::PATIENT)
           {{-- Cantidad de citas pendientes vs citas aprobadas y rechazadas --}}
+
+          <div class="row">
+            <div class="col-lg-8 col-sm-4 col-md-4 col-xl-4 mx-auto">
+              <div class="card mx-auto m-3">
+                <div class="card-body">
+                  <h3 class="card-title">@lang('messages.dashboard_pending_accepted_and_rejected_appointments')
+                  </h3>
+                  <canvas id="pendingAccptedRejectedAppointments" data-pending="@lang('messages.dashboard_pending')"
+                  data-accepted="@lang('messages.accepted_stat_plural')"
+                  data-rejected="@lang('messages.rejected_stat_plural')"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {{-- Cantidad de tratamientos de curso vs total de tratamientos realizados --}}
+          <div class="row">
+            <div class="col-lg-8 col-sm-4 col-md-4 col-xl-4 mx-auto">
+              <div class="card mx-auto m-3">
+                <div class="card-body">
+                  <h3 class="card-title">@lang('messages.dashboard_number_of_treatments_in_progress_and_finished')
+                  </h3>
+                  <canvas id="treatmentsInProgress" data-progress="@lang('messages.treatments_in_progress')"
+                  data-finished="@lang('messages.finished_treatments')"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
         @elseif (auth()->user()->role_id == \HV_ROLES::DOCTOR)
           {{-- Frecuencia de citas, con respecto a sí mismo --}}
           {{-- Cantidad de citas con comentario vs sin comentario --}}

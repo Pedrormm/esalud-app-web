@@ -28,25 +28,30 @@
                 else
                     $gridCols = 4;
                 @endphp
-                    <div class="row">
-                        <div class="col-lg-{{ $gridCols }}">
-                            <label>@lang('messages.patients_list') (*)</label>
-                            <select required 
-                            name="user_id_patient" required data-width="100%" aria-describedby="patientValidity"
-                            class="selectpicker show-tick form-control"
-                            data-live-search="true" title="Patient" id="patient">                        
-                                @foreach($patients as $patient)
-                                    <option value="{{ $patient->id }}">{{ $patient->name }} {{ $patient->lastname }}</option>
-                                @endforeach
-                            </select>
-                            <div id="patientValidity" class="invalid-feedback">
-                                <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please_provide_a_valid_patient')
-                            </div>
+                    <div class="row text-center mx-auto">
+                        @if(auth()->user()->role_id != \HV_ROLES::PATIENT)
 
-                        </div>
+                            <div class="mx-auto col-lg-{{ $gridCols }}">
+                                <label>@lang('messages.patients_list') (*)</label>
+                                <select required 
+                                name="user_id_patient" required data-width="100%" aria-describedby="patientValidity"
+                                class="selectpicker show-tick form-control"
+                                data-live-search="true" title="Patient" id="patient">                        
+                                    @foreach($patients as $patient)
+                                        <option value="{{ $patient->id }}">{{ $patient->name }} {{ $patient->lastname }}</option>
+                                    @endforeach
+                                </select>
+                                <div id="patientValidity" class="invalid-feedback">
+                                    <span aria-hidden='true' class='fas fa-exclamation-triangle'></span> @lang('messages.please_provide_a_valid_patient')
+                                </div>
+
+                            </div>
+                        @elseif (auth()->user()->role_id == \HV_ROLES::PATIENT)
+                            <input type="hidden" value="{{ auth()->user()->id }}" id="patient" name="user_id_patient">
+                        @endif
                         
-                        @if(auth()->user()->role_id == \HV_ROLES::ADMIN)
-                            <div class="col-lg-{{ $gridCols }}">                      
+                        @if(auth()->user()->role_id != \HV_ROLES::DOCTOR)
+                            <div class="mx-auto col-lg-{{ $gridCols }}">                      
                                 <label>@lang('messages.doctors_list') (*)</label>
                                 <select required name="doctor_id" required data-width="100%" aria-describedby="doctorValidity"
                                 class="selectpicker show-tick form-control"
@@ -60,9 +65,11 @@
                                 </div>
 
                             </div>
+                        @elseif (auth()->user()->role_id == \HV_ROLES::DOCTOR)
+                            <input type="hidden" value="{{ auth()->user()->id }}" id="doctor" name="doctor_id">
                         @endif
                         
-                        <div class="col-lg-{{ $gridCols }}">
+                        <div class="mx-auto col-lg-{{ $gridCols }}">
                             <label>@lang('messages.appointment_date') (*)</label>
                             {{-- mirar cambio a type week --}}
                             {{-- con libreria jquery ui. https://jqueryui.com/datepicker/ --}}
@@ -73,16 +80,7 @@
                         </div>
 
                     </div>
-                    {{-- <div class="row">
-                        @if(auth()->user()->role_id == \HV_ROLES::DOCTOR)
-                            <div class="col-lg-12">                      
-                                <label for="txtComments">Comentarios del doctor</label>
-                                <textarea id="txtComments" class="form-control" name="comments" aria-describedby="commentHelpBlock"></textarea>
-                                <small id="commentHelpBlock" class="form-text text-muted">Aquí puedes poner alguna indicación especial para el paciente</small>
-                            </div>
-                        @endif
-                    </div> --}}
-
+                    
                     <div class="row mt-3" id="showAppointmentsButton">
                         <div class="col-lg-12 text-center">
                             <button type="button" class="btn btn-primary btn-lg">@lang('messages.show_appointments')</button>
@@ -94,8 +92,6 @@
                             <button type="submit" class="btn btn-primary btn-lg">@lang('messages.create_stat')</button>
                         </div>
                     </div>
-
-
 
                     {{-- <div class="card-body" id="appointmentsSchedule">
                         <div class="hv-schedule">

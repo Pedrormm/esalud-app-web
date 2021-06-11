@@ -64,6 +64,22 @@
             {
                 data: 'branch_name',
             },
+            @if(isset($flagsMenuEnabled['SCHEDULE_SHOW_AND_EDIT_ALL']) && $flagsMenuEnabled['SCHEDULE_SHOW_AND_EDIT_ALL'])
+                {
+                    data: '_edit',
+                    orderable: false,
+                    render: function(data, type, row) {
+                        // console.log(data, type, row);
+                        let strButtons = "";
+                        strButtons += ' <span> <a class="btn btn-info viewTreatments"';
+                        strButtons += ' data-id-user="'+row.users_id +'"'; 
+                        strButtons += ' href="'+ _publicUrl+'schedule/staff/'+row.users_id+'">'; 
+                        strButtons += ' <i class="fa fa-eye"></i>&ensp;'; 
+                        strButtons += _messagesLocalization.look_stat+'</a></span>';                                                                                                   
+                        return strButtons;
+                    }
+                },
+            @endif
             // {
             //     data: 'shift',
 
@@ -102,12 +118,12 @@
             //         return strShift;
             //     }
             // },
-            {
-                data: 'office',
-            },
-            {
-                data: 'room',
-            },
+            // {
+            //     data: 'office',
+            // },
+            // {
+            //     data: 'room',
+            // },
             {
                 data: 'h_phone',
             },

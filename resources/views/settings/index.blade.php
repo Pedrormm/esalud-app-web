@@ -126,6 +126,21 @@
                             </select>                    
                         </div>
                     </div>
+
+                        
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <input type="number" class="form-control" value="{{ auth()->user()->news_number }}" placeholder=@lang('messages.number_of_news_displayed') name="news_number" min="1" max="9"/>
+                        </div>
+                        <div class="col-lg-6">
+                            <select name="has_spelling_checker" class="selectpicker show-tick selectHasSpelling form-control" data-width="100%" 
+                                data-live-search="true" title=@lang('messages.activate_spelling_checker')>
+                                <option value="0" {{ auth()->user()->has_spelling_checker == "0" ? 'selected' : "" }}>@lang('messages.desactivated_stat')</option>
+                                <option value="1" {{ auth()->user()->has_spelling_checker == "1" ? 'selected' : "" }}>@lang('messages.activated')</option>
+                            </select>                    
+                        </div>
+                    </div>
+
     
                     @if(auth()->user()->role_id == \HV_ROLES::PATIENT)
                         <div class="row mb-3">
