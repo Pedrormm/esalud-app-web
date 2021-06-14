@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class ScheduleController extends Controller
 {
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function getStaff(Request $request)
     {
         $user = Auth::user();
@@ -22,7 +25,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Displays a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -31,21 +34,25 @@ class ScheduleController extends Controller
         return view('schedule.index');
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $userScheduleToDelete = User::find($id);
         $userName = $userScheduleToDelete->name . " " . $userScheduleToDelete->lastname;
-        
+
 
         if (empty($userScheduleToDelete)) {
-            return $this->jsonResponse(1, "user_not_found"); 
+            return $this->jsonResponse(1, "user_not_found");
         }
 
         $staffFound = User::leftJoin('staff', 'users.id', 'staff.user_id')
         ->select('users.id as user_id',
          'staff.id as staff_id', 'staff.user_id as staff_user_id')
         ->where('users.id', $id)->get()->toArray();
-        
+
         $strResponse = "";
         if($staffFound[0]['staff_id']){
             $staffSchedule = StaffSchedule::with("staff")
@@ -54,13 +61,16 @@ class ScheduleController extends Controller
             $strResponse = "".$userName." ".\Lang::get('messages.schedule_has_been_deleted_successfully');
         }
         else{
-            return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff')); 
+            return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff'));
         }
 
         return $this->jsonResponse(0, $strResponse);
     }
 
-
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function showSchedule(int $id ){
             $userLogged = Auth::user();
             $userStaff = User::with("staff")->where("id",$id)->get();
@@ -76,9 +86,13 @@ class ScheduleController extends Controller
                 $staffSchedule = $staffSchedule->toArray();
                 return view('schedule.show', compact('staffSchedule','userStaff'));
             }
-        
+
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generateSchedule(Request $request ){
         if ($request->ajax()){
             $userLogged = Auth::user();
@@ -101,6 +115,11 @@ class ScheduleController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @param int|null $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function saveSchedule(Request $request, int $id =null ){
         if ($request->ajax()){
             if ($id){
@@ -128,7 +147,7 @@ class ScheduleController extends Controller
                     }
                 }
                 return $this->jsonResponse(0, \Lang::get('messages.the_schedules_have_been_updated'));
-            }           
+            }
         }
     }
 
@@ -177,24 +196,24 @@ class ScheduleController extends Controller
             // Search by name, surname, role, dni, sex, branch_name, shift, office or room
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
                     $query->orWhere('users.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('users.lastname', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%')      
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('branches.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('room', 'like', '%' . $searchPhrase . '%');
                 });
-                        
-                $numRecords = $data->count();   
+
+                $numRecords = $data->count();
             }
-            
+
         }
 
         $firstRow = $data->first();
-        
+
         if(is_null($firstRow)) {
             return response()->json(['data' => []]);
         }

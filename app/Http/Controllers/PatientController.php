@@ -21,6 +21,10 @@ class PatientController extends AppBaseController
     /** @var  PatientRepository */
     private $patientRepository;
 
+    /**
+     * PatientController constructor.
+     * @param PatientRepository $patientRepo
+     */
     public function __construct(PatientRepository $patientRepo)
     {
         $this->patientRepository = $patientRepo;
@@ -101,7 +105,7 @@ class PatientController extends AppBaseController
      */
     public function edit($id)
     {
-    
+
         $userLogged = auth()->user();
         $usuario = User::find($id);
         if (empty($usuario)) {
@@ -153,7 +157,7 @@ class PatientController extends AppBaseController
             'address' => 'string',
         ]);
         $token = $request->input('token');
-        
+
         if ($request->input('role_id')==\HV_ROLES::PATIENT){
             $mapValidation = parent::checkValidation([
                 'historic' => 'required',
@@ -191,7 +195,7 @@ class PatientController extends AppBaseController
 
 
         if (empty($userToDelete)) {
-            return $this->jsonResponse(1, \Lang::get('messages.user_not_found')); 
+            return $this->jsonResponse(1, \Lang::get('messages.user_not_found'));
         }
 
         $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
@@ -206,7 +210,7 @@ class PatientController extends AppBaseController
             $join->on('a.user_id_creator', '=', 'users.id')->orOn('a.user_id_patient', '=', 'users.id');
         })
         ->leftJoin('treatments as t', 'users.id', 't.user_id_patient')
-        ->select('users.id as user_id', 'a.dt_appointment as dt', 'a.id as appointment_id', 
+        ->select('users.id as user_id', 'a.dt_appointment as dt', 'a.id as appointment_id',
         'a.deleted_at as a_deleted', 't.id as treatement_id', 't.deleted_at as t_deleted',)
         ->where('users.id', $id)
         ->where(function($q) {
@@ -218,13 +222,13 @@ class PatientController extends AppBaseController
         // deleted=null: has value. When one is null a relation is found.
         $foundRelation = false;
         foreach($hasRelations as $rel) {
-            if ((!is_null($rel->appointment_id) && is_null($rel->a_deleted)) || 
+            if ((!is_null($rel->appointment_id) && is_null($rel->a_deleted)) ||
             (!is_null($rel->treatement_id) && is_null($rel->t_deleted))) {
                 $foundRelation = true;
                 break;
             }
         }
-         
+
         if (!$foundRelation)
             $userToDelete->delete($id);
         else
@@ -235,16 +239,20 @@ class PatientController extends AppBaseController
                 Patient::find($patientOrStaffFound[0]['patient_id'])->delete();
             }
             else{
-                return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_a_patient')); 
+                return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_a_patient'));
             }
         }
 
         return $this->jsonResponse(0, \Lang::get('messages.patient_type')." ".$userName." ".\Lang::get('messages.deleted_successfully'));
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function confirmDelete($id){
         $singleUser = User::find($id);
-        return view('patients.confirm-delete',['singleUser' => $singleUser]);  
+        return view('patients.confirm-delete',['singleUser' => $singleUser]);
     }
 
      /**
@@ -255,8 +263,6 @@ class PatientController extends AppBaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function ajaxViewDatatable(Request $request) {
-
-
         if(!$request->wantsJson()) {
             abort(404, \Lang::get('messages.bad_request'));
         }
@@ -272,7 +278,7 @@ class PatientController extends AppBaseController
             }
         }
         $data = Patient::select('users.*','patients.*','roles.name AS role_name', 'patients.id AS patients_id', 'users.id AS users_id')->join('users', 'patients.user_id', 'users.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
-        
+
         $numTotal = $numRecords = $data->count();
 
         /**
@@ -296,33 +302,33 @@ class PatientController extends AppBaseController
             // Search by name, surname, role, dni or sex
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
                     $query->orWhere('users.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('users.lastname', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');             
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
 
             // Search by blood type
             elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
+                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
-            
+
         }
         // dd($numRecords);
 
         $firstRow = $data->first();
-        
+
         if(is_null($firstRow)) {
             return response()->json(['data' => []]);
         }

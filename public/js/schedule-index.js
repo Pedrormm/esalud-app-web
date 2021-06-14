@@ -4,10 +4,10 @@
         // console.log( $( this ).text() );
         submit();
     });
-      
+
       var model;
       $.ajax({
-          async: false, 
+          async: false,
           dataType: 'json',
           data: {},
           method:'GET',
@@ -29,12 +29,19 @@
       })
       .fail(function(xhr, st, err) {
           console.error("error in schedule/generateSchedule " + xhr, st, err);
-      }); 
+      });
 
-      function refresh(){
-        fillSchedule(model);
-      }
-      function fillSchedule(){
+    /**
+    *
+    */
+    function refresh(){
+    fillSchedule(model);
+    }
+
+    /**
+     *
+     */
+    function fillSchedule(){
         var hvHours = document.querySelector('.hv-hours');
         var minHour = 0;
         var maxHour = 23;
@@ -44,13 +51,13 @@
           str = str.toString();
           return str.length < max ? pad("0" + str, max) : str;
        };
-        
+
         for(var hour = minHour; hour<=maxHour; hour++){
           var hourDiv =createTimeCaptionDiv(hour);
 
           for(var day = minDay; day<=maxDay; day++){
             // console.log('model',model);
-           
+
             //var occupiedTime = model.find((m)=> checkValidDayHour(m, day, hour));
             var occupiedTime = model.find((m)=> {
               let startHour = parseInt(m.starting_workday_time.substring(0,2));
@@ -66,10 +73,15 @@
           }
         }
 
-        
+
       }
 
-      function createTimeCaptionDiv(hour){
+    /**
+     *
+     * @param hour
+     * @returns {HTMLDivElement}
+     */
+    function createTimeCaptionDiv(hour){
         var hvHours = document.querySelector('.hv-hours');
         var hourDiv = document.createElement('div');
         hourDiv.classList.add('hv-row');
@@ -81,9 +93,12 @@
         hourDiv.appendChild(timeCaptionDiv);
         hvHours.appendChild(hourDiv);
         return hourDiv;
-      }
+    }
 
-      function submit(){
+    /**
+     *
+     */
+    function submit(){
         var model = [];
         var data = function (start_hour,end_hour){
           this.start_hour = start_hour;
@@ -92,7 +107,7 @@
         var selecteds = document.querySelectorAll('div.hv-time-selection-active');
         var start_hour = -1;
         var end_hour = -1;
-       
+
         let days = [];
 
         for(var i = 0; i<7; i++){
@@ -112,12 +127,12 @@
               hAnt = h;
               days[i].push([h.toString()+":00:00", null]);
 
-              consec = true;              
+              consec = true;
             }
-            
+
             days[i][days[i].length-1][1] = (h+1).toString()+":00:00";
             hAnt = h;
-          
+
           });
         }
         // console.log("array: ",days);
@@ -125,7 +140,7 @@
         $.ajax({
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }, 
+          },
           url:_publicUrl+'schedule/saveSchedule',
           type:"POST",
           data: {"days":days,"_method":'PATCH'},
@@ -165,7 +180,14 @@
         console.log("model",model);
       }
 
-      function createHourDiv(hourDiv,hour,weekday,selected){
+    /**
+     *
+     * @param hourDiv
+     * @param hour
+     * @param weekday
+     * @param selected
+     */
+    function createHourDiv(hourDiv,hour,weekday,selected){
         var selectionDiv  = document.createElement('div');
         selectionDiv.setAttribute('data-day',weekday);
         selectionDiv.setAttribute('data-hour',hour);
@@ -177,4 +199,4 @@
           this.classList.toggle('hv-time-selection-active');
         })
         hourDiv.appendChild(selectionDiv);
-      }
+    }

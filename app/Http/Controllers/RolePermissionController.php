@@ -15,13 +15,17 @@ class RolePermissionController extends AppBaseController
     /** @var  RolePermissionRepository */
     private $rolePermissionRepository;
 
+    /**
+     * RolePermissionController constructor.
+     * @param RolePermissionRepository $rolePermissionRepo
+     */
     public function __construct(RolePermissionRepository $rolePermissionRepo)
     {
         $this->rolePermissionRepository = $rolePermissionRepo;
     }
 
     /**
-     * Display a listing of the RolePermission.
+     * Displays a listing of the RolePermission.
      *
      * @param Request $request
      *
@@ -36,7 +40,7 @@ class RolePermissionController extends AppBaseController
     }
 
     /**
-     * Show the form for creating a new RolePermission.
+     * Shows the form for creating a new RolePermission.
      *
      * @return Response
      */
@@ -46,7 +50,7 @@ class RolePermissionController extends AppBaseController
     }
 
     /**
-     * Store a newly created RolePermission in storage.
+     * Stores a newly created RolePermission in storage.
      *
      * @param CreateRolePermissionRequest $request
      *
@@ -64,7 +68,7 @@ class RolePermissionController extends AppBaseController
     }
 
     /**
-     * Display the specified RolePermission.
+     * Displays the specified RolePermission.
      *
      * @param int $id
      *
@@ -84,7 +88,7 @@ class RolePermissionController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified RolePermission.
+     * Shows the form for editing the specified RolePermission.
      *
      * @param int $id
      *
@@ -104,7 +108,7 @@ class RolePermissionController extends AppBaseController
     }
 
     /**
-     * Update the specified RolePermission in storage.
+     * Updates the specified RolePermission in storage.
      *
      * @param int $id
      * @param UpdateRolePermissionRequest $request
@@ -129,7 +133,7 @@ class RolePermissionController extends AppBaseController
     }
 
     /**
-     * Remove the specified RolePermission from storage.
+     * Removes the specified RolePermission from storage.
      *
      * @param int $id
      *

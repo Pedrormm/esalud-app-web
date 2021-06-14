@@ -39,8 +39,6 @@ class AppointmentController extends Controller
 
         $appointmentType ="all";
 
-        // dd($appointments->toArray());
-
         return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
     }
 
@@ -71,7 +69,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // dd($request->all());
         $validatedData = parent::checkValidation([
             'user_id_patient' => 'required',
@@ -81,16 +79,16 @@ class AppointmentController extends Controller
             'dt_appointment' => 'required|unique:App\Models\Appointment,dt_appointment',
             // 'checked' => 'required|min:0|max:0|numeric',
             // 'accomplished' => 'required|min:0|max:0|numeric',
-            
+
         ]);
         // TODO: Generacion citas. Crear calendario para ver citas con dia y hora. -
         // Notificacion de cita en dashboard, para que aparezca nueva cita, al verlas desaparece. Hacer con pusher js
-        
+
         $user_id_patient = $request->input('user_id_patient');
         $user_id_doctor = $request->input('doctor_id');
         $dt_appointment = $request->input('dtime');
-            
-        
+
+
         $userPatient = User::find($user_id_patient);
         $userPatient = $userPatient->name . " " . $userPatient->lastname;
         $userDoctor = User::find($user_id_doctor);
@@ -120,11 +118,11 @@ class AppointmentController extends Controller
             $query->select('id', 'name');
         }])
         ->find($appointment->id);
-        
 
-        
+
+
         // dd($appointment);
-        // Crear email con fichero calendar adjunto. 
+        // Crear email con fichero calendar adjunto.
 
         $appointments = Appointment::with(["userPatient","userCreator","userDoctor"])->find($appointment->id);
 
@@ -133,7 +131,7 @@ class AppointmentController extends Controller
         // return $this->create()->with('okMessage', "Una invitación de cita médica entre el paciente ".$userPatient." y el médico ".$userDoctor." con fecha de ".$spanishDate." ha sido creada correctamente")
         // ->with('createAppointment', true);
 
-        
+
 
         return $this->jsonResponse(0, $message, $appointment);
 
@@ -171,9 +169,9 @@ class AppointmentController extends Controller
             ->with('appointment',$appointment)->with('dtAppointment',$dtAppointment);
         }
         else{
-            return $this->backWithErrors(\Lang::get('messages.not_a_valid_appointment') );   
+            return $this->backWithErrors(\Lang::get('messages.not_a_valid_appointment') );
         }
-                                    
+
     }
 
     /**
@@ -200,7 +198,7 @@ class AppointmentController extends Controller
         }
 
 
-        $appointment = Appointment::find($id);      
+        $appointment = Appointment::find($id);
 
         // $appointment->update($request->all());
 
@@ -214,7 +212,7 @@ class AppointmentController extends Controller
             $comments = $request->input('doctorComments');
         if ($request->input('patientComments'))
             $user_comment = $request->input('patientComments');
-       
+
         if (isset ($dt_appointment))
             $appointment->dt_appointment = $dt_appointment;
         if (isset ($checked))
@@ -242,21 +240,21 @@ class AppointmentController extends Controller
         $appointmentDate = $appointmentToDelete->dt_appointment;
         $spanishDate = $this->mysqlDateTime2Spanish($appointmentDate);
         if (empty($appointmentToDelete)) {
-            return $this->jsonResponse(1, \Lang::get('messages.appointment_not_found')); 
+            return $this->jsonResponse(1, \Lang::get('messages.appointment_not_found'));
         }
 
         $appointmentToDelete->delete($id);
-        
+
         return $this->jsonResponse(0, \Lang::get('messages.the_appointment_which_date_is_on')." ".$spanishDate." ".\Lang::get('messages.has_been_deleted_succesfully'));
     }
 
     public function realDoctorSchedule(Request $request)
     {
-        
+
         if ($request->ajax()){
-            
+
             $dateMonday = Carbon::parse($request->date)->startOfWeek();
-           
+
             $dateSunday = Carbon::parse($request->date)->startOfWeek()->addWeek(1);
 
             // $weekdayRealAppointment = Carbon::parse($request->date)->dayOfWeek;
@@ -295,7 +293,7 @@ class AppointmentController extends Controller
             ->groupBy('dt_appointment')
             ->get();
 
-            // dd($realAppointments->toArray());   
+            // dd($realAppointments->toArray());
 
             $minutesPerDate = 30;
             $rpArray = [];
@@ -303,17 +301,17 @@ class AppointmentController extends Controller
                 // dump(($value["dt_appointment"]));
                 $weekday = Carbon::parse($value["dt_appointment"])->dayOfWeek;
                 $weekday = ($weekday == 0)?7:$weekday;
-                
+
                 $timeStringIni = Carbon::parse($value["dt_appointment"])->toTimeString();
-                
-                if ($minutesPerDate == 30){  
+
+                if ($minutesPerDate == 30){
                     list($hours,$minutes) = explode(":", $timeStringIni);
                     if(!in_array((int)$minutes, [0, $minutesPerDate])) {
                         $iMinutes = (int)$minutes;
                         $iHours = (int)$hours;
-                    
+
                         $corrections = [15, 29, 45, 59];
-                        
+
                         if($iMinutes < $corrections[1] && $iMinutes < $corrections[0])
                             $iMinutes = 0;
                         elseif(($iMinutes <$corrections[1] && $iMinutes > $corrections[0])||
@@ -323,7 +321,7 @@ class AppointmentController extends Controller
                             $iHours++;
                             $iMinutes = 0;
                         }
-                        
+
                         $timeStringIni = str_pad($iHours, 2, "0", STR_PAD_LEFT) .":" . str_pad($iMinutes, 2, "0", STR_PAD_LEFT).":00";
                     }
                 }
@@ -361,7 +359,7 @@ class AppointmentController extends Controller
         $appointments = $appointments->distinct()
         ->groupBy('dt_appointment')
         ->get();
-        
+
         foreach($appointments as $ap) {
             $ap["fullNameCreator"] = User::find($ap->user_id_creator)->name . " " . User::find($ap->user_id_creator)->lastname;
             $ap["fullNamePatient"] = User::find($ap->user_id_patient)->name . " " . User::find($ap->user_id_patient)->lastname;
@@ -378,7 +376,7 @@ class AppointmentController extends Controller
 
         $appointment = Appointment::find($id);
         $especialidad = DB::select('SELECT branches.name FROM appointments INNER JOIN staff ON appointments.user_id_doctor = staff.user_id INNER JOIN branches ON staff.branch_id = branches.id WHERE appointments.user_id_doctor = '.$appointment->user_id_doctor.'');
-        
+
 
         $data = Appointment::select('appointments.*')->distinct()->where('id',"=",$id)
         ->groupBy('dt_appointment')
@@ -404,7 +402,7 @@ class AppointmentController extends Controller
     public function listPending()
     {
         $usuarioLogin = auth()->user();
-        
+
         $appointments = Appointment::where('user_id_patient',"=",$usuarioLogin->id)->with('userPatient')->with('userDoctor')->get();
         $appointmentType ="pending";
         // return view('appointments.listPending')->with('appointments',$appointments->toArray());
@@ -445,7 +443,7 @@ class AppointmentController extends Controller
 
     public function showAppointmentIcon(){
         $userLogin = auth()->user();
-        $rol_user = $userLogin->role_id;        
+        $rol_user = $userLogin->role_id;
 
         $data = Appointment::select('appointments.*')->distinct();
         if($rol_user == \HV_ROLES::DOCTOR){
@@ -469,7 +467,7 @@ class AppointmentController extends Controller
 
     public function showAppointmentsSummary(){
         $authUser = Auth::user();
-        $rol_user = $authUser->role_id;        
+        $rol_user = $authUser->role_id;
 
         $data = Appointment::select('appointments.*')->distinct();
         if($rol_user == \HV_ROLES::DOCTOR){
@@ -502,8 +500,8 @@ class AppointmentController extends Controller
         $appointmentUserCreator = User::find($appointmentUserCreatorId);
         $appointmentUserCreatorRole = $appointmentUserCreator->role_id;
 
-        // $patientEmail = "pedroramonmm@gmail.com";  
-        // $doctortEmail = "pedroramonmm@gmail.com";  
+        // $patientEmail = "pedroramonmm@gmail.com";
+        // $doctortEmail = "pedroramonmm@gmail.com";
 
         $appointment = $appointment->toArray();
 
@@ -578,7 +576,7 @@ class AppointmentController extends Controller
         }
 
         $messageAcRj = ($checked == 1)? \Lang::get('messages.accepted_stat') : (($checked == 2) ? (\Lang::get('messages.rejected_stat')) : (""));
-        
+
         if ($mailable){
             return view('appointments.index');
         }
@@ -596,7 +594,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::find($id);
         $appointment->update(['accomplished' =>$accomplished]);
         $messageAcRj = ($accomplished == 1)? \Lang::get('messages.accepted_stat') : (($accomplished == 2) ? (\Lang::get('messages.rejected_stat')) : (""));
-            
+
 
         return $this->jsonResponse(0,  \Lang::get('messages.the_appointment_with_the_date').$appointment->dt_appointment." ".\Lang::get('messages.has_been')." ".$messageAcRj." ".\Lang::get('messages.succesfully_stat'));
     }
@@ -626,7 +624,7 @@ class AppointmentController extends Controller
         }else if ($appointmentType == "old"){
             $data = $data->whereDate('dt_appointment', '<', Carbon::today());
         }
-        
+
         if($rol_user == \HV_ROLES::DOCTOR){
             $data = $data->where('user_id_doctor',"=",$userLogin->id);
         }else if($rol_user == \HV_ROLES::PATIENT){
@@ -655,7 +653,7 @@ class AppointmentController extends Controller
 
 
         // $data = Patient::select('users.*','patients.*','roles.name AS role_name', 'patients.id AS patients_id', 'users.id AS users_id')->join('users', 'patients.user_id', 'users.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
-        
+
         // $numTotal = $numRecords = $data->get()->count();
 
         /**
@@ -674,10 +672,10 @@ class AppointmentController extends Controller
         //         });
         //         $numRecords = $data->count();
         //     }
-            
+
         // }
         // $firstRow = $data->first();
-        
+
         // if(is_null($firstRow)) {
         //     return response()->json(['data' => []]);
         // }

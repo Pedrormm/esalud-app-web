@@ -7,23 +7,32 @@ use Twilio\Rest\Client;
 
 class SmsController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function sendsms(Request $request)
     {
         switch ($request->method()) {
             case 'POST':
                 return ($this->postSendSms($request));
                 break;
-    
+
             case 'GET':
                 return view('communication/sendsms');
                 break;
-    
+
             default:
                 // invalid request
                 break;
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Twilio\Exceptions\ConfigurationException
+     */
     public function postSendSms(Request $request)
     {
         $request->validate([
@@ -43,7 +52,7 @@ class SmsController extends Controller
         // $response = $client->messages->create(
         //     $to ,
         //     [
-        //         'from' => $number, 
+        //         'from' => $number,
         //         'body' => $body
         //     ]
         // );

@@ -27,6 +27,10 @@ class TreatmentController extends AppBaseController
     /** @var  TreatmentRepository */
     private $treatmentRepository;
 
+    /**
+     * TreatmentController constructor.
+     * @param TreatmentRepository $treatmentRepo
+     */
     public function __construct(TreatmentRepository $treatmentRepo)
     {
         $this->treatmentRepository = $treatmentRepo;
@@ -34,7 +38,7 @@ class TreatmentController extends AppBaseController
 
 
     /**
-     * Display a listing of Treatments on a Single Patient
+     * Displays a listing of Treatments on a Single Patient
      *
      * @param int $id
      *
@@ -58,7 +62,7 @@ class TreatmentController extends AppBaseController
 
 
     /**
-     * Display a listing of the Treatment.
+     * Displays a listing of the Treatment.
      *
      * @param Request $request
      *
@@ -73,7 +77,7 @@ class TreatmentController extends AppBaseController
     }
 
     /**
-     * Show the form for creating a new Treatment.
+     * Shows the form for creating a new Treatment.
      *
      * @return Response
      */
@@ -103,7 +107,7 @@ class TreatmentController extends AppBaseController
     }
 
     /**
-     * Store a newly created Treatment in storage.
+     * Stores a newly created Treatment in storage.
      *
      * @param Request $request
      *
@@ -111,8 +115,6 @@ class TreatmentController extends AppBaseController
      */
     public function store(Request $request)
     {
-        // dd($id);
-        // dd($request->all());
         $input = $request->all();
         $validatedData = parent::checkValidation([
             'doctor_id' => 'required',
@@ -150,14 +152,14 @@ class TreatmentController extends AppBaseController
         if (isset ($treatment_end_date))
             $treatment->treatment_end_date = $treatment_end_date;
         $treatment->save();
-       
+
         $message = \Lang::get('messages.a_new_treatment_was_created');
 
         return $this->jsonResponse(0, $message);
     }
 
     /**
-     * Display the specified Treatment.
+     * Displays the specified Treatment.
      *
      * @param int $id
      *
@@ -177,7 +179,7 @@ class TreatmentController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified Treatment.
+     * Shows the form for editing the specified Treatment.
      *
      * @param int $id
      *
@@ -231,14 +233,14 @@ class TreatmentController extends AppBaseController
         }
         // $returnHTML = view('treatments.edit-single-treatment-from-patient', compact('treatment','doctors','typeMedicines','medicinesAdministration','today','userId'))->render();
         // $message="";
-        
+
         // return $this->jsonResponse(0, $message, $returnHTML);
         return view('treatments.edit-single-treatment-from-patient', compact('treatment','doctors','typeMedicines','medicinesAdministration','today'));
 
     }
 
     /**
-     * Update the specified Treatment in storage.
+     * Updates the specified Treatment in storage.
      *
      * @param int $id
      * @param UpdateTreatmentRequest $request
@@ -265,7 +267,7 @@ class TreatmentController extends AppBaseController
     }
 
     /**
-     * Remove the specified Treatment from storage.
+     * Removes the specified Treatment from storage.
      *
      * @param int $id
      *
@@ -279,13 +281,17 @@ class TreatmentController extends AppBaseController
             $res=Treatment::where('id',$id)->delete();
 
             $message = \Lang::get('messages.the_treatment_was_deleted_sucessfully');
-           
+
             return $this->jsonResponse(0, $message);
         }
     }
 
-
-    public function deleteAll($userId, Request $request){
+    /**
+     * @param int $userId
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAll(int $userId, Request $request){
         if ($request->ajax()){
 
             $singleUser = User::find($userId);
@@ -294,12 +300,16 @@ class TreatmentController extends AppBaseController
             $res=Treatment::where('user_id_patient',$userId)->delete();
 
             $message = \Lang::get('messages.all_treatments_of_the_user')." ".$userName." ".\Lang::get('messages.were_deleted_sucessfully');
-           
+
             return $this->jsonResponse(0, $message);
         }
     }
 
-    public function viewDescription($id){
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function viewDescription(int $id){
         $treatment = Treatment::find($id);
         $hasDescription = false;
         $description = \Lang::get('messages.the_treatment_has_no_description');
@@ -339,7 +349,7 @@ class TreatmentController extends AppBaseController
             }
         }
         $data = Patient::select('users.*','patients.*','roles.name AS role_name', 'patients.id AS patients_id', 'users.id AS users_id')->join('users', 'patients.user_id', 'users.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
-        
+
         $numTotal = $numRecords = $data->count();
 
         /**
@@ -359,33 +369,33 @@ class TreatmentController extends AppBaseController
             // Search by name, surname, role, dni or sex
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
                     $query->orWhere('users.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('users.lastname', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');             
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
 
             // Search by blood type
             elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('users.blood', 'like', '%' . $searchPhrase . '%');            
+                    $query->orWhere('users.blood', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
-            
+
         }
         // dd($numRecords);
 
         $firstRow = $data->first();
-        
+
         if(is_null($firstRow)) {
             return response()->json(['data' => []]);
         }
@@ -452,7 +462,7 @@ class TreatmentController extends AppBaseController
                 return response()->json(['data' => []]);
             }
         }
-        
+
         $data = Treatment::query()
         ->with(array('userDoctor' => function($query) {
             $query->select('id','dni','name','lastname');
@@ -487,33 +497,33 @@ class TreatmentController extends AppBaseController
             // Search by name, surname, role, dni or sex
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
                     $query->orWhere('users.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('users.lastname', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');             
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
 
             // Search by blood type
             elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
+                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
-            
+
         }
         // dd($numRecords);
 
         $firstRow = $data->first();
-        
+
         if(is_null($firstRow)) {
             return response()->json(['data' => []]);
         }
@@ -545,7 +555,7 @@ class TreatmentController extends AppBaseController
          * Apply data processing
          */
         foreach($data as $row) {
-            // dd($row->toArray()); 
+            // dd($row->toArray());
             if ($row->treatment_starting_date){
                 $row->startingDate = $this->mysqlDate2Spanish($row->treatment_starting_date);
             }
@@ -577,7 +587,7 @@ class TreatmentController extends AppBaseController
             }
             $row->nameTypeMedicine = $row->typeMedicine->name;
             $row->medicineAdministration = ($row->medicineAdministration)?$row->medicineAdministration->name:\Lang::get('messages.generic_treatment');
-            
+
         }
         // dd($data->toArray());
         if(request()->wantsJson()) {

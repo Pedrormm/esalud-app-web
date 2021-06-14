@@ -27,6 +27,10 @@ class RoleController extends AppBaseController
     /** @var  RoleRepository */
     private $roleRepository;
 
+    /**
+     * RoleController constructor.
+     * @param RoleRepository $roleRepo
+     */
     public function __construct(RoleRepository $roleRepo)
     {
         $this->roleRepository = $roleRepo;
@@ -61,7 +65,7 @@ class RoleController extends AppBaseController
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
      * @return Response
-     */ 
+     */
     public function create(){
         $permissions = Permission::get()->toArray();
         return view('roles.create',['permissions' => $permissions]);
@@ -110,7 +114,7 @@ class RoleController extends AppBaseController
                 'role_id' => $maxRoleId+1,
                 'permission_id' => $i,
                 'activated' => 0,
-            ];               
+            ];
         }
         foreach($requestData as $key => $value){
             if(strpos($key,'check-')!==false){
@@ -118,7 +122,7 @@ class RoleController extends AppBaseController
                 $data[$role_permission_id - 1]["activated"]= 1;
             }
         }
-        RolePermission::insert($data); 
+        RolePermission::insert($data);
         return $this->jsonResponse(0, \Lang::get('messages.the_role')." ".$request->name." ".\Lang::get('messages.has_been_created'));
     }
 
@@ -186,12 +190,12 @@ class RoleController extends AppBaseController
                         })
                     ],
                 ]);
-    
+
                 if($validator->fails()){
                     $errors = implode(',',$validator->messages()->all());
                     return $this->jsonResponse(1, $errors);
                 }
-    
+
                 $role->name = $request->name;
                 $role->save();
 
@@ -218,7 +222,7 @@ class RoleController extends AppBaseController
                 return $this->jsonResponse(0, \Lang::get('messages.the_role')." ".$request->name." ".\Lang::get('messages.has_been_succesfully_edited'));
             }
             else{
-                return $this->jsonResponse(1, \Lang::get('messages.permission_denied')); 
+                return $this->jsonResponse(1, \Lang::get('messages.permission_denied'));
             }
         }
         else{
@@ -241,11 +245,11 @@ class RoleController extends AppBaseController
         $roleToDelete = Role::find($id);
         $roleName = $roleToDelete->name;
         if($roleToDelete->delible == 1 ) {
-            return $this->jsonResponse(1, \Lang::get('messages.the_role')." ".$roleName." ".\Lang::get('messages.cannot_be_deleted')); 
+            return $this->jsonResponse(1, \Lang::get('messages.the_role')." ".$roleName." ".\Lang::get('messages.cannot_be_deleted'));
         }
 
         if (empty($roleToDelete)) {
-            return $this->jsonResponse(1, \Lang::get('messages.role_not_found')); 
+            return $this->jsonResponse(1, \Lang::get('messages.role_not_found'));
         }
 
         $idRoleNameGuest = Role::select('id')->where('name', HV_ROLE_ASSIGNED_WHEN_DELETED)->first()->id;
@@ -254,17 +258,22 @@ class RoleController extends AppBaseController
         $roleToDelete->delete($id);
 
         RolePermission::where('role_id', $id)->delete();
-        
+
         return $this->jsonResponse(0, \Lang::get('messages.role_stat')." ".$roleName." ".\Lang::get('messages.deleted_successfully'));
-    
+
 
     }
 
+    /**
+     * @param $id
+     * @param string|null $searchPhrase
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function usersRolesView($id, string $searchPhrase=null){
         $usersRole = Role::with('user1s')->where('id',$id)->get();
         $usersRole = $usersRole->toArray();
 
-        $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name', 
+        $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name',
         'users.lastname', 'users.dni', 'users.birthdate','users.sex','users.email','users.blood','users.role_id' )
         ->join('users', 'users.role_id', 'roles.id')->where('users.role_id', '<>', $id)
         ->get();
@@ -280,9 +289,13 @@ class RoleController extends AppBaseController
          'usersRole' => $usersRole, 'roles' => $roles]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function editNotInRole($id){
 
-        $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name', 
+        $usersNotInRole = Role::select('roles.name as role_name', 'users.id', 'users.name',
         'users.lastname', 'users.dni', 'users.birthdate','users.sex','users.email','users.blood','users.role_id' )
         ->join('users', 'users.role_id', 'roles.id')->where('users.role_id', '<>', $id)
         ->get();
@@ -298,7 +311,10 @@ class RoleController extends AppBaseController
         'roles' => $roles]);
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateNotInRole(Request $request)
     {
         $requestData = $request->all();
@@ -368,11 +384,19 @@ class RoleController extends AppBaseController
         return $this->jsonResponse(0, $response);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function confirmDelete($id){
         $role = Role::find($id);
         return view('roles.confirm-delete',['role' => $role]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ajaxUserRolesDatatable($id){
         $uRoles = Role::with('user1s')->where('id',$id)->get()->toArray();
         $uRoles=$uRoles[0]["user1s"];
@@ -380,6 +404,9 @@ class RoleController extends AppBaseController
         return response()->json(['data' => $uRoles]);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ajaxViewMainRolesDatatable(){
         $mRoles = Role::join('users', 'roles.user_id_creator', 'users.id')
         ->select(DB::raw('roles.id as idRole, roles.name as nameRole, roles.delible, user_id_creator,
@@ -395,7 +422,10 @@ class RoleController extends AppBaseController
 
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
     public function isDelible(Request $request){
         if ($request->ajax()){
             $role = Role::find($request->id);
@@ -404,13 +434,13 @@ class RoleController extends AppBaseController
                 if ($role->delible == 1){
                     $response = [
                         'delible' => true
-                    ];          
+                    ];
                     return response()->json($response);                }
                 else{
                     $response = [
                         'delible' => false
-                    ];          
-                    return response()->json($response);  
+                    ];
+                    return response()->json($response);
                 }
             }
             return $delible;
@@ -420,18 +450,21 @@ class RoleController extends AppBaseController
         }
     }
 
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete2(Request $request){
         if ($request->ajax()){
             // dd($request->all());
             $message = Message::find($request->id);
             if ($message){
                 if (($message->user_id_from == Auth::user()->id) || ($message->user_id_to == Auth::user()->id)){
-                    // dd($message);             
+                    // dd($message);
                     if ($message->delete()){
                         $response = [
                             'status' => 0
-                        ];          
+                        ];
                         return response()->json($response);
                     }
                 }

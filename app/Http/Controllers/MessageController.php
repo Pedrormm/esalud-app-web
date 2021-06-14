@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * This controller affects user communication in a chat
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -13,7 +15,12 @@ use App\Custom\PusherFactory;
 
 class MessageController extends Controller
 {
+    /** @var int Llimit os max message */
     const MAX_MESSAGE_LENGTH = 15;
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function get() {
         $authUser = Auth::user();
         $userMessages = Message::where('user_id_to', $authUser->id)->orderByDesc('created_at')->get();
@@ -28,6 +35,9 @@ class MessageController extends Controller
         return view('ajax/messages', compact('userMessages'));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showMessageIcon(){
         $authUser = Auth::user();
         $userMessages = Message::where('user_id_to', $authUser->id)->where('read', 0)
@@ -36,6 +46,9 @@ class MessageController extends Controller
         return view('communication.messages_icon', compact('nMessages'));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showMessagesSummary(){
         $authUser = Auth::user();
 
@@ -44,7 +57,7 @@ class MessageController extends Controller
         ->orderBy('messages.read')
         ->join('users', 'messages.user_id_from', 'users.id')
         ->select('messages.id AS messages_id', 'messages.message', 'messages.read', 'messages.user_id_to', 'messages.user_id_from',
-         'messages.created_at', 'users.id AS users_id', 'users.dni', 'users.sex', 'users.name', 
+         'messages.created_at', 'users.id AS users_id', 'users.dni', 'users.sex', 'users.name',
             'users.lastname', 'users.email', 'users.phone', 'users.avatar','users.deleted_at')
         ->get()
         ->unique('user_id_from');
@@ -94,17 +107,17 @@ class MessageController extends Controller
         }
 
         $userMessages = $userMessages->toArray();
-        
+
         // dd ($userMessages);
         return view('communication.messages_summary', compact('userMessages'));
     }
 
-    const MAX_MY_MESSAGES_SHOWN_LENGTH = 25;    
+    const MAX_MY_MESSAGES_SHOWN_LENGTH = 25;
     public function showMyMessages(){
         $authUser = Auth::user();
 
         $userMessages = Message::join('users', 'messages.user_id_from', 'users.id')
-        ->select('messages.*', 'users.id', 
+        ->select('messages.*', 'users.id',
         'users.dni', 'users.sex', 'users.name', 'users.lastname', 'users.role_id','users.deleted_at')
         ->where('user_id_to', $authUser->id)
         ->orderBy('messages.read')
@@ -143,7 +156,7 @@ class MessageController extends Controller
         foreach($userMessages as $i=>$userMessage) {
             if (!in_array($userMessage->user_id_from, $processedIds)){
                 $processedIds[] = $userMessage->user_id_from;
-                $auxMessages->push($userMessage);                
+                $auxMessages->push($userMessage);
             }
         }
 
@@ -151,17 +164,21 @@ class MessageController extends Controller
         return view('communication/my_messages', ['userMessages' => $auxMessages,'user' => $authUser]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request){
         if ($request->ajax()){
             // dd($request->all());
             $message = Message::find($request->id);
             if ($message){
                 if (($message->user_id_from == Auth::user()->id) || ($message->user_id_to == Auth::user()->id)){
-                    // dd($message);             
+                    // dd($message);
                     if ($message->delete()){
                         $response = [
                             'status' => 0
-                        ];          
+                        ];
                         return response()->json($response);
                     }
                 }
@@ -176,8 +193,11 @@ class MessageController extends Controller
         }
     }
 
-
-    public function showMessagesFromUser($id){
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function showMessagesFromUser(int $id){
         $authUser = Auth::user();
         $userIdFromTo = [$authUser->id, $id];
         $userMessages = Message::leftjoin('users', 'messages.user_id_from', 'users.id')
@@ -216,12 +236,14 @@ class MessageController extends Controller
         ->first();
         $userFrom->name = urldecode($userFrom->name);
         $userFrom->lastname = urldecode($userFrom->lastname);
-        
+
         return view('communication/my_messages_from_user', ['userMessages' => $userMessages,'user' => $authUser,
         'userFrom' => $userFrom]);
     }
 
-
+    /**
+     * @return array
+     */
     public function sendMessage(){
         $user = Auth::user();
 
@@ -232,7 +254,9 @@ class MessageController extends Controller
         return ['status' => \Lang::get('messages.the_message_was_sent')];
     }
 
-
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showMessaging(){
         // Adding a lastMessageDate field to contact collection
         $contacts = DB::table("users_with_messages_view")
@@ -263,32 +287,36 @@ class MessageController extends Controller
                 $contact->name = \Lang::get('messages.user_type')." ";
                 $contact->lastname = \Lang::get('messages.deleted_already_stat');
             }
-            
+
             $contactUnread = $unreadIds->where('sender_id', $contact->id)->first();
 
             $contact->unread = $contactUnread ? $contactUnread->messages_count : 0;
 
             $contact->message_date = (!is_null($contact->message_date) && isset($contact->message_date) ?
              date("d-m-Y H:i:s",strtotime($contact->message_date)) : null);
-            
+
             $contact->dateHumanReadable = (!is_null($contact->message_date) && isset($contact->message_date) ?
             Carbon::parse($contact->message_date)->diffForHumans(Carbon::now()) : null);
             $contact->dateHumanReadable = str_replace("before","ago", $contact->dateHumanReadable);
-            
+
             return $contact;
         });
 
-        // dd($contacts->toArray());        
+        // dd($contacts->toArray());
 
 
         return view('communication.messaging', ['contacts' => $contacts]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getContactInfo(Request $request){
         if($request->ajax()) {
 
             $id = $request->id;
-            $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name', 
+            $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name',
             'users.lastname', 'users.email', 'users.phone', 'users.avatar','users.deleted_at')
             ->where('id', $id)->get();
 
@@ -362,7 +390,7 @@ class MessageController extends Controller
 
                 $contact->message_date = (!is_null($contact->message_date) && isset($contact->message_date) ?
                 date("d-m-Y H:i:s",strtotime($contact->message_date)) : null);
-                
+
                 $contact->dateHumanReadable = (!is_null($contact->message_date) && isset($contact->message_date) ?
                 Carbon::parse($contact->message_date)->diffForHumans(Carbon::now()) : null);
                 $contact->dateHumanReadable = str_replace("before","ago", $contact->dateHumanReadable);
@@ -388,6 +416,10 @@ class MessageController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateReadMessages(Request $request){
         if($request->ajax()) {
 
@@ -416,6 +448,10 @@ class MessageController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getUserFromId(Request $request){
         if($request->ajax()) {
 
@@ -440,7 +476,10 @@ class MessageController extends Controller
         }
     }
 
-
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getMessagesFor($id)
     {
         // Mark all messages with the selected contact as read
@@ -459,14 +498,19 @@ class MessageController extends Controller
         return response()->json($messages);
     }
 
-    public function viewMessagesFromMobile($id){
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function viewMessagesFromMobile(int $id){
 
-        $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name', 
+        $user_to_be_found = User::select('users.id', 'users.dni', 'users.sex', 'users.name',
         'users.lastname', 'users.email', 'users.phone', 'users.avatar', 'users.deleted_at')
-        ->where('id', $id)->get()->toArray();
-
+        ->where('id', $id)->get();
 
         foreach($user_to_be_found as $i=>$userMessage) {
+            // dd($userMessage->deleted_at);
+
             if (!$userMessage->deleted_at){
                 $userMessage->name = $userMessage->name;
                 $userMessage->lastname = $userMessage->lastname;
@@ -498,12 +542,16 @@ class MessageController extends Controller
 
         $messages_from_user = $messages_from_user->toArray();
 
-        // dd($messages_from_user);        
+        // dd($messages_from_user);
 
         return view('communication/view_messages_from_mobile', ['userFound' => $user_to_be_found,
         'userMessages' => $messages_from_user]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function send(Request $request)
     {
         if($request->ajax()) {
@@ -520,14 +568,14 @@ class MessageController extends Controller
             $message->message = \htmlentities($message->message);
             $message->date_spa = Carbon::now()->format('d-m-Y H:i:s');
             $message->date_eng = Carbon::now()->format('m-d-Y h:i:s A');
-            
-    
+
+
             // $message->log = PusherFactory::make()->trigger('chat', 'send', ['data' => $message]);
-            
+
             return response()->json($message);
         }
     }
-    
+
 
 
 

@@ -22,12 +22,12 @@ use App\Models\Appointment;
 class RecordsController extends Controller
 {
 
-    public function __construct()
-    {
-        // Se puede llamar al middleware desde el constructor
-    }
+
     /**
      * @tag #render_menu
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index(Request $request) {
         $ord = $request->record_order_type;
@@ -40,7 +40,7 @@ class RecordsController extends Controller
         }
 
       //  if ((Schema::hasColumn('users', $ord) || Schema::hasColumn('patients', $ord))) {
-            // Comprobar si columna existe en la BD
+            // Checking if column exists in DB
             $sex = ['male', 'female'];
             if (!is_null($sex_fil) && !empty($sex_fil) && $sex_fil != "no"){
                 $sex = explode(" ",$sex_fil);
@@ -57,7 +57,7 @@ class RecordsController extends Controller
             $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
             ->whereIn('sex', $sex)
             ->whereDate('birthdate', '<=', $from)->whereDate('birthdate', '>=', $to)->get()->toArray();
-            
+
             if (!is_null($n_search) && !empty($n_search) && isset($n_search)){
                 $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
                 ->whereIn('sex', $sex)
@@ -69,13 +69,17 @@ class RecordsController extends Controller
                 ->get()->toArray();
             }
        // }
-       
+
         $flagsMenuEnabled = getAuthValueFromPermission();
         return view('records/index', ['patients' => $patients, 'flagsMenuEnabled' => $flagsMenuEnabled]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function showRecord($id) {
-		$user = User::find($id);	
+		$user = User::find($id);
 
         $rol_user = $user->role_id;
 
@@ -122,7 +126,7 @@ class RecordsController extends Controller
                 else{
                     $row->endingDate = $this->mysqlDate2Spanish(now()->addDays(7));
                 }
-            }         
+            }
         }
 
         $userTreatments = $userTreatments->toArray();
@@ -168,6 +172,9 @@ class RecordsController extends Controller
         ->with('appointments',$appointments);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function showOwnRecord() {
         $id = Auth::user()->id;
 
@@ -175,7 +182,7 @@ class RecordsController extends Controller
         $user = $user[0];
 
         if ($user->role_id == \HV_ROLES::PATIENT){
-            return ($this->showRecord($id));            
+            return ($this->showRecord($id));
         }
         else if (($user->role_id == \HV_ROLES::DOCTOR) || ($user->role_id == \HV_ROLES::HELPER)) {
             $user = Staff::select('users.*','staff.*','roles.name AS role_name', 'branches.name AS branch_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('branches', 'staff.branch_id', 'branches.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null)->where("users.id",$id)->get();
@@ -188,6 +195,6 @@ class RecordsController extends Controller
     }
 
 
-    
+
 
 }

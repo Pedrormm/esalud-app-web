@@ -18,6 +18,10 @@ use Mail;
 
 class SettingController extends Controller
 {
+    /**
+     * @param int|null $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function index(int $id=null) {
         $roles = Role::all();
         $branches = Branch::all();
@@ -40,6 +44,10 @@ class SettingController extends Controller
         return view('settings/index', compact('userLogin', 'rol_usuario_info', 'roles', 'branches'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request) {
         //  dd($request->all());
         $validatedData = parent::checkValidation([
@@ -78,7 +86,7 @@ class SettingController extends Controller
                 'office' => 'required|numeric',
                 'room' => 'required|numeric',
                 'h_phone' => 'required|numeric',
-            ]); 
+            ]);
             $res = Staff::whereUserId($id)->update($mapValidation);
         }
 
@@ -101,13 +109,19 @@ class SettingController extends Controller
         if ($request->file)
             $this->updateAvatar($request,auth()->user()->id,true);
         // return view('users.index')->with('okMessage', "El usuario: ".$usuario->name." ".$usuario->lastname." ha sido editado correctamente");
-    
+
         $message = \Lang::get('messages.your_user_data')." (".$usuario->name." ".$usuario->lastname.") ".\Lang::get('messages.has_been_edited_successfully');
 
         return $this->jsonResponse(0, $message);
-    
+
     }
 
+    /**
+     * @param Request $request
+     * @param null $id
+     * @param false $local
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function updateAvatar(Request $request, $id=null, $local=false) {
         // dd($request->all());
 
@@ -122,7 +136,7 @@ class SettingController extends Controller
             }
             $image64 = $request->data;
             $regularExpression = "/^data\:image\\/([\w]{3,4});base64,/"; //data:image/png;base64,
-            if(!preg_match($regularExpression, $image64, $matches)) { 
+            if(!preg_match($regularExpression, $image64, $matches)) {
                 return $this->jsonResponse(1, \Lang::get('messages.the_file_does_not_have_an_image_format'));
             }
             $ext = $matches[1];
@@ -150,17 +164,24 @@ class SettingController extends Controller
 
     }
 
+    /**
+     * @param null $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function confirmAvatarDelete($id=null){
         if (!$id){
             $id = auth()->user()->id;
         }
         $singleUser = User::find($id);
-        return view('settings.avatar-confirm-delete',['singleUser' => $singleUser]);  
+        return view('settings.avatar-confirm-delete',['singleUser' => $singleUser]);
     }
 
+    /**
+     * @param Request $request
+     * @param null $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function avatarDestroy(Request $request, $id=null) {
-        // dd($request->all());
-
         if (!$id){
             $id = auth()->user()->id;
         }
@@ -182,12 +203,16 @@ class SettingController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function convertAvatar(Request $request){
 
         if ($request->ajax()){
             $image64 = $request->bytes64;
             $regularExpression = "/^data\:image\\/([\w]{3,4});base64,/"; //data:image/png;base64,
-            if(!preg_match($regularExpression, $image64, $matches)) { 
+            if(!preg_match($regularExpression, $image64, $matches)) {
                 return $this->jsonResponse(1, "Invalid image format");
             }
             $ext = $matches[1];
@@ -195,7 +220,6 @@ class SettingController extends Controller
             $imageBytes = base64_decode($image64);
             $newFileName = getRandomFile($ext);
 
-            // dd($newFileName);
             $destFile = public_path("images/avatars/{$newFileName}");
 
             file_put_contents($destFile, $imageBytes);
@@ -207,7 +231,7 @@ class SettingController extends Controller
         else{
             return back()->withErrors([\Lang::get('messages.permission_denied')]);
         }
-    
+
     }
 
 }

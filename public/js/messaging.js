@@ -21,7 +21,7 @@ chatChannel.bind(`client-send`, (data) => {
             })
             .fail(function(xhr, st, err) {
                 console.error("error in messaging/updateReadMessages " + xhr, st, err);
-            }); 
+            });
         }
         else{
             let alert_sound = document.getElementById("chat-sound");
@@ -33,6 +33,12 @@ chatChannel.bind(`client-send`, (data) => {
 
 let width = $(window).width();
 
+/**
+ *
+ * @param contactId
+ * @param reset
+ * @param written
+ */
 function updateUnread(contactId, reset, written=false) {
     let found = $('.contactsList li[value='+contactId+']');
     if (found[0]){
@@ -42,7 +48,7 @@ function updateUnread(contactId, reset, written=false) {
             if (unReadFound[0])
                 unReadFound.remove();
             if (dateInfoFound[0])
-                dateInfoFound.remove();               
+                dateInfoFound.remove();
         }
         else{
             if (!written){
@@ -57,7 +63,7 @@ function updateUnread(contactId, reset, written=false) {
                 }
                 else{
                     found.find('.contactInfo').append($('<p />').addClass("dateInfo").text(_messagesLocalization.a_while_ago));
-                } 
+                }
             }
         }
     }
@@ -66,6 +72,10 @@ function updateUnread(contactId, reset, written=false) {
     }
 }
 
+/**
+ *
+ * @param el
+ */
 function dropdownDisplay(el) {
     let dropdown = el.parentNode.querySelector('.dropdown-content');
     dropdown.style.display="block";
@@ -88,11 +98,11 @@ if (width < 768) {
         })
         .fail(function(xhr, st, err) {
             console.error("error in messaging/updateReadMessages " + xhr, st, err);
-        }); 
+        });
     });
-} 
+}
 else {
-    
+
     $(".cMessageComposer textarea").prop( "disabled", true );
     $(".cMessageComposer textarea").css("display", "none");
 
@@ -116,8 +126,8 @@ else {
             console.log("distintas: ",location.href, mURL);
             window.history.pushState('object', document.title, mURL);
         }
-        
-        let contactId = (requiredId === null) ? $(this).attr("value"):requiredId; 
+
+        let contactId = (requiredId === null) ? $(this).attr("value"):requiredId;
         // let contactId = this.getAttribute("value");
 
         $(".conversation").css("height", $(".contactsList").height());
@@ -147,7 +157,7 @@ else {
 
             [].forEach.call(arrContacts, function(contact) {
 
-                if (contact.querySelectorAll(".unread").length > 0) 
+                if (contact.querySelectorAll(".unread").length > 0)
                 {
                     let dateInfo = contact.querySelector(".contactInfo .dateInfo");
                     let dni = contact.querySelector(".contactInfo .dni");
@@ -155,7 +165,7 @@ else {
                     for (const [key, value] of Object.entries(contactsUnread)){
                         if (dni.textContent == value["dni"]){
                             dateInfo.textContent = value["dateHumanReadable"];
-                        } 
+                        }
                     }
                 }
             });
@@ -177,7 +187,7 @@ else {
                     else if ((msj.user_id_from == authUser.id) && (msj.user_id_to == contact.id)){
                         str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
                         str += '<div class="dropdown-content"><a href="">Reenviar mensaje</a><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>Eliminar mensaje</a></div></div></li>'
-                                                
+
                         // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
                         // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';
                     }
@@ -185,7 +195,7 @@ else {
                     //Error
                     console.error("User message id not found or incorrect");
                     }
-                }); 
+                });
 
                 str += '</ul>';
                 // document.getElementById("cMessagesFeed").innerHTML = str;
@@ -199,12 +209,12 @@ else {
                     $.ajax(_publicUrl + 'messaging/deleteMessageChat', {
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }, 
+                        },
                         dataType: 'json',
                         data: {id: id, _method:'delete'},
                         method:'post',
                     }).done(function(res){
-                        if (res.status == 0){ 
+                        if (res.status == 0){
                             console.log("response ",res);
                             that.closest('li').remove();
                         }
@@ -212,11 +222,11 @@ else {
                     .fail(function(xhr, st, err) {
                         // this.url
                         console.error("error in messaging/deleteMessageChat " + xhr, st, err);
-                    }); 
+                    });
                 }
                 );
             }
-            
+
 
             $(".cMessageComposer textarea").prop( "disabled", false );
             $(".cMessageComposer textarea").css("display", "block");
@@ -236,16 +246,16 @@ else {
                 $(this).css({"overflow": "hidden", "overflow-y": "hidden"});
             })
 
-            $(".cMessagesFeed").addClass("scroller");                     
+            $(".cMessagesFeed").addClass("scroller");
             $('.cMessageComposer').data('recipient-id', contact.id);
-            
+
         })
         .fail(function(xhr, st, err) {
             console.error("error in messaging/getContactInfo " + xhr, st, err);
-        }); 
+        });
     }
 
-    arrContacts.forEach((c) => { c.addEventListener('click', handleContactClick);})    
+    arrContacts.forEach((c) => { c.addEventListener('click', handleContactClick);})
 
 
     $(".cMessageComposer").keydown(function(event){
@@ -257,7 +267,7 @@ else {
             sendMessage(writtenMessage, $(this).data('recipient-id'), authUser.id, chatChannel);
         }
     });
-       
+
     // Watcher. Scroll when there's a change in the messages feed. Watcher for contacts and for messages.
     // Call when clicked on  a contact. It'll also be called when a new message is created
     $('.cMessagesFeed, .contactsList').bind('DOMSubtreeModified', function(e) {
@@ -269,17 +279,17 @@ else {
     let prevHeight = $('.contactsList').height();
     $('.contactsList').attrchange({
         callback: function (e) {
-            let currentHeight = $(this).height();            
+            let currentHeight = $(this).height();
             if (prevHeight !== currentHeight) {
             //    console.log('height changed from ' + prevHeight + ' to ' + currentHeight);
                 $(".conversation").css("height", currentHeight);
                 scrollToBottom(".cMessagesFeed");
                 prevHeight = currentHeight;
-            }            
+            }
         }
     });
 
-    // Closing dropdown messages menus if open 
+    // Closing dropdown messages menus if open
     window.onclick = function(event) {
         if (!event.target.matches('.fa-sort-down')) {
             let dropdowns = document.getElementsByClassName("dropdown-content");
@@ -293,22 +303,3 @@ else {
 
 }
 
-
-function generateMessageLine(msj, authUserId, otherUserId) {
-    let str = '';
-    if ((msj.user_id_from == otherUserId) && (msj.user_id_to == authUserId)){
-        str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-        str += '<div class="dropdown-content"></div></div></li>'
-    }
-    else if ((msj.user_id_from == authUserId) && (msj.user_id_to == otherUserId)){
-        str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
-        str += '<div class="dropdown-content"><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>'+_messagesLocalization.delete_message+'</a></div></div></li>'
-                                
-        // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
-        // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';
-    }
-    else {
-        console.error("Bad response message");
-    }
-    return str;
-}

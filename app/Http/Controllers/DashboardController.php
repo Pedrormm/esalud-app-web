@@ -15,24 +15,31 @@ use Lang;
 
 class DashboardController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function frontPageDashboard() {
         $authUser = Auth::user();
 
         return view('dashboard/ajaxfrontPageDashboard', []);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fillMsgTable(Request $request){
         if ($request->ajax()){
             $ms = Message::with("userFrom.roles")->get()->groupBy([
                 'userFrom.role_id'
-            ]); 
-           
-            $numberMsg = []; 
+            ]);
+
+            $numberMsg = [];
             $total = 0;
-            
+
             foreach ($ms as $m) {
                 $roleName = $m[0]->userFrom->roles->name;
-                $c = $m->count();   
+                $c = $m->count();
                 $total += $c;
                 $numberMsg[$roleName]= $c;
             }
@@ -44,12 +51,16 @@ class DashboardController extends Controller
                     ];
                 }
             }
-            
+
             return response()->json($numberMsg);
 
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fillUsersTypeRoles(Request $request){
         if ($request->ajax()){
             $users = User::select('role_id', DB::raw('count(*) as total'))
@@ -74,6 +85,10 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fillWeekAppointments(Request $request){
         if ($request->ajax()){
             $dates = Appointment::select('dt_appointment')->get();
@@ -87,7 +102,7 @@ class DashboardController extends Controller
             $grouped = $dates->groupBy(function ($item, $key) {
                 return substr($item['weekday'], 0);
             });
-            
+
             $groupCount = $grouped->map(function ($item, $key) {
                 return collect($item)->count();
             });
@@ -100,7 +115,7 @@ class DashboardController extends Controller
                     'value' => $result
                 ];
             }
-            
+
 
             // dd($data);
 
@@ -111,6 +126,10 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fillDiaryAppointments(Request $request){
         if ($request->ajax()){
             $ap = Appointment::select('id','dt_appointment','checked','updated_at')->whereDate('updated_at', Carbon::today())
@@ -143,6 +162,10 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fillDelayedAppointments(Request $request){
         if ($request->ajax()){
             $ap = Appointment::select('id','dt_appointment','checked','updated_at')
@@ -176,6 +199,10 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function fillSinglePatientAppointments(Request $request){
         if ($request->ajax()){
             $id = auth()->user()->id;
@@ -216,6 +243,10 @@ class DashboardController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function filltreatmentsInProgress(Request $request){
         if ($request->ajax()){
             $id = auth()->user()->id;

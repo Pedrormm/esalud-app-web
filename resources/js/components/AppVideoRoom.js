@@ -259,7 +259,7 @@ export default class AppVideoRoom extends Component {
 
                     if (!utils.isInVideoCallView()){
                         
-                        showModalConfirm("Llamada de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
+                        showModalConfirm(_messagesLocalization.incoming_call_coming_from + " "+whoCalls,_messagesLocalization.would_you_like_to_accept_the_call,()=>{
                             // window.location.replace(_publicUrl+'videoCall/'+JSON.stringify(signal));
                             $('#saveModal').off('click');
                             console.log("NO EN VENTANA VIDEO");
@@ -300,10 +300,10 @@ export default class AppVideoRoom extends Component {
                     else{
                         console.log("EN VENTANA VIDEO");
                         // this.usersIds[signal.userId]
-                        showModalConfirm("Llamada entrante de "+whoCalls,"¿Desea aceptar la llamada?",()=>{
+                        showModalConfirm(_messagesLocalization.incoming_call_coming_from + " "+whoCalls,_messagesLocalization.would_you_like_to_accept_the_call,()=>{
                             this.incomingCall(signal);
                         },()=>{
-                            //TODO: Reset the call when cancel is pressed
+                            // Reset the call when cancel is pressed
                             // window.history.pushState('Cancel', 'Cancel', _publicUrl + 'records');
                             // window.history.forward();
                             // location.reload();

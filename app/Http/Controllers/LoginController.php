@@ -27,9 +27,12 @@ use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
-
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function login(Request $request) {
-        $remember = $request->has('remember') ? true : false;    
+        $remember = $request->has('remember') ? true : false;
         $validatedData = $request->validate([
             'dni' => 'required|min:4|max:10|exists:users,dni',
             'password' => 'required|min:6',
@@ -46,38 +49,34 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             // Autenticacion realizada...
-           
+
             $user = auth()->user();
-            
+
             if(Hash::needsRehash($user->password)) {
                 $user->password = Hash::make($request->password);
                 $user->save();
             }
-            
+
             return redirect()->action('LoginController@index');
         }
         return back()->withErrors(\Lang::get('messages.authentication_failed'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function loginForgotten(Request $request) {
-        // return redirect()->back()->with(['error' => 'the_email_or_DNI_provided_does_not_exist']);
-        // $request->session()->flash('info', 'the_email_or_DNI_provided_does_not_exist!');
-        // return response()->json(['status' => 1, 'message' => 'the_email_or_DNI_provided_does_not_exist']);
-
-        // $validatedData = $request->validate([
-        //     'rem_password' => 'required|min:4|max:10|exists:users,dni',
-        // ]);
-       
         $login = $request->rem_password;
         $user = User::where('dni', $login)->first();
         if(is_null($user)) {
             // return back()->withErrors("Invalid login");
             return response()->json(['status' => 1, 'message' => \Lang::get('messages.the_email_or_DNI_provided_does_not_exist')]);
         }
-        
+
         $maxSteps = 1000; //We do not allow this for security reasons
         $try = 0;
-        do {            
+        do {
             $token = Str::random(32);
             // var_dump($token);
             $user->remember_token = $token;
@@ -108,30 +107,35 @@ class LoginController extends Controller
 
         $res = \Mail::to($email)->send(new ForgotPasswordMail($token, $name));
 
-        
+
         // $res = Mail::to($contact[0]->email)->send(new InvitationNewUserMail($token, $contact[0]->name));
-        
+
         // return redirect()->back()->with(['successful' => 'A reset email was sent to the email']);
         return response()->json(['status' => 0, 'message' => \Lang::get('messages.a_reset_email_was_sent_to_your_email')]);
 
     }
 
+    /**
+     * @param null $token
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function forgotPassword($token=null){
         $user = User::where('remember_token', $token)->get();
         if ((empty($token)) || (count($user) == 0)){
             return redirect('/')->withError(\Lang::get('messages.invalid_route'));
         }
-        return view('mail.resetpassword', ['token' => $token]);        
+        return view('mail.resetpassword', ['token' => $token]);
     }
 
-    //TODO: Whenever the pass is swifted in the option menu, an optional mail has to be sent for security reasons, like "Tu contraseña ha sido cambiada desde la IP x"
-    //TODO: The email can also be changed (Meanwhile, the email state would be a 'pending to be verified'). If the email is not changed, the email would be the previous one
-
+    /**
+     *
+     * Whenever the pass is swifted in the option menu, an optional mail has to be sent for security reasons, like "Your password have been changed from the IP x".
+     * The email can also be changed (Meanwhile, the email state would be a 'pending to be verified'). If the email is not changed, the email would be the previous one
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function changePassword(Request $request){
-        // $validatedData = Validator::make($request->all(), [
-        //     'password' => 'required|confirmed|min:6',
-        // ]); // Tiene que haber un campo 'password_confirmation' para que se pueda dar la validación confirmed
-        
         $validatedData = checkValidation([
             'password' => 'required|confirmed|min:6',
         ]);
@@ -148,17 +152,28 @@ class LoginController extends Controller
 
     const MAX_MESSAGE_LENGTH = 15;
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index() {
-        $user = Auth::user();        
+        $user = Auth::user();
 
         return view('dashboard.index', ['user' => $user]);
     }
-    
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function logout(Request $request) {
         Auth::logout();
         return redirect('/')->withError(\Lang::get('messages.session_closed'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function isPasswordForgotten(Request $request){
         if ($request->ajax()){
             return view('login-is-password-forgotten');
@@ -169,6 +184,10 @@ class LoginController extends Controller
         }
     }
 
+    /**
+     * @param string $lang
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function setLanguage(string $lang="es") {
         switch ($lang) {
             case "es":
@@ -197,17 +216,17 @@ class LoginController extends Controller
                 break;
             case "ru":
                 Session::put('lang', 'ru');
-                break;     
+                break;
             case "zh_CN":
                 Session::put('lang', 'zh_CN');
                 break;
             case "ja":
                 Session::put('lang', 'ja');
-                break;         
+                break;
             default:
                 Session::put('lang', 'es');
         }
-                
+
         return back();
     }
 }

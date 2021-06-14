@@ -62,7 +62,7 @@
                         <div class="cMessageComposer">
                             <textarea placeholder=@lang('messages.write_stat') autofocus></textarea>
                             {{-- <button type="button" class="btn btn-primary"> --}}
-                                <i class="fas fa-arrow-alt-circle-right"></i>
+                                <i id="buttonSendMessage" class="fas fa-arrow-alt-circle-right"></i>
                             {{-- </button> --}}
                         </div>
                     </div>
@@ -80,5 +80,6 @@
         let authUser = @json(auth()->user()->toArray());
     </script>
 
-    <script type="text/javascript" src="{{ asset('js/viewMessagesFromMobile.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/viewMessagesFromMobile.js') . '?r=' . rand() }}"></script>
+
 @endsection

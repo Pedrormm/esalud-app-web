@@ -22,13 +22,17 @@ class StaffController extends AppBaseController
     /** @var  StaffRepository */
     private $staffRepository;
 
+    /**
+     * StaffController constructor.
+     * @param StaffRepository $staffRepo
+     */
     public function __construct(StaffRepository $staffRepo)
     {
         $this->staffRepository = $staffRepo;
     }
 
     /**
-     * Display a listing of the Staff.
+     * Displays a listing of the Staff.
      *
      * @param Request $request
      *
@@ -43,7 +47,7 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Show the form for creating a new Staff.
+     * Shows the form for creating a new Staff.
      *
      * @return Response
      */
@@ -53,7 +57,7 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Store a newly created Staff in storage.
+     * Stores a newly created Staff in storage.
      *
      * @param CreateStaffRequest $request
      *
@@ -71,7 +75,7 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Display the specified Staff.
+     * Displays the specified Staff.
      *
      * @param int $id
      *
@@ -91,7 +95,7 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified Staff.
+     * Shows the form for editing the specified Staff.
      *
      * @param int $id
      *
@@ -99,7 +103,7 @@ class StaffController extends AppBaseController
      */
     public function edit($id)
     {
-   
+
         $userLogged = auth()->user();
         $usuario = User::find($id);
         if (empty($usuario)) {
@@ -124,14 +128,14 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Update the selected user in the Database
+     * Updates the selected user in the Database
      * Endpoint: users/{id}
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */      
+     */
     public function update(Request $request, int $id){
-        
+
         $validatedData = parent::checkValidation([
             'role_id' => 'required|exists:App\Models\Role,id',
             'email' => 'required|email:rfc,dns',
@@ -147,7 +151,7 @@ class StaffController extends AppBaseController
             'address' => 'string',
         ]);
         $token = $request->input('token');
-        
+
         if ($request->input('role_id')==\HV_ROLES::PATIENT){
             $mapValidation = parent::checkValidation([
                 'historic' => 'required',
@@ -165,7 +169,7 @@ class StaffController extends AppBaseController
                 'office' => 'required|numeric',
                 'room' => 'required|numeric',
                 'h_phone' => 'required|numeric',
-            ]); 
+            ]);
             $res = Staff::whereUserId($id)->update($mapValidation);
         }
 
@@ -180,7 +184,7 @@ class StaffController extends AppBaseController
     }
 
     /**
-     * Remove the specified Staff from storage.
+     * Removes the specified Staff from storage.
      *
      * @param int $id
      *
@@ -192,10 +196,10 @@ class StaffController extends AppBaseController
     {
         $userToDelete = User::find($id);
         $userName = $userToDelete->name . " " . $userToDelete->lastname;
-        
+
 
         if (empty($userToDelete)) {
-            return $this->jsonResponse(1, \Lang::get('messages.user_not_found')); 
+            return $this->jsonResponse(1, \Lang::get('messages.user_not_found'));
         }
 
         $patientOrStaffFound = User::leftJoin('patients', 'users.id', 'patients.user_id')
@@ -209,7 +213,7 @@ class StaffController extends AppBaseController
             $join->on('a.user_id_creator', '=', 'users.id')->orOn('a.user_id_doctor', '=', 'users.id');
         })
         ->leftJoin('treatments as t', 'users.id', 't.user_id_doctor')
-        ->select('users.id as user_id', 'a.dt_appointment as dt', 'a.id as appointment_id', 
+        ->select('users.id as user_id', 'a.dt_appointment as dt', 'a.id as appointment_id',
         'a.deleted_at as a_deleted', 't.id as treatement_id', 't.deleted_at as t_deleted',)
         ->where('users.id', $id)
         ->where(function($q) {
@@ -221,13 +225,13 @@ class StaffController extends AppBaseController
         // deleted=null: has value. When one is null a relation is found.
         $foundRelation = false;
         foreach($hasRelations as $rel) {
-            if ((!is_null($rel->appointment_id) && is_null($rel->a_deleted)) || 
+            if ((!is_null($rel->appointment_id) && is_null($rel->a_deleted)) ||
             (!is_null($rel->treatement_id) && is_null($rel->t_deleted))) {
                 $foundRelation = true;
                 break;
             }
         }
-        
+
         if (!$foundRelation)
             $userToDelete->delete($id);
         else
@@ -238,7 +242,7 @@ class StaffController extends AppBaseController
                 Staff::find($patientOrStaffFound[0]['staff_id'])->delete();
             }
             else{
-                return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff')); 
+                return $this->jsonResponse(1, \Lang::get('messages.the_user_is_not_staff'));
             }
         }
 
@@ -247,7 +251,7 @@ class StaffController extends AppBaseController
 
     public function confirmDelete($id){
         $singleUser = User::find($id);
-        return view('patients.confirm-delete',['singleUser' => $singleUser]);  
+        return view('patients.confirm-delete',['singleUser' => $singleUser]);
     }
 
      /**
@@ -298,36 +302,36 @@ class StaffController extends AppBaseController
             // Search by name, surname, role, dni, sex, branch_name, office or room
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
                     $query->orWhere('users.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('users.lastname', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%')      
+                        ->orWhere('sex', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('branches.name', 'like', '%' . $searchPhrase . '%')
                         // ->orWhere('shift', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('office', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('room', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
 
             // Search by blood type
             elseif(preg_match("/^(A|B|AB|0)[+-]$/i", $searchPhrase)) {
-               
+
                 $data->where(function($query) use ($searchPhrase) {
-                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');            
+                    $query->orWhere('u.blood', 'like', '%' . $searchPhrase . '%');
                 });
-                        
+
                 $numRecords = $data->count();
             }
-            
+
         }
 
         $firstRow = $data->first();
-        
+
         if(is_null($firstRow)) {
             return response()->json(['data' => []]);
         }

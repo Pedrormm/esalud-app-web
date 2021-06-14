@@ -106,12 +106,33 @@ export default class App extends Component {
             console.log(userReceiverFullName, authUser.name + " " + authUser.lastname);
 
             console.log("hiddenform");
+            $('#videoFormData').remove();
+            $('#sessionName').val(session);
             let hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: _publicUrl+'videoCallContainer', target: 'videoWindow'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
-            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: session}));
+            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', id:'sessionName', value: session}));
             $('body').append(hiddenForm);
-    
+            $('#sessionName').val(session);
             console.log(session);
+            console.log($('#sessionName').val());
+
+            // $.ajax(_publicUrl + 'videoCallContainer', {
+            //     dataType: "text",
+            //     data: {sessionName: session, userName: authUser.name + " " + authUser.lastname},
+            //     method:'post',
+            //     target: 'videoWindow',
+            // }).done(function(res){
+            //     console.log(session);
+    
+            //     let openviduWindow = window.open('', 'videoWindow');
+            // })
+            // .fail(function(xhr, st, err) {
+            //     console.error("error in videoCall/getUserInfo " + xhr, st, err);
+            // });
+
+
+    
+            // console.log(session);
     
             let openviduWindow = window.open('', 'videoWindow');
             // let that = this;
@@ -122,7 +143,7 @@ export default class App extends Component {
 
 
             $('#videoFormData').submit();
-    
+            $('#videoFormData').remove();
             // window.open(_publicUrl+"videoCallContainer?userId="+userId+"&sessionName="+session,"blank");    
             // if (this.state.latestSession !== null ){
                 $("#joinButton").css("display", "inline");

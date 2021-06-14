@@ -18,11 +18,11 @@ $(document).on( 'draw.dt', function ( e, settings ) {
     assignHeadersToRowsResponsive();
 } );
 
-// On load jquery  
+// On load jquery
 $(function() {
     if ($("#topbar-navheader")[0]){
         $('#topbar-navheader .nav-link,.dropdown-toggle').trigger('click');
-    } 
+    }
     // selectpicker
     clickOnSelectpicker();
 
@@ -54,13 +54,13 @@ $(function() {
             break;
         case "ru":
             $("#headerTopFlag").attr("src",_flagUrl+"ru.svg");
-            break;     
+            break;
         case "zh_CN":
             $("#headerTopFlag").attr("src",_flagUrl+"cn.svg");
             break;
         case "ja":
             $("#headerTopFlag").attr("src",_flagUrl+"jp.svg");
-            break; 
+            break;
         default:
             $("#headerTopFlag").attr("src",_flagUrl+"es.svg");
             break;
@@ -81,24 +81,32 @@ $(function() {
     $('#sidebarToggleTop').click();
     console.log("clicked");*/
 
-    
+
 var pusher = videoPusherInit();
 var videoChannel = pusher[1];
 
 videoChannel.bind(`client-video-channel-send`, (data) => {
     console.log("Recibido datos video channel", data);
+    let inputSession = "";
     if (data.userReceiverId == authUser.id){
-
-            showModalConfirm("Llamada entrante de "+data.userReceiverFullName,"¿Desea aceptar la llamada?",()=>{
-            var hiddenForm = $('<form>', {id: 'videoFormData', method: 'post', action: _publicUrl+'videoCallContainer', target: 'videoWindow'});
+            if (data.session)
+                inputSession = data.session;
+            console.log(inputSession);
+            $('#videoFormDataReciever').remove();
+            $('#sessionNameReciever').val(inputSession);
+            showModalConfirm(_messagesLocalization.incoming_call_coming_from + " "+data.userCallerFullName, _messagesLocalization.would_you_like_to_accept_the_call,()=>{
+            var hiddenForm = $('<form>', {id: 'videoFormDataReciever', method: 'post', action: _publicUrl+'videoCallContainer', target: 'videoWindowReciever'});
             hiddenForm.append($('<input>', {type: 'hidden', name:'userFullName', value: authUser.name + " " + authUser.lastname}));
-            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', value: data.session}));
+            hiddenForm.append($('<input>', {type: 'hidden', name:'sessionName', id:'sessionNameReciever', value: inputSession}));
             $('body').append(hiddenForm);
-    
-            window.open('', 'videoWindow');
-            $('#videoFormData').submit(); 
+            $('#sessionNameReciever').val(inputSession);
+            inputSession="";
+
+            window.open('', 'videoWindowReciever');
+            $('#videoFormDataReciever').submit();
+            $('#videoFormDataReciever').remove();
         },()=>{
-            
+
         });
     }
 
@@ -115,7 +123,7 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {function} callback - Function to be called when even triggers.
  * @param {number} [timeout=2000] - Timeout, in ms, to to wait before triggering event if not caused by blur.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
  ;(function($){
     $.fn.extend({
@@ -135,7 +143,7 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
                     // the event from triggering too preemptively. Without this line,
                     // using tab/shift+tab will make the focused element fire the callback.
                     if (e.type=='keyup' && e.keyCode!=8) return;
-                    
+
                     // Check if timeout has been set. If it has, "reset" the clock and
                     // start over again.
                     if (timeoutReference) clearTimeout(timeoutReference);
@@ -153,14 +161,14 @@ videoChannel.bind(`client-video-channel-send`, (data) => {
 })(jQuery);
 
 // Today and timeNow are used for getting the currentDate at the saveNewMessage function
-Date.prototype.today = function () { 
+Date.prototype.today = function () {
     return ((this.getDate() < 10)?"0":"") + this.getDate() +"-"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"-"+ this.getFullYear();
 }
 
 Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 }
- 
+
 // Using jdocs https://jsdoc.app/tags-param.html
 
 /**
@@ -168,14 +176,14 @@ Date.prototype.timeNow = function () {
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {string} endpoint - The endpoint (url) for the ajax call.
  * @param {Object} jQselector - The selector where the ajax result function will be displayed.
- * @param {boolean} [displayErrorOnLayer=false] - A boolean indicating whether and error 
+ * @param {boolean} [displayErrorOnLayer=false] - A boolean indicating whether and error
  * is going to be displayed on the selector target when there is an error or not. It is false by default
  * @param {boolean} [forceDisplay=true] - A boolean indicating whether the selected is going to be forced to be displayed or not
  * It is true by befault.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
-    
+
     // console.log("Calling asyncCall with args", arguments);
     if(typeof displayErrorOnLayer != 'boolean')
         displayErrorOnLayer = false;
@@ -198,9 +206,9 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
         }
     }).fail(function(xhr, status, error) {
         console.error("fail arguments", arguments);
-       
+
         // if(displayErrorOnLayer) {
-           
+
         //     $(jQselector).html('<div class="alert alert-danger">ERROR: No se pudo cargar contenido en destino</div>');
         // }
     });
@@ -213,11 +221,11 @@ function asyncCall(endpoint, jQselector, displayErrorOnLayer, forceDisplay) {
  * @param {Object} [data={}] - The data for the ajax input.
  * @param {string} [method="PUT"] - The data used for the ajax call
  * @param {string} [type="json"] - The dataType of the ajax call
- * @param {function} [callbackOkFunction=function(){}] - Callback function when the user pressed "ok" 
+ * @param {function} [callbackOkFunction=function(){}] - Callback function when the user pressed "ok"
  * and the function went ok.
- * @param {boolean} [closeModal=true] - A boolean indicating whether the modal will be hide 
+ * @param {boolean} [closeModal=true] - A boolean indicating whether the modal will be hide
  * when the callbak function is applied or not. It is true by befault.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOkFunction=function(){}, closeModal=true) {
 
@@ -233,12 +241,12 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
                 };
             })();
         }
-       
+
         $.ajax(url,
             {
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },  
+                },
                 dataType: type,
                 method: method,
                 data: data
@@ -250,7 +258,7 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
             $('#generic-modal').modal('hide');
         });
         $('#saveModal').off();
-   
+
 }
 
 /**
@@ -259,7 +267,7 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
  * @param {number|string} status - The status of the response. 0 for ok | 1 for error
  * @param {string} message - The message to be displayed on the container
  * @param {number} [timeout=0] - 0 for no disappearing | >0 for seconds to disappear
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function showInlineError(status,message, timeout=0, modal=false) {
     let containerNameError = '#error-container';
@@ -280,11 +288,11 @@ function showInlineError(status,message, timeout=0, modal=false) {
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {string} message - The message to be displayed on the container
  * @param {number} [timeout=0] - 0 for no disappearing | >0 for seconds to disappear
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function showInlineMessage(message, timeout=0) {
     $('#message-container').show().html(message);
-  
+
     if(timeout>0) {
         setTimeout(function() {
             $('#message-container').hide(500);
@@ -296,7 +304,7 @@ function showInlineMessage(message, timeout=0) {
  * Shows the return of an ajax call inside a bootstrap Modal with multiple options
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {string} title - The title of the bootstrap modal to be displayed.
- * @param {Object} body - The body of the bootstrap modal in case there is no ajax. 
+ * @param {Object} body - The body of the bootstrap modal in case there is no ajax.
  * If there is an ajax call, its response will be overlaped.
  * @param {boolean} htmlFormat - If it is empty, the bootstrap body will have an ajax response.
  * If it is not empty, the bootstrap body will have whatever was passed in the previous argument (body).
@@ -306,20 +314,20 @@ function showInlineMessage(message, timeout=0) {
  * @param {boolean} [drageable=false] - A boolean indicating whether the modal will be drageable
  * (meaning that it can be moved) or not. If it is drageable the function dragElement will make it possible.
  * @param {boolean} [collapseable=false] - A boolean indicating whether the modal will be collapseable
- * (meaning that it can be collapsed in a single line) or not. 
- * @param {boolean} [removeApp=false] - A boolean indicating whether #app 
+ * (meaning that it can be collapsed in a single line) or not.
+ * @param {boolean} [removeApp=false] - A boolean indicating whether #app
  * (the videoCall id that will be rendered on React) will be removed or not.
  * @param {number} [secondstoCancel=null] - null: The modal does not cancel on its own.
  * Any number: Shows the quantity of seconds for the modal to be canceled.
- * @param {function} [callbackOkFunction=function(){}] - Callback function when the user pressed "ok" 
+ * @param {function} [callbackOkFunction=function(){}] - Callback function when the user pressed "ok"
  * and the function went ok.
  * @param {string} [nameCancelModal="Close"] - null: The cancel button will have the default string value (Close).
  * Any string: The modal cancel button will have the given string.
  * @param {string} [nameSaveModal="Save changes"] - null: The save button will have the default string value (Save changes).
  * Any string: The modal save button will have the given string.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
-function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
+function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false,
      removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal=_messagesLocalization.close_stat, nameSaveModal=_messagesLocalization.save_changes) {
     $('#generic-modal .modal-body').text('');
     $('#generic-modal .modal-title').text(title);
@@ -342,7 +350,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
                 cachedFunction.apply(this, arguments);
                 if(!_avoidAllSendings)
                     $('#generic-modal').modal('hide');
-                $( this ).off( e ); 
+                $( this ).off( e );
             }
         })();
         $('#generic-modal #saveModal').click(callbackOkButton);
@@ -357,14 +365,14 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         $('.modalCollapse').show();
         $(".modal-body").collapse('show');
     }
-   
+
     if(htmlFormat)
         $('#generic-modal .modal-body').html(body);
     else if (url) {
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, 
+            },
             url: url,
 
         }).done(function(res) {
@@ -401,7 +409,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
             if (seconds <= 0){
                 clearInterval(countdown);
                 console.log("Se destruye el intevalo countdown");
-            } 
+            }
         }
         cont(secondstoCancel);
 
@@ -426,7 +434,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
             moveTimer = setTimeout(function(){
                 // console.log("I stopped moving");
                 $("#generic-modal").fadeTo(800, 0).slideUp(800, function(){
-                    $(this).modal('hide'); 
+                    $(this).modal('hide');
                 });
                 $("#generic-modal").stop().off();
             },secondstoCancel*1000)
@@ -452,8 +460,8 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
         $('.modal-body').on('shown.bs.collapse', function () {
             icon.classList.remove('fa-caret-square-right');
             icon.classList.add('fa-caret-square-down');
-        }); 
-    
+        });
+
         return;
 
     });
@@ -465,16 +473,16 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
 }//--end showModal
 
 /**
- * Shows a bootstrap modal with a message and two possible callback functions 
+ * Shows a bootstrap modal with a message and two possible callback functions
  * (for when it has been closed and for when it is click on "save" and it works out ok)
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {string} title - The title of the bootstrap modal to be displayed.
  * @param {Object} message - The message to be displayed on the bootstrap body
- * @param {function} [callback=function(){}] - Callback function when the user pressed "ok" 
+ * @param {function} [callback=function(){}] - Callback function when the user pressed "ok"
  * or whatever the argument optConfirmText has.
- * @param {function} [callbackClose=function(){}] - Callback function when the user pressed "cancel" 
+ * @param {function} [callbackClose=function(){}] - Callback function when the user pressed "cancel"
  * @param {string} [optConfirmText="Ok"] - The save button (or ok, confirm button) will have the given string.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function showModalConfirm(title=_messagesLocalization.title_stat, message=_messagesLocalization.no_response_message, callback=function(){},callbackClose=function(){}, optConfirmText=_messagesLocalization.ok_stat) {
     let mainId = '#confirm-modal';
@@ -505,7 +513,7 @@ function showModalConfirm(title=_messagesLocalization.title_stat, message=_messa
     $(buttonOkId).click(callback);
 
     $(buttonCloseId).click(callbackClose);
-    
+
     if(optConfirmText !== undefined) {
         $(buttonOkId).text(optConfirmText);
     }
@@ -516,7 +524,7 @@ function showModalConfirm(title=_messagesLocalization.title_stat, message=_messa
  * Returns the age of a person in years when a date is given
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {date} dateString - The date given.
- * @return {number} - The age of the person in years.
+ * @returns {number} - The age of the person in years.
  */
 function getAge(dateString) {
     let today = new Date();
@@ -533,7 +541,7 @@ function getAge(dateString) {
  * Moves dynamically thoughout the window the given element
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {Object} elmnt - The element to be moved.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function dragElement(elmnt) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -582,25 +590,25 @@ function dragElement(elmnt) {
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {string} str - The given phrase
  * @param {Object} pattern - The reggex value, in case multiple separators will be allowed
- * @param {boolean} [allCase=false] - A boolean indicating whether all the resulting 
+ * @param {boolean} [allCase=false] - A boolean indicating whether all the resulting
  * characters will be uppercase or not.
- * @param {spellCheck} [allCase=true] - A boolean indicating whether the spelling 
+ * @param {spellCheck} [allCase=true] - A boolean indicating whether the spelling
  * (and thus, changing the resulting word accordingly) will be taken into account or not.
  * @param {number} [charLimit=2] - The number of characters for each word to be taken into account
  * for being modified.
- * @return {string} - The resulting phrase
+ * @returns {string} - The resulting phrase
  */
 function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, charLimit=2) {
-    // Via Regex. Allowing multiple separators 
+    // Via Regex. Allowing multiple separators
     let splitStr = str.toLowerCase().split(pattern);
-    
+
         for (let i = 0; i < splitStr.length; i++) {
             // console.log('Original: ', splitStr[i]);
             if (spellCheck){
                 if (_dictionary){
                     let array_of_suggestions = _dictionary.suggest(splitStr[i]);
                     // console.log(array_of_suggestions, array_of_suggestions[0]);
-                    if (array_of_suggestions && array_of_suggestions.length) {   
+                    if (array_of_suggestions && array_of_suggestions.length) {
                         splitStr[i] = array_of_suggestions[0];
                     }
                 }
@@ -612,17 +620,17 @@ function patternCase(str, pattern=/(?: )+/, allCase=false, spellCheck=true, char
             let caseCondition = allCase ? (splitStr[i].length > charLimit || i == 0) : (i == 0);
             if (caseCondition){
                 splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-            }           
+            }
         }
 
-    return splitStr.join(' '); 
+    return splitStr.join(' ');
 }
 
 /**
  * Sleeps everything for the time given
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {number} milliseconds - The time for the app to be slept, in ms
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function sleep(milliseconds) {
     const date = Date.now();
@@ -633,9 +641,9 @@ function sleep(milliseconds) {
 }
 
 /**
- * Returns whether a bootstrap modal is currently open or not 
+ * Returns whether a bootstrap modal is currently open or not
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {boolean} - If the modal is opened or not
+ * @returns {boolean} - If the modal is opened or not
  */
 function isABootstrapModalOpen() {
     return $('.modal.show').length >0;
@@ -644,7 +652,7 @@ function isABootstrapModalOpen() {
 /**
  * Returns whether the view the user is in is the videoCall one or not
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {boolean} - If we are located in the videoCall view or not
+ * @returns {boolean} - If we are located in the videoCall view or not
  */
 function isInVideoCallView() {
     return window.location.href != (URL+'videoCall');
@@ -655,65 +663,21 @@ function isInVideoCallView() {
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {Object} [appointment=null] - The given appointment object.
  * @param {Object} [channel=null] - Channel where the pusher trigger will occur.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function sendAlert(appointment=null,channel=null ) {
     if (appointment){
-        
+
         $.ajax(_publicUrl + 'messaging/send', {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },  
+            },
             dataType: 'json',
             data: {contact_id: userToMessageId, msj: msj},
             method:'post',
         }).done(function(res){
 
-            channel.trigger(`client-send`, { 
-                idSender: idSender,
-                idReceiver: userToMessageId,
-                user_id_from: idSender,
-                user_id_to: userToMessageId,    
-                message: msj,
-                date_spa: res.date_spa,
-                date_eng: res.date_eng,
-            });
-            // We push the new message into the messages array cause we already have the other messages locally
-            // We add the msj to the parent
-            console.log("res: ",res);
-            saveNewMessage(res, true);
-        })
-        .fail(function(xhr, st, err) {
-            console.error("error in messaging/send " + xhr, st, err);
-        }); 
-
-        writtenMessage.val('');     
-    }
-}
-
-/**
- * Creates a pusher trigger with the sent message
- * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @param {string} writtenMessage - The given message to be sent.
- * @param {number} [userToMessageId=null] - Id of the user who recieves the mesage.
- * @param {number} [idSender=null] - Id of the user who sends the mesage.
- * @param {Object} [channel=null] - Channel where the pusher trigger will occur.
- * @return {void} Nothing
- */
-function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channel=null ) {
-    let msj = writtenMessage.val();
-    if (msj && (msj != "")){
-        
-        $.ajax(_publicUrl + 'messaging/send', {
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },  
-            dataType: 'json',
-            data: {contact_id: userToMessageId, msj: msj},
-            method:'post',
-        }).done(function(res){
-
-            channel.trigger(`client-send`, { 
+            channel.trigger(`client-send`, {
                 idSender: idSender,
                 idReceiver: userToMessageId,
                 user_id_from: idSender,
@@ -729,9 +693,53 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
         })
         .fail(function(xhr, st, err) {
             console.error("error in messaging/send " + xhr, st, err);
-        }); 
+        });
 
-        writtenMessage.val('');     
+        writtenMessage.val('');
+    }
+}
+
+/**
+ * Creates a pusher trigger with the sent message
+ * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
+ * @param {string} writtenMessage - The given message to be sent.
+ * @param {number} [userToMessageId=null] - Id of the user who recieves the mesage.
+ * @param {number} [idSender=null] - Id of the user who sends the mesage.
+ * @param {Object} [channel=null] - Channel where the pusher trigger will occur.
+ * @returns {void} Nothing
+ */
+function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channel=null ) {
+    let msj = writtenMessage.val();
+    if (msj && (msj != "")){
+
+        $.ajax(_publicUrl + 'messaging/send', {
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: 'json',
+            data: {contact_id: userToMessageId, msj: msj},
+            method:'post',
+        }).done(function(res){
+
+            channel.trigger(`client-send`, {
+                idSender: idSender,
+                idReceiver: userToMessageId,
+                user_id_from: idSender,
+                user_id_to: userToMessageId,
+                message: msj,
+                date_spa: res.date_spa,
+                date_eng: res.date_eng,
+            });
+            // We push the new message into the messages array cause we already have the other messages locally
+            // We add the msj to the parent
+            console.log("res: ",res);
+            saveNewMessage(res, true);
+        })
+        .fail(function(xhr, st, err) {
+            console.error("error in messaging/send " + xhr, st, err);
+        });
+
+        writtenMessage.val('');
     }
 }
 
@@ -741,7 +749,7 @@ function sendMessage(writtenMessage, userToMessageId=null, idSender=null, channe
  * @param {Object} messageObj - The message object to be saved.
  * @param {number} [alienUser=false] - If true, the user who sends the message is the logged user
  * @param {number} [contactToWriteId=null] - Id of the user where the message will be written.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
     let appended = false;
@@ -757,16 +765,16 @@ function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
         idFrom = authUser.id;
         idTo = messageObj.user_id_to;
     }
-   
+
     let str = generateMessageLine(messageObj, idFrom, idTo);
 
     $('.cMessagesFeed ul').append(str);
     if($(".cMessagesFeed li").length > oldLength)
         appended = true;
 
-    if (appended==false)    
+    if (appended==false)
         updateHeaderMessages(true, contactToWriteId, messageObj.message);
-        
+
     return appended;
 }
 
@@ -775,7 +783,7 @@ function saveNewMessage(messageObj, alienUser=false, contactToWriteId=null) {
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {Object} element - Element that will be scrolled to the bottom.
  * @param {number} [speed=10] - Speed, in ms, at which the animation will occur.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function scrollToBottom(element, speed=10) {
     setTimeout(function() {
@@ -784,11 +792,11 @@ function scrollToBottom(element, speed=10) {
         let docHeight = getDocHeight();
         let scrollHeight = $(window).scrollTop() + $(window).height();
 
-        setTimeout(function() {            
+        setTimeout(function() {
             if (docHeight !== scrollHeight){
                 // console.log("not bottom!");
                 let maxValue = Number.MAX_SAFE_INTEGER;
-                let bigInt = BigInt(Math.pow(maxValue,2));   
+                let bigInt = BigInt(Math.pow(maxValue,2));
                 $(element).animate({ scrollTop: bigInt }, 'slow');
             }
         }, 50);
@@ -798,7 +806,7 @@ function scrollToBottom(element, speed=10) {
 /**
  * Returns the height of the current view
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {number} The height of the document (view)
+ * @returns {number} The height of the document (view)
  */
 function getDocHeight() {
     var D = document;
@@ -813,7 +821,7 @@ function getDocHeight() {
  * Initializes an element in pusher and subscribes to a pressence channel
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {boolean} [isChat=true] - If it is a chat the channel name is swaped.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function chatPusherInit(isChat = true) {
     console.log("llamada chatPusherInit",chatPusherInit.caller);
@@ -825,10 +833,10 @@ function chatPusherInit(isChat = true) {
         authEndpoint: _publicUrl+'pusher/auth',
         cluster: 'ap2',
         encrypted: true,
-        auth: { 
+        auth: {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, 
+            },
             params: authUser.id,
             // params: {
             //     socket_id: authUser.id,
@@ -837,7 +845,7 @@ function chatPusherInit(isChat = true) {
         }
     });
     // console.log("despues: ", _publicUrl+'pusher/auth');
-    
+
     chatPusher.connection.bind( 'error', function( err ) {
         console.log("Pusher chat error: ",err);
     });
@@ -855,7 +863,7 @@ function chatPusherInit(isChat = true) {
 /**
  * Initializes an element in pusher and subscribes to a channel
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function videoPusherInit() {
     Pusher.logToConsole = false;
@@ -864,18 +872,18 @@ function videoPusherInit() {
         authEndpoint: _publicUrl+'pusher/auth',
         cluster: 'ap2',
         encrypted: true,
-        auth: { 
+        auth: {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, 
+            },
             // params: authUser.id,
         }
     });
-    
+
     videoPusher.connection.bind( 'error', function( err ) {
         console.log("Pusher video session error: ",err);
     });
-    
+
     let videoChannel = videoPusher.subscribe('presence-video-session-channel');
     return [videoPusher, videoChannel];
 }
@@ -887,16 +895,16 @@ function videoPusherInit() {
  * @param {number} contactToWriteId - The reciever user id (the one who the message is aimed to).
  * @param {string} message - The message to be updated
  * @param {number} msjRead - The number of messages that the logged user has read
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
     let icon = $('#numMessagesHeader');
     let num = icon.text();
-    
-    let top = $("#top-navigator-messages a[data-contact-id="+ contactToWriteId +"]") 
+
+    let top = $("#top-navigator-messages a[data-contact-id="+ contactToWriteId +"]")
 
     if(add){
-        if (num && (num>0) ) 
+        if (num && (num>0) )
             icon.text(parseInt(num)+1);
         else
             icon.text(1);
@@ -906,7 +914,7 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
             nod.parent().addClass( "font-weight-bold" );
             top.find('.headerDate').html("Recently");
             console.log("top ",nod.parent()[0],top[0], nod[0]);
-    
+
             let unread = top.find('.unread');
             if (unread[0]){
                 unread.text(parseInt(num)+1);
@@ -914,8 +922,8 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
             else{
                 top.append(
                     $('<div />').addClass("mr-3 header-unread").append($('<span />').addClass("unread").text("1"))
-                ); 
-            }  
+                );
+            }
         }
         else{
             console.log("No se encuentra en el header");
@@ -930,9 +938,9 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
                 let whatToInsert =
                 ` <a class='dropdown-item d-flex align-items-center' data-contact-id=${contactToWriteId} href='${_publicUrl}messaging' >`+
                  "<div class='dropdown-list-image mr-3'>"+
-                    `<img class='rounded-circle' src='${res.avatar ? route: 
+                    `<img class='rounded-circle' src='${res.avatar ? route:
                         ((res.sex == "male") ? _publicUrl+"images/avatars/user_man.png":
-                         (res.sex == "female")? _publicUrl+"images/avatars/user_woman.png":null)}' alt='Foto de perfil'>`+  
+                         (res.sex == "female")? _publicUrl+"images/avatars/user_woman.png":null)}' alt='Foto de perfil'>`+
                          "<div class='status-indicator bg-success'></div>"+
                  "</div>"+
                  "<div class='mr-3 font-weight-bold'>"+
@@ -942,7 +950,7 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
                  "</div>"+
                  "<div class='mr-3 header-unread'></div>"+
                  "<div class='mr-3 header-unread'><span class='unread'>1</span></div></a>";
- 
+
                 window.localStorage.setItem("contact-id",contactToWriteId);
 
                 $(whatToInsert).insertAfter('#top-navigator-messages .dropdown-header');
@@ -950,7 +958,7 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
             })
             .fail(function(xhr, st, err) {
                 console.error("error in messaging/getUserFromId " + xhr, st, err);
-            }); 
+            });
 
         }
     }
@@ -977,17 +985,17 @@ function updateHeaderMessages(add=false, contactToWriteId, message, msjRead=0) {
  * Returns wheather the given object is a number or not
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {number} n - The object to be checked.
- * @return {boolean} - Boolean indicating if the object is a number or not
+ * @returns {boolean} - Boolean indicating if the object is a number or not
  */
 function isNumber(n) {
-     return /^-?[\d.]+(?:e-?\d+)?$/.test(n); 
-} 
+     return /^-?[\d.]+(?:e-?\d+)?$/.test(n);
+}
 
 /**
  * Validates the phone number and settings for every country
  * Function made thanks to the International Telephone Input script, https://intl-tel-input.com/
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function settingUpPhone(){
     let input = document.querySelector("#smsPhone");
@@ -1014,7 +1022,7 @@ function settingUpPhone(){
         errorMsg.classList.add("hide");
         validMsg.classList.add("hide");
     };
-    
+
     // Validate on blur event
     input.addEventListener('blur', function() {
         reset();
@@ -1054,7 +1062,7 @@ function settingUpPhone(){
 /**
  * Makes every table in the app responsive by changing the ths and tds to make it look better and to fit in the device
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function assignHeadersToRowsResponsive(){
     // if (screen.width <= 1024){
@@ -1074,7 +1082,7 @@ function assignHeadersToRowsResponsive(){
         // $('#sidebarToggleTop').trigger('click');
         // $(".sidebar").toggleClass("toggled");
 
-        // $("body").toggleClass("sidebar-toggled"); 
+        // $("body").toggleClass("sidebar-toggled");
         // $(".sidebar").toggleClass("toggled");
         // if ($(".sidebar").hasClass("toggled")) {
         //     console.log("expansion 1024");
@@ -1084,14 +1092,14 @@ function assignHeadersToRowsResponsive(){
 }
 
 /**
- * Disables a default setting in the datatables plug-in, 
+ * Disables a default setting in the datatables plug-in,
  * so searchs will not be available till a number of min characters given are written
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {Object} dtSelector - The table jquery selector.
  * @param {number} minChars - The number of characters at minimum needed for the search option to be activated.
- * @param {boolean} [bloodOption=true] - If true, the option searched is blood, 
+ * @param {boolean} [bloodOption=true] - If true, the option searched is blood,
  * so the minimum characters will change accordingly.
- * @return {void} Nothing
+ * @returns {void} Nothing
  */
 function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=null) {
     $('.dataTables_filter input')
@@ -1105,9 +1113,9 @@ function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=
                     // console.log("es sangre");
                     $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
                     return false;
-                }    
+                }
             }
-            if(!this.value.length) { 
+            if(!this.value.length) {
                 $(dtSelector).DataTable().search(this.value.trim(), false, false).draw();
                 $(dtSelector).DataTable().ajax.reload();
                 return false;
@@ -1121,7 +1129,7 @@ function disableDataTablesMinCharactersSearch(dtSelector, minChars, bloodOption=
 /**
  * Returns wheather the device is a mobile phone or not
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
- * @return {boolean} - Boolean indicating if the user is on a phone or not
+ * @returns {boolean} - Boolean indicating if the user is on a phone or not
  */
 function isMobile(){
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
@@ -1130,7 +1138,7 @@ function isMobile(){
     else{
         return false
     }
-} 
+}
 
 function clickOnSelectpicker(){
     if ($(".selectpicker")[0]){
@@ -1138,20 +1146,20 @@ function clickOnSelectpicker(){
             $('button.dropdown-toggle').trigger('click');
             $('body').trigger('click');
         }, 1000);
-    } 
+    }
 }
 
 /**
  * Returns the date in the selected language format
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {date} date - The given date.
- * @return {string} - The date properly formatted with the language
+ * @returns {string} - The date properly formatted with the language
  */
 
 function getLanguageDate(date){
     let mydate = new Date(date);
     let publishedDate;
-    
+
     switch(_lang){
       case "es":
         publishedDate = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
@@ -1179,13 +1187,13 @@ function getLanguageDate(date){
         break;
       case "ru":
         publishedDate = new Intl.DateTimeFormat('ru-RU', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
-        break;     
+        break;
       case "zh_CN":
         publishedDate = new Intl.DateTimeFormat('zh-u-ca-chinese', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
         break;
       case "ja":
         publishedDate = new Intl.DateTimeFormat('ja-JP-u-ca-japanese', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
-        break; 
+        break;
       default:
         publishedDate = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full', timeStyle: 'long' }).format(mydate);
         break;
@@ -1200,12 +1208,12 @@ function getLanguageDate(date){
  * Returns the language format for datatables
  * @author Pedro Ramón Moreno Martín <pedroramonmm@gmail.com>
  * @param {string} language - The given language.
- * @return {string} - The date properly formatted with the language
+ * @returns {string} - The date properly formatted with the language
  */
 
  function getLanguageDtFormat(language){
     let lang;
-    
+
     switch(language){
       case "es":
         lang = "es";
@@ -1233,17 +1241,43 @@ function getLanguageDate(date){
         break;
       case "ru":
         lang = "ru";
-        break;     
+        break;
       case "zh_CN":
         lang = "zh-cn";
         break;
       case "ja":
         lang = "ja";
-        break; 
+        break;
       default:
         lang = "es";
         break;
     }
     return lang;
 
+}
+
+/**
+ *
+ * @param msj
+ * @param authUserId
+ * @param otherUserId
+ * @returns {string}
+ */
+function generateMessageLine(msj, authUserId, otherUserId) {
+    let str = '';
+    if ((msj.user_id_from == otherUserId) && (msj.user_id_to == authUserId)){
+        str += '<li class="ownUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
+        str += '<div class="dropdown-content"></div></div></li>'
+    }
+    else if ((msj.user_id_from == authUserId) && (msj.user_id_to == otherUserId)){
+        str += '<li class="alienUser"><div class="text"><span onclick="dropdownDisplay(this)" class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p>';
+        str += '<div class="dropdown-content"><a href="javascript:void(0)" data-delete-message-id=' + msj.id + '>'+_messagesLocalization.delete_message+'</a></div></div></li>'
+
+        // str += '<li class="alienUser"><div class="text"><span class="textIcon"><i class="fa fa-sort-down"></i></span><span>'+ msj.message +'</span><p class="dateFeed">'+ msj.date_spa +'</p></div></li>';
+        // str += '<li class="alienUser"><div class="text">'+ msj.message + '</div><p>'+msj.date_spa +'</p></li>';
+    }
+    else {
+        console.error("Bad response message");
+    }
+    return str;
 }

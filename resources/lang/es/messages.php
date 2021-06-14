@@ -617,6 +617,11 @@ return [
     'activated' => 'Activado',
     'desactivated_stat' => 'Desactivado',
 
+    'write_stat' => 'Escribir',
+    'incoming_call_coming_from' => 'Llamada entrante de',
+    'would_you_like_to_accept_the_call' => '¿Desea aceptar la llamada?',
+
+
 ];
 
 

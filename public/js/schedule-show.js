@@ -8,7 +8,7 @@
     $( "#SaveSchedule" ).on( "click", function() {
         submit();
     });
-      
+
       var model = staffSchedule;
 
       fillSchedule(null);
@@ -27,13 +27,13 @@
           str = str.toString();
           return str.length < max ? pad("0" + str, max) : str;
        };
-        
+
         for(var hour = minHour; hour<=maxHour; hour++){
           var hourDiv = createTimeCaptionDiv(hour);
 
           for(var day = minDay; day<=maxDay; day++){
             // console.log('model',model);
-           
+
             //var occupiedTime = model.find((m)=> checkValidDayHour(m, day, hour));
             var occupiedTime = model.find((m)=> {
               let startHour = parseInt(m.starting_workday_time.substring(0,2));
@@ -49,9 +49,14 @@
           }
         }
 
-        
+
       }
 
+    /**
+     *
+     * @param hour
+     * @returns {HTMLDivElement}
+     */
       function createTimeCaptionDiv(hour){
         var hvHours = document.querySelector('.hv-hours');
         var hourDiv = document.createElement('div');
@@ -66,6 +71,9 @@
         return hourDiv;
       }
 
+    /**
+     *
+     */
       function submit(){
         var model = [];
         var data = function (start_hour,end_hour){
@@ -75,7 +83,7 @@
         var selecteds = document.querySelectorAll('div.hv-time-selection-active');
         var start_hour = -1;
         var end_hour = -1;
-       
+
         let days = [];
 
         for(var i = 0; i<7; i++){
@@ -95,12 +103,12 @@
               hAnt = h;
               days[i].push([h.toString()+":00:00", null]);
 
-              consec = true;              
+              consec = true;
             }
-            
+
             days[i][days[i].length-1][1] = (h+1).toString()+":00:00";
             hAnt = h;
-          
+
           });
         }
         // console.log("array: ",days);
@@ -108,7 +116,7 @@
         $.ajax({
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }, 
+          },
           url:_publicUrl+'schedule/saveSchedule/'+staffId,
           type:"POST",
           data: {"days":days,"_method":'PATCH'},
@@ -148,6 +156,13 @@
         console.log("model",model);
       }
 
+    /**
+     *
+     * @param hourDiv
+     * @param hour
+     * @param weekday
+     * @param selected
+     */
       function createHourDiv(hourDiv,hour,weekday,selected){
         var selectionDiv  = document.createElement('div');
         selectionDiv.setAttribute('data-day',weekday);

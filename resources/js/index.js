@@ -25,12 +25,17 @@ let props = Object.assign({}, appElement.dataset);
 // https://82.223.128.221
 //  
 
-console.log("111");
+// let session = params.get('sessionName')?params.get('sessionName'):props.sessionname;
+// let name = params.get('userFullName')?params.get('userFullName'):props.userfullname;
+
+// console.log("111");
 
 let dynamicProps = {
     sessionName: props.sessionname,
     // sessionName: "sessionA",
     user: props.userfullname, 
+    // sessionName: session,
+    // user: name, 
     openviduServerUrl:"https://www.mihospitalvirtual.com:4443",
     openviduSecret:"1234"
 }

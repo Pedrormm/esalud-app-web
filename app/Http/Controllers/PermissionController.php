@@ -15,13 +15,17 @@ class PermissionController extends AppBaseController
     /** @var  PermissionRepository */
     private $permissionRepository;
 
+    /**
+     * PermissionController constructor.
+     * @param PermissionRepository $permissionRepo
+     */
     public function __construct(PermissionRepository $permissionRepo)
     {
         $this->permissionRepository = $permissionRepo;
     }
 
     /**
-     * Display a listing of the Permission.
+     * Displays a listing of the Permission.
      *
      * @param Request $request
      *
@@ -36,7 +40,7 @@ class PermissionController extends AppBaseController
     }
 
     /**
-     * Show the form for creating a new Permission.
+     * Shows the form for creating a new Permission.
      *
      * @return Response
      */
@@ -46,7 +50,7 @@ class PermissionController extends AppBaseController
     }
 
     /**
-     * Store a newly created Permission in storage.
+     * Stores a newly created Permission in storage.
      *
      * @param CreatePermissionRequest $request
      *
@@ -64,7 +68,7 @@ class PermissionController extends AppBaseController
     }
 
     /**
-     * Display the specified Permission.
+     * Displays the specified Permission.
      *
      * @param int $id
      *
@@ -84,7 +88,7 @@ class PermissionController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified Permission.
+     * Shows the form for editing the specified Permission.
      *
      * @param int $id
      *
@@ -104,7 +108,7 @@ class PermissionController extends AppBaseController
     }
 
     /**
-     * Update the specified Permission in storage.
+     * Updates the specified Permission in storage.
      *
      * @param int $id
      * @param UpdatePermissionRequest $request

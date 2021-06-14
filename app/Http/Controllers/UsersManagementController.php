@@ -27,20 +27,23 @@ use Reminder;
 use Illuminate\Support\Str;
 class UsersManagementController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function newUser(){
-        
-        if ((auth()->user()->role_id == \HV_ROLES::DOCTOR) 
+
+        if ((auth()->user()->role_id == \HV_ROLES::DOCTOR)
         || (auth()->user()->role_id == \HV_ROLES::HELPER))
             $roles = Role::whereNotIn('id', [\HV_ROLES::ADMIN])->get();
         else if (auth()->user()->role_id == \HV_ROLES::ADMIN)
             $roles = Role::all();
         else
             return redirect()->back()->withErrors([\Lang::get('messages.permission_denied'), \Lang::get('messages.No permissions')]);
-        return view('users.newUser')->with('roles',$roles);    
+        return view('users.newUser')->with('roles',$roles);
     }
 
     /**
-     * This is the main processing controller for users invitations 
+     * This is the main processing controller for users invitations
      * Endpoint: user/create
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
@@ -52,7 +55,7 @@ class UsersManagementController extends Controller
             'email' => 'required|email:rfc,dns',
             'rol_id' => 'required|numeric|min:1',
         ]);
-        
+
         $dni = $request->input('dni');
         $email = $request->input('email');
         $rol_id = $request->input('rol_id');
@@ -101,7 +104,7 @@ class UsersManagementController extends Controller
 
             if(!$res) {
                 return view('users.newUser')->with('roles',$roles)->with('danger','UsMaCoCr001: '.\Lang::get('messages.internal_error'));
-            } 
+            }
             $subject = config('app.name')." ".\Lang::get('messages.has_invited_you_to_create_a_new_account_with_the_DNI')." ". $dni;
             DB::commit();
             $res = Mail::to($email)->send(new InvitationNewUserMail($token, $dni));
@@ -112,10 +115,10 @@ class UsersManagementController extends Controller
             else
                 DB::commit();*/
             return view('users.newUser')->with('roles',$roles)->with('info',\Lang::get('messages.a_mail_has_been_sent_to_the_one_provided_with_instructions_on_how_to_create_the_new_user'));
-            
-        }else{                        
+
+        }else{
             return view('users.newUser')->with('roles',$roles)->with('danger',\Lang::get('messages.the_DNI_already_exists_please_check_your_data'));
-           
+
         }
     }
 
@@ -135,13 +138,13 @@ class UsersManagementController extends Controller
         if ($verify){
             $currentDate = Carbon::now();
             $expirationDate = Carbon::parse($verify->expiration_date);
-   
+
             if ($expirationDate->gt($currentDate)){
                 $rol = Role::find($verify->role_id);
                 $email = $verify->email;
                 $dni = $verify->dni;
 
-                if ($verify->role_id == \HV_ROLES::DOCTOR) 
+                if ($verify->role_id == \HV_ROLES::DOCTOR)
                     $branches = Branch::where('role_id', $verify->role_id)->get();
                 else if ($verify->role_id == \HV_ROLES::HELPER)
                     $branches = Branch::where('role_id', $verify->role_id)->get();
@@ -153,10 +156,10 @@ class UsersManagementController extends Controller
                 return view('users.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
             }
             else
-                return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.token_has_been_expired_contact_an_admin_to_resend_an_email'));     
+                return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.token_has_been_expired_contact_an_admin_to_resend_an_email'));
         }
         else{
-            return view('users.newUserMail')->with('showError',true)->withErrors("UsMaCoCrUsFrMa001: ".\Lang::get('messages.internal_error'));        
+            return view('users.newUserMail')->with('showError',true)->withErrors("UsMaCoCrUsFrMa001: ".\Lang::get('messages.internal_error'));
         }
     }
 
@@ -181,7 +184,7 @@ class UsersManagementController extends Controller
             'birthdate' => 'required',
             'sex' => 'required',
             'blood' => 'required',
-            
+
         ]);
         $token = $request->input('token');
         if ($request->input('rol_id')==\HV_ROLES::PATIENT){
@@ -201,7 +204,7 @@ class UsersManagementController extends Controller
                 'office' => 'required|numeric',
                 'room' => 'required|numeric',
                 'h_phone' => 'required|numeric',
-            ]); 
+            ]);
         }
 
         $historic = $request->input('historic');
@@ -214,13 +217,13 @@ class UsersManagementController extends Controller
 
         // dd($verifyDni);
         // Si ya existe dni
-        if ($verifyDni){ 
-            return back()->withErrors("UsMaCoCrNeUs002: ".\Lang::get('messages.mismatch_error'));        
+        if ($verifyDni){
+            return back()->withErrors("UsMaCoCrNeUs002: ".\Lang::get('messages.mismatch_error'));
         }
 
         $verify = UserInvitation::whereVerificationToken($token)->first();
         if (!$verify){
-            return back()->withErrors(\Lang::get('messages.mismatch_error'));        
+            return back()->withErrors(\Lang::get('messages.mismatch_error'));
         }
         //dd($request->all());
 
@@ -244,11 +247,11 @@ class UsersManagementController extends Controller
         DB::beginTransaction();
         // $verify->deleted_at = Carbon::now();
         // $verify->save();
-        
+
         $res = $verify->delete();
         if (!$res){
             DB::rollBack();
-            return back()->withErrors(\Lang::get('messages.internal_error'));        
+            return back()->withErrors(\Lang::get('messages.internal_error'));
         }
 
 
@@ -270,9 +273,9 @@ class UsersManagementController extends Controller
         $res = $user->save();
         if(!$res) {
             DB::rollBack();
-            return back()->withErrors(\Lang::get('messages.internal_error'));  
+            return back()->withErrors(\Lang::get('messages.internal_error'));
         }
-       
+
         if($rol_id == \HV_ROLES::PATIENT){
             $historic = $request->input('historic');
             $height = $request->input('height');
@@ -289,7 +292,7 @@ class UsersManagementController extends Controller
                 return back()->withErrors(\Lang::get('messages.internal_error'));
             }
         }
-       
+
         if(($rol_id == \HV_ROLES::DOCTOR) || ($rol_id == \HV_ROLES::HELPER)){
             $historic = $request->input('historic');
             $branch = $request->input('branch');
@@ -307,15 +310,15 @@ class UsersManagementController extends Controller
             $staff->room = $room;
             $staff->user_id = $user->id;
             $res = $staff->save();
-            
+
             if(!$res) {
                 DB::rollBack();
                 return back()->withErrors(\Lang::get('messages.internal_error'));
             }
         }
-        
+
         DB::commit();
-        
+
         $roles = Role::all();
         $res = Mail::to($email)->send(new WelcomeNewUserMail($dni, $name, $lastname, $sex));
 
@@ -331,7 +334,7 @@ class UsersManagementController extends Controller
      * @author Pedro
      * @param  $id The userId to be edited
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */    
+     */
     public function edit($id){
         $usuario = User::find($id);
         $rol_usuario_info = "";
@@ -362,13 +365,13 @@ class UsersManagementController extends Controller
      * @author Pedro
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */      
+     */
     public function editUser(Request $request){
 
         $user_id = $request->input('user_id');
         $usuario_rol = User::find($user_id);
         $role_id = $usuario_rol->role_id;
-        
+
         $email = $request->input('email');
         $dni = $request->input('dni');
 
@@ -418,7 +421,7 @@ class UsersManagementController extends Controller
 
             $historic = $request->input('historic');
             $branch_id = $request->input('branch');
-            $shift = $request->input('shift');            
+            $shift = $request->input('shift');
             $office = $request->input('office');
             $room = $request->input('room');
             $h_phone = $request->input('h_phone');
@@ -445,13 +448,13 @@ class UsersManagementController extends Controller
      * @param string $search The searching sentence
      * @param string $order The given order
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */      
+     */
     public function showStaff(string $search=null, string $ord=null){
         $user = Auth::user();
 
         $staff = DB::select('SELECT * FROM users INNER JOIN staff ON users.id = staff.user_id WHERE role_id = 2 or role_id = 3');
-        
-        return view('user/staff', ['staff' => $staff,'user' => $user]);    
+
+        return view('user/staff', ['staff' => $staff,'user' => $user]);
     }
 
 
@@ -462,7 +465,7 @@ class UsersManagementController extends Controller
      * @param string $search The searching sentence
      * @param string $order The given order
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */  
+     */
     public function showPatients(string $search=null, string $ord=null){
         $user = Auth::user();
 
@@ -473,26 +476,26 @@ class UsersManagementController extends Controller
         $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)->get();
 
         if (!is_null($search) && !empty($search) && isset($search)){
-            $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)        
+            $patients = Patient::join('users', 'patients.user_id', 'users.id')->orderBy($ord)
             ->where('name', 'LIKE', '%'.$search.'%')
             ->orWhere('lastname', 'LIKE', '%'.$search.'%')
             ->orWhere('historic', 'LIKE', '%'.$search.'%')
             ->orWhere('dni', 'LIKE', '%'.$search.'%')
             ->get();
         }
-        
+
         return view('user/patient', ['patients' => $patients,'user' => $user]);
     }
 
     /**
      * Shows all users
-     * Endpoint: user/user/{search?}/{ord?} 
+     * Endpoint: user/user/{search?}/{ord?}
      -* Endpoint: usersManagement/show/users/{search?}/{ord?}-
      * @author Pedro
      * @param string $search The searching sentence
      * @param string $order The given order
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */ 
+     */
     public function showUsers(string $search=null, string $ord=null){
         $user = Auth::user();
 
@@ -501,7 +504,7 @@ class UsersManagementController extends Controller
         }
 
         // $users = DB::table('users')->join('patients', 'patients.user_id', 'users.id')
-        // ->join('staff', 'staff.user_id', 'users.id')->orderBy($ord)->get(); 
+        // ->join('staff', 'staff.user_id', 'users.id')->orderBy($ord)->get();
 
         $patients = Patient::join('users', 'patients.user_id', 'users.id')
         ->join('staff', 'staff.user_id', 'users.id')->orderBy($ord)->get();
@@ -512,7 +515,7 @@ class UsersManagementController extends Controller
         $users = User::with(['patients', 'staff'])->orderBy($ord)->get()->toArray();
 
         if (!is_null($search) && !empty($search) && isset($search)){
-            $users = User::with(['patients', 'staff'])->orderBy($ord)        
+            $users = User::with(['patients', 'staff'])->orderBy($ord)
             ->where('name', 'LIKE', '%'.$search.'%')
             ->orWhere('lastname', 'LIKE', '%'.$search.'%')
             ->orWhere('historic', 'LIKE', '%'.$search.'%')
@@ -521,7 +524,7 @@ class UsersManagementController extends Controller
         }
 
         //dd($users);
-        
+
         return view('user/user', ['users' => $users,'user' => $user]);
     }
 

@@ -16,17 +16,30 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
+
+    /**
+     * Controller constructor.
+     */
     public function __construct() {
-        
+
         view()->composer('*',function($view) {
             $view->with('perms', fillPermissionClass());
         });
     }
+
+    /**
+     * @return mixed
+     */
     public function getPerms() {
         return $this->perms;
     }
 
+    /**
+     * @param string $status
+     * @param string $message
+     * @param null $obj
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function jsonResponse(string $status, string $message, $obj = null) {
         $res = ['status' => $status, 'message' => $message];
         if ($obj){
@@ -35,6 +48,11 @@ class Controller extends BaseController
         return response()->json($res);
     }
 
+    /**
+     * @param Request $request
+     * @param string $message
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     protected function errorNotAjax(Request $request, string $message) {
         if($request->wantsJson()) {
             // dd($request);
@@ -45,20 +63,34 @@ class Controller extends BaseController
         return redirect('/');
     }
 
+    /**
+     * @param $errors
+     * @return \Illuminate\Http\RedirectResponse
+     */
     protected function backWithErrors($errors) {
         if(is_string($errors))
             $errors = [$errors];
         return redirect()->back()->withErrors($errors);
     }
 
+    /**
+     * @param array $rules
+     * @return array
+     */
     protected function checkValidation(array $rules){
-        return request()->validate($rules);     
+        return request()->validate($rules);
     }
 
+    /**
+     * @param string $tableName
+     * @param string $field
+     * @param int $length
+     * @return \Illuminate\Http\RedirectResponse|string
+     */
     protected function generateUniqueToken(string $tableName, string $field, int $length=32){
         $maxSteps = HV_MAX_ITERATION_TOKEN; //Por seguridad, no vamos a permitir esto
         $try = 0;
-        do {            
+        do {
             $token = Str::random($length);
 
             if($try >= $maxSteps) {
@@ -95,6 +127,13 @@ class Controller extends BaseController
         request()->validate($rules);
     }
 
+    /**
+     * @param array $data
+     * @param int $draw
+     * @param int $total
+     * @param int $totalFiltered
+     * @return \Illuminate\Http\JsonResponse
+     */
     protected function responseDataTables(array $data, int $draw, int $total, int $totalFiltered) {
         $dataSend = array();
         $dataSend['draw'] = $draw;
@@ -105,13 +144,13 @@ class Controller extends BaseController
     }
 
     /**
-     * Convert a given mysql default date into spanish representation with format d/m/Y
+     * Converts a given mysql default date into spanish representation with format d/m/Y
      *
      * @param string|null $mysqlDt The input datetime that must complain format Y/m/d
      * @return string
      */
     function mysqlDate2Spanish($mysqlDt) {
-        
+
         try {
             $dtSpanish = Carbon::parse($mysqlDt)->format('d/m/Y');
         }
@@ -123,13 +162,13 @@ class Controller extends BaseController
 
 
     /**
-     * Convert a given mysql default datetime into spanish representation with format d/m/Y H:i
+     * Converts a given mysql default datetime into spanish representation with format d/m/Y H:i
      *
      * @param string|null $mysqlDt The input datetime that must complain format Y/m/d h:m
      * @return string
      */
     function mysqlDateTime2Spanish($mysqlDt) {
-        
+
         try {
             $dtSpanish = Carbon::parse($mysqlDt)->format('d/m/Y H:i');
         }
@@ -139,5 +178,5 @@ class Controller extends BaseController
         return $dtSpanish;
     }
 
-        
+
     }

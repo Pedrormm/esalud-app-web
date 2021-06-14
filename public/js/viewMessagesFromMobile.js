@@ -67,6 +67,7 @@
             };
         });  
     } 
+    // _messagesLocalization.write_stat+"..."
     
     $(".cMessageComposer textarea").keydown(function(event){
         if(event.key === 'Enter') {
@@ -75,4 +76,12 @@
             sendMessage(writtenMessage, $(".conversationMobile").attr("data-selectedUserId"),
             authUser.id, chatChannel);
         }
+    });
+
+    $('#buttonSendMessage').click(function(event) {
+        event.preventDefault();
+        let writtenMessage = $(".cMessageComposer textarea");
+        sendMessage(writtenMessage, $(".conversationMobile").attr("data-selectedUserId"),
+        authUser.id, chatChannel);
+        scrollToBottom(".cMessagesFeed");
     });

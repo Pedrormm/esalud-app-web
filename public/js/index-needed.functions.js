@@ -1,4 +1,19 @@
-function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false, 
+/**
+ *
+ * @param title
+ * @param body
+ * @param htmlFormat
+ * @param url
+ * @param size
+ * @param drageable
+ * @param collapseable
+ * @param removeApp
+ * @param secondstoCancel
+ * @param callbackOkButton
+ * @param nameCancelModal
+ * @param nameSaveModal
+ */
+function showModal(title, body, htmlFormat, url = null, size=null, drageable=false, collapseable=false,
     removeApp=false, secondstoCancel=null, callbackOkButton = null, nameCancelModal=_messagesLocalization.close_stat, nameSaveModal=_messagesLocalization.save_changes) {
    $('#generic-modal .modal-body').text('');
    $('#generic-modal .modal-title').text(title);
@@ -21,7 +36,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
                cachedFunction.apply(this, arguments);
                if(!_avoidAllSendings)
                    $('#generic-modal').modal('hide');
-               $( this ).off( e ); 
+               $( this ).off( e );
            }
        })();
        $('#generic-modal #saveModal').click(callbackOkButton);
@@ -36,14 +51,14 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
        $('.modalCollapse').show();
        $(".modal-body").collapse('show');
    }
-  
+
    if(htmlFormat)
        $('#generic-modal .modal-body').html(body);
    else if (url) {
        $.ajax({
            headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-           }, 
+           },
            url: url,
 
        }).done(function(res) {
@@ -80,7 +95,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
            if (seconds <= 0){
                clearInterval(countdown);
                console.log("Se destruye el intevalo countdown");
-           } 
+           }
        }
        cont(secondstoCancel);
 
@@ -105,7 +120,7 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
            moveTimer = setTimeout(function(){
                // console.log("I stopped moving");
                $("#generic-modal").fadeTo(800, 0).slideUp(800, function(){
-                   $(this).modal('hide'); 
+                   $(this).modal('hide');
                });
                $("#generic-modal").stop().off();
            },secondstoCancel*1000)
@@ -131,8 +146,8 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
        $('.modal-body').on('shown.bs.collapse', function () {
            icon.classList.remove('fa-caret-square-right');
            icon.classList.add('fa-caret-square-down');
-       }); 
-   
+       });
+
        return;
 
    });
@@ -142,7 +157,10 @@ function showModal(title, body, htmlFormat, url = null, size=null, drageable=fal
 
 
 }//--fin showModal
-
+/**
+ *
+ * @param elmnt
+ */
 function dragElement(elmnt) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (document.getElementById(elmnt.id + "header")) {
@@ -153,6 +171,10 @@ function dragElement(elmnt) {
         elmnt.onmousedown = dragMouseDown;
     }
 
+    /**
+     *
+     * @param e
+     */
     function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
@@ -164,6 +186,10 @@ function dragElement(elmnt) {
         document.onmousemove = elementDrag;
     }
 
+    /**
+     *
+     * @param e
+     */
     function elementDrag(e) {
         e = e || window.event;
         e.preventDefault();
@@ -177,6 +203,9 @@ function dragElement(elmnt) {
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }
 
+    /**
+     *
+     */
     function closeDragElement() {
         /* stop moving when mouse button is released:*/
         document.onmouseup = null;
@@ -184,7 +213,10 @@ function dragElement(elmnt) {
     }
 }
 
-
+/**
+ *
+ * @returns {boolean}
+ */
 function isMobile(){
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         return true
@@ -192,8 +224,12 @@ function isMobile(){
     else{
         return false
     }
-} 
+}
 
+/**
+ *
+ * @returns {boolean}
+ */
 function isABootstrapModalOpen() {
     return $('.modal.show').length >0;
 }
