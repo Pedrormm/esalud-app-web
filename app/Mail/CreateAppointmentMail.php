@@ -59,6 +59,7 @@ class CreateAppointmentMail extends Mailable
         ->get();
 
         if ($this->isPatient){
+            app()->setLocale($this->patient['language']);
             return $this->subject($this->patient['name'] .", ".\Lang::get('messages.a_new_appointment_has_been_created_with_the_doctor') ." ".$this->doctor['name'] )
             ->markdown('mail.newAppointmentPatient', ['patientName' => $this->patient['name'], 
             'doctorName' => $this->doctor['name'], 'dateTimeAppointment' => $this->dateTimeAppointment, 'isPatient' => $this->isPatient,
@@ -70,6 +71,7 @@ class CreateAppointmentMail extends Mailable
              );
         }
         else{
+            app()->setLocale($this->doctor['language']);
             return $this->subject($this->doctor['name'] .", ".\Lang::get('messages.a_new_appointment_has_been_created_with_the_patient') ." ".$this->patient['name'] )
             ->markdown('mail.newAppointmentDoctor', ['patientName' => $this->patient['name'], 
             'doctorName' => $this->doctor['name'], 'dateTimeAppointment' => $this->dateTimeAppointment, 'isPatient' => $this->isPatient,

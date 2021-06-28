@@ -15,7 +15,7 @@
                             <div class="form-group">
                                 <label for="name">@lang('messages.role_name')</label>
                                 <input id="name" name="name" class="form-control" type="text" 
-                                placeholder=@lang('messages.enter_the_role_name') required>
+                                placeholder="@lang('messages.enter_the_role_name')" required>
                                 <div class="invalid-feedback">
                                     <div>
                                       @lang('messages.the_role_name_is_required')

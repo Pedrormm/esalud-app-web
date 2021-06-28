@@ -5,7 +5,18 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<nav class="top">
-					<h3 class="div_2 on text-danger"><i class="fa fa-edit"></i> @lang('messages.medical_records')</h3>
+                    
+                    <div class="card-header py-3">
+                        <div class="row">
+                            <div class="cHeader col-2">
+                              <button type="button" class="btn btn-primary">
+                                  <i class="fas fa-arrow-left"></i>
+                              </button>
+                            </div>
+                            <h3 class="div_2 on text-danger"><i class="fa fa-edit"></i> @lang('messages.medical_records')</h3>
+                        </div>
+                    </div>
+
 				</nav>
 			</div>
 		</div>
@@ -19,7 +30,7 @@
 			<div class="col-lg-8 ">
 				<h4 class="header_box"><i class="fa fa-user"></i> @lang('messages.patient_type')</h4>
 				
-				<table class="table table-bordered ">
+				<table class="table table-bordered" id="tableDataUserRecords">
 					<tbody>
 						<tr>
 							<td>@lang('messages.name_data'):</td>
@@ -99,14 +110,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <table class="table table-striped changableTable">
                                             <thead>
                                                 <tr class="text-center">
                                                     <th class="bg-primary">@lang('messages.start_date')</th>
                                                     <th class="bg-primary">@lang('messages.end_date')</th>
                                                     <th class="bg-primary">@lang('messages.doctor_in_charge')</th>
                                                     <th class="bg-primary">@lang('messages.medicine_drug')</th>
-                                                    <th class="bg-primary">@lang('messages.medicine_administration')</th>
+                                                    <th id="recordsMedicineAdministrationHeader" class="bg-primary">
+                                                        @lang('messages.medicine_administration')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -116,8 +128,7 @@
                                                     <td>{{ $treatment["endingDate"] ?? "[".\Lang::get('messages.there_is_no_ending_date')."]" }}</td>
                                                     <td>{{ $treatment["user_doctor"]?$treatment["user_doctor"]["name"] . " " . $treatment["user_doctor"]["lastname"]:null }}</td>
                                                     <td>{{ $treatment["type_medicine"]["name"]  }}</td>
-                                                    <td>{{ $treatment["medicine_administration"] ?? "[".\Lang::get('messages.generic_treatment')."]" }}</td>
-                                                    
+                                                    <td>{{ $treatment["medicine_administration"] ? $treatment["medicine_administration"]["name"]:"[".\Lang::get('messages.generic_treatment')."]" }}</td>                                                  
                                                 </tr>                                                        
                                                 @endforeach
                                             </tbody>
@@ -147,7 +158,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
-                                        <table class="table table-striped">
+                                        <table class="table table-striped changableTable">
                                             <thead>
                                                 <tr class="text-center">
                                                     @if (( $usuario->role_id) != \HV_ROLES::PATIENT)
@@ -170,7 +181,7 @@
                                                     @if (( $usuario->role_id) != \HV_ROLES::DOCTOR)
 
                                                         <td>{{ $appointment["user_doctor"]?$appointment["user_doctor"]["name"] . " " . $appointment["user_doctor"]["lastname"]:null }}</td> 
-                                                        <td>{{ $appointment["user_doctor"]?$appointment["user_doctor"]["staff"][0]["branch"]["name"]:null}}</td> 
+                                                        <td>{{ $appointment["user_doctor"]?$appointment["user_doctor"]["staff"][0]["medicalSpeciality"]["name"]:null}}</td> 
                                                     @endif
                                                     <td class="record-appointment-date" data-record-appointment-date="{{ $appointment["dt_appointment"] }}"></td>
                                                     <td>{{ $appointment["checkedStatus"]  }}</td>
@@ -196,6 +207,15 @@
 @section('viewsScripts')
     <script>
 
+        if (isMobile()){
+            $("#recordsMedicineAdministrationHeader").html(_messagesLocalization.administration_mode_stat);
+        }
+
+        $('.cHeader button').on('click', function(e){
+            e.preventDefault();
+            window.location.href = _publicUrl+"records/";
+        });
+
         $("[data-chat-record-id]").on('click', function(e){
             e.preventDefault();
             let id = $(this).attr("data-chat-record-id");
@@ -211,15 +231,15 @@
         });
 
         $('.eventClose').click(function(){
-        $(this).parent().parent().parent().fadeOut();
+            $(this).parent().parent().parent().fadeOut();
         })
 
         $('.tratamientos').click(function(){
-        $(this).parent().parent().parent().fadeOut();
+            $(this).parent().parent().parent().fadeOut();
         })
         
         $('.sesiones').click(function(){
-        $(this).parent().parent().parent().fadeOut();
+            $(this).parent().parent().parent().fadeOut();
         })
     </script>
 @endsection

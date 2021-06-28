@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'Você realmente quer isso?',
     'user_id' => 'ID do usuário',
-    'branch_stat' => 'Branch',
+    'medical_speciality' => 'Branch',
 
     'edit_treatment' => 'Editar tratamento',
     'treatment_data' => 'Dados de tratamento',
@@ -616,6 +616,26 @@ return [
     'activate_spelling_checker' => 'Ativar verificador ortográfico',
     'activated' => 'Ativado',
     'desactivated_stat' => 'Desativado',
+
+    'write_stat' => 'Escreva',
+    'coming_call_coming_from '=>' Chamada recebida de ',
+    'would_you_like_to_accept_the_call' => 'Deseja aceitar a chamada?',
+    'porcentagem_stat' => 'Porcentagem',
+    'quantidade_estado' => 'Quantidade',
+
+    'administration_mode_stat' => 'Administração',
+    'appointment_updated_successfully' => 'A consulta médica foi atualizada com sucesso',
+    'news_number' => 'Número de notícias para mostrar',
+    'spelling_checker' => 'Ativação automática do verificador',
+    'helper_data' => 'Dados auxiliares',
+
+    'password_reset' => 'Redefinição de senha',
+    'enter_the_new_password' => 'Digite a nova senha:',
+    'repeat_the_new_password' => 'Repete a nova senha:',
+    'passwords_match' => 'As senhas correspondem',
+    'passwords_do_not_match' => 'As senhas não conferem',
+    'the_password_must_be_at_least_6_characters_long' => 'A senha deve ter pelo menos 6 caracteres',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'A senha deve ter pelo menos um número, uma letra maiúscula, uma letra minúscula e um caractere especial',
 
 ];
 

@@ -9,6 +9,27 @@ var hash = require('object-hash');
 
 const APP_KEY = '9e2cbb3bb69dab826cef';
 
+    // Opera 8.0+
+    const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    
+    // Firefox 1.0+
+    const isFirefox = typeof InstallTrigger !== 'undefined';
+    
+    // Safari 3.0+ "[object HTMLElementConstructor]" 
+    const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+    
+    // Internet Explorer 6-11
+    const isIE = /*@cc_on!@*/false || !!document.documentMode;
+    
+    // Edge 20+
+    const isEdge = !isIE && !!window.StyleMedia;
+    
+    // Chrome 1 - 71
+    const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    
+    // Blink engine detection
+    const isBlink = (isChrome || isOpera) && !!window.CSS;
+
 export default class App extends Component {
     constructor(props){
         super(props);
@@ -193,13 +214,14 @@ export default class App extends Component {
             );
         }
     }
- 
+
     render() {
         const mode = this.state.mode;
         if(mode=='call'){
+                console.log('users:', this.users)
                 return (
                 <div className="app">
-                    <select className="selectpicker selectUserToCall" data-live-search="true" data-style="btn-info"
+                    <select className={isFirefox ?"selectUserToCall":"selectpicker selectUserToCall"} data-live-search="true" data-style="btn-info"
                     title="Busque usuario por nombre, apellidos o dni" data-width="35%"       
                     data-header="Busque usuario por nombre, apellidos o dni" onChange={(e) => this.selectUser(e)}>
                         {Object.keys(this.users).map((role, roleId) => {                      

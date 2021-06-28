@@ -10,31 +10,31 @@
   <i class="fa fa-bars"></i>
 </button>
 
-<!-- Topbar Search -->
-<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+{{-- <!-- Topbar Search --> --}}
+{{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
   <div class="input-group">
-    <input type="text" class="form-control bg-light border-0 small" placeholder=@lang('messages.search_for') aria-label="Search" aria-describedby="basic-addon2">
+    <input type="text" class="form-control bg-light border-0 small" placeholder="@lang('messages.search_for')" aria-label="Search" aria-describedby="basic-addon2">
     <div class="input-group-append">
       <button class="btn btn-primary" type="button">
         <i class="fas fa-search fa-sm"></i>
       </button>
     </div>
   </div>
-</form>
+</form> --}}
 
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto" id="topbar-navheader">
 
   <!-- Nav Item - Search Dropdown (Visible Only XS) -->
   <li class="nav-item dropdown no-arrow d-sm-none">
-    <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{-- <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-search fa-fw"></i>
-    </a>
+    </a> --}}
     <!-- Dropdown - Messages -->
     <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
       <form class="form-inline mr-auto w-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder=@lang('messages.search_for') 
+          <input type="text" class="form-control bg-light border-0 small" placeholder="@lang('messages.search_for')" 
           aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
             <button class="btn btn-primary" type="button">
@@ -69,7 +69,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.english_language')</span>
         </div>
       </a>
@@ -80,7 +79,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.spanish_language')</span>
         </div>
       </a>
@@ -92,7 +90,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.italian_language')</span>
         </div>
       </a>
@@ -103,7 +100,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.portuguese_language')</span>
         </div>
       </a>
@@ -114,7 +110,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.french_language')</span>
         </div>
       </a>
@@ -125,7 +120,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.romanian_language')</span>
         </div>
       </a>
@@ -136,7 +130,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.german_language')</span>
         </div>
       </a>
@@ -147,7 +140,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.arabic_language')</span>
         </div>
       </a>
@@ -158,7 +150,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.russian_language')</span>
         </div>
       </a>
@@ -169,7 +160,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.chinese_language')</span>
         </div>
       </a>
@@ -180,7 +170,6 @@
           </div>
         </div>
         <div>
-          {{-- <div class="small text-gray-500">December 12, 2019</div> --}}
           <span class="font-weight-bold">@lang('messages.japanese_language')</span>
         </div>
       </a>

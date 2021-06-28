@@ -15,12 +15,10 @@ class CreateRolesPermissions extends Migration
     {
         Schema::create('roles_permissions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->smallInteger('role_id')->unsigned()->comment('Associated role');
+            $table->bigInteger('role_id')->unsigned()->comment('Associated role');
             $table->bigInteger('permission_id')->unsigned()->comment('Associated permission');
             $table->integer('activated')->unsigned()->comment('Kind of permission. 0:Not activated/1:Activated');
-            // $table->string('value_name', 100)->comment('Permission name kind');
             $table->softDeletes();
-            // $table->timestamps();     
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP')); 
         });

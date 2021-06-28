@@ -7,6 +7,21 @@ body {
   min-height: 100vh;
   font-family: 'Lato';
 }
+#show_hide_password{
+  white-space: nowrap !important;
+  display: inline;
+}
+#show_hide_password *{
+  display: inline-block;
+}
+.field-icon {
+  float: right;
+  margin-left: -1.6rem;
+  margin-top: -2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
 .logo img{
   width: 20vh;
   height: auto;
@@ -109,7 +124,7 @@ body {
 } */
 
  /*
-	Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+	 This query will take effect for any screen smaller than 760px and also iPads specifically.
 	*/
 	@media
 	  only screen 
@@ -118,6 +133,15 @@ body {
       .logo img{
         width: 14vh;
       }
+      .field-icon {
+        float: right;
+        margin-left: -1.6rem;
+        margin-top: -2.5rem;
+        position: relative;
+        z-index: 2;
+        white-space: nowrap !important;
+        display: inline;
+      }     
     }
 
 

@@ -34,10 +34,10 @@ $('#saveModal').click(function() {
         saveModalActionAjax(_publicUrl+"roles", data, 'POST', 'json', function(res) {
             if(res.status == 0) {
                 $('#mainTableRoles').DataTable().ajax.reload();
-                showInlineMessage(res.message, 5);
+                showInlineMessage(res.message, 10);
             }
             else {
-                showInlineError(res.status, res.message, 5);
+                showInlineError(res.status, res.message, 10);
             }
             // console.log(that);
             $('#saveModal').off("click");

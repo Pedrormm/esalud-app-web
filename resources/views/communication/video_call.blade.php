@@ -32,21 +32,23 @@
 @endsection
 
 @section('viewsScripts')
-  @if (auth()->user())
-    <script>
-      window.user = {
-        id: {{ (auth()->user()->id) }},
-        dni: "{{ (auth()->user()->dni) }}"
-      }
+  @auth
+    @if (auth()->user())
+      <script>
+        window.user = {
+          id: {{ (auth()->user()->id) }},
+          dni: "{{ (auth()->user()->dni) }}"
+        }
 
-      window.csrfToken = "{{ csrf_token() }}";
+        window.csrfToken = "{{ csrf_token() }}";
 
-      window.allUsers = <?=$allUsers?>;
+        window.allUsers = <?=$allUsers?>;
 
-      window.signalSent = @json($signalSent);
-      
-    </script>
-  @endif
+        window.signalSent = @json($signalSent);
+        
+      </script>
+    @endif
+  @endauth
   
   <script id="videoApp" src="{{asset('js/app.js')}}" ></script>   
 @endsection

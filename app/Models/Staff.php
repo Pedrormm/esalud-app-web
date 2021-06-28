@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Database\Eloquent\Collection specialitiesStaffs
  * @property string historic
  * @property integer user_id
- * @property integer branch
- * @property string shift
+ * @property integer medical_speciality_id
  * @property string office
  * @property string room
  * @property string h_phone
@@ -38,8 +37,7 @@ class Staff extends Model
     public $fillable = [
         'historic',
         'user_id',
-        'branch',
-        'shift',
+        'medical_speciality_id',
         'office',
         'room',
         'h_phone'
@@ -54,8 +52,7 @@ class Staff extends Model
         'id' => 'integer',
         'historic' => 'string',
         'user_id' => 'integer',
-        'branch' => 'integer',
-        'shift' => 'string',
+        'medical_speciality_id' => 'integer',
         'office' => 'string',
         'room' => 'string',
         'h_phone' => 'string'
@@ -68,7 +65,7 @@ class Staff extends Model
      */
     public static $rules = [
         'user_id' => 'required',
-        'branch' => 'required'
+        'medical_speciality_id' => 'required'
     ];
 
     /**
@@ -82,9 +79,9 @@ class Staff extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function branch()
+    public function medicalSpeciality()
     {
-        return $this->belongsTo(\App\Models\Branch::class, 'branch_id');
+        return $this->belongsTo(\App\Models\MedicalSpeciality::class, 'medical_speciality_id');
     }
 
     /**

@@ -17,9 +17,15 @@ class SetLocale
     public function handle(Request $request, Closure $next)
     {
         $language = 'es';
-        // if (session()->get('lang')){
-        if (session()->has('lang')){
-            $language = session()->get('lang');
+
+        $currentUser = auth()->user();
+        if (is_null($currentUser) || empty($currentUser)){
+            if (session()->has('lang')){
+                $language = session()->get('lang');
+            }
+        }
+        else{
+            $language = $currentUser->language;
         }
         app()->setLocale($language);
         return $next($request);

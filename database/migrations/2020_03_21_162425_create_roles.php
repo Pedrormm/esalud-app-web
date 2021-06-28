@@ -14,7 +14,7 @@ class CreateRoles extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->smallIncrements('id');
+            $table->bigIncrements('id');
             $table->string('name', 250)->nullable()->index()->comment('Role name');
             $table->unsignedBigInteger('user_id_creator')->comment('Creator Id');
             $table->unsignedSmallInteger('delible')->nullable()->default(0)->comment('If the value is 1 the role cannot be deleted');

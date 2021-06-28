@@ -3,10 +3,10 @@ $('#saveModal').click(function() {
     saveModalActionAjax(_publicUrl+"users/"+roleDeleteId, roleDeleteId, 'DELETE', 'json', function(res) {
         if(res.status == 0) {
             $('#mainTableRoles').DataTable().ajax.reload();
-            showInlineMessage(res.message, 5);
+            showInlineMessage(res.message, 10);
         }
         else {
-            showInlineError(res.status, res.message, 5);
+            showInlineError(res.status, res.message, 10);
         }
         $('#saveModal').off("click");
     });

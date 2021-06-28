@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'Вы действительно этого хотите?',
     'user_id' => 'Идентификатор пользователя',
-    'branch_stat' => 'Филиал',
+    'medical_speciality' => 'Филиал',
 
     'edit_treatment' => 'Изменить лечение',
     'treatment_data' => 'Данные о лечении',
@@ -615,9 +615,27 @@ return [
     'number_of_news_displayed' => 'Количество отображаемых новостей',
     'activate_spelling_checker' => 'Активировать проверку орфографии',
     'activated' => 'Активировано',
-    'deactivated_stat' => 'Деактивировано',
+    'desactivated_stat' => 'Деактивировано',
 
-    
+    'write_stat' => 'Написать',
+    'incoming_call_coming_from' => 'Входящий звонок от',
+    'would_you_like_to_accept_the_call' => 'Вы хотите принять звонок?',
+    'percentage_stat' => 'Процент',
+    'quantity_stat' => 'Количество',
+
+    'administration_mode_stat' => 'Администрирование',
+    'appointment_updated_successfully' => 'Запись на прием к врачу успешно обновлена',
+    'news_number' => 'Количество отображаемых новостей',
+    'spelling_checker' => 'Автоматическая активация чекера',
+    'helper_data' => 'Вспомогательные данные',
+
+    'password_reset' => 'Сброс пароля',
+    'enter_the_new_password' => 'Введите новый пароль:',
+    'repeat_the_new_password' => 'Повторить новый пароль:',
+    'passwords_match' => 'Пароли совпадают',
+    'passwords_do_not_match' => 'Пароли не совпадают',
+    'the_password_must_be_at_least_6_characters_long' => 'Пароль должен содержать не менее 6 символов',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'Пароль должен содержать как минимум одну цифру, одну заглавную букву, одну строчную букву и один специальный символ',
 
 ];
 

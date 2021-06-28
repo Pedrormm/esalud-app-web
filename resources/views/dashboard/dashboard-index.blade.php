@@ -127,6 +127,12 @@
     }
 
     @if (auth()->user()->role_id == \HV_ROLES::ADMIN)
+
+        if (isMobile()){
+            $(".dashboardPercentage").html(_messagesLocalization.percentage_stat);
+            $(".dashboardQuantity").html(_messagesLocalization.quantity_stat);
+        }
+
         let pending = $("#diaryAppointments").data("pending");
         let processed = $("#diaryAppointments").data("processed");
 

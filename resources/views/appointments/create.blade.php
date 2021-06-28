@@ -57,7 +57,7 @@
                                 class="selectpicker show-tick form-control"
                                 data-live-search="true" title="Doctor" id="doctor">
                                 @foreach ($doctors as $doctor)
-                                    <option value={{ $doctor["id"] }} data-subtext="{{ $doctor["staff"][0]["branch"]["name"] }}">{{ $doctor["name"] . " " . $doctor["lastname"] }}</option>
+                                    <option value={{ $doctor["id"] }} data-subtext="{{ $doctor["staff"][0]["medical_speciality"]["name"] }}">{{ $doctor["name"] . " " . $doctor["lastname"] }}</option>
                                 @endforeach
                                 </select> 
                                 <div id="doctorValidity" class="invalid-feedback">
@@ -71,7 +71,6 @@
                         
                         <div class="mx-auto col-lg-{{ $gridCols }}">
                             <label>@lang('messages.appointment_date') (*)</label>
-                            {{-- mirar cambio a type week --}}
                             {{-- con libreria jquery ui. https://jqueryui.com/datepicker/ --}}
                             <input required type="date" class="form-control" name="dt_appointment" id="dt_appointment"/>
                             <div id="dateValidity" class="invalid-feedback">
@@ -321,5 +320,5 @@
 @endsection
 
 @section('viewsScripts')
-  <script type="text/javascript" src="{{ asset('js/createAppointment.js')}}"></script>
+  <script type="text/javascript" src="{{ asset('js/createAppointment.js') . '?r=' . rand() }}"></script>
 @endsection

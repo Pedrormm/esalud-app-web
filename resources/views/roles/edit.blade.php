@@ -19,7 +19,7 @@
                             <div class="form-group">
                                 <label for="firstName">@lang('messages.role_name')</label>
                                 <input id="name" name="name" class="form-control" type="text" 
-                                placeholder=@lang('messages.enter_the_role_name') value="{{ $roles['name'] }}">
+                                placeholder="@lang('messages.enter_the_role_name')" value="{{ $roles['name'] }}">
                                 <div  class="invalid-feedback">
                                     <div>
                                       @lang('messages.the_role_name_is_required')

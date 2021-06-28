@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeyToUsers extends Migration
+class AddForeignKeyToPhonePrefixes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddForeignKeyToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('role_id')->references('id')->on('roles')
+        Schema::table('phone_prefixes', function (Blueprint $table) {
+            $table->foreign('country_id')->references('id')->on('countries')
             ->onDelete('cascade')->onUpdate('cascade'); 
         });
     }
@@ -26,8 +26,8 @@ class AddForeignKeyToUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
+        Schema::table('phone_prefixes', function (Blueprint $table) {
+            $table->dropForeign(['country_id']);
         });
     }
 }

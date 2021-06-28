@@ -34,11 +34,13 @@
 
             <h2>@lang('messages.enter_DNI_and_password')</h2>
             {{-- <form method="post" action="{{ url('login') }}"> --}}
-            {{ Form::open(array('url' => 'login', 'method' => 'POST')) }}
+            {{ Form::open(array('url' => 'login', 'method' => 'POST', 'class' => 'form-horizontal')) }}
 
                 @csrf
-                <input type="text" name="dni" class="ct" placeholder=@lang('messages.DNI_or_email') value="{{ Cookie::get('credencialesDni') }}" />
-                <input type="password" name="password" class="ct" placeholder=@lang('messages.password_stat') />
+                <input type="text" name="dni" class="ct" placeholder="@lang('messages.DNI_or_email')" value="{{ Cookie::get('credencialesDni') }}" autocomplete="on"/>
+                <input id="password-field" type="password" name="password" class="ct" placeholder="@lang('messages.password_stat')" autocomplete="on"/>
+                <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+
                 <div class="rememberme form-group form-check m-1">
                     <input name="remember" type="checkbox" class="form-check-input" id="rememberMe" {{ (Cookie::has('credencialesDni')) ? 'checked' : '' }}>
                     <label class="form-check-label" for="rememberMe">@lang('messages.remember_me')</label>
@@ -76,7 +78,7 @@
             <div class="text-center m-1">
                 <a href="{{ url('isPasswordForgotten')  }}" class="remember_password" 
                 data-name-role="">
-                @lang('messages.have_you_forgotten_your_password')
+                    @lang('messages.have_you_forgotten_your_password')
                 </a>
             </div>
   
@@ -94,11 +96,17 @@
 @include('inc.jsGlobalsDefinition')
 {{-- <script type="text/javascript" src="{{ asset('js/application.js') }}"></script> --}}
 
-{{-- <script>
-    if (isABootstrapModalOpen()){
-        $('#generic-modal').modal('hide');
-    }
+<script>
+    $(".toggle-password").click(function() {
 
-</script> --}}
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+</script>
 
 </html>

@@ -27,14 +27,16 @@ class Controller extends BaseController
         });
     }
 
-    /**
+    /**Returns the permissions associated to the current user
+     * 
      * @return mixed
      */
     public function getPerms() {
         return $this->perms;
     }
 
-    /**
+    /** Returns a custom json response
+     * 
      * @param string $status
      * @param string $message
      * @param null $obj
@@ -48,7 +50,8 @@ class Controller extends BaseController
         return response()->json($res);
     }
 
-    /**
+    /** Returns an error message when the request is not ajax
+     * 
      * @param Request $request
      * @param string $message
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -63,7 +66,8 @@ class Controller extends BaseController
         return redirect('/');
     }
 
-    /**
+    /** Returns all the errors redirecting back
+     * 
      * @param $errors
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -73,7 +77,8 @@ class Controller extends BaseController
         return redirect()->back()->withErrors($errors);
     }
 
-    /**
+    /** Checks the proper validation rules
+     * 
      * @param array $rules
      * @return array
      */
@@ -81,20 +86,21 @@ class Controller extends BaseController
         return request()->validate($rules);
     }
 
-    /**
+    /** Generates an unique token
+     * 
      * @param string $tableName
      * @param string $field
      * @param int $length
      * @return \Illuminate\Http\RedirectResponse|string
      */
     protected function generateUniqueToken(string $tableName, string $field, int $length=32){
-        $maxSteps = HV_MAX_ITERATION_TOKEN; //Por seguridad, no vamos a permitir esto
+        $maxSteps = HV_MAX_ITERATION_TOKEN; // We do not allow this for security reasons
         $try = 0;
         do {
             $token = Str::random($length);
 
             if($try >= $maxSteps) {
-                // Caso muy excepcional, que no deberia pasar a no ser que tengamos millones de usuarios
+                // Exceptional case. Shouldn't happen unless we have millions of users
                 return back()->withErrors("internal_error");
             }
             $try++;
@@ -127,7 +133,8 @@ class Controller extends BaseController
         request()->validate($rules);
     }
 
-    /**
+    /** Response for Datatables plugin
+     * 
      * @param array $data
      * @param int $draw
      * @param int $total

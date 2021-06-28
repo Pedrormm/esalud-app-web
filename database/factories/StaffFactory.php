@@ -10,8 +10,8 @@ $factory->define(Staff::class, function (Faker $faker) {
     return [
         'historic' => $faker->word,
         'user_id' => $faker->word,
-        'branch' => $faker->word,
-        'shift' => $faker->word,
+        'medical_speciality_id' => $faker->word,
+        // 'shift' => $faker->word,
         'office' => $faker->word,
         'room' => $faker->word,
         'h_phone' => $faker->word,

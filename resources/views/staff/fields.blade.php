@@ -10,10 +10,10 @@
     {!! Form::number('user_id', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Branch Field -->
+<!-- medicalSpeciality Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('branch', 'Branch:') !!}
-    {!! Form::number('branch', null, ['class' => 'form-control']) !!}
+    {!! Form::label('medicalSpeciality', 'medicalSpeciality:') !!}
+    {!! Form::number('medicalSpeciality', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Shift Field -->

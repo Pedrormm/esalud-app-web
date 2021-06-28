@@ -36,7 +36,7 @@
             {
                 data: 'fullName',
                 render: function(data, type, row) {
-                    console.log("DATOS "+ data, type, row);
+                    // console.log("DATOS "+ data, type, row);
                     let strFullName = "";
                     if (row.avatar){
                         strFullName += '<img class="avatar clearfix align-middle" src="'+ _publicUrl+'images/avatars/' + row.avatar + '" class="avatar big">';                                                                           
@@ -122,7 +122,7 @@
                 data: '_buttons',
                 orderable: false,
                 render: function(data, type, row) {
-                    console.log(data, type, row);
+                    // console.log(data, type, row);
                     let strButtons = "";
 
                     @if(isset($flagsMenuEnabled['PATIENT_USER_EDIT']) && $flagsMenuEnabled['PATIENT_USER_EDIT'])
@@ -175,7 +175,6 @@
 
           }
       }).on('draw', () => {
-          console.log("entra draw");
           disableDataTablesMinCharactersSearch('#mainTablePatients', 3, true);
           assignHeadersToRowsResponsive();
       });

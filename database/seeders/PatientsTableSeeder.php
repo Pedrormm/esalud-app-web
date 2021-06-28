@@ -130,6 +130,117 @@ class PatientsTableSeeder extends Seeder
                 'updated_at' => date("Y-m-d H:i:s"),
             ),
 
+            11 => 
+            array (
+                'id' => 12,
+                'user_id' => 32,
+                'historic' => '672463245',
+                'height' => 165,
+                'weight' => 51,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            12 => 
+            array (
+                'id' => 13,
+                'user_id' => 33,
+                'historic' => '708042782',
+                'height' => 172,
+                'weight' => 98,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            13 => 
+            array (
+                'id' => 14,
+                'user_id' => 34,
+                'historic' => '203384358',
+                'height' => 185,
+                'weight' => 83,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            14 => 
+            array (
+                'id' => 15,
+                'user_id' => 35,
+                'historic' => '506257834',
+                'height' => 171,
+                'weight' => 69,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            15 => 
+            array (
+                'id' => 16,
+                'user_id' => 36,
+                'historic' => '997550299',
+                'height' => 177,
+                'weight' => 73,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            16 => 
+            array (
+                'id' => 17,
+                'user_id' => 37,
+                'historic' => '595113357',
+                'height' => 156,
+                'weight' => 65,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            17 => 
+            array (
+                'id' => 18,
+                'user_id' => 38,
+                'historic' => '915543750',
+                'height' => 161,
+                'weight' => 51,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            18 => 
+            array (
+                'id' => 19,
+                'user_id' => 39,
+                'historic' => '151563953',
+                'height' => 173,
+                'weight' => 90,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            19 => 
+            array (
+                'id' => 20,
+                'user_id' => 40,
+                'historic' => '351091978',
+                'height' => 170,
+                'weight' => 72,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            20 => 
+            array (
+                'id' => 21,
+                'user_id' => 41,
+                'historic' => '384569345',
+                'height' => 182,
+                'weight' => 86,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+            21 => 
+            array (
+                'id' => 22,
+                'user_id' => 42,
+                'historic' => '556870893',
+                'height' => 170,
+                'weight' => 74,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ),
+
         ));
         
         

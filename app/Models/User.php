@@ -119,8 +119,8 @@ class User extends Authenticatable
      */
     public static $rules = [
         'token' => 'required|exists:App\Models\UserInvitation,verification_token',
-        'dni' => 'required|min:9|max:9',
-        'email' => 'required|email:rfc,dns',
+        'dni' => 'required|min:9|max:9|unique:users,dni',
+        'email' => 'required|email:rfc,dns|unique:users,email',
         'rol_id' => 'required|numeric|min:1',
         'name' => 'required',
         'lastname' => 'required',
@@ -138,6 +138,22 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(\App\Models\Role::class, 'role_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function countries()
+    {
+        return $this->belongsTo(\App\Models\Country::class, 'country_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function phonePrefixes()
+    {
+        return $this->belongsTo(\App\Models\PhonePrefix::class, 'phone_prefix_id');
     }
 
     /**

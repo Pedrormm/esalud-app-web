@@ -56813,7 +56813,26 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var hash = __webpack_require__(/*! object-hash */ "./node_modules/object-hash/dist/object_hash.js");
 
-var APP_KEY = '9e2cbb3bb69dab826cef';
+var APP_KEY = '9e2cbb3bb69dab826cef'; // Opera 8.0+
+
+var isOpera = !!window.opr && !!opr.addons || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Firefox 1.0+
+
+var isFirefox = typeof InstallTrigger !== 'undefined'; // Safari 3.0+ "[object HTMLElementConstructor]" 
+
+var isSafari = /constructor/i.test(window.HTMLElement) || function (p) {
+  return p.toString() === "[object SafariRemoteNotification]";
+}(!window['safari'] || typeof safari !== 'undefined' && safari.pushNotification); // Internet Explorer 6-11
+
+
+var isIE =
+/*@cc_on!@*/
+ false || !!document.documentMode; // Edge 20+
+
+var isEdge = !isIE && !!window.StyleMedia; // Chrome 1 - 71
+
+var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime); // Blink engine detection
+
+var isBlink = (isChrome || isOpera) && !!window.CSS;
 
 var App =
 /*#__PURE__*/
@@ -57027,6 +57046,7 @@ function (_Component) {
       var mode = this.state.mode;
 
       if (mode == 'call') {
+        console.log('users:', this.users);
         return (
           /*#__PURE__*/
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -57034,7 +57054,7 @@ function (_Component) {
           },
           /*#__PURE__*/
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-            className: "selectpicker selectUserToCall",
+            className: isFirefox ? "selectUserToCall" : "selectpicker selectUserToCall",
             "data-live-search": "true",
             "data-style": "btn-info",
             title: "Busque usuario por nombre, apellidos o dni",

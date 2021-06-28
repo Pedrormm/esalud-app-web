@@ -132,8 +132,9 @@ class DashboardController extends Controller
      */
     public function fillDiaryAppointments(Request $request){
         if ($request->ajax()){
-            $ap = Appointment::select('id','dt_appointment','checked','updated_at')->whereDate('updated_at', Carbon::today())
-            ->whereDate('dt_appointment', '<=', Carbon::today())
+            $ap = Appointment::select('id','dt_appointment','checked','updated_at')
+            ->whereDate('updated_at', Carbon::today())
+            // ->whereDate('dt_appointment', '<=', Carbon::today())
             ->get();
             // dd($ap->toArray());
             $data = [];
@@ -157,6 +158,8 @@ class DashboardController extends Controller
                 }
 
             }
+
+            // dd($ap->toArray());
 
             return response()->json($data);
         }
@@ -169,8 +172,8 @@ class DashboardController extends Controller
     public function fillDelayedAppointments(Request $request){
         if ($request->ajax()){
             $ap = Appointment::select('id','dt_appointment','checked','updated_at')
-            ->whereDate('updated_at', '<', Carbon::today())
-            ->whereDate('dt_appointment', '<=', Carbon::today())
+            // ->whereDate('updated_at', '<', Carbon::today())
+            ->whereDate('dt_appointment', '>=', Carbon::today())
             ->get();
             // dd($ap->toArray());
             $data = [];
@@ -194,6 +197,8 @@ class DashboardController extends Controller
                 }
 
             }
+
+            // dd($ap->toArray());
 
             return response()->json($data);
         }

@@ -12,6 +12,8 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Patient;
 use App\Models\Role;
+use App\Models\Country;
+use App\Models\PhonePrefix;
 use Flash;
 use Response;
 use Carbon\Carbon;
@@ -113,6 +115,7 @@ class PatientController extends AppBaseController
             // return redirect(route('users.index'));
             return $this->backWithErrors(\Lang::get('messages.user_not_found') );
         }
+        $usuario->load('countries')->load('phonePrefixes.countries');
         $rol_usuario_info = "";
 
         if($usuario->role_id == \HV_ROLES::PATIENT){
@@ -125,10 +128,11 @@ class PatientController extends AppBaseController
             return $this->backWithErrors("UsMaCoEd001: "+\Lang::get('messages.invalid_id'));
         }
         $roles = Role::all();
+        $countries = Country::all();
         // dd($usuario->toArray());
         // dd($rol_usuario_info->toArray());
 
-        return view('patients.edit', compact('usuario', 'rol_usuario_info', 'roles'));//->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info)->with('roles',$roles)->with('branches',$branches);
+        return view('patients.edit', compact('usuario', 'rol_usuario_info', 'roles','countries'));
 
     }
 
@@ -142,9 +146,13 @@ class PatientController extends AppBaseController
      */
     public function update($id, UpdatePatientRequest $request)
     {
+        if ($request->input('user_id'))
+            $user_id = $request->input('user_id');
+
         $validatedData = parent::checkValidation([
             'role_id' => 'required|exists:App\Models\Role,id',
-            'email' => 'required|email:rfc,dns',
+            'dni' => 'required|min:9|max:9|unique:users,dni,'.$user_id,
+            'email' => 'required|string|email:rfc,dns|max:200|unique:users,email,'.$user_id,
             'name' => 'required',
             'lastname' => 'required',
             'zipcode' => 'numeric',
@@ -152,7 +160,7 @@ class PatientController extends AppBaseController
             'birthdate' => 'required|date',
             'sex' => 'required',
             'blood' => 'required',
-            'country' => 'string',
+            'country_id' => 'required|exists:App\Models\Country,id',
             'city' => 'string',
             'address' => 'string',
         ]);
@@ -168,12 +176,104 @@ class PatientController extends AppBaseController
             $res = Patient::whereUserId($id)->update($mapValidation);
         }
 
-        $user_id = $request->input('user_id');
         $usuario = User::find($user_id);
 
         $validatedData = array_merge($mapValidation, $validatedData);
 
-        $usuario->update($validatedData);
+        // $usuario->update($validatedData);
+
+        if ($request->input('dni'))
+            $dni = $request->input('dni');
+
+        //Check valid DNI letter
+        if(!checkDni($dni)) {
+            return $this->backWithErrors(\Lang::get('messages.invalid_DNI_format'));
+        }
+
+        if ($request->input('email'))
+            $email = $request->input('email');
+        if ($request->input('name'))
+            $name = $request->input('name');
+        if ($request->input('lastname'))
+            $lastname = $request->input('lastname');
+        if ($request->input('address'))
+            $address = $request->input('address');
+
+        if ($request->input('country_id'))
+            $country_id = $request->input('country_id');
+        if ($request->input('city'))
+            $city = $request->input('city');
+        if ($request->input('zipcode'))
+            $zipcode = $request->input('zipcode');
+        if ($request->input('phone'))
+            $phone = $request->input('phone');
+        if ($request->input('birthdate'))
+            $birthdate = $request->input('birthdate');
+        if ($request->input('sex'))
+            $sex = $request->input('sex');
+        if ($request->input('blood'))
+            $blood = $request->input('blood');
+
+        if ($request->input('hiddenPhoneCode'))
+            $hiddenPhoneCode = $request->input('hiddenPhoneCode');
+        if ($request->input('hiddenCountryCodeLong'))
+            $hiddenCountryCodeLong = $request->input('hiddenCountryCodeLong');
+
+        if (isset ($email))
+            $usuario->email = $email;
+        if (isset ($dni))
+            $usuario->dni = $dni;
+        if (isset ($name))
+            $usuario->name = $name;
+        if (isset ($lastname))
+            $usuario->lastname = $lastname;
+        if (isset ($address))
+            $usuario->address = $address;
+
+        if (isset ($country_id))
+            $usuario->country_id = $country_id;
+        if (isset ($city))
+            $usuario->city = $city;
+        if (isset ($zipcode))
+            $usuario->zipcode = $zipcode;
+        if (isset ($phone))
+            $usuario->phone = $phone;
+        if (isset ($birthdate))
+            $usuario->birthdate = $birthdate;
+        if (isset ($sex))
+            $usuario->sex = $sex;
+        if (isset ($blood))
+            $usuario->blood = $blood;
+        if (isset ($hiddenPhoneCode)){
+            $code = substr($hiddenPhoneCode, 1);
+            // dd($code);
+            $phonePrefixId = PhonePrefix::where('prefix',$code)->value('id');
+            $usuario->phone_prefix_id = $phonePrefixId;
+            // dd($phonePrefixId);
+        }
+
+        $usuario->save();
+
+        if ($request->input('role_id')==\HV_ROLES::PATIENT){
+            $patientId = Patient::where("user_id",$user_id)->value('id');
+            $patient = Patient::find($patientId);
+
+            if ($request->input('historic'))
+                $patientHistoric = $request->input('historic');
+            if ($request->input('height'))
+                $height = $request->input('height');
+            if ($request->input('weight'))
+                $weight = $request->input('weight');
+
+            if (isset ($patientHistoric))
+                $patient->historic = $patientHistoric;
+            if (isset ($height))
+                $patient->height = $height;
+            if (isset ($weight))
+                $patient->weight = $weight;
+
+            $patient->save();
+        }
 
         return view('patients.index')->with('okMessage', \Lang::get('messages.the_patient').": ".$usuario->name." ".$usuario->lastname." ".\Lang::get('messages.has_been_succesfully_edited'));
 

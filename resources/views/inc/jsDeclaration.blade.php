@@ -34,7 +34,7 @@
 
     <!-- Compiled and minified Bootstrap Select JavaScript (selectpicker) -->
     <!-- https://developer.snapappointments.com/bootstrap-select/ -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <!-- Selectpicker JavaScript translation files -->
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/i18n/defaults-*.min.js"></script> --}}
 

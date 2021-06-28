@@ -11,7 +11,9 @@ use App\Models\Role;
 use App\Models\Patient;
 use App\Models\Staff;
 use App\Models\UserInvitation;
-use App\Models\Branch;
+use App\Models\MedicalSpeciality;
+use App\Models\Country;
+use App\Models\PhonePrefix;
 use App\Mail\InvitationNewUserMail;
 use App\Mail\WelcomeNewUserMail;
 
@@ -51,8 +53,8 @@ class UsersManagementController extends Controller
      */
     public function create(Request $request){
         $validatedData = parent::checkValidation([
-            'dni' => 'required|min:9|max:9',
-            'email' => 'required|email:rfc,dns',
+            'dni' => 'required|min:9|max:9|unique:users,dni',
+            'email' => 'required|string|email:rfc,dns|max:200|unique:users,email',
             'rol_id' => 'required|numeric|min:1',
         ]);
 
@@ -143,17 +145,19 @@ class UsersManagementController extends Controller
                 $rol = Role::find($verify->role_id);
                 $email = $verify->email;
                 $dni = $verify->dni;
+                $countries = Country::all();
 
                 if ($verify->role_id == \HV_ROLES::DOCTOR)
-                    $branches = Branch::where('role_id', $verify->role_id)->get();
+                    $medicalSpecialities = MedicalSpeciality::where('role_id', $verify->role_id)->get();
                 else if ($verify->role_id == \HV_ROLES::HELPER)
-                    $branches = Branch::where('role_id', $verify->role_id)->get();
+                    $medicalSpecialities = MedicalSpeciality::where('role_id', $verify->role_id)->get();
                 else if ($verify->role_id == \HV_ROLES::ADMIN)
-                    $branches = Branch::all();
+                    $medicalSpecialities = MedicalSpeciality::all();
                 else
-                    $branches = "";
+                    $medicalSpecialities = "";
 
-                return view('users.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'branches'=>$branches]);
+                return view('users.newUserMail')->with(['token'=>$token,'rol'=>$rol,'email'=>$email,'dni'=>$dni, 'medicalSpecialities'=>$medicalSpecialities,
+                'countries'=>$countries]);
             }
             else
                 return view('users.newUserMail')->with('showError',true)->withErrors(\Lang::get('messages.token_has_been_expired_contact_an_admin_to_resend_an_email'));
@@ -171,11 +175,13 @@ class UsersManagementController extends Controller
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function createNewUser(Request $request){
+        // dd($request->all());
+
 
         $validatedData = parent::checkValidation([
             'token' => 'required|exists:App\Models\UserInvitation,verification_token',
-            'dni' => 'required|min:9|max:9',
-            'email' => 'required|email:rfc,dns',
+            'dni' => 'required|min:9|max:9|unique:users,dni',
+            'email' => 'required|string|email:rfc,dns|max:200|unique:users,email',
             'rol_id' => 'required|numeric|min:1',
             'name' => 'required',
             'lastname' => 'required',
@@ -197,52 +203,70 @@ class UsersManagementController extends Controller
         if (($request->input('rol_id')==\HV_ROLES::DOCTOR) || ($request->input('rol_id')==\HV_ROLES::HELPER))  {
             $validatedData = parent::checkValidation([
                 'historic' => 'required',
-                'branch' => 'required|exists:App\Models\Branch,id',
+                'medicalSpeciality' => 'required|exists:App\Models\MedicalSpeciality,id',
                 // 'shift' => 'required|min:1|max:3|in:M,ME,MN,MEN,E,EN,N',
-                'shift' => Rule::in(\SHIFTS::$types),
-                'shift' => 'required|min:1|max:3',
+                // 'shift' => Rule::in(\SHIFTS::$types),
+                // 'shift' => 'required|min:1|max:3',
                 'office' => 'required|numeric',
                 'room' => 'required|numeric',
                 'h_phone' => 'required|numeric',
             ]);
         }
 
-        $historic = $request->input('historic');
-        $branch = $request->input('branch');
-        $shift = $request->input('shift');
-        $office = $request->input('office');
-        $room = $request->input('room');
-        $h_phone = $request->input('h_phone');
         $verifyDni = User::whereDni($request->dni)->first();
 
-        // dd($verifyDni);
-        // Si ya existe dni
+        // If the DNI already exists
         if ($verifyDni){
-            return back()->withErrors("UsMaCoCrNeUs002: ".\Lang::get('messages.mismatch_error'));
+            return back()->withErrors(["UsMaCoCrNeUs002: ".\Lang::get('messages.mismatch_error')]);
         }
 
         $verify = UserInvitation::whereVerificationToken($token)->first();
         if (!$verify){
-            return back()->withErrors(\Lang::get('messages.mismatch_error'));
+            return back()->withErrors([\Lang::get('messages.mismatch_error')]);
         }
-        //dd($request->all());
 
-        $dni = $request->input('dni');
-        $email = $request->input('email');
-        $rol_id = $request->input('rol_id');
+        if ($request->input('dni'))
+            $dni = $request->input('dni');
 
-        $name = $request->input('name');
-        $lastname = $request->input('lastname');
-        $address = $request->input('address');
-        $country = $request->input('country');
-        $city = $request->input('city');
-        $zipcode = $request->input('zipcode');
-        $phone = $request->input('phone');
-        $birthdate = $request->input('birthdate');
-        $sex = $request->input('sex');
-        $blood = $request->input('blood');
+        //Check valid DNI letter
+        if(!checkDni($dni)) {
+            return $this->backWithErrors(\Lang::get('messages.invalid_DNI_format'));
+        }
 
-        $password =  Hash::make($request->input('password'));
+        if ($request->input('email'))
+            $email = $request->input('email');
+        if ($request->input('rol_id'))
+            $rol_id = $request->input('rol_id');
+
+        if ($request->input('name'))
+            $name = $request->input('name');
+        if ($request->input('lastname'))
+            $lastname = $request->input('lastname');
+        if ($request->input('address'))
+            $address = $request->input('address');
+
+        if ($request->input('country_id'))
+            $country_id = $request->input('country_id');
+        if ($request->input('city'))
+            $city = $request->input('city');
+        if ($request->input('zipcode'))
+            $zipcode = $request->input('zipcode');
+        if ($request->input('phone'))
+            $phone = $request->input('phone');
+        if ($request->input('birthdate'))
+            $birthdate = $request->input('birthdate');
+        if ($request->input('sex'))
+            $sex = $request->input('sex');
+        if ($request->input('blood'))
+            $blood = $request->input('blood');
+
+        if ($request->input('hiddenPhoneCode'))
+            $hiddenPhoneCode = $request->input('hiddenPhoneCode');
+        if ($request->input('hiddenCountryCodeLong'))
+            $hiddenCountryCodeLong = $request->input('hiddenCountryCodeLong');
+
+        if ($request->input('password'))
+            $password =  Hash::make($request->input('password'));
 
         DB::beginTransaction();
         // $verify->deleted_at = Carbon::now();
@@ -251,25 +275,43 @@ class UsersManagementController extends Controller
         $res = $verify->delete();
         if (!$res){
             DB::rollBack();
-            return back()->withErrors(\Lang::get('messages.internal_error'));
+            return back()->withErrors([\Lang::get('messages.internal_error')]);
         }
 
 
         $user = new User();
-        $user->dni = $dni;
-        $user->email = $email;
-        $user->role_id = $rol_id;
-        $user->name = $name;
-        $user->lastname = $lastname;
-        $user->address = $address;
-        $user->country = $country;
-        $user->city = $city;
-        $user->zipcode = $zipcode;
-        $user->phone = $phone;
-        $user->birthdate = $birthdate;
-        $user->sex = $sex;
-        $user->blood = $blood;
-        $user->password = $password;
+
+        if (isset ($dni))
+            $user->dni = $dni;
+        if (isset ($email))
+            $user->email = $email;
+        if (isset ($role_id))
+            $user->role_id = $rol_id;
+        if (isset ($name))
+            $user->name = $name;
+        if (isset ($lastname))
+            $user->lastname = $lastname;
+        if (isset ($user_comment))
+            $user->address = $address;
+
+        if (isset ($country_id))
+            $user->country_id = $country_id;
+        if (isset ($city))
+            $user->city = $city;
+        if (isset ($zipcode))
+            $user->zipcode = $zipcode;
+        if (isset ($phone))
+            $user->phone = $phone;
+        if (isset ($birthdate))
+            $user->birthdate = $birthdate;
+        if (isset ($sex))
+            $user->sex = $sex;
+        if (isset ($blood))
+            $user->blood = $blood;
+        if (isset ($password))
+            $user->password = $password;
+
+
         $res = $user->save();
         if(!$res) {
             DB::rollBack();
@@ -277,15 +319,22 @@ class UsersManagementController extends Controller
         }
 
         if($rol_id == \HV_ROLES::PATIENT){
-            $historic = $request->input('historic');
-            $height = $request->input('height');
-            $weight = $request->input('weight');
+            if ($request->input('historic'))
+                $patientHistoric = $request->input('historic');
+            if ($request->input('height'))
+                $height = $request->input('height');
+            if ($request->input('weight'))
+                $weight = $request->input('weight');
 
             $patient = new Patient();
             $patient->user_id = $user->id;
-            $patient->historic = $historic;
-            $patient->height = $height;
-            $patient->weight = $weight;
+            if (isset ($patientHistoric))
+                $patient->historic = $patientHistoric;
+            if (isset ($height))
+                $patient->height = $height;
+            if (isset ($weight))
+                $patient->weight = $weight;
+
             $res = $patient->save();
             if(!$res) {
                 DB::rollBack();
@@ -294,21 +343,30 @@ class UsersManagementController extends Controller
         }
 
         if(($rol_id == \HV_ROLES::DOCTOR) || ($rol_id == \HV_ROLES::HELPER)){
-            $historic = $request->input('historic');
-            $branch = $request->input('branch');
-            $shift = $request->input('shift');
-            $office = $request->input('office');
-            $room = $request->input('room');
-            $h_phone = $request->input('h_phone');
+            if ($request->input('historic'))
+                $staffHistoric = $request->input('historic');
+            if ($request->input('medical_speciality_id'))
+                $medical_speciality_id = $request->input('medical_speciality_id');
+            if ($request->input('office'))
+                $office = $request->input('office');
+            if ($request->input('room'))
+                $room = $request->input('room');
+            if ($request->input('h_phone'))
+                $h_phone = $request->input('h_phone');
 
             $staff = new Staff();
-            $staff->historic = $historic;
-            $staff->branch_id = $branch;
-            $staff->shift = $shift;
-            $staff->office = $office;
-            $staff->h_phone = $h_phone;
-            $staff->room = $room;
             $staff->user_id = $user->id;
+            if (isset ($staffHistoric))
+                $staff->historic = $staffHistoric;
+            if (isset ($medical_speciality_id))
+                $staff->medical_speciality_id = $medical_speciality_id;
+            if (isset ($office))
+                $staff->office = $office;
+            if (isset ($room))
+                $staff->room = $room;
+            if (isset ($h_phone))
+                $staff->h_phone = $h_phone;
+
             $res = $staff->save();
 
             if(!$res) {
@@ -366,80 +424,80 @@ class UsersManagementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function editUser(Request $request){
+    // public function editUser(Request $request){
 
-        $user_id = $request->input('user_id');
-        $usuario_rol = User::find($user_id);
-        $role_id = $usuario_rol->role_id;
+    //     $user_id = $request->input('user_id');
+    //     $usuario_rol = User::find($user_id);
+    //     $role_id = $usuario_rol->role_id;
 
-        $email = $request->input('email');
-        $dni = $request->input('dni');
+    //     $email = $request->input('email');
+    //     $dni = $request->input('dni');
 
-        $name = $request->input('name');
-        $lastname = $request->input('lastname');
-        $address = $request->input('address');
+    //     $name = $request->input('name');
+    //     $lastname = $request->input('lastname');
+    //     $address = $request->input('address');
 
-        $country = $request->input('country');
-        $city = $request->input('city');
-        $zipcode = $request->input('zipcode');
+    //     $country = $request->input('country');
+    //     $city = $request->input('city');
+    //     $zipcode = $request->input('zipcode');
 
-        $phone = $request->input('phone');
-        $birthdate = $request->input('birthdate');
-        $sex = $request->input('sex');
-        $blood = $request->input('blood');
+    //     $phone = $request->input('phone');
+    //     $birthdate = $request->input('birthdate');
+    //     $sex = $request->input('sex');
+    //     $blood = $request->input('blood');
 
-        $usuario = User::find($user_id);
-        $usuario->dni = $dni;
-        $usuario->email = $email;
-        $usuario->name = $name;
-        $usuario->lastname = $lastname;
-        $usuario->address = $address;
-        $usuario->country = $country;
-        $usuario->city = $city;
-        $usuario->zipcode = $zipcode;
-        $usuario->phone = $phone;
-        $usuario->birthdate = $birthdate;
-        $usuario->sex = $sex;
-        $usuario->blood = $blood;
-        $usuario->save();
+    //     $usuario = User::find($user_id);
+    //     $usuario->dni = $dni;
+    //     $usuario->email = $email;
+    //     $usuario->name = $name;
+    //     $usuario->lastname = $lastname;
+    //     $usuario->address = $address;
+    //     $usuario->country = $country;
+    //     $usuario->city = $city;
+    //     $usuario->zipcode = $zipcode;
+    //     $usuario->phone = $phone;
+    //     $usuario->birthdate = $birthdate;
+    //     $usuario->sex = $sex;
+    //     $usuario->blood = $blood;
+    //     $usuario->save();
 
-        if($role_id == \HV_ROLES::PATIENT){
+    //     if($role_id == \HV_ROLES::PATIENT){
 
-            $historic = $request->input('historic');
-            $height = $request->input('height');
-            $weight = $request->input('weight');
+    //         $historic = $request->input('historic');
+    //         $height = $request->input('height');
+    //         $weight = $request->input('weight');
 
-            $patient_actual = Patient::getPatientByUser($user_id);
-            $patient = Patient::find($patient_actual->id);
+    //         $patient_actual = Patient::getPatientByUser($user_id);
+    //         $patient = Patient::find($patient_actual->id);
 
-            $patient->historic = $historic;
-            $patient->height = $height;
-            $patient->weight = $weight;
-            $patient->save();
+    //         $patient->historic = $historic;
+    //         $patient->height = $height;
+    //         $patient->weight = $weight;
+    //         $patient->save();
 
-        }elseif($role_id == \HV_ROLES::DOCTOR){
+    //     }elseif($role_id == \HV_ROLES::DOCTOR){
 
-            $historic = $request->input('historic');
-            $branch_id = $request->input('branch');
-            $shift = $request->input('shift');
-            $office = $request->input('office');
-            $room = $request->input('room');
-            $h_phone = $request->input('h_phone');
+    //         $historic = $request->input('historic');
+    //         $medical_speciality_id = $request->input('medical_speciality_id');
+    //         // $shift = $request->input('shift');
+    //         $office = $request->input('office');
+    //         $room = $request->input('room');
+    //         $h_phone = $request->input('h_phone');
 
-            $staff_usuario = Staff::getUserStaffById($user_id);
-            $staff = Staff::find($staff_usuario->id);
+    //         $staff_usuario = Staff::getUserStaffById($user_id);
+    //         $staff = Staff::find($staff_usuario->id);
 
-            $staff->historic = $historic;
-            $staff->branch_id = $branch_id;
-            $staff->shift = $shift;
-            $staff->office = $office;
-            $staff->h_phone = $h_phone;
-            $staff->room = $room;
-            $staff->save();
-        }
+    //         $staff->historic = $historic;
+    //         $staff->medical_speciality_id = $medical_speciality_id;
+    //         // $staff->shift = $shift;
+    //         $staff->office = $office;
+    //         $staff->h_phone = $h_phone;
+    //         $staff->room = $room;
+    //         $staff->save();
+    //     }
 
-        return view('dashboard.index')->with('successful', \Lang::get('messages.the_user').$usuario->name." ".$usuario->lastname." ".\Lang::get('messages.has_been_succesfully_edited'));
-    }
+    //     return view('dashboard.index')->with('successful', \Lang::get('messages.the_user').$usuario->name." ".$usuario->lastname." ".\Lang::get('messages.has_been_succesfully_edited'));
+    // }
 
     /**
      * Shows the users that are Staff

@@ -15,25 +15,25 @@
                                 {{-- Buscador --}}
                                 <select id="userspicker"
                                  class="selectpicker mx-auto users-picker" data-live-search="true"
-                                multiple title=@lang('messages.search_by_name_surname_or_DNI') data-style="btn-info" 
-                                data-width="35%" multiple data-actions-box="true" data-header=@lang('messages.search_by_name_surname_or_DNI')
+                                multiple title="@lang('messages.search_by_name_surname_or_DNI')" data-style="btn-info" 
+                                data-width="35%" multiple data-actions-box="true" data-header="@lang('messages.search_by_name_surname_or_DNI')"
                                 multiple>
                                   @foreach($usersNotInRole as $roleName => $usersRole)
-                                  <optgroup label="{{ $roleName }}">
-                                    @foreach($usersRole as  $users)
-                                      <option data-subtext="{{ $users->dni }}" value="{{ $users->id }}">
-                                        {{ $users->name}}&nbsp;{{$users->lastname}}</option>
-                                    @endforeach
-                                  </optgroup>
+                                    <optgroup label="{{ $roleName }}">
+                                      @foreach($usersRole as  $users)
+                                        <option data-subtext="{{ $users->dni }}" value="{{ $users->id }}">
+                                          {{ $users->name}}&nbsp;{{$users->lastname}}</option>
+                                      @endforeach
+                                    </optgroup>
                                   @endforeach
                                 </select>  
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                      <div class="col-12">
+                      <div class="table-responsive-md">
                         {{-- Tabla invisible --}}
-                        <table id="tableUsersNotInRole" class="display">
+                        <table id="tableUsersNotInRole" class="display table">
                             <thead>
                               <tr>
                                 <th>@lang('messages.ID_data')</th>

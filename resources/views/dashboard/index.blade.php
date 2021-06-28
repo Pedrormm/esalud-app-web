@@ -81,12 +81,12 @@
                                 <h3 class="card-title">@lang('messages.dashboard_number_of_user_messages_title')</h3>
                                 <p class="card-description">@lang('messages.dashboard_number_of_user_messages_subtitle')</p>
                                 <div class="table-responsive" id="msgTable">
-                                    <table class="table table-striped" id="msgTable">
+                                    <table class="table table-striped changableTable" id="msgTable">
                                         <thead>
                                             <tr>
                                                 <th> @lang('messages.dashboard_messages_role') </th>
-                                                <th> @lang('messages.dashboard_messages_percentage_of_messages_sent') </th>
-                                                <th> @lang('messages.dashboard_messages_amount_of_messages_sent') </th>
+                                                <th class="dashboardPercentage"> @lang('messages.dashboard_messages_percentage_of_messages_sent') </th>
+                                                <th class="dashboardQuantity"> @lang('messages.dashboard_messages_amount_of_messages_sent') </th>
                                                 {{-- <th> @lang('messages.dashboard_messages_amount_of_messages_received') </th> --}}
                                             </tr>
                                         </thead>

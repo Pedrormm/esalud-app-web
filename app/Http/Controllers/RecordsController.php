@@ -150,8 +150,8 @@ class RecordsController extends Controller
         ->with(['userDoctor' => function ($query) {
             $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS doctorFullName"));
         }, 'userDoctor.staff' => function ($query) {
-            $query->select('id', 'user_id', 'branch_id');
-        }, 'userDoctor.staff.branch' => function ($query) {
+            $query->select('id', 'user_id', 'medical_speciality_id');
+        }, 'userDoctor.staff.medicalSpeciality' => function ($query) {
             $query->select('id', 'name', 'role_id');
         }])
         ->get();
@@ -165,7 +165,6 @@ class RecordsController extends Controller
         if (empty($appointments))
             $appointments = null;
 
-        // dd($appointments);
 
         return view('records.singleRecord')->with('usuario',$user)->with('patient',$patient)
         ->with('treatments',$treatments)->with('userTreatments',$userTreatments)
@@ -185,7 +184,7 @@ class RecordsController extends Controller
             return ($this->showRecord($id));
         }
         else if (($user->role_id == \HV_ROLES::DOCTOR) || ($user->role_id == \HV_ROLES::HELPER)) {
-            $user = Staff::select('users.*','staff.*','roles.name AS role_name', 'branches.name AS branch_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('branches', 'staff.branch_id', 'branches.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null)->where("users.id",$id)->get();
+            $user = Staff::select('users.*','staff.*','roles.name AS role_name', 'medical_specialities.name AS medical_speciality_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('medical_specialities', 'staff.medical_speciality_id', 'medical_specialities.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null)->where("users.id",$id)->get();
             // dd($user->toArray());
             $user = $user[0];
         }

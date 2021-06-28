@@ -1,7 +1,7 @@
 @component('mail::message')
 # @lang('messages.new_appointment')
 
-@lang('messages.hello_data') {{ $patientName }}, @lang('messages.a_new_appointment_has_been_created_with_the_doctor') {{ $doctorName }}. 
+@lang('messages.hello_data') {{ $doctorName }}, @lang('messages.a_new_appointment_has_been_created_with_the_patient') {{ $patientName }}. 
 @lang('messages.please_click_on_the_following_link_to_view_or_edit_your_medical_appointment')
     
 @component('mail::button', ['url' => URL::asset('appointment/'.$appointmentId.'/edit')])

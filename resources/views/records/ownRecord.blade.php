@@ -124,7 +124,7 @@
 
                         <tr>
 							<td>@lang('messages.specialty_stat'):</td>
-							<td>{{ $usuario->branch_name }}</td>
+							<td>{{ $usuario->medical_speciality_name }}</td>
 						</tr>
 
 

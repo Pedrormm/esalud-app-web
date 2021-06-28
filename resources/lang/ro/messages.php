@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'Îl dorești cu adevărat?',
     'user_id' => 'ID utilizator',
-    'branch_stat' => 'Sucursală',
+    'medical_speciality' => 'Sucursală',
 
     'edit_treatment' => 'Editați tratamentul',
     'treatment_data' => 'Date despre tratament',
@@ -616,6 +616,26 @@ return [
     'activate_spelling_checker' => 'Activați verificatorul ortografic',
     'activated' => 'Activat',
     'desactivated_stat' => 'Dezactivat',
+
+    'write_stat' => 'Scrie',
+    'incoming_call_coming_from' => 'Apel primit de la',
+    'would_you_like_to_accept_the_call' => 'Doriți să acceptați apelul?',
+    'percent_stat' => 'Procentaj',
+    'quantity_stat' => 'Cantitate',
+
+    'administration_mode_stat' => 'Administrare',
+    'meeting_updated_successfully' => 'Programarea medicală a fost actualizată cu succes',
+    'news_number' => 'Numărul de știri de afișat',
+    'spelling_checker' => 'Activare automată a verificatorului',
+    'helper_data' => 'Date de ajutor',
+
+    'password_reset' => 'Resetare parolă',
+    'enter_the_new_password' => 'Introduceți noua parolă:',
+    'repeat_the_new_password' => 'Repetați parola nouă:',
+    'passwords_match' => 'Potrivirea parolelor',
+    'passwords_do_not_match' => 'Parolele nu se potrivesc',
+    'the_password_must_be_at_least_6_characters_long' => 'Parola trebuie să aibă cel puțin 6 caractere',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'Parola trebuie să aibă cel puțin un număr, o literă mare, o literă mică și un caracter special',
 
 ];
 

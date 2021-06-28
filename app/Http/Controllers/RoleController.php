@@ -356,7 +356,7 @@ class RoleController extends AppBaseController
                     $staff = new Staff();
                     $staff->user_id = $key;
                     $staff->historic = "";
-                    ($user_to_change->role_id == \HV_ROLES::DOCTOR) ? $staff->branch_id = 45 : $staff->branch_id = 46;
+                    ($user_to_change->role_id == \HV_ROLES::DOCTOR) ? $staff->medical_speciality_id = 45 : $staff->medical_speciality_id = 46;
                     $staff->shift = "";
                     $staff->office = "";
                     $staff->h_phone = "";

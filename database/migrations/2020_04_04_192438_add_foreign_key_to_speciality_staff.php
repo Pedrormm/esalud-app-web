@@ -16,7 +16,7 @@ class AddForeignKeyToSpecialityStaff extends Migration
         Schema::table('specialities_staff', function (Blueprint $table) {
             $table->foreign('staff_id')->references('id')->on('staff')
             ->onDelete('cascade')->onUpdate('cascade'); 
-            $table->foreign('branches_id')->references('id')->on('branches')
+            $table->foreign('medical_speciality_id')->references('id')->on('medical_specialities')
             ->onDelete('cascade')->onUpdate('cascade'); 
         });
     }
@@ -30,7 +30,7 @@ class AddForeignKeyToSpecialityStaff extends Migration
     {
         Schema::table('specialities_staff', function (Blueprint $table) {
             $table->dropForeign(['staff_id']);
-            $table->dropForeign(['branches_id']);
+            $table->dropForeign(['medical_speciality_id']);
         });
     }
 }

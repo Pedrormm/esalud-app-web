@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            CountriesTableSeeder::class,
+            PhonePrefixesTableSeeder::class,
             UsersTableSeeder::class,
             MessagesTableSeeder::class,
             PatientsTableSeeder::class,
@@ -20,14 +22,15 @@ class DatabaseSeeder extends Seeder
             PermissionsTableSeeder::class,
             RolesTableSeeder::class,
             RolesPermissionsTableSeeder::class,
-            BranchesTableSeeder::class,
+            MedicalSpecialitiesTableSeeder::class,
             SpecialitiesStaffTableSeeder::class,
             StaffTableSeeder::class,
             MedicinesAdministrationTableSeeder::class,
             TypeMedicineTableSeeder::class,
             TreatmentsTableSeeder::class,
             RoutesTableSeeder::class,
-            StaffScheduleTableSeeder::class
+            StaffScheduleTableSeeder::class,
+            // AppointmentsTableSeeder::class
             ]);
     }
 }

@@ -35,22 +35,38 @@
                 </div>
                
                 <div class="row mb-3">
-                    <input type="hidden" value="{{ $appointment[0]['id']}}" name="  " />
+                    <input type="hidden" value="{{ $appointment[0]['id']}}" name="appointment_id" />
                     <div class="col-lg-4">
-                        <input type="text" class="form-control-plain-text" name="user_patient" placeholder=@lang('messages.patient_type') disabled
-                        value="{{ $appointment[0]['user_patient']['name'].' '. $appointment[0]['user_patient']['lastname']}}"/>
+                        <div class="form-group">
+                            <label for="userPatientFullName">@lang('messages.patient_type')</label>
+                            <input type="text" id="userPatientFullName" class="form-control-plain-text" name="user_patient" 
+                            placeholder="@lang('messages.patient_type')" disabled
+                            value="{{ $appointment[0]['user_patient']['name'].' '. $appointment[0]['user_patient']['lastname']}}"/>
+                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control-plain-text" name="user_doctor" placeholder=@lang('messages.doctor_type') disabled
-                        value="{{ $appointment[0]['user_doctor']['name'].' '. $appointment[0]['user_doctor']['lastname']}}" />                        
+                        <div class="form-group">
+                            <label for="userDoctorFullName">@lang('messages.doctor_type')</label>
+                            <input type="text" id="userDoctorFullName" class="form-control-plain-text" name="user_doctor" 
+                            placeholder="@lang('messages.doctor_type')" disabled
+                            value="{{ $appointment[0]['user_doctor']['name'].' '. $appointment[0]['user_doctor']['lastname']}}" /> 
+                        </div>                       
                     </div>
                     <div class="col-lg-4">
                         @if ($userLogin->role_id == \HV_ROLES::PATIENT)
-                            <input type="datetime-local" id="dateTimePatient" class="form-control-plain-text"
-                            name="dateTimePatient" value="{{ $dtAppointment }}" disabled>
+                            <div class="form-group">
+                                <label for="dateTimePatient">@lang('messages.appointment_date')</label>
+                                <input type="datetime-local" id="dateTimePatient" class="form-control-plain-text"
+                                name="dateTimePatient" value="{{ $dtAppointment }}" disabled>
+                            </div>
                         @elseif (($userLogin->role_id == \HV_ROLES::DOCTOR) || ($userLogin->role_id == \HV_ROLES::HELPER) || ($userLogin->role_id == \HV_ROLES::ADMIN))
-                            <input type="datetime-local" id="dateTimeOther" class="form-control-plain-text"
-                            name="dateTimeOther" value="{{ $dtAppointment }}" >
+                            <div class="form-group">
+                                <label for="dateTimeOther">@lang('messages.appointment_date')</label>
+                                <input type="datetime-local" id="dateTimeOther" class="form-control-plain-text"
+                                name="dateTimeOther" value="{{ $dtAppointment }}" >
+                            </div>    
+                        
+                            
                         @endif
                         
                     </div>
@@ -118,33 +134,42 @@
 
                 <div class="row mb-3">
                     @if ($userLogin->role_id == \HV_ROLES::PATIENT)
-                        <div class="col-lg-8 mx-auto">                      
-                            <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
-                            data-width="100%" data-header=@lang('messages.appointment_status')
-                            data-live-search="true" title=@lang('messages.appointment_status') id="appointmentChecked">
-                                <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending_stat')</option>
-                                <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted_stat')</option>
-                                <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
-                            </select>  
+                        <div class="col-lg-8 mx-auto">
+                            <div class="form-group">
+                                <label for="appointmentChecked">@lang('messages.appointment_status')</label>
+                                <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
+                                data-width="100%" data-header="@lang('messages.appointment_status')"
+                                data-live-search="true" title="@lang('messages.appointment_status')" id="appointmentChecked">
+                                    <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending_stat')</option>
+                                    <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted_stat')</option>
+                                    <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
+                                </select>
+                            </div>
                         </div>
                         <input type="hidden" value="{{ $appointment[0]['accomplished'] }}" name="appointmentAccomplished">
                     @else
-                        <div class="col-lg-6">                      
-                            <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
-                            data-width="100%" data-header=@lang('messages.appointment_status')
-                            data-live-search="true" title=@lang('messages.appointment_status') id="appointmentChecked">
-                                <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending_stat')</option>
-                                <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted_stat')</option>
-                                <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
-                            </select>  
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="appointmentChecked">@lang('messages.appointment_status')</label>
+                                <select name="appointmentChecked" required class="selectpicker show-tick form-control" 
+                                data-width="100%" data-header="@lang('messages.appointment_status')"
+                                data-live-search="true" title="@lang('messages.appointment_status')" id="appointmentChecked">
+                                    <option value="0" {{ $appointment[0]['checked'] == "0" ? 'selected' : "" }}>@lang('messages.pending_stat')</option>
+                                    <option value="1" {{ $appointment[0]['checked'] == "1" ? 'selected' : "" }}>@lang('messages.accepted_stat')</option>
+                                    <option value="2" {{ $appointment[0]['checked'] == "2" ? 'selected' : "" }}>@lang('messages.rejected_stat')</option>
+                                </select>  
+                            </div>
                         </div>
-                        <div class="col-lg-6">                      
-                            <select name="appointmentAccomplished" required class="selectpicker show-tick form-control"
-                            data-width="100%" data-header=@lang('messages.appointment_fulfillment')
-                            data-live-search="true" title=@lang('messages.appointment_fulfillment') id="appointmentAccomplished">
-                                <option value="0" {{ $appointment[0]['accomplished'] == "0" ? 'selected' : "" }}>@lang('messages.not_accomplished')</option>
-                                <option value="1" {{ $appointment[0]['accomplished'] == "1" ? 'selected' : "" }}>@lang('messages.accomplished_stat')</option>
-                            </select>  
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="appointmentAccomplished">@lang('messages.appointment_fulfillment')</label>
+                                <select name="appointmentAccomplished" required class="selectpicker show-tick form-control"
+                                data-width="100%" data-header="@lang('messages.appointment_fulfillment')"
+                                data-live-search="true" title="@lang('messages.appointment_fulfillment')" id="appointmentAccomplished">
+                                    <option value="0" {{ $appointment[0]['accomplished'] == "0" ? 'selected' : "" }}>@lang('messages.not_accomplished')</option>
+                                    <option value="1" {{ $appointment[0]['accomplished'] == "1" ? 'selected' : "" }}>@lang('messages.accomplished_stat')</option>
+                                </select>                 
+                            </div>                      
                         </div>
                     @endif
                 </div>

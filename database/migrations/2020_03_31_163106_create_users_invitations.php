@@ -20,7 +20,7 @@ class CreateUsersInvitations extends Migration
             $table->string('verification_token', 250)->nullable()->index()->comment('Email verification token');
             $table->date('expiration_date')->nullable()->comment('Email expiration date');
             $table->integer('times_sent')->default('0')->comment('Number of times the request was sent');
-            $table->unsignedSmallInteger('role_id')->nullable()->comment('User role');
+            $table->unsignedBigInteger('role_id')->nullable()->comment('User role');
             $table->softDeletes();
             $table->timestamps();
         });

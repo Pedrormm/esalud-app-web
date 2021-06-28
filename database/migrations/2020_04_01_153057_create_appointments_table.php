@@ -15,19 +15,18 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            
-            $table->unsignedBigInteger('user_id_patient')->comment('FK(users.id). Paciente cita');;
+            $table->unsignedBigInteger('user_id_patient')->comment('FK(users.id). Asigned patient to current appointment');;
             $table->foreign('user_id_patient')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id_creator')->comment('FK(users.id). Creador de citas');
+            $table->unsignedBigInteger('user_id_creator')->comment('FK(users.id). Appointment creator');
             $table->foreign('user_id_creator')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id_doctor')->comment('FK(users.id). Doctor asignado de cita');
+            $table->unsignedBigInteger('user_id_doctor')->comment('FK(users.id). Asigned doctor to current appointment');
             $table->foreign('user_id_doctor')->references('id')->on('users')->onDelete('cascade');
-            $table->datetime('dt_appointment')->comment('Fecha de inicio de la cita');
-            $table->integer('appointment_minutes_duration')->nullable()->default(20)->comment('Tiempo de cada cita en minutos');
-            $table->smallInteger('checked')->comment('0=Pendiente;1=Aceptada;2=Rechazada');
-            $table->smallInteger('accomplished')->comment('0=No cumplido;1=Cumplido');
-            $table->text('comments')->nullable()->comment('Comentarios del doctor');
-            $table->text('user_comment')->nullable()->comment('Motivo de no asistancia (denegado)');
+            $table->datetime('dt_appointment')->comment('Appointment start date');
+            $table->integer('appointment_minutes_duration')->nullable()->default(30)->comment('Appointment time in minutes');
+            $table->smallInteger('checked')->comment('0=Pending;1=Accepted;2=Denied');
+            $table->smallInteger('accomplished')->comment('0=No accomplished;1=Accomplished');
+            $table->text('comments')->nullable()->comment('Doctor comments');
+            $table->text('user_comment')->nullable()->comment('Reason for non-attendance (denied)');
             $table->softDeletes();
             $table->timestamps();
         });

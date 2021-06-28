@@ -558,7 +558,7 @@ return [
 
     'are_you_sure'=>'您真的想要嗎？',
     'user_id'=>'用戶ID',
-    'branch_stat'=>'分支',
+    'medical_speciality'=>'分支',
 
     'edit_treatment'=>'編輯治療方法',
     'treatment_data'=>'治療數據',
@@ -601,6 +601,40 @@ return [
     'are_you_sure_you_want_to_delete_the_treatment' => '您確定要結束治療嗎？',
     'the_treatment_was_deleted_sucessfully' => '治療已成功刪除',
 
+    'deleted_already_stat' => '已刪除',
+    'the_user_cannot_be_deleted_since_it_already_has_treatments_or_appointments' => '由於相關的醫療預約或治療，無法刪除用戶',
 
+    'dashboard_pending_accepted_rejected' => '待定、接受和拒絕',
+    'dashboard_pending_accepted_and_rejected_appointments' => '待定、接受和拒絕的約會',
+    'accepted_stat_plural' => '接受',
+    'rejected_stat_plural' => '拒絕',
+    'dashboard_number_of_treatments_in_progress_and_finished' => '正在進行的治療次數和完成的治療次數',
+    'treatments_in_progress' => '進行中',
+    'finished_treatments' => '完成',
+    'nav-main_my_medical_treatment' => '我的治療',
+    'number_of_news_displayed' => '要顯示的新聞數量',
+    'activate_spelling_checker' => '激活拼寫檢查',
+    'activated' => '已激活',
+    'desactivated_stat' => '停用',
+
+    'write_stat' => '寫',
+    'incoming_call_coming_from' => '來電來自',
+    'would_you_like_to_accept_the_call' => '你想接聽電話嗎？',
+    'percentage_stat' => '百分比',
+    'quantity_stat' => '數量',
+
+    'administration_mode_stat' => '管理',
+    'appointment_updated_successfully' => '醫療預約已成功更新',
+    'news_number' => '要顯示的新聞數量',
+    'spelling_checker' => '自動檢查器激活',
+    'helper_data' => '助手數據',
+
+    'password_reset' => '密碼重置',
+    'enter_the_new_password' => '輸入新密碼：',
+    'repeat_the_new_password' => '重複新密碼：',
+    'passwords_match' => '密碼匹配',
+    'passwords_do_not_match' => '密碼不匹配',
+    'the_password_must_be_at_least_6_characters_long' => '密碼長度必須至少為 6 個字符',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => '密碼必須至少包含一個數字、一個大寫字母、一個小寫字母和一個特殊字符',
 ];
 

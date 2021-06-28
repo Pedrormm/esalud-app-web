@@ -23,26 +23,26 @@
 		}
 
 		/* Force table to not be like tables anymore */
-		table, thead, tbody, th, td, tr {
+		.changableTable table, .changableTable thead, .changableTable tbody, .changableTable th, .changableTable td, .changableTable tr {
 			display: block;
 		}
 
 		/* Hide table headers (but not display: none;, for accessibility) */
-		thead tr {
+		.changableTable thead tr {
 			position: absolute !important;
 			top: -9999px !important;
 			left: -9999px !important;
 		}
 
-		tr {
+		.changableTable tr {
 		margin: 0 0 1rem 0 !important;
 		}
 		
-		tr:nth-child(odd) {
+		.changableTable tr:nth-child(odd) {
 		background: #ccc !important;
 		}
 		
-		td {
+		.changableTable td {
 			/* Behave  like a "row" */
 			border: none !important;
 			border-bottom: 1px solid #eee !important;
@@ -50,7 +50,7 @@
 			padding-left: 50% !important;
 		}
 
-		td::after,td::before {
+		.changableTable td::after,td::before {
 			position: absolute !important;
 			top: 6px !important;
 			left: 6px !important;

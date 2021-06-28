@@ -16,7 +16,7 @@ use App\Models\Patient;
 use App\Models\MedicineAdministration;
 use App\Models\Staff;
 use App\Models\Role;
-use App\Models\Branch;
+use App\Models\MedicalSpeciality;
 use Carbon\Carbon;
 use Active;
 use App\Models\TypeMedicine;
@@ -185,7 +185,7 @@ class TreatmentController extends AppBaseController
      *
      * @return Response
      */
-    public function edit($id, Request $request)
+    public function edit($id)
     {
         // $userId = $request->id;
         $userLogged = auth()->user();
@@ -249,21 +249,43 @@ class TreatmentController extends AppBaseController
      */
     public function update($id, Request $request)
     {
-        $treatment = $this->treatmentsRepository->find($id);
+        $validatedData = parent::checkValidation([
+            'treatment_id' => 'required|exists:App\Models\Role,id',
+            'doctor_id' => 'required|exists:App\Models\User,id',
+            'type_medicines_id' => 'required|exists:App\Models\TypeMedicine,id',
+            'medicines_administration_id' => 'required|exists:App\Models\MedicineAdministration,id',
+        ]);
+        $treatment = Treatment::find($id);
 
         if (empty($treatment)) {
-            Flash::error(\Lang::get('messages.treatment_not_found'));
-
-            return redirect(route('treatments.index'));
+            return redirect()->back()->withErrors([\Lang::get('messages.permission_denied'), \Lang::get('messages.No permissions')]);
         }
 
-        $treatment = $this->treatmentsRepository->update($request->all(), $id);
+        if ($request->input('treatment_id'))
+            $treatment_id = $request->input('treatment_id');
+        if ($request->input('doctor_id'))
+            $doctor_id = $request->input('doctor_id');
+        if ($request->input('type_medicines_id'))
+            $type_medicines_id = $request->input('type_medicines_id');
+        if ($request->input('medicines_administration_id'))
+            $medicines_administration_id = $request->input('medicines_administration_id');
+        if ($request->input('description'))
+            $description = $request->input('description');
 
-        Flash::success('Treatment updated successfully.');
+    
+        if (isset ($doctor_id))
+            $treatment->user_id_doctor = $doctor_id;
+        if (isset ($type_medicines_id))
+            $treatment->type_medicine_id = $type_medicines_id;
+        if (isset ($medicines_administration_id))
+            $treatment->medicine_administration_id = $medicines_administration_id;
+        if (isset ($description))
+            $treatment->description = $description;
+        $treatment->save();
 
         $message = \Lang::get('messages.treatment_updated_successfully');
 
-        return redirect(route('treatments.index'));
+        return view('treatments.index')->with('okMessage', $message);
     }
 
     /**

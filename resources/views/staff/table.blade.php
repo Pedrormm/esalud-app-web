@@ -1,10 +1,10 @@
 <div class="table-responsive">
-    <table class="table" id="staff-table">
+    <table class="table changableTable" id="staff-table">
         <thead>
             <tr>
                 <th>@lang('messages.historical_stat')</th>
                 <th>@lang('messages.user_id')</th>
-                <th>@lang('messages.branch_stat')</th>
+                <th>@lang('messages.medical_speciality')</th>
                 <th>@lang('messages.shift_data')</th>
                 <th>@lang('messages.office_data')</th>
                 <th>@lang('messages.room_number')</th>
@@ -17,7 +17,7 @@
             <tr>
                 <td>{{ $staff->historic }}</td>
             <td>{{ $staff->user_id }}</td>
-            <td>{{ $staff->branch }}</td>
+            <td>{{ $staff->medical_speciality_id }}</td>
             <td>{{ $staff->shift }}</td>
             <td>{{ $staff->office }}</td>
             <td>{{ $staff->room }}</td>

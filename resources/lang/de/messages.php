@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'Willst du es wirklich?',
     'user_id' => 'Benutzer-ID',
-    'branch_stat' => 'Zweig',
+    'medical_speciality' => 'Zweig',
 
     'edit_treatment' => 'Behandlung bearbeiten',
     'treatment_data' => 'Behandlungsdaten',
@@ -616,6 +616,26 @@ return [
     'activate_spelling_checker' => 'Rechtschreibprüfung aktivieren',
     'activated' => 'Aktiviert',
     'desactivated_stat' => 'Deaktiviert',
+
+    'write_stat' => 'Schreiben',
+    'incoming_call_coming_from' => 'Eingehender Anruf von',
+    'would_you_like_to_accept_the_call' => 'Möchtest du den Anruf annehmen?',
+    'percentage_stat' => 'Prozentsatz',
+    'quantity_stat' => 'Quantität',
+
+    'administration_mode_stat' => 'Verwaltung',
+    'appointment_updated_successfully' => 'Der Arzttermin wurde erfolgreich aktualisiert',
+    'news_number' => 'Anzahl der anzuzeigenden Nachrichten',
+    'spelling_checker' => 'Automatische Checker-Aktivierung',
+    'helper_data' => 'Helferdaten',
+
+    'password_reset' => 'Passwort zurücksetzen',
+    'enter_the_new_password' => 'Geben Sie das neue Passwort ein:',
+    'repeat_the_new_password' => 'Neues Passwort wiederholen:',
+    'passwords_match' => 'Passwörter passen',
+    'passwords_do_not_match' => 'Passwörter stimmen nicht überein',
+    'the_password_must_be_at_least_6_characters_long' => 'Das Passwort muss mindestens 6 Zeichen lang sein',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'Das Passwort muss mindestens eine Zahl, einen Großbuchstaben, einen Kleinbuchstaben und ein Sonderzeichen enthalten',
 
 ];
 

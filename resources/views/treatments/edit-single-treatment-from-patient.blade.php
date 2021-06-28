@@ -37,6 +37,7 @@
                 </div>
             </div>
         @else
+        
 
             <div id="error-container" class="alert alert-danger dNone"></div>
             <div id="message-container" class="alert alert-success dNone"></div>
@@ -52,44 +53,58 @@
                 <div class="row mb-3">
                     <input type="hidden" value="{{ $treatment->id }}" name="treatment_id" />
                     <div class="col-lg-4">
-                        <select name="doctor_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.doctor_type')>
-                            @if ($treatment->userDoctor)
-                                @foreach ($doctors as $doctor)
-                                    <option value={{ $doctor->id }} {{ $treatment->userDoctor->id == $doctor->id ? 'selected' : "" }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
-                                @endforeach
-                            @else
-                                @foreach ($doctors as $doctor)
-                                    <option value={{ $doctor->id }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
-                                @endforeach
-                            @endif
-                        </select> 
+                        <div class="form-group">
+                            <label for="doctorId">@lang('messages.doctor_type')</label>
+                            <select id="doctorId" name="doctor_id" required class="selectpicker show-tick form-control" 
+                            data-width="100%" data-live-search="true" title="@lang('messages.doctor_type')">
+                                @if ($treatment->userDoctor)
+                                    @foreach ($doctors as $doctor)
+                                        <option value={{ $doctor->id }} {{ $treatment->userDoctor->id == $doctor->id ? 'selected' : "" }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
+                                    @endforeach
+                                @else
+                                    @foreach ($doctors as $doctor)
+                                        <option value={{ $doctor->id }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
+                                    @endforeach
+                                @endif
+                            </select> 
+                        </div>
                     </div>
 
                     <div class="col-lg-4">
-                        <select name="type_medicines_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.type_of_medicine')>
-                            @foreach ($typeMedicines as $typeMedicine)
-                                <option value={{ $typeMedicine->id }} {{ $treatment->typeMedicine->id == $typeMedicine->id ? 'selected' : "" }}>{{ $typeMedicine->name }}</option>
-                            @endforeach
-                        </select> 
+                        <div class="form-group">
+                            <label for="typeMedicinesId">@lang('messages.type_of_medicine')</label>
+                            <select id="typeMedicinesId" name="type_medicines_id" required class="selectpicker show-tick form-control" 
+                            data-width="100%" data-live-search="true" title="@lang('messages.type_of_medicine')">
+                                @foreach ($typeMedicines as $typeMedicine)
+                                    <option value={{ $typeMedicine->id }} {{ $treatment->typeMedicine->id == $typeMedicine->id ? 'selected' : "" }}>{{ $typeMedicine->name }}</option>
+                                @endforeach
+                            </select> 
+                        </div>
                     </div>
 
                     <div class="col-lg-4">
-                        <select name="medicines_administration_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.medicine_administration')>
-                            @foreach ($medicinesAdministration as $medicineAdministration)
-                                <option value={{ $medicineAdministration->id }} 
-                                    {{ is_null($treatment->medicineAdministration)?"": 
-                                    ($treatment->medicineAdministration->id == $medicineAdministration->id ? 'selected' : "") }}>{{ $medicineAdministration->name }}</option>
-                            @endforeach
-                        </select> 
+                        <div class="form-group">
+                            <label for="medicinesAdministrationId">@lang('messages.medicine_administration')</label>
+                            <select id="medicinesAdministrationId" name="medicines_administration_id" required class="selectpicker show-tick form-control" 
+                            data-width="100%" data-live-search="true" title="@lang('messages.medicine_administration')">
+                                @foreach ($medicinesAdministration as $medicineAdministration)
+                                    <option value={{ $medicineAdministration->id }} 
+                                        {{ is_null($treatment->medicineAdministration)?"": 
+                                        ($treatment->medicineAdministration->id == $medicineAdministration->id ? 'selected' : "") }}>{{ $medicineAdministration->name }}</option>
+                                @endforeach
+                            </select> 
+                        </div>
                     </div>
                 </div>
 
                 <div class="row mb-3 d-flex justify-content-center">
-                    <div class="col-lg-11">
-                        <textarea class="form-control" id="treatmentDescription" rows="3" value="{{ $treatment->description }}" placeholder=@lang('messages.description_stat') name="description"></textarea>
+                    <div class="col-lg-11 mx-auto">
+                        <div class="form-group">
+                            <label for="treatmentDescription">@lang('messages.description_stat')</label>
+                            <textarea class="form-control mx-auto" id="treatmentDescription" rows="3" 
+                            value="{{ $treatment->description }}" placeholder="@lang('messages.description_stat')" 
+                            name="description"></textarea>
+                        </div>
                     </div>
                 </div>
 
@@ -97,14 +112,9 @@
                     <div class="row mb-3 d-flex justify-content-center">
                         <div class="col-lg-4">
                             <label>@lang('messages.treatment_end_date')</label>
-                            {{-- <input required type="datetime-local" 
-                            value="{{ !is_null($treatment->treatment_end_date)? substr($treatment->treatment_end_date,0, 10)."T".substr($treatment->treatment_end_date,11,16) :"" }}" 
-                            class="form-control" name="treatment_end_date" /> --}}
-
                             <input required type="date" 
                             value="{{ !is_null($treatment->treatment_end_date)? substr($treatment->treatment_end_date,0, 10) :"" }}" 
                             class="form-control" name="treatment_end_date" />
-
                         </div>
                     </div>
                 @endif

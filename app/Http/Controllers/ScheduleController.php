@@ -175,7 +175,7 @@ class ScheduleController extends Controller
             }
         }
 
-        $data = Staff::select('users.*','staff.*','roles.name AS role_name', 'branches.name AS branch_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('branches', 'staff.branch_id', 'branches.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
+        $data = Staff::select('users.*','staff.*','roles.name AS role_name', 'medical_specialities.name AS medical_speciality_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('medical_specialities', 'staff.medical_speciality_id', 'medical_specialities.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
 
         $numTotal = $numRecords = $data->count();
 
@@ -193,7 +193,7 @@ class ScheduleController extends Controller
                 });
                 $numRecords = $data->count();
             }
-            // Search by name, surname, role, dni, sex, branch_name, shift, office or room
+            // Search by name, surname, role, dni, sex, medical_speciality_name, office or room
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
 
@@ -203,7 +203,7 @@ class ScheduleController extends Controller
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('sex', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('branches.name', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('medical_specialities.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('room', 'like', '%' . $searchPhrase . '%');
                 });
 

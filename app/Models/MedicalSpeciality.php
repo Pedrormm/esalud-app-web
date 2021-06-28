@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
-class Branch extends Model
+class MedicalSpeciality extends Model
 {
 
     use SoftDeletes;
 
-    protected $table = "branches";
+    protected $table = "medical_specialities";
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -20,7 +20,8 @@ class Branch extends Model
 
     public $fillable = [
         'name',
-        'branch_type'
+        'speciality_type',
+        'role_id'
     ];
 
       /**
@@ -31,7 +32,8 @@ class Branch extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'branch_type' => 'string'
+        'speciality_type' => 'string',        
+        'role_id' => 'integer'
     ];
 
     /**
@@ -41,7 +43,7 @@ class Branch extends Model
      */
     public static $rules = [
         'name' => 'required',
-        'branch_type' => 'required'
+        'role_id' => 'required'
     ];
 
     

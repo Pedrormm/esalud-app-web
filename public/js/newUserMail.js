@@ -50,12 +50,16 @@ $(document).ready(function() {
             }
   
             let title = $('.iti__selected-flag').attr('title');
-            let phoneCode = title.replace(/[^\d\+]/g, '')
-            // phoneCode = phoneCode.replace("+", "00");
-            // console.log(phoneCode);
+            let phoneCode = title.replace(/[^\d\+]/g, '');
+            // let countryCodeShort = $(".iti__selected-flag").data("countrycodename");
+            let countryCodeLong = title.substr(0, title.indexOf(':')); 
             $("<input />").attr("type", "hidden")
             .attr("name", "hiddenPhoneCode")
             .attr("value", phoneCode)
+            .appendTo("#newUserMailForm");
+            $("<input />").attr("type", "hidden")
+            .attr("name", "hiddenCountryCodeLong")
+            .attr("value", countryCodeLong)
             .appendTo("#newUserMailForm");
           })
   
@@ -70,11 +74,12 @@ let validMsg = document.querySelector("#valid-msg");
 
 // let errorMap = [ "Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
 
-let errorMap = [ _messagesLocalization.no_response_valid_number, _messagesLocalization.invalid_country_code, _messagesLocalization.too_short, _messagesLocalization.too_long, _messagesLocalization.no_response_valid_number];
+let errorMap = [ _messagesLocalization.no_valid_number, _messagesLocalization.invalid_country_code, _messagesLocalization.too_short, _messagesLocalization.too_long, _messagesLocalization.no_valid_number];
 
 
 let intl = window.intlTelInput(input, {
-    initialCountry: "auto",
+    // initialCountry: "auto",
+    initialCountry: "es",
     geoIpLookup: function(successful, failure){
         $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp){
             let countryCode = (resp && resp.country) ? resp.country : "";
@@ -92,8 +97,7 @@ let reset = function(){
     validMsg.classList.add("hide");
 };
 
-// Validate on blur event
-input.addEventListener('blur', function() {
+let messageValidate = function (event) {
     reset();
     if (input.value.trim()){
         if (intl.isValidNumber()){
@@ -101,24 +105,24 @@ input.addEventListener('blur', function() {
             // $('#valid-msg').html("&#10004; Valid number");
             $('#valid-msg').html("&#10004; "+_messagesLocalization.valid_number);
         }
-        else{
-            $('#valid-msg').text("");
-            input.classList.add("error");
-            let errorCode = intl.getValidationError();
-            let code = errorMap[errorCode];
-            if (!code){
-                // code = "Not valid";
-                code = _messagesLocalization.no_responset_valid;
-            }
-            errorMsg.innerHTML = code;
-            errorMsg.classList.remove("hide");
+    else{
+        $('#valid-msg').text("");
+        input.classList.add("error");
+        let errorCode = intl.getValidationError();
+        let code = errorMap[errorCode];
+        if (!code){
+            // code = "Not valid";
+            code = _messagesLocalization.no_valid_number;
         }
+        errorMsg.innerHTML = code;
+        errorMsg.classList.remove("hide");
     }
-});
+}};
 
-// Reset on keyUp change event
-input.addEventListener('change', reset);
-input.addEventListener('keyup', reset);
+// Validate on blur keyup and change event
+input.addEventListener('blur', messageValidate, false);
+input.addEventListener('keyup', messageValidate, false);
+input.addEventListener('change', messageValidate, false);
 
 $('#smsPhone').on('change', function(e) {
     $(e.target).val($(e.target).val().replace(/[^\d\-]/g, ''))

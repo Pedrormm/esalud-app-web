@@ -16,7 +16,7 @@
                       <i class="fas fa-arrow-left"></i>
                   </button>
                 </div>
-                <h4 class="font-weight-bold text-primary centered"> @lang('messages.associated_users_to_the_role')  {{ $usersRole[0]["name"] }}</h4>
+                <h4 class="font-weight-bold text-primary centered role-title-header"> @lang('messages.associated_users_to_the_role')  {{ $usersRole[0]["name"] }}</h4>
 
               </div>
             </div>
@@ -25,7 +25,7 @@
 
             <div class="card-body" id="mainCardBody">
               <div class="table-responsive">
-                <table class="table table-bordered" id="tableRoles" width="100%" cellspacing="0">
+                <table class="table table-bordered changableTable" id="tableRoles" width="100%" cellspacing="0">
                   <thead class="text-center">
                     <tr>
                       <th>@lang('messages.ID_data')</th>
@@ -58,6 +58,14 @@
   <script>
     let currentIdRole = {{ $id }};
     let roles = @json($roles);
+    if (isMobile()){
+      $(".role-title-header").removeClass("centered");
+      $("#usersDistRole").removeClass("borderShadow");
+    }
+    else{
+      $(".role-title-header").addClass("centered");
+      $("#usersDistRole").addClass("borderShadow");
+    }
 
   </script>
 

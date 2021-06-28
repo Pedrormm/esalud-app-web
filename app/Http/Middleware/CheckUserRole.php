@@ -41,12 +41,12 @@ class CheckUserRole
             break;
 
             default:
-                $this->auth->logout();
+                // $this->auth->logout();
 
-                if ($request->ajax())
-                    return response(\Lang::get('messages.permission_denied'), 401);
-                else
-                    return redirect()->to('login');
+                // if ($request->ajax())
+                //     return response(\Lang::get('messages.permission_denied'), 401);
+                // else
+                //     return redirect()->to('login');
             break;
         }
 

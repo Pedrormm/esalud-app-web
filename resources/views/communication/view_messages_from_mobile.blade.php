@@ -27,40 +27,42 @@
 
                          
                         <div class="cMessagesFeed scroller" style="max-height: 64vh; overflow: scroll;">
-                            <ul>
-                                @foreach ($userMessages as $userMessage)
-
-                                    @if ($userMessage["user_id_from"] == auth()->user()->id)
-                                        <li class="alienUser">
-                                            <div class="text">
-                                                <span>
-                                                    {{ $userMessage["message"] }}
-                                                </span>
-                                                <p class="dateFeed">
-                                                    {{ $userMessage["date_spa"] }}
-                                                </p>
-                                            <div>                    
-                                        </li>
-                                    @else
-                                        <li class="ownUser">
-                                            <div class="text">
-                                                <span>
-                                                    {{ $userMessage["message"] }}
-                                                </span>
-                                                <p class="dateFeed">
-                                                    {{ $userMessage["date_spa"] }}
-                                                </p>
-                                            <div>                    
-                                        </li>
-                                    @endif                                                          
-                        
-                                @endforeach
-
-                            </ul>
+                            @auth
+                                <ul>
+                               
+                                    @foreach ($userMessages as $userMessage)
+                                        
+                                        @if ($userMessage["user_id_from"] == auth()->user()->id)
+                                            <li class="alienUser">
+                                                <div class="text">
+                                                    <span>
+                                                        {{ $userMessage["message"] }}
+                                                    </span>
+                                                    <p class="dateFeed">
+                                                        {{ $userMessage["date_spa"] }}
+                                                    </p>
+                                                <div>                    
+                                            </li>
+                                        @else
+                                            <li class="ownUser">
+                                                <div class="text">
+                                                    <span>
+                                                        {{ $userMessage["message"] }}
+                                                    </span>
+                                                    <p class="dateFeed">
+                                                        {{ $userMessage["date_spa"] }}
+                                                    </p>
+                                                <div>                    
+                                            </li>
+                                        @endif                                                          
+                            
+                                    @endforeach
+                                </ul>
+                            @endauth
                         </div>
                     
                         <div class="cMessageComposer">
-                            <textarea placeholder=@lang('messages.write_stat') autofocus></textarea>
+                            <textarea placeholder="@lang('messages.write_stat')" autofocus></textarea>
                             {{-- <button type="button" class="btn btn-primary"> --}}
                                 <i id="buttonSendMessage" class="fas fa-arrow-alt-circle-right"></i>
                             {{-- </button> --}}

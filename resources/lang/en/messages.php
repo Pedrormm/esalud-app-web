@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'Are you sure?',
     'user_id' => 'User id',
-    'branch_stat' => 'Branch',
+    'medical_speciality' => 'Branch',
 
     'edit_treatment' => 'Edit treatment',
     'treatment_data' => 'Treatment Data',
@@ -615,7 +615,28 @@ return [
     'number_of_news_displayed' => 'Number of news to be displayed',
     'activate_spelling_checker' => 'Activate spell checker',
     'activated' => 'Activated',
-    'deactivated' => 'Deactivated',
+    'desactivated_stat' => 'Deactivated',
+
+    'write_stat' => 'Write',
+    'incoming_call_coming_from' => 'Incoming call coming from',
+    'would_you_like_to_accept_the_call' => 'Would you like to accept the call',
+    'percentage_stat' => 'Percentage',
+    'quantity_stat' => 'Quantity',
+    'administration_mode_stat' => 'Administration',
+
+    'appointment_updated_successfully' => 'The medical appointment has been updated correctly',
+    'news_number' => 'Number of news to be shown',
+    'spelling_checker' => 'Spelling checker activation',
+    'helper_data' => 'Helper data',
+
+    'password_reset' => 'Password reset',
+    'enter_the_new_password' => 'Enter the new password:',
+    'repeat_the_new_password' => 'Repeat the new password:',
+    'passwords_match' => 'Passwords match',
+    'passwords_do_not_match' => 'Passwords do not match',
+    'the_password_must_be_at_least_6_characters_long' => 'The password must be at least 6 characters long',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'The password must have at least one number, one uppercase letter, one lowercase letter and one special character',
+   
 
 
 ];

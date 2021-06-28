@@ -19,7 +19,7 @@
                           <i class="fas fa-arrow-left"></i>
                       </button>
                     </div>
-                    <h4 class="font-weight-bold text-primary centered">@lang('messages.available_schedule_of_the_user') 
+                    <h4 class="font-weight-bold text-primary centered schedule-title-header">@lang('messages.available_schedule_of_the_user') 
                         {{ $userStaff->name . " ".$userStaff->lastname }}</h4>
                 </div>
             </div>
@@ -214,7 +214,6 @@
 
         </div>
         <button type="button" id="SaveSchedule"> @lang('messages.save_stat')</button>
-
         <!-- /.container-fluid -->
 
 @endsection
@@ -225,6 +224,16 @@
         staffSchedule = @json($staffSchedule);
         staffId = {{ $userStaff->id }}
         console.log(staffSchedule);
+        if (isMobile()){
+            $("#SaveSchedule").addClass( "btn btn-primary text-center" );
+            $('#SaveSchedule').wrap('<div class="col-md-12 text-center"></div>');
+            $(".schedule-title-header").removeClass("centered");
+        }
+        else{
+            $("#SaveSchedule").removeClass( "btn btn-primary" );
+            $(".schedule-title-header").addClass("centered");
+        }
+
     </script>
     {{-- {{ dd($staffSchedule) }} --}}
   <script type="text/javascript" src="{{ asset('js/schedule-show.js') . '?r=' . rand() }}"></script>

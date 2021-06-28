@@ -25,10 +25,10 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        // dd(2);
         $userLogin = auth()->user();
         $rol_user = $userLogin->role_id;
 
+        $appointments = null;
         if($rol_user == \HV_ROLES::ADMIN){
             $appointments = Appointment::with('userPatient')->with('userDoctor')->get();
         }else if($rol_user == \HV_ROLES::DOCTOR){
@@ -36,8 +36,12 @@ class AppointmentController extends Controller
         }else if($rol_user == \HV_ROLES::PATIENT){
             $appointments = Appointment::where('user_id_patient',"=",$userLogin->id)->with('userPatient')->with('userDoctor')->get();
         }
+        else{
+            $appointments = Appointment::with('userPatient')->with('userDoctor')->get();
+        }
 
         $appointmentType ="all";
+        // dd($appointmentType);
 
         return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
     }
@@ -52,8 +56,8 @@ class AppointmentController extends Controller
         $userLogin = auth()->user();
         // $rol_user = $userLogin->role_id();
         $patients = User::select('id','name','lastname','dni','role_id')->whereRoleId(\HV_ROLES::PATIENT)->get();
-        $doctors = User::select('id','name','lastname','dni','role_id')->whereRoleId(\HV_ROLES::DOCTOR)->with('staff.branch')->get()->toArray();
-        // dd($doctors[0]["staff"][0]["branch"]["name"]);
+        $doctors = User::select('id','name','lastname','dni','role_id')->whereRoleId(\HV_ROLES::DOCTOR)->with('staff.medicalSpeciality')->get()->toArray();
+        // dd($doctors[0]["staff"][0]["medicalSpeciality"]["name"]);
         // dd($doctors);
         return view('appointments.create')->with('user',$userLogin)
                                         // ->with('role',$rol_user)
@@ -140,7 +144,7 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Displays the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -152,7 +156,7 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Shows the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -175,7 +179,7 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Updates the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -204,15 +208,16 @@ class AppointmentController extends Controller
 
         if ($request->input('dateTimeOther'))
             $dt_appointment = $request->input('dateTimeOther');
-        if ($request->input('appointmentChecked'))
+        // if ($request->input('appointmentChecked'))
             $checked = $request->input('appointmentChecked');
-        if ($request->input('appointmentAccomplished'))
+        // if ($request->input('appointmentAccomplished'))
             $accomplished = $request->input('appointmentAccomplished');
         if ($request->input('doctorComments'))
             $comments = $request->input('doctorComments');
         if ($request->input('patientComments'))
             $user_comment = $request->input('patientComments');
 
+        // dd($request->input('appointmentChecked'));
         if (isset ($dt_appointment))
             $appointment->dt_appointment = $dt_appointment;
         if (isset ($checked))
@@ -225,7 +230,9 @@ class AppointmentController extends Controller
             $appointment->user_comment = $user_comment;
         $appointment->save();
 
-        return $this->index();
+        $message = \Lang::get('messages.appointment_updated_successfully');
+
+        return $this->index()->with('okMessage', $message);
     }
 
     /**
@@ -248,6 +255,10 @@ class AppointmentController extends Controller
         return $this->jsonResponse(0, \Lang::get('messages.the_appointment_which_date_is_on')." ".$spanishDate." ".\Lang::get('messages.has_been_deleted_succesfully'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function realDoctorSchedule(Request $request)
     {
 
@@ -343,6 +354,9 @@ class AppointmentController extends Controller
         }
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function calendar(){
 
         $userLogin = auth()->user();
@@ -369,13 +383,17 @@ class AppointmentController extends Controller
         return view('appointments.calendar')->with('appointments',$appointments)->with('rol_user',$rol_user);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showCalendar($id){
         // dd($id);
         $userLogin = auth()->user();
         $rol_user = $userLogin->role_id;
 
         $appointment = Appointment::find($id);
-        $especialidad = DB::select('SELECT branches.name FROM appointments INNER JOIN staff ON appointments.user_id_doctor = staff.user_id INNER JOIN branches ON staff.branch_id = branches.id WHERE appointments.user_id_doctor = '.$appointment->user_id_doctor.'');
+        $especialidad = DB::select('SELECT medical_specialities.name FROM appointments INNER JOIN staff ON appointments.user_id_doctor = staff.user_id INNER JOIN medical_specialities ON staff.medical_speciality_id = medical_specialities.id WHERE appointments.user_id_doctor = '.$appointment->user_id_doctor.'');
 
 
         $data = Appointment::select('appointments.*')->distinct()->where('id',"=",$id)
@@ -386,8 +404,8 @@ class AppointmentController extends Controller
         ->with(['userDoctor' => function ($query) {
             $query->select('id','name','lastname','dni','role_id', DB::Raw("CONCAT(name, ' ', lastname) AS doctorFullName"));
         }, 'userDoctor.staff' => function ($query) {
-            $query->select('id', 'user_id', 'branch_id');
-        }, 'userDoctor.staff.branch' => function ($query) {
+            $query->select('id', 'user_id', 'medical_speciality_id');
+        }, 'userDoctor.staff.medicalSpeciality' => function ($query) {
             $query->select('id', 'name', 'role_id');
         }])
         ->get()->toArray();
@@ -399,6 +417,9 @@ class AppointmentController extends Controller
         return view('appointments.showCalendar')->with('appointment',$appointment)->with('especialidad',$especialidad);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function listPending()
     {
         $usuarioLogin = auth()->user();
@@ -410,6 +431,9 @@ class AppointmentController extends Controller
 
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function listAccepted()
     {
         $usuarioLogin = auth()->user();
@@ -420,6 +444,9 @@ class AppointmentController extends Controller
         return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function listRejected()
     {
         $usuarioLogin = auth()->user();
@@ -430,6 +457,9 @@ class AppointmentController extends Controller
         return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function listOld()
     {
         $usuarioLogin = auth()->user();
@@ -440,7 +470,9 @@ class AppointmentController extends Controller
         return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
     }
 
-
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showAppointmentIcon(){
         $userLogin = auth()->user();
         $rol_user = $userLogin->role_id;
@@ -465,6 +497,9 @@ class AppointmentController extends Controller
         return view('appointments.icon', compact('nAppointments'));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showAppointmentsSummary(){
         $authUser = Auth::user();
         $rol_user = $authUser->role_id;
@@ -492,6 +527,10 @@ class AppointmentController extends Controller
         return view('appointments.summary', compact('data'));
     }
 
+    /**
+     * @param $appointment
+     * @param null $userAuthRole
+     */
     public function sendMailNewAppointment($appointment, $userAuthRole=null){
 
         $patientEmail = $appointment->userPatient->email;
@@ -504,6 +543,7 @@ class AppointmentController extends Controller
         // $doctortEmail = "pedroramonmm@gmail.com";
 
         $appointment = $appointment->toArray();
+        $currentLanguage = \Lang::locale();
 
         if ($appointment['user_patient']['id']){
             $res = \Mail::to($patientEmail)->send(new CreateAppointmentMail($appointment['id'], $appointment['dt_appointment'],
@@ -513,8 +553,15 @@ class AppointmentController extends Controller
             $res = \Mail::to($doctortEmail)->send(new CreateAppointmentMail($appointment['id'], $appointment['dt_appointment'],
              $appointment['user_patient'], $appointment['user_doctor'], $userAuthRole, (int)$appointmentUserCreatorRole, false));
         }
+        app()->setLocale($currentLanguage);
+
     }
 
+    /**
+     * @param $id
+     * @param null $checked
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function confirmChecked($id, $checked=null){
         $appointment = Appointment::find($id);
         $checkedText = ($checked == 1)? \Lang::get('messages.accept_stat') : (($checked == 2) ? (\Lang::get('messages.reject_stat')) : (""));
@@ -524,6 +571,11 @@ class AppointmentController extends Controller
         return view('appointments.confirm-checked', compact('appointment','checked','checkedText'));
     }
 
+    /**
+     * @param $id
+     * @param null $accomplished
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function confirmAccomplished($id, $accomplished=null){
         $appointment = Appointment::find($id);
         $accomplishedText = ($accomplished == 1)? \Lang::get('messages.appointment_completed'): (($accomplished == 2) ? (\Lang::get('messages.appointment_not_completed')) : (""));
@@ -533,16 +585,29 @@ class AppointmentController extends Controller
         return view('appointments.confirm-accomplished', compact('appointment','accomplished','accomplishedText'));
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function confirmDelete($id){
         $appointment = Appointment::find($id);
         return view('appointments.confirm-delete', compact('appointment'));
     }
 
+    /**
+     * @param $id
+     * @param null $checked
+     * @param false $mailable
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function setChecked($id, $checked=null, $mailable = false, Request $request) {
 
         if (($checked != 1) &&($checked != 2)){
             if ($mailable){
-                return view('appointments.index');
+                $appointments = Appointment::where('user_id_patient',"=",auth()->user()->id)->with('userPatient')->with('userDoctor')->get();
+                $appointmentType ="all";
+                return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());    
             }
             return $this->jsonResponse(1, \Lang::get('messages.there_was_an_error_on_the_checked_requirements'));
 
@@ -578,12 +643,28 @@ class AppointmentController extends Controller
         $messageAcRj = ($checked == 1)? \Lang::get('messages.accepted_stat') : (($checked == 2) ? (\Lang::get('messages.rejected_stat')) : (""));
 
         if ($mailable){
-            return view('appointments.index');
+            $appointments = Appointment::where('user_id_patient',"=",auth()->user()->id)->with('userPatient')->with('userDoctor')->get();
+            if ($checked == 1){
+                $appointmentType ="accepted";
+            }
+            else if ($checked == 2){
+                $appointmentType ="rejected";
+            }
+            else{
+                $appointmentType ="all";
+            }
+            return view('appointments.index')->with('appointmentType',$appointmentType)->with('appointments',$appointments->toArray());
+
         }
 
         return $this->jsonResponse(0,  \Lang::get('messages.the_appointment_with_the_date').$appointment->dt_appointment." ".\Lang::get('messages.has_been')." ".$messageAcRj." ".\Lang::get('messages.succesfully_stat'));
     }
 
+    /**
+     * @param $id
+     * @param null $accomplished
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function setAccomplished($id, $accomplished=null) {
         if (($accomplished != 1) &&($accomplished != 2)){
             return $this->jsonResponse(1, \Lang::get('messages.there_was_an_error_on_the_checked_requirements'));
@@ -599,6 +680,11 @@ class AppointmentController extends Controller
         return $this->jsonResponse(0,  \Lang::get('messages.the_appointment_with_the_date').$appointment->dt_appointment." ".\Lang::get('messages.has_been')." ".$messageAcRj." ".\Lang::get('messages.succesfully_stat'));
     }
 
+    /**
+     * @param Request $request
+     * @param string|null $appointmentType
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ajaxViewDatatable(Request $request, string $appointmentType=null) {
 
         if(!$request->wantsJson()) {

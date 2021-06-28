@@ -12,7 +12,9 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Staff;
 use App\Models\Role;
-use App\Models\Branch;
+use App\Models\MedicalSpeciality;
+use App\Models\Country;
+use App\Models\PhonePrefix;
 use Carbon\Carbon;
 use Flash;
 use Response;
@@ -111,6 +113,7 @@ class StaffController extends AppBaseController
             // return redirect(route('users.index'));
             return $this->backWithErrors(\Lang::get('messages.user_not_found'));
         }
+        $usuario->load('countries')->load('phonePrefixes.countries');
         $rol_usuario_info = "";
         // dd($usuario->toArray());
         if(($usuario->role_id == \HV_ROLES::DOCTOR) || $usuario->role_id == \HV_ROLES::HELPER){
@@ -123,8 +126,9 @@ class StaffController extends AppBaseController
             return $this->backWithErrors(\Lang::get('messages.invalid_id'));
         }
         $roles = Role::all();
-        $branches = Branch::all();
-        return view('staff.edit', compact('usuario', 'rol_usuario_info', 'roles', 'branches'));//->with('usuario',$usuario)->with('rol_usuario_info',$rol_usuario_info)->with('roles',$roles)->with('branches',$branches);
+        $medicalSpecialities = MedicalSpeciality::all();
+        $countries = Country::all();
+        return view('staff.edit', compact('usuario', 'rol_usuario_info', 'roles', 'medicalSpecialities','countries'));
     }
 
     /**
@@ -136,9 +140,13 @@ class StaffController extends AppBaseController
      */
     public function update(Request $request, int $id){
 
+        if ($request->input('user_id'))
+            $user_id = $request->input('user_id');
+
         $validatedData = parent::checkValidation([
             'role_id' => 'required|exists:App\Models\Role,id',
-            'email' => 'required|email:rfc,dns',
+            'dni' => 'required|min:9|max:9|unique:users,dni,'.$user_id,
+            'email' => 'required|string|email:rfc,dns|max:200|unique:users,email,'.$user_id,
             'name' => 'required',
             'lastname' => 'required',
             'zipcode' => 'numeric',
@@ -146,7 +154,7 @@ class StaffController extends AppBaseController
             'birthdate' => 'required|date',
             'sex' => 'required',
             'blood' => 'required',
-            'country' => 'string',
+            'country_id' => 'required|exists:App\Models\Country,id',
             'city' => 'string',
             'address' => 'string',
         ]);
@@ -164,7 +172,7 @@ class StaffController extends AppBaseController
         if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
             $mapValidation = parent::checkValidation([
                 'historic' => 'required',
-                'branch_id' => 'required|exists:App\Models\Branch,id',
+                'medical_speciality_id' => 'required|exists:App\Models\MedicalSpeciality,id',
                 'shift' => Rule::in(\SHIFTS::$types),
                 'office' => 'required|numeric',
                 'room' => 'required|numeric',
@@ -173,12 +181,112 @@ class StaffController extends AppBaseController
             $res = Staff::whereUserId($id)->update($mapValidation);
         }
 
-        $user_id = $request->input('user_id');
         $usuario = User::find($user_id);
 
         $validatedData = array_merge($mapValidation, $validatedData);
         // dd($validatedData);
-        $usuario->update($validatedData);
+        // $usuario->update($validatedData);
+        // dd($request->all());
+        if ($request->input('dni'))
+            $dni = $request->input('dni');
+
+        //Check valid DNI letter
+        if(!checkDni($dni)) {
+            return $this->backWithErrors(\Lang::get('messages.invalid_DNI_format'));
+        }
+
+        if ($request->input('email'))
+            $email = $request->input('email');
+        if ($request->input('name'))
+            $name = $request->input('name');
+        if ($request->input('lastname'))
+            $lastname = $request->input('lastname');
+        if ($request->input('address'))
+            $address = $request->input('address');
+
+        if ($request->input('country_id'))
+            $country_id = $request->input('country_id');
+        if ($request->input('city'))
+            $city = $request->input('city');
+        if ($request->input('zipcode'))
+            $zipcode = $request->input('zipcode');
+        if ($request->input('phone'))
+            $phone = $request->input('phone');
+        if ($request->input('birthdate'))
+            $birthdate = $request->input('birthdate');
+        if ($request->input('sex'))
+            $sex = $request->input('sex');
+        if ($request->input('blood'))
+            $blood = $request->input('blood');
+
+        if ($request->input('hiddenPhoneCode'))
+            $hiddenPhoneCode = $request->input('hiddenPhoneCode');
+        if ($request->input('hiddenCountryCodeLong'))
+            $hiddenCountryCodeLong = $request->input('hiddenCountryCodeLong');
+
+        if (isset ($email))
+            $usuario->email = $email;
+        if (isset ($dni))
+            $usuario->dni = $dni;
+        if (isset ($name))
+            $usuario->name = $name;
+        if (isset ($lastname))
+            $usuario->lastname = $lastname;
+        if (isset ($address))
+            $usuario->address = $address;
+
+        if (isset ($country_id))
+            $usuario->country_id = $country_id;
+        if (isset ($city))
+            $usuario->city = $city;
+        if (isset ($zipcode))
+            $usuario->zipcode = $zipcode;
+        if (isset ($phone))
+            $usuario->phone = $phone;
+        if (isset ($birthdate))
+            $usuario->birthdate = $birthdate;
+        if (isset ($sex))
+            $usuario->sex = $sex;
+        if (isset ($blood))
+            $usuario->blood = $blood;
+        if (isset ($hiddenPhoneCode)){
+            $code = substr($hiddenPhoneCode, 1);
+            // dd($code);
+            $phonePrefixId = PhonePrefix::where('prefix',$code)->value('id');
+            $usuario->phone_prefix_id = $phonePrefixId;
+            // dd($phonePrefixId);
+        }
+
+        $usuario->save();
+
+        if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
+            $staffId = Staff::where("user_id",$user_id)->value('id');
+            $staff = Staff::find($staffId);
+
+            if ($request->input('historic'))
+                $staffHistoric = $request->input('historic');
+            if ($request->input('medical_speciality_id'))
+                $medical_speciality_id = $request->input('medical_speciality_id');
+            if ($request->input('office'))
+                $office = $request->input('office');
+            if ($request->input('room'))
+                $room = $request->input('room');
+            if ($request->input('h_phone'))
+                $h_phone = $request->input('h_phone');
+
+            if (isset ($staffHistoric))
+                $staff->historic = $staffHistoric;
+            if (isset ($medical_speciality_id))
+                $staff->medical_speciality_id = $medical_speciality_id;
+            if (isset ($office))
+                $staff->office = $office;
+            if (isset ($room))
+                $staff->room = $room;
+            if (isset ($h_phone))
+                $staff->h_phone = $h_phone;
+
+            $staff->save();
+        }
 
         return view('staff.index')->with('okMessage', \Lang::get('messages.the_user').$usuario->name." ".$usuario->lastname." ".\Lang::get('messages.has_been_succesfully_edited'));
     }
@@ -279,7 +387,7 @@ class StaffController extends AppBaseController
             }
         }
 
-        $data = Staff::select('users.*','staff.*','roles.name AS role_name', 'branches.name AS branch_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('branches', 'staff.branch_id', 'branches.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
+        $data = Staff::select('users.*','staff.*','roles.name AS role_name', 'medical_specialities.name AS medical_speciality_name', 'staff.id AS staff_id', 'users.id AS users_id')->join('users', 'staff.user_id', 'users.id')->join('medical_specialities', 'staff.medical_speciality_id', 'medical_specialities.id')->join('roles', 'users.role_id', 'roles.id')->where("users.deleted_at",null);
 
         $numTotal = $numRecords = $data->count();
 
@@ -299,7 +407,7 @@ class StaffController extends AppBaseController
                 });
                 $numRecords = $data->count();
             }
-            // Search by name, surname, role, dni, sex, branch_name, office or room
+            // Search by name, surname, role, dni, sex, medical_speciality_name, office or room
             // elseif(preg_match("/\w{3,}\$/i", $searchPhrase)) {
             elseif(preg_match("/[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]{3,}\$/i", $searchPhrase)) {
 
@@ -309,8 +417,8 @@ class StaffController extends AppBaseController
                         ->orWhere('roles.name', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('dni', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('sex', 'like', '%' . $searchPhrase . '%')
-                        ->orWhere('branches.name', 'like', '%' . $searchPhrase . '%')
-                        // ->orWhere('shift', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('medical_specialities.name', 'like', '%' . $searchPhrase . '%')
+                        ->orWhere('shift', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('office', 'like', '%' . $searchPhrase . '%')
                         ->orWhere('room', 'like', '%' . $searchPhrase . '%');
                 });

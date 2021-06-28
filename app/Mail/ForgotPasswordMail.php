@@ -13,15 +13,17 @@ class ForgotPasswordMail extends Mailable
 
     private $token;
     private $name;
+    private $language;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $token, string $name)
+    public function __construct(string $token, string $name, string $language)
     {
         $this->token = $token;
         $this->name = $name;
+        $this->language = $language;
     }
 
     /**
@@ -31,7 +33,9 @@ class ForgotPasswordMail extends Mailable
      */
     public function build()
     {
+        // App::setLocale('es');
+        app()->setLocale($this->language);
         return $this->subject($this->name .", ".\Lang::get('messages.a_password_changed_has_been_requested_for_a_user_in')." ". config('app.name'))
-                    ->markdown('mail.forgot', ['token' => $this->token, 'name' => $this->name]);
+                    ->markdown('mail.forgot', ['token' => $this->token, 'name' => $this->name, 'language' => $this->language]);
     }
 }

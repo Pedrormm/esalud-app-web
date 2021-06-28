@@ -17,8 +17,8 @@
 
             <div class="card-body" id="mainCardBody">
               <div class="table-responsive">
-              <table class="table table-bordered" id="mainTableAllAppointments" width="100%" cellspacing="0">
-                  <thead >
+              <table class="table table-bordered changableTable" id="mainTableAllAppointments" width="100%" cellspacing="0">
+                  <thead>
                     <tr class="text-center">
                         @if (( auth()->user()->role_id) != \HV_ROLES::PATIENT)
                           <th class="bg-primary">@lang('messages.patient_type')</th>

@@ -35,7 +35,7 @@
 
                         {{-- Message composer --}}
                         <div class="cMessageComposer">
-                          <textarea placeholder=@lang('messages.write_a_message')></textarea>
+                          <textarea placeholder="@lang('messages.write_a_message')"></textarea>
                         </div>
                         {{-- --end Message composer --}}
                     </div>

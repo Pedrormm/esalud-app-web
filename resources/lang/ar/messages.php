@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'هل تريده حقًا؟',
     'user_id' => 'معرف المستخدم',
-    'Branch_stat' => 'فرع',
+    'medical_speciality' => 'فرع',
 
     'edit_treatment' => 'تحرير العلاج',
     'treatment_data' => 'بيانات العلاج',
@@ -616,6 +616,27 @@ return [
     'activate_spelling_checker' => 'تفعيل المدقق الإملائي',
     'activated' => 'مفعل',
     'desactivated_stat' => 'معاق',
+
+    'write_stat' => 'كتابة',
+    'incoming_call_coming_from' => 'مكالمة واردة من',
+    'would_you_like_to_accept_the_call' => 'هل تريد قبول المكالمة؟',
+    'percentage_stat' => 'نسبة مئوية',
+    'quantity_stat' => 'كمية',
+
+    'administration_mode_stat' => 'الادارة',
+    'appointment_updated_successfully' => 'تم تحديث الموعد الطبي بشكل صحيح',
+    'news_number' => 'عدد الأخبار المراد عرضها',
+    'spelling_checker' => 'تفعيل المصحح الأوتوماتيكي',
+    'helper_data' => 'مساعد البيانات',
+
+    'password_reset' => 'إعادة تعيين كلمة المرور',
+    'enter_the_new_password' => 'أدخل كلمة المرور الجديدة:',
+    'repeat_the_new_password' => 'كرر كلمة المرور الجديدة:',
+    'passwords_match' => 'كلمات السر متطابقة',
+    'passwords_do_not_match' => 'كلمة المرور غير مطابقة',
+    'the_password_must_be_at_least_6_characters_long' => 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل وحرف كبير واحد وحرف صغير واحد وحرف خاص واحد',
+
 
 
 ];

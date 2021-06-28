@@ -22,6 +22,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+          height: screen.height/1.4, 
 
           locale: getLanguageDtFormat(_lang),
 
@@ -82,6 +83,21 @@
         });
         calendar.render();
       });
+
+    // // add the responsive classes after page initialization
+    // window.onload = function () {
+    //     $('.fc-toolbar.fc-header-toolbar').addClass('row col-lg-12');
+    // };
+
+    // // add the responsive classes when navigating with calendar buttons
+    // $(document).on('click', '.fc-button', function(e) {
+    //     $('.fc-toolbar.fc-header-toolbar').addClass('row col-lg-12');
+    // });
+
+    // calendar.setOption('height', "100%");
+    // alert(calendar.getOption('locale'));
+
+
 
   </script>
 @endsection

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 use DB;
 use Illuminate\Database\Seeder;
-class BranchesTableSeeder extends Seeder
+class MedicalSpecialitiesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class BranchesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('branches')->insert(
+        DB::table('medical_specialities')->insert(
             [
                 [
                     'name'=>'Alergologia',

@@ -19,7 +19,7 @@ class StaffRepository extends BaseRepository
     protected $fieldSearchable = [
         'historic',
         'user_id',
-        'branch',
+        'medical_speciality_id',
         'shift',
         'office',
         'room',

@@ -13,6 +13,8 @@ defined("HV_ROLE_ASSIGNED_WHEN_DELETED") or define("HV_ROLE_ASSIGNED_WHEN_DELETE
 defined("HV_APP_TITLE_NAME") or define("HV_APP_TITLE_NAME",  "MI HOSPITAL V.");
 defined("HV_PAGINATION") or define("HV_PAGINATION", '10');
 defined("HV_IMAGE_MAX_SIZE") or define("HV_IMAGE_MAX_SIZE", '3000000');
+defined("HV_MIN_NEWS_NUMBER") or define("HV_MIN_NEWS_NUMBER", '1');
+defined("HV_MAX_NEWS_NUMBER") or define("HV_MAX_NEWS_NUMBER", '9');
 
 
 

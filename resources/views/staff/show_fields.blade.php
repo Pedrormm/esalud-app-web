@@ -10,10 +10,10 @@
     <p>{{ $staff->user_id }}</p>
 </div>
 
-<!-- Branch Field -->
+<!-- medicalSpeciality Field -->
 <div class="form-group">
-    {!! Form::label('branch', 'Branch:') !!}
-    <p>{{ $staff->branch }}</p>
+    {!! Form::label('medicalSpeciality', 'medicalSpeciality:') !!}
+    <p>{{ $staff->medicalSpeciality }}</p>
 </div>
 
 <!-- Shift Field -->

@@ -34,8 +34,9 @@ class LoginController extends Controller
     public function login(Request $request) {
         $remember = $request->has('remember') ? true : false;
         $validatedData = $request->validate([
-            'dni' => 'required|min:4|max:10|exists:users,dni',
-            'password' => 'required|min:6',
+            'dni' => 'min:4|max:10|exists:users,dni',
+            // 'email' => 'string|email:rfc,dns|max:200|unique:users',
+            'password' => 'required',
         ]);
         $credentials = $request->only('dni', 'password');
 
@@ -48,7 +49,7 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials, $remember)) {
-            // Autenticacion realizada...
+            // Authutentication succeded...
 
             $user = auth()->user();
 
@@ -56,6 +57,7 @@ class LoginController extends Controller
                 $user->password = Hash::make($request->password);
                 $user->save();
             }
+            Session::put('lang', $user->language);
 
             return redirect()->action('LoginController@index');
         }
@@ -94,9 +96,11 @@ class LoginController extends Controller
             // return redirect()->back()->with(['error' => \Lang::get('messages.the_email_or_DNI_provided_does_not_exist')]);
             return response()->json(['status' => 1, 'message' => \Lang::get('messages.the_email_or_DNI_provided_does_not_exist')]);
         }
+        $currentLanguage = \Lang::locale();
 
         $email = $contact[0]->email;
         $name = $contact[0]->name;
+        $language = $contact[0]->language;
         User::where('id',$contact[0]->id)->update(['remember_token'=>$token]);
         // Guardar en BD el token
 
@@ -105,8 +109,8 @@ class LoginController extends Controller
         //     $m->subject(urldecode($contact[0]->name)." ". urldecode($contact[0]->lastname).", it has been requested to reset your password");
         // });
 
-        $res = \Mail::to($email)->send(new ForgotPasswordMail($token, $name));
-
+        $res = \Mail::to($email)->send(new ForgotPasswordMail($token, $name, $language));
+        app()->setLocale($currentLanguage);
 
         // $res = Mail::to($contact[0]->email)->send(new InvitationNewUserMail($token, $contact[0]->name));
 
@@ -124,6 +128,12 @@ class LoginController extends Controller
         if ((empty($token)) || (count($user) == 0)){
             return redirect('/')->withError(\Lang::get('messages.invalid_route'));
         }
+        if ($user[0]){
+            $user = $user[0];
+            $language = $user->language;
+            app()->setLocale($language);        
+        }
+
         return view('mail.resetpassword', ['token' => $token]);
     }
 
@@ -136,14 +146,18 @@ class LoginController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function changePassword(Request $request){
-        $validatedData = checkValidation([
-            'password' => 'required|confirmed|min:6',
+        // dd($request->all());
+
+        # via Facade
+        $validator = Validator::make($request->all(), [
+            // 'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'password' => 'required|string|min:6|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W]).{6,}$/',
         ]);
-
-        if ($validatedData->fails()){
-            return redirect()->back()->withError($validatedData->messages()->first());
+        
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-
+        
         $pass = Hash::make($request->password);
 
         User::where('remember_token', $request->token)->update(['password'=>$pass]);
@@ -189,43 +203,50 @@ class LoginController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function setLanguage(string $lang="es") {
-        switch ($lang) {
-            case "es":
-                Session::put('lang', 'es');
-                break;
-            case "en":
-                Session::put('lang', 'en');
-                break;
-            case "it":
-                Session::put('lang', 'it');
-                break;
-            case "pt":
-                Session::put('lang', 'pt');
-                break;
-            case "fr":
-                Session::put('lang', 'fr');
-                break;
-            case "ro":
-                Session::put('lang', 'ro');
-                break;
-            case "de":
-                Session::put('lang', 'de');
-                break;
-            case "ar":
-                Session::put('lang', 'ar');
-                break;
-            case "ru":
-                Session::put('lang', 'ru');
-                break;
-            case "zh_CN":
-                Session::put('lang', 'zh_CN');
-                break;
-            case "ja":
-                Session::put('lang', 'ja');
-                break;
-            default:
-                Session::put('lang', 'es');
+
+        $userLogged = auth()->user();
+        if (isset ($lang)){
+            $userLogged->language = $lang;
+            $userLogged->save();
         }
+        Session::put('lang', $lang);
+        // switch ($lang) {
+        //     case "es":
+        //         Session::put('lang', 'es');
+        //         break;
+        //     case "en":
+        //         Session::put('lang', 'en');
+        //         break;
+        //     case "it":
+        //         Session::put('lang', 'it');
+        //         break;
+        //     case "pt":
+        //         Session::put('lang', 'pt');
+        //         break;
+        //     case "fr":
+        //         Session::put('lang', 'fr');
+        //         break;
+        //     case "ro":
+        //         Session::put('lang', 'ro');
+        //         break;
+        //     case "de":
+        //         Session::put('lang', 'de');
+        //         break;
+        //     case "ar":
+        //         Session::put('lang', 'ar');
+        //         break;
+        //     case "ru":
+        //         Session::put('lang', 'ru');
+        //         break;
+        //     case "zh_CN":
+        //         Session::put('lang', 'zh_CN');
+        //         break;
+        //     case "ja":
+        //         Session::put('lang', 'ja');
+        //         break;
+        //     default:
+        //         Session::put('lang', 'es');
+        // }
 
         return back();
     }

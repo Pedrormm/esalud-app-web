@@ -47,43 +47,58 @@
                 @csrf
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h3>@lang('messages.treatment_data') @lang('messages.of_the_user') {{ $selectedUser["name"] ." ".$selectedUser["lastname"]}}</h3>
+                        <h3>@lang('messages.treatment_data') @lang('messages.of_the_user') 
+                            {{ $selectedUser["name"] ." ".$selectedUser["lastname"]}}
+                        </h3>
                     </div>
                 </div>
                
                 <div class="row mb-3">
-                    {{-- <input type="hidden" value="{{ $selectedUser["id"] }}" name="user_id" /> --}}
                     <div class="col-lg-4">
-                        <select name="doctor_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.doctor_type')>
-                            @foreach ($doctors as $doctor)
-                                <option value={{ $doctor->id }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
-                            @endforeach
-                        </select> 
+                        <div class="form-group">
+                            <label for="doctorId">@lang('messages.doctor_type')</label>
+                            <select id="doctorId" name="doctor_id" required class="selectpicker show-tick form-control" data-width="100%" 
+                            data-live-search="true" title="@lang('messages.doctor_type')">
+                                @foreach ($doctors as $doctor)
+                                    <option value={{ $doctor->id }}>{{ $doctor->name . " " . $doctor->lastname }}</option>
+                                @endforeach
+                            </select> 
+                        </div>
                     </div>
 
                     <div class="col-lg-4">
-                        <select name="type_medicines_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.type_of_medicine')>
-                            @foreach ($typeMedicines as $typeMedicine)
-                                <option value={{ $typeMedicine->id }} >{{ $typeMedicine->name }}</option>
-                            @endforeach
-                        </select> 
+                        <div class="form-group">
+                            <label for="typeMedicinesId">@lang('messages.type_of_medicine')</label>
+                            <select id="typeMedicinesId" name="type_medicines_id" required class="selectpicker show-tick form-control" 
+                            data-width="100%" data-live-search="true" title="@lang('messages.type_of_medicine')">
+                                @foreach ($typeMedicines as $typeMedicine)
+                                    <option value={{ $typeMedicine->id }} >{{ $typeMedicine->name }}</option>
+                                @endforeach
+                            </select> 
+                        </div>
                     </div>
 
                     <div class="col-lg-4">
-                        <select name="medicines_administration_id" required class="selectpicker show-tick selectCurrentRole form-control" data-width="100%" 
-                            data-live-search="true" title=@lang('messages.medicine_administration')>
-                            @foreach ($medicinesAdministration as $medicineAdministration)
-                                <option value={{ $medicineAdministration->id }}>{{ $medicineAdministration->name }}</option>
-                            @endforeach
-                        </select> 
+                        <div class="form-group">
+                            <label for="medicinesAdministrationId">@lang('messages.medicine_administration')</label>
+                            <select id="medicinesAdministrationId" name="medicines_administration_id" required 
+                            class="selectpicker show-tick form-control" data-width="100%" 
+                            data-live-search="true" title="@lang('messages.medicine_administration')">
+                                @foreach ($medicinesAdministration as $medicineAdministration)
+                                    <option value={{ $medicineAdministration->id }}>{{ $medicineAdministration->name }}</option>
+                                @endforeach
+                            </select> 
+                        </div>
                     </div>
-                </div>
+                </div> 
 
                 <div class="row mb-3 d-flex justify-content-center">
-                    <div class="col-lg-11">
-                        <textarea class="form-control" id="treatmentDescription" rows="3" placeholder=@lang('messages.description_stat') name="description"></textarea>
+                    <div class="col-lg-11 mx-auto">
+                        <div class="form-group">
+                            <label for="treatmentDescription">@lang('messages.description_stat')</label>
+                            <textarea class="form-control mx-auto" id="treatmentDescription" rows="3" 
+                            placeholder="@lang('messages.description_stat')" name="description"></textarea>
+                        </div>
                     </div>
                 </div>
 
@@ -100,7 +115,9 @@
 
                 <div class="row mt-3" id="createTreatmentButton">
                     <div class="col-lg-12 text-center">
-                        <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-plus-circle"></i> @lang('messages.create_stat')</button>
+                        <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-plus-circle"></i> 
+                            @lang('messages.create_stat')
+                        </button>
                     </div>
                 </div>
 

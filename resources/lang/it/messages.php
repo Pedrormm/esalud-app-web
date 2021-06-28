@@ -556,7 +556,7 @@ return [
 
     'are_you_sure' => 'Lo vuoi davvero?',
     'user_id' => 'ID utente',
-    'branch_stat' => 'Ramo',
+    'medical_speciality' => 'Ramo',
 
     'edit_treatment' => 'Modifica trattamento',
     'treatment_data' => 'Dati del trattamento',
@@ -615,6 +615,24 @@ return [
     'attivato' => 'attivato',
     'disattivato' => 'disattivato',
 
+    'write_stat' => 'Scrivi',
+    'incoming_call_coming_from' => 'Chiamata in arrivo da',
+    'would_you_like_to_accept_the_call' => 'Vuoi accettare la chiamata?',
+    'percentage_stat' => 'Percentuale',
+    'quantity_stat' => 'Quantità',
 
+    'administration_mode_stat' => 'Amministrazione',
+    'appointment_updated_successfully' => 'L appuntamento medico è stato aggiornato con successo',
+    'news_number' => 'Numero di notizie da mostrare',
+    'spelling_checker' => 'Attivazione correttore automatico',
+    'helper_data' => 'Dati di aiuto',
+
+    'password_reset' => 'Reimposta password',
+    'enter_the_new_password' => 'Inserisci la nuova password:',
+    'repeat_the_new_password' => 'Ripeti nuova password:',
+    'passwords_match' => 'Corrispondenza password',
+    'passwords_do_not_match' => 'Le password non corrispondono',
+    'the_password_must_be_at_least_6_characters_long' => 'La password deve essere lunga almeno 6 caratteri',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'La password deve contenere almeno un numero, una lettera maiuscola, una lettera minuscola e un carattere speciale',
 
 ];

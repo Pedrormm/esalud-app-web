@@ -9,7 +9,9 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Patient;
 use App\Models\Staff;
-use App\Models\Branch;
+use App\Models\MedicalSpeciality;
+use App\Models\Country;
+use App\Models\PhonePrefix;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -24,11 +26,15 @@ class SettingController extends Controller
      */
     public function index(int $id=null) {
         $roles = Role::all();
-        $branches = Branch::all();
+        $medicalSpecialities = MedicalSpeciality::all();
         $userLogin = auth()->user();
+        $userLogin->load('countries')->load('phonePrefixes.countries');
+        // dd($userLogin->toArray()); 
+
         if (!$id)
             $id = $userLogin->id;
         $rol_usuario_info = "";
+        $countries = Country::all();
 
         if($userLogin->role_id == \HV_ROLES::PATIENT){
             $rol_usuario_info = Patient::whereUserId($id)->first();
@@ -41,7 +47,8 @@ class SettingController extends Controller
         if(!$rol_usuario_info) {
             return $this->backWithErrors("UsMaCoEd001: ".\Lang::get('messages.invalid_id'));
         }
-        return view('settings/index', compact('userLogin', 'rol_usuario_info', 'roles', 'branches'));
+        
+        return view('settings/index', compact('userLogin', 'rol_usuario_info', 'roles', 'medicalSpecialities','countries'));
     }
 
     /**
@@ -50,52 +57,215 @@ class SettingController extends Controller
      */
     public function update(Request $request) {
         //  dd($request->all());
-        $validatedData = parent::checkValidation([
-            'role_id' => 'required|exists:App\Models\Role,id',
-            'email' => 'required|email:rfc,dns',
-            'name' => 'required',
-            'lastname' => 'required',
-            'zipcode' => 'numeric',
-            'phone' => 'required',
-            'birthdate' => 'required|date',
-            'sex' => 'required',
-            'blood' => 'required',
-            'country' => 'string',
-            'city' => 'string',
-            'address' => 'string',
-            'avatar' => 'file',
-            'news_number' => 'integer|min:1|max:9',
-            'has_spelling_checker' => 'integer',
-        ]);
-        $token = $request->input('token');
-        $mapValidation=[];
+        if ($request->input('user_id'))
+            $user_id = $request->input('user_id');
+
+        # via Facade
         if ($request->input('role_id')==\HV_ROLES::PATIENT){
-            $mapValidation = parent::checkValidation([
+            $validator = Validator::make($request->all(), [
+                'role_id' => 'required|exists:App\Models\Role,id',
+                'dni' => 'required|min:9|max:9|unique:users,dni,'.$user_id,
+                'email' => 'required|string|email:rfc,dns|max:200|unique:users,email,'.$user_id,
+                'name' => 'required',
+                'lastname' => 'required',
+                'zipcode' => 'numeric',
+                'phone' => 'required',
+                'birthdate' => 'required|date',
+                'sex' => 'required',
+                'blood' => 'required',
+                'country_id' => 'required|exists:App\Models\Country,id',
+                'city' => 'string',
+                'address' => 'string',
+                'avatar' => 'file',
+                'news_number' => 'integer|min:1|max:9',
+                'has_spelling_checker' => 'integer',
                 'historic' => 'required',
                 'height' => 'required|numeric',
                 'weight' => 'required|numeric',
             ]);
-
-            $res = Patient::whereUserId($id)->update($mapValidation);
         }
-        if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
-            $mapValidation = parent::checkValidation([
+        else if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
+            $validator = Validator::make($request->all(), [
+                'role_id' => 'required|exists:App\Models\Role,id',
+                'dni' => 'required|min:9|max:9|unique:users,dni,'.$user_id,
+                'email' => 'required|string|email:rfc,dns|max:200|unique:users,email,'.$user_id,
+                'name' => 'required',
+                'lastname' => 'required',
+                'zipcode' => 'numeric',
+                'phone' => 'required',
+                'birthdate' => 'required|date',
+                'sex' => 'required',
+                'blood' => 'required',
+                'country_id' => 'required|exists:App\Models\Country,id',
+                'city' => 'string',
+                'address' => 'string',
+                'avatar' => 'file',
+                'news_number' => 'integer|min:1|max:9',
+                'has_spelling_checker' => 'integer',
                 'historic' => 'required',
-                'branch_id' => 'required|exists:App\Models\Branch,id',
-                'shift' => Rule::in(\SHIFTS::$types),
+                'medical_speciality_id' => 'required|exists:App\Models\MedicalSpeciality,id',
+                // 'shift' => Rule::in(\SHIFTS::$types),
                 'office' => 'required|numeric',
                 'room' => 'required|numeric',
                 'h_phone' => 'required|numeric',
             ]);
-            $res = Staff::whereUserId($id)->update($mapValidation);
+        }
+        else{
+            $validator = Validator::make($request->all(), [
+                'role_id' => 'required|exists:App\Models\Role,id',
+                'dni' => 'required|min:9|max:9|unique:users,dni,'.$user_id,
+                'email' => 'required|string|email:rfc,dns|max:200|unique:users,email,'.$user_id,
+                'name' => 'required',
+                'lastname' => 'required',
+                'zipcode' => 'numeric',
+                'phone' => 'required',
+                'birthdate' => 'required|date',
+                'sex' => 'required',
+                'blood' => 'required',
+                'country_id' => 'required|exists:App\Models\Country,id',
+                'city' => 'string',
+                'address' => 'string',
+                'avatar' => 'file',
+                'news_number' => 'integer|min:1|max:9',
+                'has_spelling_checker' => 'integer',
+            ]);
+        }
+        
+        if ($validator->fails()) {
+            $errors = implode("\n",$validator->errors()->all());
+            return $this->jsonResponse(1, $errors);
         }
 
-        $user_id = $request->input('user_id');
+
         $usuario = User::find($user_id);
 
-        $validatedData = array_merge($mapValidation, $validatedData);
         // dd(request()->all());
-        $usuario->update($validatedData);
+
+        if ($request->input('dni'))
+            $dni = $request->input('dni');
+
+        //Check valid DNI letter
+        if(!checkDni($dni)) {
+            return $this->backWithErrors(\Lang::get('messages.invalid_DNI_format'));
+        }
+
+        if ($request->input('email'))
+            $email = $request->input('email');
+        if ($request->input('name'))
+            $name = $request->input('name');
+        if ($request->input('lastname'))
+            $lastname = $request->input('lastname');
+        if ($request->input('address'))
+            $address = $request->input('address');
+
+        if ($request->input('country_id'))
+            $country_id = $request->input('country_id');
+        if ($request->input('city'))
+            $city = $request->input('city');
+        if ($request->input('zipcode'))
+            $zipcode = $request->input('zipcode');
+        if ($request->input('phone'))
+            $phone = $request->input('phone');
+        if ($request->input('birthdate'))
+            $birthdate = $request->input('birthdate');
+        if ($request->input('sex'))
+            $sex = $request->input('sex');
+        if ($request->input('blood'))
+            $blood = $request->input('blood');
+
+        if ($request->input('hiddenPhoneCode'))
+            $hiddenPhoneCode = $request->input('hiddenPhoneCode');
+        if ($request->input('hiddenCountryCodeLong'))
+            $hiddenCountryCodeLong = $request->input('hiddenCountryCodeLong');
+
+        if (isset ($email))
+            $usuario->email = $email;
+        if (isset ($dni))
+            $usuario->dni = $dni;
+        if (isset ($name))
+            $usuario->name = $name;
+        if (isset ($lastname))
+            $usuario->lastname = $lastname;
+        if (isset ($address))
+            $usuario->address = $address;
+
+        if (isset ($country_id))
+            $usuario->country_id = $country_id;
+        if (isset ($city))
+            $usuario->city = $city;
+        if (isset ($zipcode))
+            $usuario->zipcode = $zipcode;
+        if (isset ($phone))
+            $usuario->phone = $phone;
+        if (isset ($birthdate))
+            $usuario->birthdate = $birthdate;
+        if (isset ($sex))
+            $usuario->sex = $sex;
+        if (isset ($blood))
+            $usuario->blood = $blood;
+        if (isset ($hiddenPhoneCode)){
+            $code = substr($hiddenPhoneCode, 1);
+            // dd($code);
+            $phonePrefixId = PhonePrefix::where('prefix',$code)->value('id');
+            $usuario->phone_prefix_id = $phonePrefixId;
+            // dd($phonePrefixId);
+        }
+
+        $usuario->save();
+
+
+
+        if ($request->input('role_id')==\HV_ROLES::PATIENT){
+            $patientId = Patient::where("user_id",$user_id)->value('id');
+            $patient = Patient::find($patientId);
+
+            if ($request->input('historic'))
+                $patientHistoric = $request->input('historic');
+            if ($request->input('height'))
+                $height = $request->input('height');
+            if ($request->input('weight'))
+                $weight = $request->input('weight');
+
+            if (isset ($patientHistoric))
+                $patient->historic = $patientHistoric;
+            if (isset ($height))
+                $patient->height = $height;
+            if (isset ($weight))
+                $patient->weight = $weight;
+
+            $patient->save();
+        }
+
+        if (($request->input('role_id')==\HV_ROLES::DOCTOR) || ($request->input('role_id')==\HV_ROLES::HELPER))  {
+            $staffId = Patient::where("user_id",$user_id)->value('id');
+            $staff = Staff::find($staffId);
+
+            if ($request->input('historic'))
+                $staffHistoric = $request->input('historic');
+            if ($request->input('medical_speciality_id'))
+                $medical_speciality_id = $request->input('medical_speciality_id');
+            if ($request->input('office'))
+                $office = $request->input('office');
+            if ($request->input('room'))
+                $room = $request->input('room');
+            if ($request->input('h_phone'))
+                $h_phone = $request->input('h_phone');
+
+            if (isset ($staffHistoric))
+                $staff->historic = $staffHistoric;
+            if (isset ($medical_speciality_id))
+                $staff->medical_speciality_id = $medical_speciality_id;
+            if (isset ($office))
+                $staff->office = $office;
+            if (isset ($room))
+                $staff->room = $room;
+            if (isset ($h_phone))
+                $staff->h_phone = $h_phone;
+
+            $staff->save();
+        }
+
+
 
         if (($request->news_number) || ($request->has_spelling_checker)){
             $specialFieldsUser = User::find($user_id);
@@ -229,7 +399,7 @@ class SettingController extends Controller
             return $this->jsonResponse(0, "",$destFile);
         }
         else{
-            return back()->withErrors([\Lang::get('messages.permission_denied')]);
+                return back()->withErrors([\Lang::get('messages.permission_denied')]);
         }
 
     }

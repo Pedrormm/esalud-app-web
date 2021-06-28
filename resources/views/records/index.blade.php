@@ -1,5 +1,4 @@
-{{-- @extends('layout.logged', ['flagsMenuEnabled' =>  $flagsMenuEnabled]); --}}
-@extends('layout.logged');
+@extends('layout.logged')
 
 @section('nav-bar-top')
 
@@ -42,7 +41,7 @@
 							</select>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 d-inline-block">
-							<input type="text" placeholder=@lang('messages.name_surname_historial_or_DNI') 
+							<input type="text" placeholder="@lang('messages.name_surname_historial_or_DNI')" 
 							class="inp_search filter_height" name="record_search_filter" id="record_search_filter">
 						</div>
 						<div class="col-lg-2 d-inline-block">

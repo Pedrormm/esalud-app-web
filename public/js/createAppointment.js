@@ -42,6 +42,8 @@
 
 
     $('#showAppointmentsButton').on("click",function(e){
+        $('.hv-time-selection').removeClass("hv-time-selected");
+        active = false;
         
         if (!$myForm[0].checkValidity()) {
             // Invalid
@@ -101,7 +103,12 @@
             contenttype: "application/json; charset=utf-8",
         }).done(function(response){
             // console.log("resp ", response);
-            showInlineMessage(response.message, 30);
+            if(response.status == 0) {
+                showInlineMessage(response.message, 20);
+            }
+            else {
+                showInlineError(response.status, response.message, 10);
+            }
             // console.log("app ",response.obj);
             $('.hv-time-selection').removeClass("hv-time-selected");
             active = false;

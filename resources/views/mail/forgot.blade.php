@@ -1,7 +1,7 @@
 @component('mail::message')
 # @lang('messages.password_change')
 
-@lang('messages.hello_data') {{ $name }}, @lang('messages.a_password_change_has_been_requested')
+@lang('messages.hello_data') {{ $name }}, @lang('messages.a_password_change_has_been_requested')<br>
 @lang('messages.please_click_on_the_following_link_if_you_want_to_change_your_password')
 
 @component('mail::button', ['url' => URL::asset('password/reset/' . $token)])

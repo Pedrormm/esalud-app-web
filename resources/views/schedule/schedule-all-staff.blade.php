@@ -62,7 +62,7 @@
                 data: 'role_name',            
             },
             {
-                data: 'branch_name',
+                data: 'medical_speciality_name',
             },
             {
                 data: 'birthdate',

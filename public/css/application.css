@@ -71,6 +71,26 @@ body {
 ========================================================================== */
 
 
+#phone-label{
+  display: inherit !important;
+}
+
+#valid-msg, #error-msg{
+  display: block;
+}
+
+#smsPhone, .iti--allow-dropdown{
+  width: 100% !important;
+}
+
+.field-icon {
+  float: right;
+  margin-left: -25px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 2;
+}
+
 
 .video-snap {
   /* width: 130px; */

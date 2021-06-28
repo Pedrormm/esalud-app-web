@@ -1,22 +1,22 @@
 
 document.addEventListener("click", function(){
     assignHeadersToRowsResponsive();
-    $("#mediaTableCss").attr('href', _publicUrl + "css/media-table.css");
+    // $("#mediaTableCss").attr('href', _publicUrl + "css/media-table.css");
 
-    $(document).ajaxComplete(function(){
-        $("#mediaTableCss").attr("href", _publicUrl + "css/roleEdit.css");
-    });
+    // $(document).ajaxComplete(function(){
+    //     $("#mediaTableCss").attr("href", _publicUrl + "css/roleEdit.css");
+    // });
 
-    if (isABootstrapModalOpen()){
-        // $("#mediaTableCss").remove();
-        $("#mediaTableCss").attr("href", _publicUrl + "css/roleEdit.css");
-    }
+    // if (isABootstrapModalOpen()){
+    //     // $("#mediaTableCss").remove();
+    //     $("#mediaTableCss").attr("href", _publicUrl + "css/roleEdit.css");
+    // }
 
   });
 
-$(document).on( 'draw.dt', function ( e, settings ) {
-    assignHeadersToRowsResponsive();
-} );
+// $(document).on( 'draw.dt', function ( e, settings ) {
+//     assignHeadersToRowsResponsive();
+// } );
 
 // On load jquery
 $(function() {
@@ -75,7 +75,9 @@ $(function() {
             },
         });
     }
-    // assignHeadersToRowsResponsive();
+    setTimeout(function() {
+        assignHeadersToRowsResponsive();
+    }, 800);
     // $(".sidebar").toggleClass("toggled");
     /*console.log("click on sidebartoggletop");
     $('#sidebarToggleTop').click();
@@ -269,12 +271,13 @@ function saveModalActionAjax(url, data={}, method='PUT', type='json', callbackOk
  * @param {number} [timeout=0] - 0 for no disappearing | >0 for seconds to disappear
  * @returns {void} Nothing
  */
-function showInlineError(status,message, timeout=0, modal=false) {
+function showInlineError(status=1,message, timeout=0, modal=false) {
     let containerNameError = '#error-container';
     if (modal){
         containerNameError = '#error-container-modal';
     }
     $(containerNameError).show().text(message);
+    
     if(timeout>0) {
         setTimeout(function() {
             $(containerNameError).hide(500);
@@ -824,7 +827,7 @@ function getDocHeight() {
  * @returns {void} Nothing
  */
 function chatPusherInit(isChat = true) {
-    console.log("llamada chatPusherInit",chatPusherInit.caller);
+    // console.log("llamada chatPusherInit",chatPusherInit.caller);
     Pusher.logToConsole = false;
 
     // console.log("antes", _publicUrl);
@@ -1069,11 +1072,11 @@ function assignHeadersToRowsResponsive(){
     if (isMobile()){
 
         //Assign class to each header
-        $('th').each(function() {
+        $('.changableTable th').each(function() {
             $(this).addClass('header-' + $(this).index());
         });
         //Assign a data-header attribute with the text from the corresponding header
-        $('td').each(function() {
+        $('.changableTable td').each(function() {
             $(this).attr('data-header', $('.header-' + $(this).index()).text());
         });
         // $('#mainCardShadow').removeClass(['card','shadow']);

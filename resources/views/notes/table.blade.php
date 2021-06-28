@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table" id="notes-table">
+    <table class="table changableTable" id="notes-table">
         <thead>
             <tr>
                 <th>User Id</th>

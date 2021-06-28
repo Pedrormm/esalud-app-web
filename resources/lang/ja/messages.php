@@ -346,7 +346,7 @@ return [
     'a_password_change_has_been_requested' => 'パスワードの変更が要求されました。',
     'password_change' => 'パスワード変更',
     'please_click_on_the_following_link_if_you_want_to_change_your_password' => 'パスワードを変更する場合は,次のリンクをクリックしてください',
-    'Create_new_password' => '新しいパスワード',
+    'create_new_password' => '新しいパスワード',
     'new_appointment' => '新しい医療予約',
     'please_click_on_the_following_link_to_view_or_edit_your_medical_appointment' => '次のリンクをクリックして,医療予約を表示または編集してください',
     'view_or_edit_appointment' => '予定を表示または編集する',
@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => '本当に欲しいですか？',
     'user_id' => 'ユーザーID',
-    'branch_stat' => 'ブランチ',
+    'medical_speciality' => 'ブランチ',
 
     'edit_treatment' => '治療の編集',
     'treatment_data' => '治療データ',
@@ -615,7 +615,27 @@ return [
     'number_of_news_displayed' => '表示されるニュースの数',
     'activate_spelling_checker' => 'スペルチェッカーを有効にする',
     'activated' => '「アクティブ化」',
-    'desactivated_stat' => '非アクティブ化',   
+    'desactivated_stat' => '非アクティブ化',  
+    
+    'write_stat' => '書き込み',
+    'incoming_call_coming_from' => 'からの着信',
+    'would_you_like_to_accept_the_call' => '電話に出ますか?',
+    'percentage_stat' => 'パーセント',
+    'quantity_stat' => '数量',
+
+    'administration_mode_stat' => '管理',
+    'appointment_updated_successfully' => '医療予約は正常に更新されました',
+    'news_number' => '表示するニュースの数',
+    'spelling_checker' => '自動チェッカーアクティベーション',
+    'helper_data' => 'ヘルパーデータ',
+
+    'password_reset' => 'パスワードリセット',
+    'enter_the_new_password' => '新しいパスワードを入力してください：',
+    'repeat_the_new_password' => '新しいパスワードを繰り返します：',
+    'passwords_match' => 'パスワードが一致します',
+    'passwords_do_not_match' => 'パスワードが一致しません',
+    'the_password_must_be_at_least_6_characters_long' => 'パスワードは6文字以上である必要があります',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'パスワードには、少なくとも1つの数字、1つの大文字、1つの小文字、および1つの特殊文字が必要です',
 
 
 ];

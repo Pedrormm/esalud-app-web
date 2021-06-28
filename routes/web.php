@@ -32,6 +32,9 @@ Route::group(['middleware' => ['setLocale']], function () {
     Route::post('/passwordChanged', 'LoginController@changePassword');
     Route::get('isPasswordForgotten', 'LoginController@isPasswordForgotten');
 
+    Route::get('user/createUserFromMail/{token?}', 'UsersManagementController@createUserFromMail');
+    Route::post('user/createNewUser', 'UsersManagementController@createNewUser');
+
 });
 
 Route::group(['middleware' => ['isLogged','setLocale', 'checkUserRole','checkPermissionRoutes']], function () {
@@ -56,8 +59,6 @@ Route::group(['middleware' => ['isLogged','setLocale', 'checkUserRole','checkPer
     // User creation routes
     Route::get('user/newUser', 'UsersManagementController@newUser');
     Route::post('user/create', 'UsersManagementController@create');
-    Route::get('user/createUserFromMail/{token?}', 'UsersManagementController@createUserFromMail');
-    Route::post('user/createNewUser', 'UsersManagementController@createNewUser');
 
     // User routes
     Route::get('users/{id}/confirmDelete', 'UserController@confirmDelete');

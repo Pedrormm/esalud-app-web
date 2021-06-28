@@ -3,7 +3,7 @@
     </div> --}}
 
 
-{{-- <table class="table table-hover">
+{{-- <table class="table table-hover changableTable">
     <thead>
         <tr>
             <th>Num.</th>

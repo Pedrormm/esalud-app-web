@@ -43,7 +43,7 @@
 
         <div class="card-body" id="mainCardBody">
           <div class="table-responsive">
-          <table class="table table-bordered" id="mainTableStaff" width="100%" cellspacing="0">
+          <table class="table table-bordered changableTable" id="mainTableStaff" width="100%" cellspacing="0">
               <thead>
                 <tr class="text-center">
                     <th class="bg-primary">@lang('messages.lastnamesurnamecoma_and_name')</th>

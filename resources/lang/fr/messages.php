@@ -558,7 +558,7 @@ return [
 
     'are_you_sure' => 'Le voulez-vous vraiment ?',
     'user_id' => 'Identifiant',
-    'branch_stat' => 'Branche',
+    'medical_speciality' => 'Branche',
 
     'edit_treatment' => 'Modifier le traitement',
     'treatment_data' => 'Données de traitement',
@@ -615,7 +615,27 @@ return [
     'number_of_news_displayed' => 'Nombre de news à afficher',
     'activate_spelling_checker' => 'Activer le correcteur orthographique',
     'activated' => 'Activé',
-    'desactivated_stat' => 'Deactivated',
+    'desactivated_stat' => 'désactivée',
+
+    'write_stat' => 'Ecrire',
+    'incoming_call_coming_from' => 'Appel entrant de',
+    'would_you_like_to_accept_the_call' => 'Voulez-vous accepter l appel ?',
+    'percentage_stat' => 'Pourcentage',
+    'quantity_stat' => 'Quantité',
+
+    'administration_mode_stat' => 'Administration',
+    'appointment_updated_successfully' => 'Le rendez-vous médical a été mis à jour avec succès',
+    'news_number' => 'Nombre d actualités à afficher',
+    'spelling_checker' => 'Activation automatique du vérificateur',
+    'helper_data' => 'Données d aide',
+
+    'password_reset' => 'Réinitialisation du mot de passe',
+    'enter_the_new_password' => 'Entrez le nouveau mot de passe :',
+    'repeat_the_new_password' => 'Répéter le nouveau mot de passe :',
+    'passwords_match' => 'Correspondance des mots de passe',
+    'passwords_do_not_match' => 'Les mots de passe ne correspondent pas',
+    'the_password_must_be_at_least_6_characters_long' => 'Le mot de passe doit comporter au moins 6 caractères',
+    'the_password_must_contain_at_least_one_number_lowercase_uppercase_special_character' => 'Le mot de passe doit comporter au moins un chiffre, une majuscule, une minuscule et un caractère spécial',
 
 
 ] ;
