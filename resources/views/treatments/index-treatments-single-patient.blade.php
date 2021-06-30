@@ -19,7 +19,7 @@
                   <i class="fas fa-arrow-left"></i>
               </button>
             </div>
-            <h4 class="font-weight-bold text-primary centered"> @lang('messages.list_of_treatments_of_pacient')  {{ $singlePatient->name . " " . $singlePatient->lastname }}</h4>
+            <h4 class="font-weight-bold text-primary centered" id="treatmentsList"> @lang('messages.list_of_treatments_of_pacient')  {{ $singlePatient->name . " " . $singlePatient->lastname }}</h4>
           </div>
 
           {{-- <h4 class="m-0 font-weight-bold text-primary text-center">Listado de tratamientos del paciente {{ $singlePatientFullName }}</h4> --}}

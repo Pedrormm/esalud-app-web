@@ -33,12 +33,41 @@ class LoginController extends Controller
      */
     public function login(Request $request) {
         $remember = $request->has('remember') ? true : false;
-        $validatedData = $request->validate([
-            'dni' => 'min:4|max:10|exists:users,dni',
-            // 'email' => 'string|email:rfc,dns|max:200|unique:users',
-            'password' => 'required',
-        ]);
-        $credentials = $request->only('dni', 'password');
+        if(!$request->has('dni')) {
+            return back()->withErrors(\Lang::get('messages.authentication_failed'));
+        }
+        $rules = array();
+        $rules['password'] = 'required';
+        if(filter_var($request->dni, FILTER_VALIDATE_EMAIL)) {
+            $rules['dni'] = 'required|email:rfc,dns|max:200';
+            $isEmail = true;
+        }
+        else {
+            $rules['dni'] = 'required';
+            $isEmail = false;
+        }
+        $validatedData = $request->validate($rules);
+        // $validatedData = $request->validate([
+        //     // 'dni' => 'min:4|max:10|exists:users,dni',
+        //     'dni' => 'nullable|required_without:email',
+        //     'email' => 'nullable|required_without:dni|email:rfc,dns|max:200',
+        //     'password' => 'required',
+        // ]);
+        if($isEmail) {
+            //Todo saco el dini del usuario
+            $dni = User::whereEmail($request->dni)->value('dni');
+            if(is_null($dni)) {
+                return back()->withErrors(\Lang::get('messages.authentication_failed'));
+            }
+            $credentials = [
+                'dni' => $dni,
+                'password' => $request->password
+            ];
+        }
+        else {
+            $credentials = $request->only('dni', 'password');
+        }
+        
 
         if($remember){
             \Cookie::queue('credencialesDni', $request->dni, 10080);
@@ -70,7 +99,12 @@ class LoginController extends Controller
      */
     public function loginForgotten(Request $request) {
         $login = $request->rem_password;
-        $user = User::where('dni', $login)->first();
+       
+        if(filter_var($login, FILTER_VALIDATE_EMAIL)) 
+            $user = User::whereEmail($login)->first();
+        else
+            $user = User::where('dni', $login)->first();
+
         if(is_null($user)) {
             // return back()->withErrors("Invalid login");
             return response()->json(['status' => 1, 'message' => \Lang::get('messages.the_email_or_DNI_provided_does_not_exist')]);

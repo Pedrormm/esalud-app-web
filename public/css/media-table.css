@@ -18,6 +18,74 @@
     and (max-width: 760px), (min-device-width: 768px) 
     and (max-device-width: 1024px)  {
 
+		#takeScreenshot{
+			/* white-space: revert; */
+			/* margin: 9%; */
+			/* position: relative; */
+			/* left: 0; */
+
+			/* padding-right: 3rem	!important;
+			margin-right: 3rem !important; */
+
+			margin-left:-20%;
+			/* margin-left:-15%;
+			margin-top:10%;
+			margin-bottom: 10%; */
+
+
+			/* margin-right: 10%;
+			text-align: justify;
+			display: block;
+			word-break:break-all;
+			overflow-wrap: break-word; */
+
+			/* display: flex !important;
+			flex-wrap: wrap;
+			padding: 10px; */
+		
+			/* white-space: normal; */
+			/* width: 100px;
+			height:120px; */
+		}
+
+		.avatar-image{
+			display: block;
+		}
+
+		#avatar-container{
+			display: block;
+		}
+
+		#avatar-container::before{
+			content: "\A";
+			white-space: pre;	
+		}
+
+		#profile-picture-container b{
+			/* margin-top: 40px; */
+		}
+
+		#deleteImage{
+			margin-top: 5%;
+			margin-bottom: 15%;
+		}
+
+		#hide-image-container{
+			visibility: hidden;
+		}
+
+		#phone-label{
+			display: inherit !important;
+		}
+		  
+		#valid-msg, #error-msg{
+			display: block;
+		}
+		
+		#smsPhone, .iti--allow-dropdown{
+		width: 100% !important;
+		}
+
 		#mainTableRoles thead th{
 			/* display: block; */
 		}

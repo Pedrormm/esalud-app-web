@@ -120,8 +120,8 @@
                 @endif
 
                 <div class="row mb-3 ">
-                    <div class="col-lg-2 offset-5 text-center">
-                        <button class="btn btn-primary btn-block"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
+                    <div class="col-lg-2 offset-5 text-center" id="editTreatmentContainer">
+                        <button class="btn btn-primary btn-block" id="editTreatmentButton"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
                     </div>
                 </div>
 
@@ -141,6 +141,13 @@
 
     @section('viewsScripts')
         <script>
+
+            if (isMobile()){
+                $("#editTreatmentContainer").removeClass( "offset-5" );
+                $("#editTreatmentButton").addClass( "text-center" );
+                $('#editTreatmentButton').wrap('<div class="col-md-12 text-center"></div>');
+            }
+
 
             $('.cHeader button').on('click', function(e){
                 e.preventDefault();

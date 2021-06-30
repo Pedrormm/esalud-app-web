@@ -1,4 +1,4 @@
-a
+
 @section('viewsScripts')
 
 <script>
@@ -6,6 +6,10 @@ a
         e.preventDefault();
         window.location.href = _publicUrl+"treatments/";
     });
+    if (isMobile()){
+        $("#treatmentsList").removeClass( "centered" );
+    }
+
 
     let _mainTableAllUsersAjax = $('#TableTreatmentsSinglePatient').DataTable({
         serverSide : true,
@@ -30,7 +34,7 @@ a
           columnDefs: [
             {
                 targets: 0,
-                className: 'dt-body-left'
+                // className: 'dt-body-left'
             }
             ],
       

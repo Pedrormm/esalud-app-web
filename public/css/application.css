@@ -1491,6 +1491,8 @@ caption {
 /* mygreen:#99CA6A */
 /* myblue:#4D72DF */
 
+
+
 .filter_row, .records_container, .center_elements{
   display: flex;
   justify-content: center;

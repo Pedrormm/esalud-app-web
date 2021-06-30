@@ -310,7 +310,7 @@
 
 
                     <div class="row mb-3">
-                        <div class="col-lg-2 offset-5 text-center">
+                        <div class="col-lg-2 offset-5 text-center" id="editSettingsContainer">
                             <button class="btn btn-primary btn-block" type="button" id="editSettings"><i class="fa fa-edit"></i> @lang('messages.save_stat')</button>
                         </div>
                     </div>
@@ -361,7 +361,7 @@
 
                                                     <div class="settings-box box-solid">
                                                       <div class="box-header with-border">
-                                                        <div><b>@lang('messages.profile_picture')</b></div>
+                                                        <div id="profile-picture-container"><b>@lang('messages.profile_picture')</b></div>
                                                         <div class="box-tools-left float-left">                                                    
                                                             <button type="button" class="btn btn-success btn-xs" id="takeScreenshot">
                                                               <i class="fa fa-camera-retro"></i>
@@ -369,7 +369,7 @@
                                                             </button>
                                                         </div>
 
-                                                        <div class="box-tools float-right">
+                                                        <div class="box-tools float-right" id="hide-image-container">
                                                           <button type="button" class="btn btn-info btn-xs remove-preview">
                                                             <i class="fa fa-eye-slash"></i>
                                                             <span class="tab"> @lang('messages.hide_image')</span>
@@ -377,7 +377,7 @@
                                                           
                                                         </div>
                                                       </div>
-                                                      <div class="box-body">
+                                                      <div class="box-body" id="avatar-container">
 
                                                         @if (!empty($userLogin->avatar))
                                                             <img src="{{ asset('images/avatars/'.$userLogin->avatar) }}" class="rounded-circle mx-auto d-block avatar-image" id="previewImage"/>

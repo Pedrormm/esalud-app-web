@@ -3,6 +3,13 @@ $('.cHeader button').on('click', function(e){
     window.location.href = _publicUrl+"patients/";
 });
 
+if (isMobile()){
+    $("#editPatientContainer").removeClass( "offset-5" );
+
+    $("#editPatientButton").addClass( "text-center" );
+    $('#editPatientButton').wrap('<div class="col-md-12 text-center"></div>');
+}
+
 $(function() {
 
         setTimeout(function () {

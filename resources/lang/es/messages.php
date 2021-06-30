@@ -565,7 +565,8 @@ return [
     'create_treatment' => 'Crear tratamiento',
     'of_the_user' => 'del usuario',
     'type_of_medicine' => 'Tipo de medicina',
-    'medicine_administration' => 'Modo de administración del fármaco',
+    // 'medicine_administration' => 'Modo de administración del fármaco',
+    'medicine_administration' => 'Administración',
     'description_stat' => 'Descripción',
     'treatment_end_date' => 'Fecha de finalización del tratamiento',
 

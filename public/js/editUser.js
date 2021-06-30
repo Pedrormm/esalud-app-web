@@ -3,6 +3,14 @@ $('.cHeader button').on('click', function(e){
     window.location.href = _publicUrl+"users/";
 });
 
+if (isMobile()){
+    $("#editUserContainer").removeClass( "offset-5" );
+
+    $("#editUserButton").addClass( "text-center" );
+    $('#editUserButton').wrap('<div class="col-md-12 text-center"></div>');
+}
+  
+
 $(function() {
 
         setTimeout(function () {

@@ -37,8 +37,8 @@
             {{ Form::open(array('url' => 'login', 'method' => 'POST', 'class' => 'form-horizontal')) }}
 
                 @csrf
-                <input type="text" name="dni" class="ct" placeholder="@lang('messages.DNI_or_email')" value="{{ Cookie::get('credencialesDni') }}" autocomplete="on"/>
-                <input id="password-field" type="password" name="password" class="ct" placeholder="@lang('messages.password_stat')" autocomplete="on"/>
+                <input type="text" required name="dni" class="ct" placeholder="@lang('messages.DNI_or_email')" value="{{ Cookie::get('credencialesDni') }}" autocomplete="on"/>
+                <input id="password-field" required type="password" name="password" class="ct" placeholder="@lang('messages.password_stat')" autocomplete="on"/>
                 <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 
                 <div class="rememberme form-group form-check m-1">

@@ -218,8 +218,8 @@
                 @endif
                 
                 <div class="row mb-3">
-                    <div class="col-lg-2 offset-5 text-center">
-                        <button class="btn btn-primary btn-block"><i class="fa fa-edit"></i> @lang('messages.save_stat')</button>
+                    <div class="col-lg-2 offset-5 text-center" id="editPatientContainer">
+                        <button class="btn btn-primary btn-block" id="editPatientButton"><i class="fa fa-edit"></i> @lang('messages.save_stat')</button>
                     </div>
                 </div>
 

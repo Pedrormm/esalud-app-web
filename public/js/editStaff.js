@@ -3,6 +3,13 @@ $('.cHeader button').on('click', function(e){
     window.location.href = _publicUrl+"staff/";
 });
 
+if (isMobile()){
+    $("#editUserContainer").removeClass( "offset-5" );
+
+    $("#editStaffButton").addClass( "text-center" );
+    $('#editStaffButton').wrap('<div class="col-md-12 text-center"></div>');
+}
+
 $(function() {
 
         setTimeout(function () {

@@ -18,7 +18,7 @@
             </div>
             {{-- <h4 class="font-weight-bold text-primary mx-auto ">Editar cita con fecha {{ $appointment[0]['dt_appointment'] }}</h4> --}}
             {{-- <h4 class="font-weight-bold text-primary col-lg-6 offset-3">Editar cita con fecha {{ $appointment[0]['dt_appointment'] }}</h4> --}}
-            <h4 class="font-weight-bold text-primary centered edit-appointment-header" data-appointment-id="{{ $appointment[0]['dt_appointment']}}"> @lang('messages.edit_an_appointment_that_has_the_date')  {{ $appointment[0]['dt_appointment'] }}</h4>
+            <h4 id="appointmentHeader" class="font-weight-bold text-primary centered edit-appointment-header" data-appointment-id="{{ $appointment[0]['dt_appointment']}}"> @lang('messages.edit_an_appointment_that_has_the_date')  {{ $appointment[0]['dt_appointment'] }}</h4>
 
           </div>
 
@@ -175,8 +175,8 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-lg-2 offset-5 text-center">
-                        <button class="btn btn-primary btn-block"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
+                    <div class="col-lg-2 offset-5 text-center" id="editAppointmentContainer">
+                        <button class="btn btn-primary btn-block" id="editAppointmentButton"><i class="fa fa-edit"></i> @lang('messages.edit_stat')</button>
                     </div>
                 </div>
             
@@ -192,6 +192,13 @@
 
     @section('viewsScripts')
         <script>
+
+            if (isMobile()){
+                $("#editAppointmentContainer").removeClass( "offset-5" );
+                $("#appointmentHeader").removeClass( "centered" );
+                $("#editAppointmentButton").addClass( "text-center" );
+                $('#editAppointmentButton').wrap('<div class="col-md-12 text-center"></div>');
+            }
 
             $(".edit-appointment-header").text(function(i){
                 let givenDate = $(this).attr("data-appointment-id");

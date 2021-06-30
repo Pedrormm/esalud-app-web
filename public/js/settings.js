@@ -150,6 +150,21 @@ async function init() {
   });
 }
 
+if (isMobile()){
+  $("#editSettingsContainer").removeClass( "offset-5" );
+  $("#editSettings").addClass( "text-center" );
+  // $("#editSettings").removeClass( "btn-block" );
+  $('#editSettings').wrap('<div class="col-md-12 text-center"></div>');
+
+  $("#deleteImage").addClass( "text-center" );
+  $("#deleteImage").removeClass( "float-left" );
+  $('#deleteImage').wrap('<div class="col-md-12 text-center"></div>');
+
+  $("#uploadImage").addClass( "text-center" );
+  $("#uploadImage").removeClass( "float-right" );
+  $('#uploadImage').wrap('<div class="col-md-12 text-center"></div>');
+}
+
 // Success
 function handleSuccess(stream) {
   window.stream = stream;
